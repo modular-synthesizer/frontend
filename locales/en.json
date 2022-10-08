@@ -1,0 +1,10 @@
+{
+  "register": {
+    "hints": {
+      "username": "Enter a username with at least 6 characters"
+    },
+    "labels": {
+      "username": "Username"
+    }
+  }
+}

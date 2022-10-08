@@ -1,0 +1,20 @@
+{
+  "register": {
+    "hints": {
+      "email": "Entrez une adresse email valide",
+      "password": "Entrez un mot de passe, plus vous entrerez un nombre et une variété importante de caractère, plus il sera sécurisé",
+      "password_confirmation": "Entrez une seconde fois votre mot de passe pour éviter les fautes de frappe",
+      "username": "Entrez un nom d'utilisateur contenant au moins six caractères"
+    },
+    "labels": {
+      "email": "Adresse email",
+      "password": "Mot de passe",
+      "password_confirmation": "Confirmation du mot de passe",
+      "username": "Nom d'utilisateur"
+    },
+    "placeholders": {
+      "email": "mon.email[at]fournisseur.fr",
+      "username": "Nom d'utilisateur"
+    }
+  }
+}
