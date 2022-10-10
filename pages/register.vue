@@ -7,12 +7,7 @@
     </v-row>
     <v-row>
       <v-col cols="6">
-        <v-text-field
-          :label="$t('register.labels.username')"
-          v-model="account.username"
-          :hint="$t('register.hints.username')"
-          :placeholder="$t('register.placeholders.username')"
-        ></v-text-field>
+        <username v-model="account.username" />
       </v-col>
       <v-col cols="6">
         <v-text-field
@@ -50,27 +45,37 @@
   </v-container>
 </template>
 
-<script lang="ts" setup>
-import IAccount from '~/lib/interfaces/IAccount';
-import Api from '~~/lib/api/Api';
-
-const account: IAccount = {
-  username: "",
-  password: "",
-  password_confirmation: "",
-  email: ""
-}
-const api = new Api(useRuntimeConfig());
-</script>
-
 <script lang="ts">
+import username from '~/components/inputs/username.vue'
+import Api from '~/lib/api/Api';
+import IApiError from '~~/lib/interfaces/IApiError';
 
 export default {
+  components: { username },
+  data() {
+    return {
+      account: {
+        username: "",
+        password: "",
+        password_confirmation: "",
+        email: ""
+      },
+      duplicates: {
+        email: false,
+        username: false
+      },
+      api: new Api(useRuntimeConfig())
+    }
+  },
   methods: {
     async register(_$event: Event) {
-      console.log(this.api);
-      this.api.get('/synthesizers')
-        .catch(error => console.log(error.response.data))
+      this.api.post('/accounts')
+        .catch(error => {
+          const apiError = error.response.data as unknown as IApiError;
+          if(apiError.message == 'uniq') {
+            this.duplicates[apiError.key] = true;
+          }
+        })
     }
   }
 }
