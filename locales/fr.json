@@ -1,4 +1,23 @@
 {
+  "errors": {
+    "email": {
+      "format": "Votre adresse email n'est pas dans un format correct",
+      "required": "Vous devez indiquer une adresse email valide",
+      "uniq": "Cette adresse email est déjà utilisée"
+    },
+    "password": {
+      "required": "Le mot de passe est obligatoire"
+    },
+    "password_confirmation": {
+      "required": "La confirmation du mot de passe est obligatoire",
+      "confirmation": "La confirmation ne correspond pas au mot de passe"
+    },
+    "username": {
+      "minsize": "Votre nom d'utilisateur doit faire six caractères ou plus",
+      "required": "Vous devez donner un nom d'utilisateur",
+      "uniq": "Ce nom d'utilisateur est déjà utilisé"
+    }
+  },
   "register": {
     "hints": {
       "email": "Entrez une adresse email valide",
@@ -11,6 +30,9 @@
       "password": "Mot de passe",
       "password_confirmation": "Confirmation du mot de passe",
       "username": "Nom d'utilisateur"
+    },
+    "messages": {
+      "success": "Votre compte a été créé avec succès, vous pouvez dès à présent vous connecter avec vos identifiants"
     },
     "placeholders": {
       "email": "mon.email[at]fournisseur.fr",

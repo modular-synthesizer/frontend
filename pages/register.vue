@@ -1,76 +1,85 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12">
-        <h1>Inscription</h1>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="6">
-        <v-text-field
-          :label="$t('register.labels.username')"
-          v-model="account.username"
-          :hint="$t('register.hints.username')"
-          :placeholder="$t('register.placeholders.username')"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="6">
-        <v-text-field
-          type="email"
-          :label="$t('register.labels.email')"
-          v-model="account.email"
-          :hint="$t('register.hints.email')"
-          :placeholder="$t('register.placeholders.email')"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="6">
-        <v-text-field
-          type="password"
-          v-model="account.password"
-          :hint="$t('register.hints.password')"
-          :label="$t('register.labels.password')"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="6">
-        <v-text-field
-          type="password"
-          v-model="account.password_confirmation"
-          :hint="$t('register.hints.password_confirmation')"
-          :label="$t('register.labels.password_confirmation')"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row no-gutters>
-      <v-col cols="12">
-        <v-btn @click="register">S'inscrire</v-btn>
-      </v-col>
-    </v-row>
+    <template v-if="registered">
+      <v-row>
+        <v-col cols="12">
+          <v-alert type="success">
+            {{ $t('register.messages.success') }}
+          </v-alert>
+        </v-col>
+      </v-row>
+    </template>
+    <template v-else>
+      <v-row>
+        <v-col cols="12">
+          <div class="text-h3 mb-4">Inscription</div>
+        </v-col>
+      </v-row>
+      <v-row v-if="duplicates != ''">
+        <v-col cols="12">
+          <v-alert type="error" class="mb-2">
+            {{ $t(duplicates) }}
+          </v-alert>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="6">
+          <Username v-model="account.username" />
+        </v-col>
+        <v-col cols="6">
+          <Email v-model="account.email" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="6">
+          <Password v-model="account.password" />
+        </v-col>
+        <v-col cols="6">
+          <Password v-model="account.password_confirmation" :confirms="account.password" />
+        </v-col>
+      </v-row>
+      <v-row no-gutters>
+        <v-col cols="12">
+          <v-btn class="mt-4" color="primary" @click="register">S'inscrire</v-btn>
+        </v-col>
+      </v-row>
+    </template>
   </v-container>
 </template>
 
-<script lang="ts" setup>
-import IAccount from '~/lib/interfaces/IAccount';
-import Api from '~~/lib/api/Api';
-
-const account: IAccount = {
-  username: "",
-  password: "",
-  password_confirmation: "",
-  email: ""
-}
-const api = new Api(useRuntimeConfig());
-</script>
-
 <script lang="ts">
+import Api from '~~/lib/api/Api';
+import Password from '~/components/inputs/password.vue';
+import Email from '~/components/inputs/email.vue';
+import Username from '~/components/inputs/username.vue';
+import IApiError from '~~/lib/interfaces/IApiError';
 
 export default {
+  components: { Email, Password, Username },
+  data() {
+    return {
+      account: {
+        username: "",
+        password: "",
+        password_confirmation: "",
+        email: ""
+      },
+      api: new Api(useRuntimeConfig()),
+      registered: false,
+      duplicates: "",
+    }
+  },
   methods: {
     async register(_$event: Event) {
       console.log(this.api);
-      this.api.get('/synthesizers')
-        .catch(error => console.log(error.response.data))
+      this.api.post('/accounts', this.account)
+        .then(_response => this.registered = true)
+        .catch(error => {
+          const apiError: IApiError = error.response.data;
+          if (apiError.message == 'uniq') {
+            this.duplicates = `errors.${apiError.key}.uniq`
+          }
+        })
     }
   }
 }
