@@ -71,7 +71,6 @@ export default {
   },
   methods: {
     async register(_$event: Event) {
-      console.log(this.api);
       this.api.post('/accounts', this.account)
         .then(_response => this.registered = true)
         .catch(error => {
