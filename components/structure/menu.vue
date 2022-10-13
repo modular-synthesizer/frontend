@@ -3,6 +3,11 @@
     <VAppBarTitle>Modusynth</VAppBarTitle>
     <template v-slot:prepend>
       <VBtn icon to="/"><VIcon>mdi-home</VIcon></VBtn>
+      <template v-if="loggedIn">
+        <VBtn icon to="/synthesizers">
+          <VIcon>mdi-piano</VIcon>
+        </VBtn>
+      </template>
     </template>
     <template v-if="loggedIn" v-slot:append>
       <VBtn @click="logout">Se déconnecter</VBtn>
