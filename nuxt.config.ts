@@ -19,7 +19,9 @@ export default defineNuxtConfig({
     compilerOptions: {
       isCustomElement: tag => [
         'v-card-header',
-        'v-card-header-text'
+        'v-card-header-text',
+        'v-app-bar',
+        'v-app-bar-title'
       ].includes(tag)
     }
   },

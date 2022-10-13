@@ -20,6 +20,11 @@ export default class Api implements IApi {
     return axios.post(`${this.uri}${uri}`, payload).then(response => response.data)
   }
 
+  public delete(uri: string, payload: any = {}): Promise<any> {
+    console.log("patate", payload);
+    return axios.delete(`${this.uri}${uri}`, {data: payload}).then(response => response.data)
+  }
+
   private payload(rawPayload: any) {
     return rawPayload
   }

@@ -58,12 +58,12 @@ export default {
       this.api.post('/sessions', this.account)
         .then(response => {
           this.setToken(response.token);
-          navigateTo('/')
+          navigateTo('/');
         })
         .catch(error => {
-          const { key, message } = error.response.data
-          this.error = `errors.${key}.${message}`
-        })
+          const { key, message } = error.response.data;
+          this.error = `errors.${key}.${message}`;
+        });
     }
   }
 }

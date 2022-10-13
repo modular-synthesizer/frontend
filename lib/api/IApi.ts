@@ -13,4 +13,6 @@ export default interface IApi {
   get (uri: string, payload?: any): Promise<any>
 
   post(uri: string, payload?: any): Promise<any>
+
+  delete(uri: string, payload?: any): Promise<any>
 }

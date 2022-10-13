@@ -1,15 +1,13 @@
 <template>
-  <div class="d-flex align-center flex-column">
-    <v-icon>mdi-home</v-icon>
-    <v-card width="400">
-      <v-card-header>
-        <v-card-header-text>
-          <v-card-title>This is a title</v-card-title>
-          <v-card-subtitle>This is a subtitle</v-card-subtitle>
-        </v-card-header-text>
-      </v-card-header>
-
-      <v-card-text> This is content </v-card-text>
-    </v-card>
-  </div>
+  <v-container>
+    <div class="text-h3">Modusynth</div>
+  </v-container>
 </template>
+
+<script lang="ts">
+import Menu from '~~/components/structure/menu.vue'
+
+export default {
+  components: { Menu }
+}
+</script>
