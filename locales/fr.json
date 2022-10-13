@@ -13,10 +13,15 @@
       "confirmation": "La confirmation ne correspond pas au mot de passe"
     },
     "username": {
+      "forbidden": "Les identifiants fournis sont incorrects",
       "minsize": "Votre nom d'utilisateur doit faire six caractères ou plus",
       "required": "Vous devez donner un nom d'utilisateur",
       "uniq": "Ce nom d'utilisateur est déjà utilisé"
     }
+  },
+  "login": {
+    "button": "Se connecter",
+    "title": "Connexion"
   },
   "register": {
     "hints": {
@@ -37,6 +42,7 @@
     "placeholders": {
       "email": "mon.email[at]fournisseur.fr",
       "username": "Nom d'utilisateur"
-    }
+    },
+    "title": "Inscription"
   }
 }

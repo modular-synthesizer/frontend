@@ -12,7 +12,7 @@
     <template v-else>
       <v-row>
         <v-col cols="12">
-          <div class="text-h3 mb-4">Inscription</div>
+          <div class="text-h3 mb-4">{{ $t('register.title') }}</div>
         </v-col>
       </v-row>
       <v-row v-if="duplicates != ''">
