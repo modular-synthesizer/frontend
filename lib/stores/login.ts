@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useLoginStore = defineStore("login", {
   state: () => {
     return {
-      token: localStorage.getItem("auth-token") || ""
+      token: ref(localStorage.getItem("auth-token") || "")
     };
   },
   getters: {
