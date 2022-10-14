@@ -19,7 +19,7 @@ export default class Synthesizer {
   // The scale of zoom the synthesizer is currently displayed at.
   public scale: number;
   // The list of racks available in the synthesizer.
-  private racks: Rack[];
+  public racks: Rack[] = [];
 
   public constructor(infos: ISynthesizer) {
     this.id = infos.id;
@@ -28,11 +28,6 @@ export default class Synthesizer {
     this.y = infos.y;
     this.scale = infos.scale;
 
-    this.initRacks(infos);
-  }
-
-  private initRacks(infos: ISynthesizer) {
-    this.racks = [] as Rack[];
     times(infos.racks, (index: number) => {
       this.racks.push(new Rack(index, infos.slots));
     })
