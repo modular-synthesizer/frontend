@@ -4,6 +4,7 @@
     @mousemove="moveDrag($event.clientX, $event.clientY)"
     @mouseup="endDrag()"
     @mouseleave="endDrag()"
+    @wheel.prevent="setScale($event.deltaY)"
   >
     <SynthesizerComponent :synthesizer="synthesizer" v-if="synthesizer !== null" />
   </svg>
@@ -16,6 +17,7 @@ import { api } from "~~/lib/api/Api";
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 import SynthesizerComponent from "~~/components/synthesizers/Synthesizer.vue"
 import { useSynthesizerDrag } from '~~/lib/stores/dragSynthesizer';
+import { useZoomStore } from '~~/lib/stores/zoom';
 
 export default {
   data() {
@@ -31,12 +33,14 @@ export default {
       startDrag: 'start',
       moveDrag: 'move',
       endDrag: 'end'
-    })
+    }),
+    ...mapActions(useZoomStore, ['setScale', 'setSynthesizer'])
   },
   mounted() {
     api.get("/synthesizers/" + this.$route.params.id, { auth_token: this.token })
       .then(response => {
         this.synthesizer = new Synthesizer(response);
+        this.setSynthesizer(this.synthesizer);
       });
   },
   components: { SynthesizerComponent }

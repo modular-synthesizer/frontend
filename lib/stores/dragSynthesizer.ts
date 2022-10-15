@@ -30,6 +30,8 @@ export const useSynthesizerDrag = defineStore("dragSynthesizer", {
       this.coords.y = y;
     },
     end() {
+      if (this.synthesizer === null) return;
+
       const loginStore = useLoginStore();
       const payload: any = {
         x: this.synthesizer.x,
