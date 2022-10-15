@@ -1,11 +1,9 @@
 import { defineStore } from "pinia";
 
 export const useLoginStore = defineStore("login", {
-  state: () => {
-    return {
-      token: ref(localStorage.getItem("auth-token") || "")
-    };
-  },
+  state: () => ({
+    token: ref(localStorage.getItem("auth-token") || "")
+  }),
   getters: {
     loggedIn() {
       return this.token !== ""

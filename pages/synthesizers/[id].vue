@@ -1,34 +1,45 @@
 <template>
-  <svg v-if="synthesizer !== null">
-    <g :transform="`translate(${synthesizer.x} ${synthesizer.y}) scale(${synthesizer.scale} ${synthesizer.scale})`">
-      <Rack v-for="rack in synthesizer.racks" :rack="rack" />
-    </g>
+  <svg
+    @mousedown="startDrag(synthesizer, $event.clientX, $event.clientY)"
+    @mousemove="moveDrag($event.clientX, $event.clientY)"
+    @mouseup="endDrag()"
+    @mouseleave="endDrag()"
+  >
+    <SynthesizerComponent :synthesizer="synthesizer" v-if="synthesizer !== null" />
   </svg>
 </template>
 
-<script lang="ts">import { mapState } from 'pinia';
+<script lang="ts">
+import { mapActions, mapState } from 'pinia';
 import { useLoginStore } from '~~/lib/stores/login';
-import Api from "~~/lib/api/Api";
+import { api } from "~~/lib/api/Api";
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
-import Rack from '~~/components/synthesizers/Rack.vue';
+import SynthesizerComponent from "~~/components/synthesizers/Synthesizer.vue"
+import { useSynthesizerDrag } from '~~/lib/stores/dragSynthesizer';
 
 export default {
   data() {
     return {
       synthesizer: null as Synthesizer || null,
-      api: new Api(useRuntimeConfig())
     };
   },
   computed: {
     ...mapState(useLoginStore, ["token"])
   },
+  methods: {
+    ...mapActions(useSynthesizerDrag, {
+      startDrag: 'start',
+      moveDrag: 'move',
+      endDrag: 'end'
+    })
+  },
   mounted() {
-    this.api.get("/synthesizers/" + this.$route.params.id, { auth_token: this.token })
+    api.get("/synthesizers/" + this.$route.params.id, { auth_token: this.token })
       .then(response => {
         this.synthesizer = new Synthesizer(response);
       });
   },
-  components: { Rack }
+  components: { SynthesizerComponent }
 }
 </script>
 

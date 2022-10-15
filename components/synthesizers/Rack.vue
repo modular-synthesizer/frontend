@@ -13,16 +13,16 @@ import Rack from '~~/lib/wrappers/Rack';
 import Fixation from './Fixation.vue';
 
 export default {
-    props: {
-        rack: {
-            type: Rack,
-            required: true
-        }
-    },
-    computed: {
-        rackHeight() { return RACK_HEIGHT; },
-        slotSize() { return SLOT_SIZE; }
-    },
-    components: { Fixation }
+  props: {
+    rack: {
+      type: Rack,
+      required: true
+    }
+  },
+  computed: {
+    rackHeight() { return RACK_HEIGHT; },
+    slotSize() { return SLOT_SIZE; }
+  },
+  components: { Fixation }
 }
 </script>

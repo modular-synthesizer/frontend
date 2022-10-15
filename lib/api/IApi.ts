@@ -15,4 +15,6 @@ export default interface IApi {
   post(uri: string, payload?: any): Promise<any>
 
   delete(uri: string, payload?: any): Promise<any>
+
+  put(uri: string, payload?: any): Promise<any>
 }

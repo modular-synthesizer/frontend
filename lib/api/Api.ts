@@ -3,11 +3,7 @@ import axios from "axios";
 
 export default class Api implements IApi {
 
-  private uri: string;
-
-  public constructor(config: any) {
-    this.uri = config.public.api_uri;
-  }
+  private uri: string = "";
 
   public get(uri: string, payload: any = {}): Promise<any> {
     return axios.get(`${this.uri}${uri}`, {params: payload})
@@ -23,4 +19,15 @@ export default class Api implements IApi {
     return axios.delete(`${this.uri}${uri}`, {data: payload})
       .then(response => response.data)
   }
+
+  public put(uri: string, payload: any = {}): Promise<any> {
+    return axios.put(`${this.uri}${uri}`, payload)
+      .then(response => response.data)
+  }
+
+  public setUri(uri: string) {
+    this.uri = uri;
+  }
 }
+
+export const api = new Api();
