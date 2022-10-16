@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import Api from '~~/lib/api/Api';
+import { api } from '~~/lib/api/Api';
 import Password from '~/components/inputs/password.vue';
 import Email from '~/components/inputs/email.vue';
 import Username from '~/components/inputs/username.vue';
@@ -64,14 +64,13 @@ export default {
         password_confirmation: "",
         email: ""
       },
-      api: new Api(useRuntimeConfig()),
       registered: false,
       duplicates: "",
     }
   },
   methods: {
     async register(_$event: Event) {
-      this.api.post('/accounts', this.account)
+      api.post('/accounts', this.account)
         .then(_response => this.registered = true)
         .catch(error => {
           const apiError: IApiError = error.response.data;

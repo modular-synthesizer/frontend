@@ -33,9 +33,10 @@
 <script lang="ts">
 import Username from '~~/components/inputs/username.vue';
 import Password from '~~/components/inputs/password.vue';
-import Api from '~~/lib/api/Api';
+import { api } from '~~/lib/api/Api';
 import { useLoginStore } from '~~/lib/stores/login';
 import { mapActions, mapStores } from 'pinia';
+import { storage } from '~~/lib/stores/storage';
 
 export default {
   data() {
@@ -44,7 +45,6 @@ export default {
         username: "",
         password: ""
       },
-      api: new Api(useRuntimeConfig()),
       error: ""
     };
   },
@@ -53,12 +53,16 @@ export default {
     ...mapStores(useLoginStore)
   },
   methods: {
-    ...mapActions(useLoginStore, ['setToken']),
+    ...mapActions(useLoginStore, ['setToken', 'syncAccount']),
     login() {
-      this.api.post('/sessions', this.account)
+      api.post('/sessions', this.account)
         .then(response => {
-          this.setToken(response.token);
-          navigateTo('/');
+          api.get(`/accounts/${response.account_id}`, {auth_token: response.token})
+            .then(account => {
+              this.setToken(response.token);
+              storage().set("account", JSON.stringify(account))
+              navigateTo('/');
+            })
         })
         .catch(error => {
           const { key, message } = error.response.data;
