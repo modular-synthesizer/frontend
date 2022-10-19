@@ -54,6 +54,9 @@ import Email from '~/components/inputs/email.vue';
 import Username from '~/components/inputs/username.vue';
 import IApiError from '~~/lib/interfaces/IApiError';
 
+definePageMeta({
+  authenticated: false
+})
 export default {
   components: { Email, Password, Username },
   data() {

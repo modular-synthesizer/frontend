@@ -36,6 +36,9 @@ import Password from '~~/components/inputs/password.vue';
 import { mapActions } from 'pinia';
 import { useAuthentication } from '~~/lib/stores/authentication';
 
+definePageMeta({
+  authenticated: false
+})
 export default {
   data() {
     return {

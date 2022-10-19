@@ -1,9 +1,9 @@
 <template>
-  <!-- This makes the application wait for the token to be refreshed before display-->
-  <VApp v-if="session.token !== ''">
+  <VApp>
     <VLayout>
       <Menu></Menu>
-      <VMain>
+      <!-- This makes the application wait for the token to be refreshed before display-->
+      <VMain v-if="displayContent">
         <NuxtPage />
       </VMain>
     </VLayout>
@@ -26,7 +26,10 @@ export default {
     ...mapActions(useAuthentication, ['refresh'])
   },
   computed: {
-    ...mapState(useAuthentication, ['session'])
+    ...mapState(useAuthentication, ['session']),
+    displayContent() {
+      return useRoute().meta.authenticated === false || this.session.token !== ''
+    }
   },
   mounted() {
     this.refresh();

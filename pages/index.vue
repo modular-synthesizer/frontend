@@ -7,6 +7,9 @@
 <script lang="ts">
 import Menu from '~~/components/structure/menu.vue'
 
+definePageMeta({
+  authenticated: false
+})
 export default {
   components: { Menu }
 }
