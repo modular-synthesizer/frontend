@@ -10,6 +10,7 @@
       </template>
     </template>
     <template v-slot:append>
+      <VBtn to="/admin" v-if="admin">Administrer</VBtn>
       <VBtn @click="logout" v-if="authenticated">Se déconnecter</VBtn>
       <template v-else>
         <VBtn to="/register">S'inscrire</VBtn>
@@ -27,7 +28,7 @@ import { useAuthentication } from '~~/lib/stores/authentication';
 export default {
   component: { VAppBar, VAppBarTitle, },
   computed: {
-    ...mapState(useAuthentication, ['authenticated']),
+    ...mapState(useAuthentication, ['authenticated', 'admin']),
   },
   methods: {
     ...mapActions(useAuthentication, ['logout'])

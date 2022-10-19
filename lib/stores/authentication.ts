@@ -11,6 +11,9 @@ export const useAuthentication = defineStore('authentication', {
   getters: {
     authenticated() {
       return this.session.token !== ""
+    },
+    admin() {
+      return !!this.session.admin;
     }
   },
   actions: {
