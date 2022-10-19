@@ -34,7 +34,7 @@
 <script lang="ts">
 import { mapState } from "pinia";
 import { api } from "~~/lib/api/Api";
-import { useLoginStore } from "~~/lib/stores/login";
+import { useAuthentication } from "~~/lib/stores/authentication";
 
 export default {
   data() {
@@ -43,10 +43,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(useLoginStore, ['token'])
+    ...mapState(useAuthentication, ['session'])
   },
   mounted() {
-    api.get('/synthesizers', {auth_token: this.token})
+    api.get('/synthesizers', {auth_token: this.session.token})
       .then(response => {
         this.synthesizers = response.synthesizers;
       })

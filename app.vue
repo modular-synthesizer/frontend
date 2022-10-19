@@ -1,5 +1,6 @@
 <template>
-  <VApp>
+  <!-- This makes the application wait for the token to be refreshed before display-->
+  <VApp v-if="session.token !== ''">
     <VLayout>
       <Menu></Menu>
       <VMain>
@@ -13,20 +14,22 @@
 import Menu from '~~/components/structure/menu.vue'
 import { VLayout, VMain, VApp } from 'vuetify/components'
 import { api } from '~~/lib/api/Api'
-import { useLoginStore } from './lib/stores/login'
-import { mapActions } from 'pinia'
+import { mapActions, mapState } from 'pinia'
+import { useAuthentication } from './lib/stores/authentication'
 
 export default {
   components: { Menu, VApp, VLayout, VMain },
   setup() {
-    api.setUri(useRuntimeConfig().public.api_uri)
+    api.setUri(useRuntimeConfig().public.api_uri);
   },
   methods: {
-    ...mapActions(useLoginStore, ['syncAccount', 'checkToken'])
+    ...mapActions(useAuthentication, ['refresh'])
+  },
+  computed: {
+    ...mapState(useAuthentication, ['session'])
   },
   mounted() {
-    this.checkToken();
-    this.syncAccount();
+    this.refresh();
   }
 }
 </script>

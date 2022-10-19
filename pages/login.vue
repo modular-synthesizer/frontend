@@ -24,7 +24,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <v-btn color="primary" @click="login">{{ $t('login.button') }}</v-btn>
+        <v-btn color="primary" @click="submitLogin">{{ $t('login.button') }}</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -33,10 +33,8 @@
 <script lang="ts">
 import Username from '~~/components/inputs/username.vue';
 import Password from '~~/components/inputs/password.vue';
-import { api } from '~~/lib/api/Api';
-import { useLoginStore } from '~~/lib/stores/login';
-import { mapActions, mapStores } from 'pinia';
-import { storage } from '~~/lib/stores/storage';
+import { mapActions } from 'pinia';
+import { useAuthentication } from '~~/lib/stores/authentication';
 
 export default {
   data() {
@@ -49,25 +47,14 @@ export default {
     };
   },
   components: { Username, Password },
-  computed: {
-    ...mapStores(useLoginStore)
-  },
   methods: {
-    ...mapActions(useLoginStore, ['setToken', 'syncAccount']),
-    login() {
-      api.post('/sessions', this.account)
-        .then(response => {
-          api.get(`/accounts/${response.account_id}`, {auth_token: response.token})
-            .then(account => {
-              this.setToken(response.token);
-              storage().set("account", JSON.stringify(account))
-              navigateTo('/');
-            })
-        })
-        .catch(error => {
+    ...mapActions(useAuthentication, ['login']),
+    submitLogin() {
+      this.login(this.account.username, this.account.password)
+        .catch((error: any) => {
           const { key, message } = error.response.data;
           this.error = `errors.${key}.${message}`;
-        });
+        })
     }
   }
 }

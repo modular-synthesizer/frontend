@@ -12,12 +12,12 @@
 
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
-import { useLoginStore } from '~~/lib/stores/login';
 import { api } from "~~/lib/api/Api";
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 import SynthesizerComponent from "~~/components/synthesizers/Synthesizer.vue"
 import { useSynthesizerDrag } from '~~/lib/stores/dragSynthesizer';
 import { useZoomStore } from '~~/lib/stores/zoom';
+import { useAuthentication } from '~~/lib/stores/authentication';
 
 export default {
   data() {
@@ -26,7 +26,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(useLoginStore, ["token"])
+    ...mapState(useAuthentication, ["session"])
   },
   methods: {
     ...mapActions(useSynthesizerDrag, {
@@ -37,7 +37,7 @@ export default {
     ...mapActions(useZoomStore, ['setScale', 'setSynthesizer'])
   },
   mounted() {
-    api.get("/synthesizers/" + this.$route.params.id, { auth_token: this.token })
+    api.get("/synthesizers/" + this.$route.params.id, { auth_token: this.session.token })
       .then(response => {
         this.synthesizer = new Synthesizer(response);
         this.setSynthesizer(this.synthesizer);

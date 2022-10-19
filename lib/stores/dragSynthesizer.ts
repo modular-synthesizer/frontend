@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import Synthesizer from "../wrappers/Synthesizer";
-import { useLoginStore } from "./login";
 import { api } from '~~/lib/api/Api'
+import { useAuthentication } from "./authentication";
 
 /**
  * This store is dedicated to node dragging and dropping, saving the currently moved
@@ -32,11 +32,11 @@ export const useSynthesizerDrag = defineStore("dragSynthesizer", {
     end() {
       if (this.synthesizer === null) return;
 
-      const loginStore = useLoginStore();
+      const auth = useAuthentication();
       const payload: any = {
         x: this.synthesizer.x,
         y: this.synthesizer.y,
-        auth_token: loginStore.token
+        auth_token: auth.session.token
       };
       api.put(`/synthesizers/${this.synthesizer.id}`, payload)
         .then(() => this.synthesizer = null as Synthesizer);
