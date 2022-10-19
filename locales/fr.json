@@ -2,6 +2,7 @@
   "admin": {
     "tabs": {
       "categories": "Catégories",
+      "parameters": "Paramètres",
       "tools": "Outils"
     }
   },
