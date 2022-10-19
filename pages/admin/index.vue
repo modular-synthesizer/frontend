@@ -1,17 +1,21 @@
 <template>
-  <v-container class="limited-width">
-    <v-tabs v-model="tab" bkacground-color="primary">
-      <v-tab value="categories">Categories</v-tab>
-      <v-tab value="tools">Tools</v-tab>
-    </v-tabs>
-    <v-window v-model="tab">
-      <v-window-item value="categories">
-        <Categories />
-      </v-window-item>
-      <v-window-item value="tools">
-        <Tools />
-      </v-window-item>
-    </v-window>
+  <v-container fluid>
+    <v-row no-gutters>
+      <v-col sm="10" md="8" lg="6" offset-sm="1" offset-md="2" offset-lg="3">
+        <v-tabs v-model="tab" bkacground-color="primary">
+          <v-tab value="categories">{{ $t('admin.tabs.categories') }}</v-tab>
+          <v-tab value="tools">{{ $t('admin.tabs.tools') }}</v-tab>
+        </v-tabs>
+        <v-window v-model="tab">
+          <v-window-item value="categories">
+            <Categories />
+          </v-window-item>
+          <v-window-item value="tools">
+            <Tools />
+          </v-window-item>
+        </v-window>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -25,9 +29,3 @@ export default {
     components: { Categories, Tools }
 }
 </script>
-
-<style scoped>
-.limited-width {
-  width: 60%;
-}
-</style>

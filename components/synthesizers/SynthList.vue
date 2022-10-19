@@ -5,11 +5,11 @@
         <VTable>
           <thead>
             <tr>
-              <th>UUID</th>
-              <th>Name</th>
+              <th>{{ $t('common.uuid') }}</th>
+              <th>{{ $t('common.name') }}</th>
               <th>Liens</th>
               <th>Noeuds</th>
-              <th>Actions</th>
+              <th>{{ $t('common.actions') }}</th>
             </tr>
           </thead>
           <tbody>

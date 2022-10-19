@@ -1,4 +1,23 @@
 {
+  "admin": {
+    "tabs": {
+      "categories": "Catégories",
+      "tools": "Outils"
+    }
+  },
+  "categories": {
+    "hints": {
+      "name": "Entrez un nom pour cette catégorie, puis validez"
+    },
+    "labels": {
+      "name": "Ajouter une catégorie"
+    }
+  },
+  "common": {
+    "actions": "Actions",
+    "name": "Nom",
+    "uuid": "Identifiant"
+  },
   "errors": {
     "email": {
       "format": "Votre adresse email n'est pas dans un format correct",

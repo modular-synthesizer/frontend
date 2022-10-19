@@ -1,15 +1,16 @@
 <template>
-  <v-container>
+  <v-container class="mt-2">
     <v-row>
-      <v-col cols="9">
+      <v-col xs="12" sm="8" offset-sm="2" md="6" offset-md="3">
         <form @submit.prevent="add">
           <v-text-field
             density="compact"
             variant="outlined"
             v-model="category.name"
-            label="Nom de la catégorie"
+            :label="$t('categories.labels.name')"
             append-inner-icon="mdi-plus"
             @click:append-inner="add"
+            :hint="$t('categories.hints.name')"
           />
         </form>
       </v-col>
@@ -19,8 +20,8 @@
         <v-table>
           <thead>
             <tr>
-              <th>UUID</th>
-              <th>Name</th>
+              <th>{{ $t('common.uuid') }}</th>
+              <th>{{ $t('common.name') }}</th>
               <th>&nbsp;</th>
             </tr>
           </thead>
