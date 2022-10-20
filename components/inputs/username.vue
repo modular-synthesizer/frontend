@@ -6,6 +6,7 @@
     :rules="[required, minSize]"
     v-model="modelValue"
     @update:modelValue="notifyChange"
+    variant="outlined"
   ></v-text-field>
 </template>
 

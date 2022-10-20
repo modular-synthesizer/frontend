@@ -6,6 +6,7 @@
     v-model="modelValue"
     @update:modelValue="notifyChange"
     type="password"
+    variant="outlined"
   ></v-text-field>
 </template>
 

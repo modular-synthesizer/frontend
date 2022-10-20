@@ -7,6 +7,7 @@
     type="email"
     v-model="modelValue"
     @update:modelValue="notifyChange"
+    variant="outlined"
   ></v-text-field>
 </template>
 

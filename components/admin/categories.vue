@@ -32,7 +32,7 @@
               <td>
                 <v-btn icon size="small" variant="text" @click="remove(category.id)">
                   <v-icon>mdi-delete</v-icon>
-                  </v-btn>
+                </v-btn>
               </td>
             </tr>
           </tbody>

@@ -1,33 +1,35 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <div class="text-h2 mb-2">{{ $t('login.title') }}</div>
-      </v-col>
-    </v-row>
-    <v-row v-if="error != ''">
-      <v-col cols="12">
-        <v-alert type="error">
-          {{ $t(error) }}
-        </v-alert>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <Username v-model="account.username" />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <Password v-model="account.password" />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <v-btn color="primary" @click="submitLogin">{{ $t('login.button') }}</v-btn>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-form @submit.prevent="submitLogin">
+    <v-container>
+      <v-row>
+        <v-col cols="6" offset="3">
+          <div class="text-h2 mb-2">{{ $t('login.title') }}</div>
+        </v-col>
+      </v-row>
+      <v-row v-if="error != ''">
+        <v-col cols="12">
+          <v-alert type="error">
+            {{ $t(error) }}
+          </v-alert>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="6" offset="3">
+          <Username v-model="account.username" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="6" offset="3">
+          <Password v-model="account.password" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="6" offset="3">
+          <v-btn color="primary" type="submit">{{ $t('login.button') }}</v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-form>
 </template>
 
 <script lang="ts">

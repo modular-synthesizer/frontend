@@ -1,49 +1,53 @@
 <template>
   <v-container>
-    <template v-if="registered">
-      <v-row>
-        <v-col cols="12">
-          <v-alert type="success">
-            {{ $t('register.messages.success') }}
-          </v-alert>
-        </v-col>
-      </v-row>
-    </template>
-    <template v-else>
-      <v-row>
-        <v-col cols="12">
-          <div class="text-h3 mb-4">{{ $t('register.title') }}</div>
-        </v-col>
-      </v-row>
-      <v-row v-if="duplicates != ''">
-        <v-col cols="12">
-          <v-alert type="error" class="mb-2">
-            {{ $t(duplicates) }}
-          </v-alert>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="6">
-          <Username v-model="account.username" />
-        </v-col>
-        <v-col cols="6">
-          <Email v-model="account.email" />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="6">
-          <Password v-model="account.password" />
-        </v-col>
-        <v-col cols="6">
-          <Password v-model="account.password_confirmation" :confirms="account.password" />
-        </v-col>
-      </v-row>
-      <v-row no-gutters>
-        <v-col cols="12">
-          <v-btn class="mt-4" color="primary" @click="register">S'inscrire</v-btn>
-        </v-col>
-      </v-row>
-    </template>
+    <v-row no-gutters>
+      <v-col xs="16" sm="10" md="8" offset-sm="1" offset-md="2">
+        <template v-if="registered">
+          <v-row>
+            <v-col cols="12">
+              <v-alert type="success">
+                {{ $t('register.messages.success') }}
+              </v-alert>
+            </v-col>
+          </v-row>
+        </template>
+        <template v-else>
+          <v-row>
+            <v-col cols="12">
+              <div class="text-h3 mb-4">{{ $t('register.title') }}</div>
+            </v-col>
+          </v-row>
+          <v-row v-if="duplicates != ''">
+            <v-col cols="12">
+              <v-alert type="error" class="mb-2">
+                {{ $t(duplicates) }}
+              </v-alert>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="6">
+              <Username v-model="account.username" />
+            </v-col>
+            <v-col cols="6">
+              <Email v-model="account.email" />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="6">
+              <Password v-model="account.password" />
+            </v-col>
+            <v-col cols="6">
+              <Password v-model="account.password_confirmation" :confirms="account.password" />
+            </v-col>
+          </v-row>
+          <v-row no-gutters>
+            <v-col cols="12">
+              <v-btn class="mt-4" color="primary" @click="register">S'inscrire</v-btn>
+            </v-col>
+          </v-row>
+        </template>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
