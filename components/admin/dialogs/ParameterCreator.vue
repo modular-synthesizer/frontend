@@ -6,7 +6,7 @@
     <v-card class="mx-auto" width="50%">
       <template v-slot:title>Ajouter un paramètre</template>
       <v-card-text>
-        <v-form @submit.prevent="create">
+        <v-form @submit.prevent="create" v-model="validForm" ref="form">
           <v-container fluid>
             <v-row>
               <v-col cols="12">
@@ -20,6 +20,8 @@
                   variant="outlined"
                   label="Nom du paramètre"
                   hint="Ce nom sera utilisé comme clef de traduction"
+                  :rules="[nameRequired]"
+                  required
                 />
               </v-col>
               <v-col cols="6">
@@ -29,6 +31,9 @@
                   variant="outlined"
                   label="Valeur par défaut"
                   hint="Cette valeur sera donné au paramètre à l'instanciation des noeuds"
+                  :min="parameter.constraints.minimum"
+                  :max="parameter.constraints.maximum"
+                  @update:modelValue="debouncedClamp"
                 />
               </v-col>
             </v-row>
@@ -43,24 +48,36 @@
                   variant="outlined"
                   v-model="parameter.constraints.minimum"
                   label="Minimum"
+                  type="number"
+                  @update:modelValue="debouncedClamp"
+                  :max="parameter.constraints.maximum - parameter.constraints.step"
                 />
               </v-col>
               <v-col xs="12" sm="6" md="3">
                 <v-text-field
                   variant="outlined"
                   v-model="parameter.constraints.maximum"
+                  label="Maximum"
+                  type="number"
+                  :min="parameter.constraints.minimum + parameter.constraints.step"
+                  @update:modelValue="debouncedClamp"
                 />
               </v-col>
               <v-col xs="12" sm="6" md="3">
                 <v-text-field
                   variant="outlined"
                   v-model="parameter.constraints.step"
+                  label="step"
+                  type="number"
                 />
               </v-col>
               <v-col xs="12" sm="6" md="3">
                 <v-text-field
                   variant="outlined"
+                  label="precision"
                   v-model="parameter.constraints.precision"
+                  type="number"
+                  min="0"
                 />
               </v-col>
             </v-row>
@@ -80,23 +97,41 @@
 import ICategory from '~~/lib/interfaces/ICategory';
 import type { PropType } from 'vue'
 import IParameter from '~~/lib/interfaces/IParameter';
+import { clamp, debounce } from 'lodash'
 
 export default {
   props: {
     parameter: {
       type: Object as PropType<IParameter>,
-      required: true
+      required: true,
     }
   },
   data: () => ({
     creationDialog: false,
     categories: [] as ICategory[],
+    validForm: true,
   }),
   methods: {
     create() {
-      this.$emit("created", this.parameter);
-      this.creationDialog = false;
-    }
+      this.$refs.form.validate();
+      if (this.validForm) {
+        this.$emit("created", this.parameter);
+        this.creationDialog = false;
+      }
+    },
+    nameRequired() {
+      return this.parameter.name !== "" || "parameters.name.required"
+    },
+    debouncedClamp: debounce(function() {
+      if (this != undefined) {
+        // @ts-ignore
+        this.parameter.value = clamp(
+          this.parameter.value,
+          this.parameter.constraints.minimum,
+          this.parameter.constraints.maximum
+        )
+      }
+    }, 250)
   }
 }
 </script>
