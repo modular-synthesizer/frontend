@@ -3,10 +3,10 @@
     <template v-slot:activator="{ props }">
       <v-btn color="primary" v-bind="props">Add new</v-btn>
     </template>
-    <v-card class="mx-auto" width="50%">
-      <template v-slot:title>Ajouter un paramètre</template>
-      <v-card-text>
-        <v-form @submit.prevent="create" v-model="validForm" ref="form">
+    <v-form @submit.prevent="create" v-model="validForm" ref="form">
+      <v-card class="mx-auto" width="50%">
+        <template v-slot:title>Ajouter un paramètre</template>
+        <v-card-text>
           <v-container fluid>
             <v-row>
               <v-col cols="12">
@@ -81,15 +81,14 @@
                 />
               </v-col>
             </v-row>
-            <v-row>
-              <v-col cols="12">
-                <v-btn color="primary" type="submit">Créer</v-btn>
-              </v-col>
-            </v-row>
           </v-container>
-        </v-form>
-      </v-card-text>
-    </v-card>
+        </v-card-text>
+        <v-card-actions class="justify-space-between">
+          <v-btn color="primary" type="submit">Créer</v-btn>
+          <v-btn @click="creationDialog = false">Fermer</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-form>
   </v-dialog>
 </template>
 

@@ -14,7 +14,6 @@
               <th>{{ $t('common.name') }}</th>
               <th>Default</th>
               <th>Constraints</th>
-              <!-- <th>{{ $t('common.actions') }}</th> -->
             </tr>
           </thead>
           <tbody>
@@ -23,11 +22,6 @@
               <td>{{ parameter.name }}</td>
               <td>{{ parameter.value }}</td>
               <td><constraints :constraints="parameter.constraints" /></td>
-              <!-- <td>
-                <v-btn icon size="small" variant="text" @click="remove(parameter.id)">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-              </td> -->
             </tr>
           </tbody>
         </v-table>
@@ -43,7 +37,6 @@ import IParameter from '~~/lib/interfaces/IParameter';
 import { useAuthentication } from '~~/lib/stores/authentication';
 import Constraints from './constraints.vue';
 import ParameterCreator from './dialogs/ParameterCreator.vue';
-import { remove } from 'lodash'
 
 export default {
     data: () => ({
@@ -66,10 +59,6 @@ export default {
             .then(response => this.parameters = response.parameters);
     },
     methods: {
-        // remove(id: string) {
-        //   api.delete(`/parameters/${id}`, { auth_token: this.session.token })
-        //     .then(() => remove(this.parameters, { id }))
-        // },
         add(parameter: IParameter) {
           const payload = {
             auth_token: this.session.token,

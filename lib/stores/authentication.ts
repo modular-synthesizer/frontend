@@ -58,10 +58,7 @@ export const useAuthentication = defineStore('authentication', {
       if (this.storage.has("auth-token")) {
         const token: string = this.storage.get("auth-token");
         api.get(`/sessions/${token}`, {auth_token: token})
-          .then((response: ISession) => {
-            this.session = response as ISession;
-            console.log(this.session);
-          })
+          .then((response: ISession) => this.session = response)
           .catch(_error => this.logout());
       }
     }

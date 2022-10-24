@@ -43,27 +43,27 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
-import ICategory from '~~/lib/interfaces/ICategory';
 import { useAuthentication } from '~~/lib/stores/authentication';
 import { remove } from "lodash"
+import { useCategories } from '~~/lib/stores/categories';
 
 export default {
   data: () => ({
-    categories: [] as ICategory[],
     category: {
       name: ""
     }
   }),
   computed: {
-    ...mapState(useAuthentication, ['session'])
+    ...mapState(useAuthentication, ['session']),
+    ...mapState(useCategories, ['categories']),
   },
   mounted() {
-    api.get("/categories", {auth_token: this.session.token})
-      .then(categories => this.categories = categories)
+    this.fetchCategories();
   },
   methods: {
+    ...mapActions(useCategories, ['fetchCategories']),
     remove(id: string) {
       api.delete(`/categories/${id}`, {auth_token: this.session.token})
         .then(() => remove(this.categories, { id }))
