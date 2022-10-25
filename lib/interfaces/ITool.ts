@@ -11,5 +11,6 @@ export interface InnerNode {
 }
 
 export interface InnerLink {
-
+  from: { node: string, index: number },
+  to: { node: string, index: number }
 }

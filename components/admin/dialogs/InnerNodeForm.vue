@@ -51,7 +51,6 @@ export default {
         });
         this.$refs.innerNodesForm.reset();
       }
-      console.log(valid);
     },
     nameUnicity() {
       const nameExists: boolean = find(this.tool.inner_nodes, {name: this.innerNode.name})

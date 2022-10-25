@@ -41,14 +41,12 @@
                       <v-table>
                         <thead>
                           <tr>
-                            <th>Index</th>
                             <th>Name</th>
                             <th>Générateur</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr v-for="(node, idx) in tool.inner_nodes">
-                            <td>{{ idx }}</td>
+                          <tr v-for="node in tool.inner_nodes">
                             <td>{{ node.name }}</td>
                             <td>{{ node.generator }}</td>
                           </tr>
@@ -61,6 +59,29 @@
             </v-expansion-panel>
             <v-expansion-panel>
               <v-expansion-panel-title>Liens internes</v-expansion-panel-title>
+              <v-expansion-panel-text>
+                <v-container fluid>
+                  <inner-links-form :tool="tool" @submitted="addInnerLink" />
+                  <v-row>
+                    <v-col cols="12">
+                      <v-table>
+                        <thead>
+                          <tr>
+                            <th>Depuis</th>
+                            <th>Vers</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="link in tool.inner_links">
+                            <td>{{ link.from.node }}.{{ link.from.index }}</td>
+                            <td>{{ link.to.node }}.{{ link.to.index }}</td>
+                          </tr>
+                        </tbody>
+                      </v-table>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-expansion-panel-text>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-card-text>
@@ -77,10 +98,11 @@
 import { mapState } from 'pinia';
 import type { PropType } from 'vue'
 import ICategory from '~~/lib/interfaces/ICategory';
-import ITool, { InnerNode } from '~~/lib/interfaces/ITool';
+import ITool, { InnerLink, InnerNode } from '~~/lib/interfaces/ITool';
 import { useCategories } from '~~/lib/stores/categories';
-import { find } from 'lodash'
+import { find, cloneDeep } from 'lodash'
 import InnerNodeForm from './InnerNodeForm.vue';
+import InnerLinksForm from './InnerLinksForm.vue';
 
 export default {
     props: {
@@ -96,7 +118,7 @@ export default {
         innerNode: { name: "", generator: "" },
     }),
     computed: {
-        ...mapState(useCategories, ["categories"])
+        ...mapState(useCategories, ["categories"]),
     },
     methods: {
         create() {
@@ -104,6 +126,10 @@ export default {
         },
         addInnerNode(node: InnerNode) {
             this.tool.inner_nodes.push(node);
+        },
+        addInnerLink(link: InnerLink) {
+          console.log(link);
+          this.tool.inner_links.push(cloneDeep(link));
         },
         uniqueNodeName() {
             return !find(this.tool.inner_nodes, { name: this.innerNode.name }) || "name.uniq";
@@ -113,6 +139,6 @@ export default {
         this.category = this.categories[0];
         this.tool.category_id = this.category.id;
     },
-    components: { InnerNodeForm }
+    components: { InnerNodeForm, InnerLinksForm }
 }
 </script>
