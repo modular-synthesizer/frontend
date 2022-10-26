@@ -69,9 +69,6 @@ export default {
   methods: {
     submit() {
       const found = find(this.tool.inner_links, this.link);
-      console.log(this.tool.inner_links);
-      console.log(this.link);
-      console.log(found)
       if (found === undefined) {
         this.$emit("submitted", this.link)
       }

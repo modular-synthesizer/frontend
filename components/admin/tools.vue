@@ -20,6 +20,8 @@ export default {
       category_id: "",
       inner_nodes: [],
       inner_links: [],
+      inputs: [],
+      outputs: [],
     }
   }),
   computed: {

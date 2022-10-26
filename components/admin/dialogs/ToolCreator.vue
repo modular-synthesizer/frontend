@@ -83,6 +83,41 @@
                 </v-container>
               </v-expansion-panel-text>
             </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-title>Ports</v-expansion-panel-title>
+              <v-expansion-panel-text>
+                <ports-form :tool="tool" @submitted="addPort" />
+                <v-table>
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Nom</th>
+                      <th>Cible</th>
+                      <th>Index</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="port in tool.inputs">
+                      <td>Input</td>
+                      <td>{{ port.name }}</td>
+                      <td>{{ port.target }}</td>
+                      <td>{{ port.index }}</td>
+                    </tr>
+                    <tr v-for="port in tool.outputs">
+                      <td>Output</td>
+                      <td>{{ port.name }}</td>
+                      <td>{{ port.target }}</td>
+                      <td>{{ port.index }}</td>
+                    </tr>
+                  </tbody>
+                </v-table>
+              </v-expansion-panel-text>
+            </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-title>Paramètres</v-expansion-panel-title>
+              <v-expansion-panel-text>
+              </v-expansion-panel-text>
+            </v-expansion-panel>
           </v-expansion-panels>
         </v-card-text>
         <v-card-actions>
@@ -103,6 +138,7 @@ import { useCategories } from '~~/lib/stores/categories';
 import { find, cloneDeep } from 'lodash'
 import InnerNodeForm from './InnerNodeForm.vue';
 import InnerLinksForm from './InnerLinksForm.vue';
+import PortsForm from './PortsForm.vue'
 
 export default {
     props: {
@@ -128,8 +164,15 @@ export default {
             this.tool.inner_nodes.push(node);
         },
         addInnerLink(link: InnerLink) {
-          console.log(link);
           this.tool.inner_links.push(cloneDeep(link));
+        },
+        addPort({ type, port }) {
+          if (type === "input") {
+            this.tool.inputs.push(port);
+          }
+          else {
+            this.tool.outputs.push(port);
+          }
         },
         uniqueNodeName() {
             return !find(this.tool.inner_nodes, { name: this.innerNode.name }) || "name.uniq";
@@ -139,6 +182,6 @@ export default {
         this.category = this.categories[0];
         this.tool.category_id = this.category.id;
     },
-    components: { InnerNodeForm, InnerLinksForm }
+    components: { InnerNodeForm, InnerLinksForm, PortsForm }
 }
 </script>
