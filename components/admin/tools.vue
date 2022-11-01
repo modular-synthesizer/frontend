@@ -22,6 +22,8 @@ export default {
       inner_links: [],
       inputs: [],
       outputs: [],
+      parameters: [],
+      slots: 2,
     }
   }),
   computed: {

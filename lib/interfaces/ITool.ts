@@ -5,6 +5,13 @@ export default interface ITool {
   inner_links: InnerLink[],
   inputs: IToolPort[],
   outputs: IToolPort[],
+  parameters: IToolParameter[],
+  slots: number
+}
+
+export interface IToolParameter {
+  descriptor: string;
+  targets: string[]
 }
 
 export interface InnerNode {

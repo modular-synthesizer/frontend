@@ -13,7 +13,7 @@
               <v-expansion-panel-text>
                 <v-container fluid>
                   <v-row>
-                    <v-col xs="12" md="6">
+                    <v-col xs="12" lg="4">
                       <v-select
                         variant="outlined"
                         :items="categories"
@@ -24,8 +24,11 @@
                         @update:modelValue="tool.category_id = category.id"
                       />
                     </v-col>
-                    <v-col xs="12" md="6">
+                    <v-col xs="12" lg="4">
                       <v-text-field variant="outlined" label="Nom de l'outil" required v-model="tool.name" />
+                    </v-col>
+                    <v-col xs="12" lg="4">
+                      <v-text-field type="number" variant="outlined" label="Emplacements" required v-model="tool.slots" />
                     </v-col>
                   </v-row>
                 </v-container>
@@ -116,12 +119,27 @@
             <v-expansion-panel>
               <v-expansion-panel-title>Paramètres</v-expansion-panel-title>
               <v-expansion-panel-text>
+                <parameters-form :tool="tool" @submitted="addParameter" />
+                <v-table>
+                  <thead>
+                    <tr>
+                      <th>Cibles</th>
+                      <th>Descripteur</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="param in tool.parameters">
+                      <td>{{ param.targets.join(', ') }}</td>
+                      <td>{{ param.descriptor }}</td>
+                    </tr>
+                  </tbody>
+                </v-table>
               </v-expansion-panel-text>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" type="submit">Créer</v-btn>
+          <v-btn color="primary" type="submit" @click="create()">Créer</v-btn>
           <v-btn @click="creationDialog = false">Fermer</v-btn>
         </v-card-actions>
       </v-card>
@@ -133,12 +151,15 @@
 import { mapState } from 'pinia';
 import type { PropType } from 'vue'
 import ICategory from '~~/lib/interfaces/ICategory';
-import ITool, { InnerLink, InnerNode } from '~~/lib/interfaces/ITool';
+import ITool, { InnerLink, InnerNode, IToolParameter } from '~~/lib/interfaces/ITool';
 import { useCategories } from '~~/lib/stores/categories';
 import { find, cloneDeep } from 'lodash'
 import InnerNodeForm from './InnerNodeForm.vue';
 import InnerLinksForm from './InnerLinksForm.vue';
 import PortsForm from './PortsForm.vue'
+import ParametersForm from './ParametersForm.vue'
+import { api } from '~~/lib/api/Api';
+import { useAuthentication } from '~~/lib/stores/authentication';
 
 export default {
     props: {
@@ -154,11 +175,16 @@ export default {
         innerNode: { name: "", generator: "" },
     }),
     computed: {
+      ...mapState(useAuthentication, ['session']),
         ...mapState(useCategories, ["categories"]),
     },
     methods: {
         create() {
-            console.log(this.tool);
+          this.tool.category_id = this.category;
+          api.post("/tools", {auth_token: this.session.token, ...this.tool})
+            .then(response => {
+              console.log(response);
+            })
         },
         addInnerNode(node: InnerNode) {
             this.tool.inner_nodes.push(node);
@@ -174,6 +200,9 @@ export default {
             this.tool.outputs.push(port);
           }
         },
+        addParameter(param: IToolParameter) {
+          this.tool.parameters.push(param);
+        },
         uniqueNodeName() {
             return !find(this.tool.inner_nodes, { name: this.innerNode.name }) || "name.uniq";
         }
@@ -182,6 +211,6 @@ export default {
         this.category = this.categories[0];
         this.tool.category_id = this.category.id;
     },
-    components: { InnerNodeForm, InnerLinksForm, PortsForm }
+    components: { InnerNodeForm, InnerLinksForm, ParametersForm, PortsForm }
 }
 </script>

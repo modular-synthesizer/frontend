@@ -31,45 +31,46 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
 import IParameter from '~~/lib/interfaces/IParameter';
 import { useAuthentication } from '~~/lib/stores/authentication';
+import { useDescriptors } from '~~/lib/stores/descriptors';
 import Constraints from './constraints.vue';
 import ParameterCreator from './dialogs/ParameterCreator.vue';
 
 export default {
-    data: () => ({
-        parameters: [] as IParameter[],
-        creationDialog: false,
-        parameter: {
-          id: "",
-          name: "",
-          value: 1,
-          constraints: {
-            minimum: 0, maximum: 10, step: 1, precision: 0
-          }
-        }
-    }),
-    computed: {
-        ...mapState(useAuthentication, ["session"])
-    },
-    mounted() {
-        api.get("/parameters", { auth_token: this.session.token })
-            .then(response => this.parameters = response.parameters);
-    },
-    methods: {
-        add(parameter: IParameter) {
-          const payload = {
-            auth_token: this.session.token,
-            name: parameter.name,
-            default: parameter.value,
-            ...parameter.constraints
-          }
-          api.post("/parameters", payload)
-            .then((response: IParameter) => this.parameters.push(response))
-        }
-    },
-    components: { Constraints, ParameterCreator }
+  data: () => ({
+    creationDialog: false,
+    parameter: {
+      id: "",
+      name: "",
+      value: 1,
+      constraints: {
+        minimum: 0, maximum: 10, step: 1, precision: 0
+      }
+    }
+  }),
+  computed: {
+    ...mapState(useDescriptors, ['parameters']),
+    ...mapState(useAuthentication, ["session"])
+  },
+  mounted() {
+    this.fetchDescriptors();
+  },
+  methods: {
+    ...mapActions(useDescriptors, ['fetchDescriptors']),
+    add(parameter: IParameter) {
+      const payload = {
+        auth_token: this.session.token,
+        name: parameter.name,
+        default: parameter.value,
+        ...parameter.constraints
+      }
+      api.post("/parameters", payload)
+        .then((response: IParameter) => this.parameters.push(response))
+    }
+  },
+  components: { Constraints, ParameterCreator }
 }
 </script>
