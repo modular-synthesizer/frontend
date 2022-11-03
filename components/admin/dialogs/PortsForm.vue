@@ -3,19 +3,19 @@
     <v-container fluid>
       <v-row>
         <v-col xs="4" md="2">
-          <v-select :items="types" v-model="type" variant="outlined" density="compact" label="Type" />
+          <v-select :items="types" v-model="type" variant="outlined" density="compact" :label="$t('tools.dialog.fields.type.label')" />
         </v-col>
         <v-col xs="8" md="3">
-          <v-text-field v-model="port.name" variant="outlined" density="compact" label="Nom" />
+          <v-text-field v-model="port.name" variant="outlined" density="compact" :label="$t('common.name')" />
         </v-col>
         <v-col xs="8" md="3">
-          <v-text-field v-model="port.target" variant="outlined" density="compact" label="Noeud" />
+          <v-text-field v-model="port.target" variant="outlined" density="compact" :label="$t('tools.dialog.fields.node.label')" />
         </v-col>
         <v-col xs="4" md="2">
-          <v-text-field type="number" variant="outlined" density="compact" v-model="port.index" label="Index" />
+          <v-text-field type="number" variant="outlined" density="compact" v-model="port.index" :label="$t('common.index')" />
         </v-col>
         <v-col xs="12" md="2">
-          <v-btn type="submit">Ajouter</v-btn>
+          <v-btn type="submit">{{ $t('common.add') }}</v-btn>
         </v-col>
       </v-row>
     </v-container>

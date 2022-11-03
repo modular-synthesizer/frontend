@@ -7,7 +7,8 @@
             variant="outlined"
             density="compact"
             v-model="innerNode.name"
-            label="Nom du noeud"
+            :label="$t('common.name')"
+            :hint="$t('tools.dialog.fields.node_name.hint')"
             :rules="[nameUnicity]"
           />
         </v-col>
@@ -16,11 +17,12 @@
             variant="outlined"
             density="compact"
             v-model="innerNode.generator"
-            label="Générateur du noeud"
+            :label="$t('tools.dialog.fields.generator.label')"
+            :hint="$t('tools.dialog.fields.generator.hint')"
           />
         </v-col>
         <v-col sm="12" md="2">
-          <v-btn @click="submit()">Ajouter</v-btn>
+          <v-btn @click="submit()">{{ $t('common.validate') }}</v-btn>
         </v-col>
       </v-row>
     </v-container>

@@ -8,7 +8,7 @@
             v-model="link.from.node"
             variant="outlined"
             density="compact"
-            label="Depuis"
+            :label="$t('tools.dialog.fields.from.label')"
           />
         </v-col>
         <v-col sm="2" md="2">
@@ -17,15 +17,17 @@
             variant="outlined"
             density="compact"
             v-model="link.from.index"
+            :label="$t('common.index')"
           />
         </v-col>
         <v-col sm="10" md="4">
-          <v-select
-            :items="innerNodes"
+          <!-- Ajouter règle de validation pour que si on split sur le point, la première partie soit un inner node -->
+          <v-text-field
             v-model="link.to.node"
             variant="outlined"
             density="compact"
-            label="Vers"
+            :label="$t('tools.dialog.fields.to.label')"
+            :hint="$t('tools.dialog.fields.to.hint')"
           />
         </v-col>
         <v-col sm="2" md="2">
@@ -34,10 +36,11 @@
             variant="outlined"
             density="compact"
             v-model="link.to.index"
+            :label="$t('common.index')"
           />
         </v-col>
         <v-col cols="12">
-          <v-btn @click="submit()">Ajouter</v-btn>
+          <v-btn @click="submit()">{{ $t('common.validate') }}</v-btn>
         </v-col>
       </v-row>
     </v-container>

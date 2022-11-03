@@ -1,41 +1,56 @@
 <template>
   <v-dialog v-model="creationDialog" width="50%">
     <template v-slot:activator="{ props }">
-      <v-btn color="primary" v-bind="props">Add new</v-btn>
+      <v-btn color="primary" v-bind="props">{{ $t('common.create') }}</v-btn>
     </template>
     <v-form @submit.prevent="create" v-model="validForm" ref="form">
       <v-card>
-        <template v-slot:title>Création d'outil</template>
+        <template v-slot:title>{{ $t('tools.dialog.title') }}</template>
         <v-card-text>
           <v-expansion-panels>
             <v-expansion-panel>
-              <v-expansion-panel-title>Informations générales</v-expansion-panel-title>
+              <v-expansion-panel-title>{{ $t('tools.dialog.steps.informations') }}</v-expansion-panel-title>
               <v-expansion-panel-text>
                 <v-container fluid>
                   <v-row>
                     <v-col xs="12" lg="4">
                       <v-select
                         variant="outlined"
+                        density="compact"
                         :items="categories"
                         item-title="name"
                         item-value="id"
-                        label="Catégorie"
+                        :label="$t('tools.dialog.fields.category.label')"
                         v-model="category"
                         @update:modelValue="tool.category_id = category.id"
                       />
                     </v-col>
                     <v-col xs="12" lg="4">
-                      <v-text-field variant="outlined" label="Nom de l'outil" required v-model="tool.name" />
+                      <v-text-field
+                        variant="outlined"
+                        density="compact"
+                        :label="$t('tools.dialog.fields.name.label')"
+                        :hint="$t('tools.dialog.fields.name.hint')"
+                        :rules="[nameRequired, nameLength]"
+                        required
+                        v-model="tool.name"
+                      />
                     </v-col>
                     <v-col xs="12" lg="4">
-                      <v-text-field type="number" variant="outlined" label="Emplacements" required v-model="tool.slots" />
+                      <v-text-field
+                        type="number"
+                        variant="outlined"
+                        density="compact"
+                        :label="$t('tools.dialog.fields.slots.label')"
+                        required
+                        v-model="tool.slots" />
                     </v-col>
                   </v-row>
                 </v-container>
               </v-expansion-panel-text>
             </v-expansion-panel>
             <v-expansion-panel>
-              <v-expansion-panel-title>Noeuds internes</v-expansion-panel-title>
+              <v-expansion-panel-title>{{ $t('tools.dialog.steps.inner_nodes') }}</v-expansion-panel-title>
               <v-expansion-panel-text>
                 <v-container fluid>
                   <inner-node-form :tool="tool" @submitted="addInnerNode" />
@@ -44,8 +59,8 @@
                       <v-table>
                         <thead>
                           <tr>
-                            <th>Name</th>
-                            <th>Générateur</th>
+                            <th>{{ $t('tools.dialog.headers.name') }}</th>
+                            <th>{{ $t('tools.dialog.headers.generator') }}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -61,7 +76,7 @@
               </v-expansion-panel-text>
             </v-expansion-panel>
             <v-expansion-panel>
-              <v-expansion-panel-title>Liens internes</v-expansion-panel-title>
+              <v-expansion-panel-title>{{ $t('tools.dialog.steps.inner_links') }}</v-expansion-panel-title>
               <v-expansion-panel-text>
                 <v-container fluid>
                   <inner-links-form :tool="tool" @submitted="addInnerLink" />
@@ -70,8 +85,8 @@
                       <v-table>
                         <thead>
                           <tr>
-                            <th>Depuis</th>
-                            <th>Vers</th>
+                            <th>{{ $t('tools.dialog.headers.from') }}</th>
+                            <th>{{ $t('tools.dialog.headers.to') }}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -87,16 +102,16 @@
               </v-expansion-panel-text>
             </v-expansion-panel>
             <v-expansion-panel>
-              <v-expansion-panel-title>Ports</v-expansion-panel-title>
+              <v-expansion-panel-title>{{ $t('tools.dialog.steps.ports') }}</v-expansion-panel-title>
               <v-expansion-panel-text>
                 <ports-form :tool="tool" @submitted="addPort" />
                 <v-table>
                   <thead>
                     <tr>
-                      <th>Type</th>
-                      <th>Nom</th>
-                      <th>Cible</th>
-                      <th>Index</th>
+                      <th>{{ $t('tools.dialog.headers.type') }}</th>
+                      <th>{{ $t('tools.dialog.headers.name') }}</th>
+                      <th>{{ $t('tools.dialog.headers.target') }}</th>
+                      <th>{{ $t('tools.dialog.headers.index') }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -117,14 +132,14 @@
               </v-expansion-panel-text>
             </v-expansion-panel>
             <v-expansion-panel>
-              <v-expansion-panel-title>Paramètres</v-expansion-panel-title>
+              <v-expansion-panel-title>{{ $t('tools.dialog.steps.parameters') }}</v-expansion-panel-title>
               <v-expansion-panel-text>
                 <parameters-form :tool="tool" @submitted="addParameter" />
                 <v-table>
                   <thead>
                     <tr>
-                      <th>Cibles</th>
-                      <th>Descripteur</th>
+                      <th>{{ $t('tools.dialog.headers.targets') }}</th>
+                      <th>{{ $t('tools.dialog.headers.descriptor') }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -139,8 +154,8 @@
           </v-expansion-panels>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" type="submit" @click="create()">Créer</v-btn>
-          <v-btn @click="creationDialog = false">Fermer</v-btn>
+          <v-btn color="primary" type="submit" @click="create()">{{ $t('common.validate') }}</v-btn>
+          <v-btn @click="creationDialog = false">{{ $t('common.close') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-form>
@@ -205,6 +220,12 @@ export default {
         },
         uniqueNodeName() {
             return !find(this.tool.inner_nodes, { name: this.innerNode.name }) || "name.uniq";
+        },
+        nameLength() {
+          return this.tool.name.length > 3 || "tools.dialog.errors.name.short"
+        },
+        nameRequired() {
+          return !!this.tool.name || "tools.dialog.errors.name.required"
         }
     },
     mounted() {

@@ -16,8 +16,13 @@
   },
   "common": {
     "actions": "Actions",
+    "add": "Ajouter",
+    "close": "Fermer",
+    "create": "Créer",
+    "index": "Index",
     "name": "Nom",
-    "uuid": "Identifiant"
+    "uuid": "Identifiant",
+    "validate": "Valider"
   },
   "errors": {
     "email": {
@@ -43,6 +48,33 @@
     "button": "Se connecter",
     "title": "Connexion"
   },
+  "parameters": {
+    "dialog": {
+      "steps": {
+        "constraints": "Contraintes",
+        "informations": "Informations générales"
+      },
+      "fields": {
+        "default": {
+          "hint": "Cette valeur sera affectée au paramètre à l'instaniation d'un module",
+          "label": "Valeur par défaut"
+        },
+        "maximum": {
+          "label": "Maximum"
+        },
+        "minimum": {
+          "label": "Minimum"
+        },
+        "precision": {
+          "label": "Précision"
+        },
+        "step": {
+          "label": "Crantage"
+        }
+      },
+      "title": "Créer un nouveau paramètre"
+    }
+  },
   "register": {
     "hints": {
       "email": "Entrez une adresse email valide",
@@ -64,5 +96,71 @@
       "username": "Nom d'utilisateur"
     },
     "title": "Inscription"
+  },
+  "tools": {
+    "dialog": {
+      "headers": {
+        "descriptor": "Descripteur",
+        "from": "Origine",
+        "generator": "Générateur",
+        "index": "Index",
+        "name": "Nom",
+        "target": "Cible",
+        "targets": "Cibles",
+        "to": "Destination",
+        "type": "Type"
+      },
+      "fields": {
+        "category": {
+          "label": "Catégorie"
+        },
+        "descriptor": {
+          "label": "Descripteur"
+        },
+        "errors": {
+          "name": {
+            "required": "Le nom est requis"
+          }
+        },
+        "from": {
+          "label": "Origine"
+        },
+        "generator": {
+          "hint": "La fonction créant le noeud",
+          "name": "Générateur"
+        },
+        "name": {
+          "hint": "Six caractères ou plus",
+          "label": "Nom de l'outil"
+        },
+        "node": {
+          "label": "Noeud"
+        },
+        "node_name": {
+          "hint": "Nom unique parmi les noeuds"
+        },
+        "slots": {
+          "label": "Emplacements"
+        },
+        "targets": {
+          "label": "Cibles"
+        },
+        "to": {
+          "hint": "Un noeud ou un paramètre audio",
+          "label": "Destination"
+        },
+        "type": {
+          "label": "Type"
+        }
+      },
+      "steps": {
+        "informations": "Informations générales",
+        "inner_links": "Liens internes",
+        "inner_nodes": "Noeuds internes",
+        "parameters": "Paramètres",
+        "ports": "Ports"
+      },
+      "title": "Créer un nouvel outil"
+    }
   }
 }

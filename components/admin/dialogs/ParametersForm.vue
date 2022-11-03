@@ -7,7 +7,7 @@
             :multiple="true"
             :items="tool.inner_nodes"
             v-model="parameter.targets"
-            label="Cibles"
+            :label="$t('tools.dialog.fields.targets.label')"
             variant="outlined"
             density="compact"
             item-title="name"
@@ -20,12 +20,12 @@
             variant="outlined"
             density="compact"
             :items="descriptors"
-            label="Descripteur"
+            :label="$t('tools.dialog.fields.descriptor.label')"
             v-model="descriptor"
           />
         </v-col>
         <v-col xs="12" md="2">
-          <v-btn @click="submit">Ajouter</v-btn>
+          <v-btn @click="submit">{{ $t('common.add') }}</v-btn>
         </v-col>
       </v-row>
     </v-container>
