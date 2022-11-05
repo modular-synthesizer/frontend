@@ -169,10 +169,10 @@ import ICategory from '~~/lib/interfaces/ICategory';
 import ITool, { InnerLink, InnerNode, IToolParameter } from '~~/lib/interfaces/ITool';
 import { useCategories } from '~~/lib/stores/categories';
 import { find, cloneDeep } from 'lodash'
-import InnerNodeForm from './InnerNodeForm.vue';
-import InnerLinksForm from './InnerLinksForm.vue';
-import PortsForm from './PortsForm.vue'
-import ParametersForm from './ParametersForm.vue'
+import InnerNodeForm from '../forms/InnerNodeForm.vue';
+import InnerLinksForm from '../forms/InnerLinksForm.vue';
+import PortsForm from '../forms/PortsForm.vue'
+import ParametersForm from '../forms/ParametersForm.vue'
 import { api } from '~~/lib/api/Api';
 import { useAuthentication } from '~~/lib/stores/authentication';
 

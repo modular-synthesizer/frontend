@@ -170,6 +170,10 @@
         "ports": "Ports"
       },
       "title": "Créer un nouvel outil"
+    },
+    "headers": {
+      "category": "Catégorie",
+      "slots": "Emplacements"
     }
   }
 }

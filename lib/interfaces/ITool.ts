@@ -1,4 +1,5 @@
 export default interface ITool {
+  id: string,
   name: string;
   category_id: string,
   inner_nodes: InnerNode[],
