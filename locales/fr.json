@@ -75,6 +75,15 @@
       "title": "Créer un nouveau paramètre"
     }
   },
+  "ports": {
+    "name": {
+      "required": "Champ obligatoire"
+    },
+    "target": {
+      "required": "Champs obligatoire",
+      "unknown": "Cible invalide"
+    }
+  },
   "register": {
     "hints": {
       "email": "Entrez une adresse email valide",
@@ -127,7 +136,7 @@
         },
         "generator": {
           "hint": "La fonction créant le noeud",
-          "name": "Générateur"
+          "label": "Générateur"
         },
         "name": {
           "hint": "Six caractères ou plus",

@@ -71,10 +71,10 @@ export default {
   },
   methods: {
     submit() {
-      const formValid: Boolean = this.$refs.form.validate();
-      if (formValid) {
+      if (this.$refs.form.validate()) {
         this.parameter.descriptor = this.descriptor
         this.$emit("submitted", cloneDeep(this.parameter));
+        this.$refs.form.reset();
       }
     },
     ...mapActions(useDescriptors, ['fetchDescriptors']),

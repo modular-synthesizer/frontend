@@ -7,12 +7,8 @@
       <v-card class="mx-auto" width="50%">
         <template v-slot:title>{{ $t('parameters.dialog.title')}}</template>
         <v-card-text>
+          <div class="text-h5">{{ $t('parameters.dialog.steps.informations') }}</div>
           <v-container fluid>
-            <v-row>
-              <v-col cols="12">
-                <div class="text-h5">{{ $t('parameters.dialog.steps.informations') }}</div>
-              </v-col>
-            </v-row>
             <v-row>
               <v-col cols="6">
                 <v-text-field
@@ -91,7 +87,7 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts">                                                                                                     
 import ICategory from '~~/lib/interfaces/ICategory';
 import type { PropType } from 'vue'
 import IParameter from '~~/lib/interfaces/IParameter';

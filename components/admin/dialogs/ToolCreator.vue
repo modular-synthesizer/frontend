@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="creationDialog" width="50%">
     <template v-slot:activator="{ props }">
-      <v-btn color="primary" v-bind="props">{{ $t('common.create') }}</v-btn>
+      <v-btn color="primary" v-bind="props">{{ $t('common.add') }}</v-btn>
     </template>
     <v-form @submit.prevent="create" v-model="validForm" ref="form">
       <v-card>
