@@ -40,7 +40,7 @@
           />
         </v-col>
         <v-col xs="12" md="2">
-          <v-btn type="submit" @click="submit">{{ $t('common.add') }}</v-btn>
+          <v-btn @click="submit">{{ $t('common.add') }}</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -75,6 +75,7 @@ export default {
   }),
   methods: {
     submit() {
+      console.log("submission", this.port);
       if (this.$refs.form.validate()) {
         this.$emit("submitted", {type: this.type, port: cloneDeep(this.port)});
         this.$refs.form.reset();

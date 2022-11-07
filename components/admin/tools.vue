@@ -1,5 +1,5 @@
 <template>
-  <tool-creator :tool="tool" />
+  <tool-creator :tool="tool" v-if="categories.length > 0 && generators.length > 0" @created="add" />
   <v-table>
     <thead>
       <tr>
@@ -24,7 +24,11 @@
 
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
+import { api } from '~~/lib/api/Api';
+import ITool from '~~/lib/interfaces/ITool';
+import { useAuthentication } from '~~/lib/stores/authentication';
 import { useCategories } from '~~/lib/stores/categories';
+import { useGenerators } from '~~/lib/stores/tools/generators';
 import { useToolsList } from '~~/lib/stores/tools/list';
 import ToolCreator from './dialogs/ToolCreator.vue'
 
@@ -44,10 +48,16 @@ export default {
   }),
   computed: {
     ...mapState(useCategories, ['categories']),
-    ...mapState(useToolsList, ['tools'])
+    ...mapState(useToolsList, ['tools']),
+    ...mapState(useGenerators, ['generators']),
+    ...mapState(useAuthentication, ['session']),
   },
   methods: {
-    ...mapActions(useToolsList, ['fetchTools'])
+    ...mapActions(useToolsList, ['fetchTools']),
+    add(tool: ITool) {
+      api.post("/tools", {auth_token: this.session.token, ...tool})
+        .then(response => this.tools.push(response));
+    }
   },
   mounted() {
     this.fetchTools();

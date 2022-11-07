@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="innerNodesForm">
+  <v-form ref="innerNodesForm" @submit.prevent="submit">
     <v-container fluid> 
       <v-row>
         <v-col sm="12" md="5">
@@ -13,10 +13,11 @@
           />
         </v-col>
         <v-col sm="12" md="5">
-          <v-text-field
+          <v-select
             variant="outlined"
             density="compact"
             v-model="innerNode.generator"
+            :items="generators"
             :label="$t('tools.dialog.fields.generator.label')"
             :hint="$t('tools.dialog.fields.generator.hint')"
           />
@@ -32,6 +33,8 @@
 <script lang="ts">import { PropType } from 'vue';
 import ITool from '~~/lib/interfaces/ITool';
 import { find } from "lodash";
+import { useGenerators } from '~~/lib/stores/tools/generators';
+import { mapActions, mapState } from 'pinia';
 
 export default {
   props: {
@@ -41,8 +44,14 @@ export default {
     }
   },
   data: () => ({
-    innerNode: { name: "", generator: "" }
+    innerNode: { name: "", generator: null }
   }),
+  computed: {
+    ...mapState(useGenerators, ['generators'])
+  },
+  mounted() {
+    this.innerNode.generator = this.generators[0]
+  },
   methods: {
     async submit() {
       const { valid } = await this.$refs.innerNodesForm.validate();
@@ -57,7 +66,8 @@ export default {
     nameUnicity() {
       const nameExists: boolean = find(this.tool.inner_nodes, {name: this.innerNode.name})
       return !nameExists || "name.uniq";
-    }
+    },
+    ...mapActions(useGenerators, ['fetchGenerators'])
   }
 }
 </script>

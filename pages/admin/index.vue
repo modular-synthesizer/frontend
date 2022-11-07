@@ -24,7 +24,9 @@
 </template>
 
 <script lang="ts">
+import { mapActions } from 'pinia';
 import Categories from '~~/components/admin/categories.vue';
+import { useGenerators } from '~~/lib/stores/tools/generators';
 import Parameters from '../../components/admin/parameters.vue';
 import Tools from '../../components/admin/tools.vue';
 
@@ -32,6 +34,12 @@ export default {
     data: () => ({
         tab: "categories"
     }),
-    components: { Categories, Parameters, Tools }
+    components: { Categories, Parameters, Tools },
+    methods: {
+      ...mapActions(useGenerators, ['fetchGenerators'])
+    },
+    mounted() {
+      this.fetchGenerators();
+    }
 }
 </script>

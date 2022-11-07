@@ -154,7 +154,7 @@
           </v-expansion-panels>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" type="submit" @click="create()">{{ $t('common.validate') }}</v-btn>
+          <v-btn color="primary" @click="create()">{{ $t('common.validate') }}</v-btn>
           <v-btn @click="creationDialog = false">{{ $t('common.close') }}</v-btn>
         </v-card-actions>
       </v-card>
@@ -173,7 +173,6 @@ import InnerNodeForm from '../forms/InnerNodeForm.vue';
 import InnerLinksForm from '../forms/InnerLinksForm.vue';
 import PortsForm from '../forms/PortsForm.vue'
 import ParametersForm from '../forms/ParametersForm.vue'
-import { api } from '~~/lib/api/Api';
 import { useAuthentication } from '~~/lib/stores/authentication';
 
 export default {
@@ -190,16 +189,17 @@ export default {
         innerNode: { name: "", generator: "" },
     }),
     computed: {
-      ...mapState(useAuthentication, ['session']),
-        ...mapState(useCategories, ["categories"]),
+      ...mapState(useCategories, ["categories"]),
     },
     methods: {
         create() {
           this.tool.category_id = this.category;
-          api.post("/tools", {auth_token: this.session.token, ...this.tool})
-            .then(response => {
-              console.log(response);
-            })
+          if(this.$refs.form.validate()) {
+            this.$emit('created', cloneDeep(this.tool));
+            this.$refs.form.reset();
+            this.$refs.form.resetValidation();
+            this.creationDialog = false;
+          }
         },
         addInnerNode(node: InnerNode) {
             this.tool.inner_nodes.push(node);
@@ -229,8 +229,10 @@ export default {
         }
     },
     mounted() {
-        this.category = this.categories[0];
-        this.tool.category_id = this.category.id;
+        if (this.categories > 0) {
+          this.category = this.categories[0];
+          this.tool.category_id = this.category.id;
+        }
     },
     components: { InnerNodeForm, InnerLinksForm, ParametersForm, PortsForm }
 }

@@ -91,7 +91,7 @@
 import ICategory from '~~/lib/interfaces/ICategory';
 import type { PropType } from 'vue'
 import IParameter from '~~/lib/interfaces/IParameter';
-import { clamp, debounce } from 'lodash'
+import { clamp, cloneDeep, debounce } from 'lodash'
 
 export default {
   props: {
@@ -109,7 +109,9 @@ export default {
     create() {
       this.$refs.form.validate();
       if (this.validForm) {
-        this.$emit("created", this.parameter);
+        this.$emit("created", cloneDeep(this.parameter));
+        this.$refs.form.reset();
+        this.$refs.form.resetValidation();
         this.creationDialog = false;
       }
     },
