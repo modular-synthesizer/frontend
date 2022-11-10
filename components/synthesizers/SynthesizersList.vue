@@ -32,24 +32,14 @@
 </template>
 
 <script lang="ts">
-import { mapState } from "pinia";
-import { api } from "~~/lib/api/Api";
-import { useAuthentication } from "~~/lib/stores/authentication";
+import ISynthesizer from "~~/lib/interfaces/ISynthesizer";
 
 export default {
-  data() {
-    return {
-      synthesizers: []
+  props: {
+    synthesizers: {
+      type: Array<ISynthesizer>,
+      default: () => []
     }
-  },
-  computed: {
-    ...mapState(useAuthentication, ['session'])
-  },
-  mounted() {
-    api.get('/synthesizers', {auth_token: this.session.token})
-      .then(response => {
-        this.synthesizers = response.synthesizers;
-      })
   }
 }
 </script>

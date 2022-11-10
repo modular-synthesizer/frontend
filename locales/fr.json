@@ -48,6 +48,26 @@
     "button": "Se connecter",
     "title": "Connexion"
   },
+  "modules": {
+    "creator": {
+      "tools": {
+        "common": {
+          "ProgrammableGain": {
+            "title": "Gain Programmable",
+            "description": "Un gain mono-canal programmable"
+          },
+          "SineOscillator": {
+            "title": "Oscillateurr sinusoidal",
+            "description": "Un oscillator simple produisant une onde sinusoïdale paramétrable"
+          },
+          "StandardOutput": {
+            "title": "Sortie standarde",
+            "description": "Une sortie standarde vous permettant d'écouter votre patch"
+          }
+        }
+      }
+    }
+  },
   "parameters": {
     "dialog": {
       "steps": {
