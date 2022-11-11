@@ -1,6 +1,8 @@
 import { ISynthesizer } from "../interfaces/ISynthesizer";
 import { times } from "lodash";
 import Rack from "./Rack";
+import { IndexHtmlTransform } from "vite";
+import IModule from "../interfaces/IModule";
 
 /**
  * A synthesizer is the main object of the application. It is materialized
@@ -31,5 +33,26 @@ export default class Synthesizer {
     times(infos.racks, (index: number) => {
       this.racks.push(new Rack(index, infos.slots));
     })
+  }
+
+  public hasRoom(rack: number, slot: number, mod: IModule): boolean {
+    for (let i = slot; i < slot + mod.slots; ++i) {
+      if (!this.racks[rack].slots[i].free) return false;
+    }
+    return true;
+  }
+
+  public place(rack: number, slot: number, mod: IModule) {
+    for (let i = slot; i < slot + mod.slots; ++i) {
+      this.racks[rack].slots[i].free = false;
+    }
+    mod.rack = rack;
+    mod.slot = slot;
+  }
+
+  public remove(mod: IModule) {
+    for (let i = mod.slot; i < mod.slot + mod.slots; ++i) {
+      this.racks[mod.rack].slots[i].free = true;
+    }
   }
 }

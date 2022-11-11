@@ -4,6 +4,7 @@ import { RACK_HEIGHT, SLOT_SIZE, TOPBAR_HEIGHT } from "~~/lib/utils/constants";
 import { useSynthesizerDetails } from "../synthesizers/details";
 import { getRack, getSlot, relativePosition } from "./utils/coordinates";
 import { clamp } from "lodash"
+import { remove } from "@vue/shared";
 
 export const useModDrag = defineStore("modDrag", {
   state: () => ({
@@ -14,19 +15,21 @@ export const useModDrag = defineStore("modDrag", {
   }),
   actions: {
     startModDrag(mod: IModule, $event: MouseEvent) {
-      const synth = useSynthesizerDetails().synthesizer;
       this.mod = mod;
       this.startSlot = mod.slot;
       this.startRack = mod.rack;
-      this.coords.x = Math.floor($event.clientX / SLOT_SIZE) * SLOT_SIZE;
-      this.coords.y = $event.clientY - TOPBAR_HEIGHT;
     },
     moveModDrag(x: number, y: number) {
       if (this.mod === null) return;
 
-      this.mod.slot = getSlot(this.mod, x, y)
-      this.mod.rack = getRack(x, y)
+      const synth = useSynthesizerDetails().synthesizer;
+      const slot = getSlot(this.mod, x, y);
+      const rack = getRack(x, y);
 
+      synth.remove(this.mod);
+      if (synth.hasRoom(rack, slot, this.mod)) {
+        synth.place(rack, slot, this.mod);
+      }
     },
     endModDrag() {
       this.mod = null;
