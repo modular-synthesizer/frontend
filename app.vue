@@ -1,7 +1,7 @@
 <template>
   <VApp>
     <VLayout>
-      <Menu></Menu>
+      <Menu v-if="displayMenu" />
       <!-- This makes the application wait for the token to be refreshed before display-->
       <VMain v-if="displayContent">
         <NuxtPage />
@@ -29,6 +29,9 @@ export default {
     ...mapState(useAuthentication, ['session']),
     displayContent() {
       return useRoute().meta.authenticated === false || this.session.token !== ''
+    },
+    displayMenu() {
+      return useRoute().meta.menu !== false;
     }
   },
   mounted() {

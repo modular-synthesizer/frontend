@@ -16,3 +16,7 @@ export const MAX_ZOOM_OUT = 0.0625;
 // This value is the maximum value the ratio can be "zoomed in" with
 // It is a magic value obtained after some trials and errors too.
 export const MAX_ZOOM_IN = 2;
+
+// We sometimes must subtract the top bar height to coordinates and we
+// don't want to duplicate magic value so we store it here.
+export const TOPBAR_HEIGHT = 64;

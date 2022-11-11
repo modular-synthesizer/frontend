@@ -2,9 +2,9 @@
   <div class="wrapper">
     <svg
       @mousedown="startDrag(synthesizer, $event.clientX, $event.clientY)"
-      @mousemove="moveDrag($event.clientX, $event.clientY)"
-      @mouseup="endDrag()"
-      @mouseleave="endDrag()"
+      @mousemove="mousemove"
+      @mouseup="endDrags()"
+      @mouseleave="endDrags()"
       @wheel.prevent="setScale($event.deltaY)"
     >
       <SynthesizerComponent :synthesizer="synthesizer" v-if="synthesizer !== null" :mods="mods" />
@@ -52,7 +52,6 @@
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
 import { api } from "~~/lib/api/Api";
-import Synthesizer from '~~/lib/wrappers/Synthesizer';
 import SynthesizerComponent from "~~/components/synthesizers/Synthesizer.vue"
 import { useSynthesizerDrag } from '~~/lib/stores/dragSynthesizer';
 import { useZoomStore } from '~~/lib/stores/zoom';
@@ -60,11 +59,15 @@ import { useAuthentication } from '~~/lib/stores/authentication';
 import { useToolsList } from '~~/lib/stores/tools/list';
 import ITool from '~~/lib/interfaces/ITool';
 import IModule from '~~/lib/interfaces/IModule';
+import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
+import { useSynthesizerDetails } from '~~/lib/stores/synthesizers/details';
 
+definePageMeta({
+  menu: false
+})
 export default {
   data() {
     return {
-      synthesizer: null as Synthesizer || null,
       displayCreator: false,
       mods: [] as IModule[],
     };
@@ -72,15 +75,28 @@ export default {
   computed: {
     ...mapState(useAuthentication, ["session"]),
     ...mapState(useToolsList, ['tools']),
+    ...mapState(useSynthesizerDetails, ['synthesizer']),
   },
   methods: {
+    mousemove($event) {
+      const x = $event.clientX;
+      const y = $event.clientY;
+      this.moveDrag(x, y);
+      this.moveModDrag(x, y);
+    },
     ...mapActions(useSynthesizerDrag, {
       startDrag: 'start',
       moveDrag: 'move',
       endDrag: 'end'
     }),
-    ...mapActions(useZoomStore, ['setScale', 'setSynthesizer']),
+    endDrags() {
+      this.endDrag();
+      this.endModDrag();
+    },
+    ...mapActions(useZoomStore, ['setScale']),
     ...mapActions(useToolsList, ['fetchTools']),
+    ...mapActions(useModDrag, ['moveModDrag', 'endModDrag']),
+    ...mapActions(useSynthesizerDetails, ['fetchSynthesizer']),
     selectTool(tool: ITool) {
       const payload = {
         auth_token: this.session.token,
@@ -94,11 +110,7 @@ export default {
   },
   mounted() {
     this.fetchTools();
-    api.get("/synthesizers/" + this.$route.params.id, { auth_token: this.session.token })
-      .then(response => {
-        this.synthesizer = new Synthesizer(response);
-        this.setSynthesizer(this.synthesizer);
-      });
+    this.fetchSynthesizer(this.$route.params.id);
     api.get("/modules", { auth_token: this.session.token, synthesizer_id: this.$route.params.id })
       .then(response => this.mods = response);
   },

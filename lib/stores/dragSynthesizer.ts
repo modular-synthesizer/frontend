@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import Synthesizer from "../wrappers/Synthesizer";
 import { api } from '~~/lib/api/Api'
 import { useAuthentication } from "./authentication";
+import { useModDrag } from "./mods/dragAndDrop";
 
 /**
  * This store is dedicated to node dragging and dropping, saving the currently moved

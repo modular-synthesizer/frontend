@@ -1,5 +1,5 @@
 <template>
-  <g :transform="`translate(${x} ${y})`">
+  <g :transform="`translate(${x} ${y})`" @mousedown.stop="startModDrag(mod, $event)">
     <rect :width="width" :height="height" stroke="black" fill="#A3A3A3" />
   </g>
 </template>
@@ -8,6 +8,8 @@
 import IModule from '~~/lib/interfaces/IModule';
 import { PropType } from 'vue'
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
+import { mapActions } from 'pinia';
+import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
 
 export default {
   name: "module-body",
@@ -22,6 +24,9 @@ export default {
     y() { return this.mod.rack * RACK_HEIGHT },
     width() { return this.mod.slots * SLOT_SIZE },
     height() { return RACK_HEIGHT }
+  },
+  methods: {
+    ...mapActions(useModDrag, ['startModDrag'])
   }
 }
 </script>
