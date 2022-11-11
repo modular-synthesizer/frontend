@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     innerNodes(): string[] {
-      return this.tool.inner_nodes.map(n => n.name)
+      return this.tool.innerNodes.map(n => n.name)
     }
   },
   data: () => ({
@@ -89,7 +89,7 @@ export default {
       return !!this.port.target || this.$t("ports.target.required");
     },
     validTarget() {
-      const targetExists: boolean = !!find(this.tool.inner_nodes, node => {
+      const targetExists: boolean = !!find(this.tool.innerNodes, node => {
         return this.port.target.startsWith(node.name)
       });
       return targetExists || this.$t("ports.target.unknown");

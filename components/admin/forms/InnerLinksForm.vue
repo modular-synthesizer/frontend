@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     innerNodes(): string[] {
-      return this.tool.inner_nodes.map(n => n.name)
+      return this.tool.innerNodes.map(n => n.name)
     }
   },
   data: () => ({
@@ -71,7 +71,7 @@ export default {
   }),
   methods: {
     submit() {
-      const found = find(this.tool.inner_links, this.link);
+      const found = find(this.tool.innerLinks, this.link);
       if (found === undefined) {
         this.$emit("submitted", this.link)
       }

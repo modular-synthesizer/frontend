@@ -2,8 +2,8 @@ export default interface ITool {
   id: string,
   name: string;
   category_id: string,
-  inner_nodes: InnerNode[],
-  inner_links: InnerLink[],
+  innerNodes: InnerNode[],
+  innerLinks: InnerLink[],
   inputs: IToolPort[],
   outputs: IToolPort[],
   parameters: IToolParameter[],

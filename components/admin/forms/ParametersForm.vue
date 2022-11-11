@@ -5,7 +5,7 @@
         <v-col xs="12" md="6">
           <v-autocomplete
             :multiple="true"
-            :items="tool.inner_nodes"
+            :items="tool.innerNodes"
             v-model="parameter.targets"
             :label="$t('tools.dialog.fields.targets.label')"
             variant="outlined"
