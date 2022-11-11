@@ -7,7 +7,7 @@
       @mouseleave="endDrag()"
       @wheel.prevent="setScale($event.deltaY)"
     >
-      <SynthesizerComponent :synthesizer="synthesizer" v-if="synthesizer !== null" />
+      <SynthesizerComponent :synthesizer="synthesizer" v-if="synthesizer !== null" :mods="mods" />
     </svg>
     <v-dialog v-model="displayCreator" fullscreen>
       <template v-slot:activator="{ props }">
@@ -59,12 +59,14 @@ import { useZoomStore } from '~~/lib/stores/zoom';
 import { useAuthentication } from '~~/lib/stores/authentication';
 import { useToolsList } from '~~/lib/stores/tools/list';
 import ITool from '~~/lib/interfaces/ITool';
+import IModule from '~~/lib/interfaces/IModule';
 
 export default {
   data() {
     return {
       synthesizer: null as Synthesizer || null,
       displayCreator: false,
+      mods: [] as IModule[],
     };
   },
   computed: {
@@ -98,7 +100,7 @@ export default {
         this.setSynthesizer(this.synthesizer);
       });
     api.get("/modules", { auth_token: this.session.token, synthesizer_id: this.$route.params.id })
-      .then(response => console.log(response))
+      .then(response => this.mods = response);
   },
   components: { SynthesizerComponent }
 }

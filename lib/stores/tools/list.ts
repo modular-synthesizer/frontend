@@ -11,10 +11,7 @@ export const useToolsList = defineStore('toolsList', {
     fetchTools() {
       const auth = useAuthentication();
       return api.get("/tools", {auth_token: auth.session.token})
-        .then(response => {
-          console.log(response);
-          this.tools = response
-        })
+        .then(response => this.tools = response);
     }
   }
 })
