@@ -1,22 +1,34 @@
 import { defineStore } from "pinia";
+import ICoordinates from "~~/lib/interfaces/ICoordinates";
 import IModule from "~~/lib/interfaces/IModule";
-import { RACK_HEIGHT, SLOT_SIZE, TOPBAR_HEIGHT } from "~~/lib/utils/constants";
 import { useSynthesizerDetails } from "../synthesizers/details";
-import { getRack, getSlot, relativePosition } from "./utils/coordinates";
-import { clamp } from "lodash"
-import { remove } from "@vue/shared";
+import { getRack, getSlot } from "./utils/coordinates";
+import { clamp } from 'lodash'
+
+interface Payload {
+  mod: IModule;
+  coords: ICoordinates;
+  slots: {
+    // The slot where the click has been started
+    click: number;
+    // The slot where the moved components is currently placed
+    mod: number;
+  };
+  rack: number;
+}
 
 export const useModDrag = defineStore("modDrag", {
-  state: () => ({
-    mod: null as IModule,
+  state: (): Payload => ({
+    mod: null,
     coords: {x: 0, y: 0},
-    startSlot: 0,
-    startRack: 0,
+    slots: {click: 0, mod: 0},
+    rack: 0,
   }),
   actions: {
     startModDrag(mod: IModule, $event: MouseEvent) {
       this.mod = mod;
-      this.startSlot = mod.slot;
+      this.slots.click = getSlot(mod, $event.clientX, $event.clientY);
+      this.slots.mod = this.mod.slot;
       this.startRack = mod.rack;
     },
     moveModDrag(x: number, y: number) {
@@ -26,13 +38,16 @@ export const useModDrag = defineStore("modDrag", {
       const slot = getSlot(this.mod, x, y);
       const rack = getRack(x, y);
 
+      const delta = slot - this.slots.click;
+      const newPlace = clamp(this.slots.mod + delta, 0, synth.racks[rack].slots.length);
+
       synth.remove(this.mod);
-      if (synth.hasRoom(rack, slot, this.mod)) {
-        synth.place(rack, slot, this.mod);
+      if (synth.hasRoom(rack, newPlace, this.mod)) {
+        synth.place(rack, newPlace, this.mod);
       }
     },
     endModDrag() {
       this.mod = null;
     }
   }
-})
+});

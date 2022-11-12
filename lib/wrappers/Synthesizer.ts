@@ -49,7 +49,6 @@ export default class Synthesizer {
     if (find(this.modules, {id: mod.id}) === undefined) {
       this.modules.push(mod);
     }
-    console.log(this.modules)
     for (let i = slot; i < slot + mod.slots; ++i) {
       this.racks[rack].slots[i].free = false;
     }
