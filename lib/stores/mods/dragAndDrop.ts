@@ -4,6 +4,8 @@ import IModule from "~~/lib/interfaces/IModule";
 import { useSynthesizerDetails } from "../synthesizers/details";
 import { getRack, getSlot } from "./utils/coordinates";
 import { clamp } from 'lodash'
+import { api } from "~~/lib/api/Api";
+import { useAuthentication } from "../authentication";
 
 interface Payload {
   mod: IModule;
@@ -36,11 +38,10 @@ export const useModDrag = defineStore("modDrag", {
 
       const synth = useSynthesizerDetails().synthesizer;
       const rack = getRack(x, y);
-      const maxSlot = synth.racks[0].slots.length
-      const slot = clamp(getSlot(x, y), 0, maxSlot);
+      const slot = clamp(getSlot(x, y), 0, synth.maxSlot);
 
       const delta = slot - this.slots.click;
-      const newPlace = clamp(this.slots.mod + delta, 0, maxSlot - this.mod.slots);
+      const newPlace = clamp(this.slots.mod + delta, 0, synth.maxSlot - this.mod.slots);
 
       synth.remove(this.mod);
       if (synth.hasRoom(rack, newPlace, this.mod)) {
@@ -48,6 +49,14 @@ export const useModDrag = defineStore("modDrag", {
       }
     },
     endModDrag() {
+      if (this.mod === null) return;
+
+      const payload = {
+        slot: this.mod.slot,
+        rack: this.mod.rack,
+        auth_token: useAuthentication().session.token
+      }
+      api.put(`/modules/${this.mod.id}`, payload);
       this.mod = null;
     }
   }

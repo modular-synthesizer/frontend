@@ -62,4 +62,8 @@ export default class Synthesizer {
       this.racks[mod.rack].slots[i].free = true;
     }
   }
+
+  public get maxSlot(): number {
+    return this.racks[0].slots.length;
+  }
 }
