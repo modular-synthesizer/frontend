@@ -112,7 +112,12 @@ export default {
     this.fetchTools();
     this.fetchSynthesizer(this.$route.params.id);
     api.get("/modules", { auth_token: this.session.token, synthesizer_id: this.$route.params.id })
-      .then(response => this.mods = response);
+      .then(response => {
+        response.forEach(mod => {
+          this.synthesizer.place(mod.rack, mod.slot, mod)
+        });
+        this.mods = response;
+      });
   },
   components: { SynthesizerComponent }
 }
