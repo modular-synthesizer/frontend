@@ -1,6 +1,3 @@
-import DevApi from "./lib/api/Api";
-import ProdApi from "./lib/api/ProdApi";
-
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   css: [

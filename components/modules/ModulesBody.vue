@@ -1,6 +1,7 @@
 <template>
   <g :transform="`translate(${x} ${y})`" @mousedown.stop="startModDrag(mod, $event)">
     <rect :width="width" :height="height" stroke="black" fill="#A3A3A3" />
+    <component :is="mod.type" :mod="mod" />
   </g>
 </template>
 
@@ -10,9 +11,11 @@ import { PropType } from 'vue'
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { mapActions } from 'pinia';
 import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
+import ProgrammableGain from "./ProgrammableGain.vue"
 
 export default {
   name: "module-body",
+  components: { ProgrammableGain },
   props: {
     mod: {
       type: Object as PropType<IModule>,

@@ -1,8 +1,9 @@
 import { ISynthesizer } from "../interfaces/ISynthesizer";
 import { times } from "lodash";
 import Rack from "./Rack";
-import { IndexHtmlTransform } from "vite";
+import { find, remove } from "lodash";
 import IModule from "../interfaces/IModule";
+import Mod from "./Mod";
 
 /**
  * A synthesizer is the main object of the application. It is materialized
@@ -22,6 +23,8 @@ export default class Synthesizer {
   public scale: number;
   // The list of racks available in the synthesizer.
   public racks: Rack[] = [];
+
+  public modules: Mod[] = []
 
   public constructor(infos: ISynthesizer) {
     this.id = infos.id;
@@ -43,6 +46,10 @@ export default class Synthesizer {
   }
 
   public place(rack: number, slot: number, mod: IModule) {
+    if (find(this.modules, {id: mod.id}) === undefined) {
+      this.modules.push(mod);
+    }
+    console.log(this.modules)
     for (let i = slot; i < slot + mod.slots; ++i) {
       this.racks[rack].slots[i].free = false;
     }
@@ -51,6 +58,7 @@ export default class Synthesizer {
   }
 
   public remove(mod: IModule) {
+    remove(this.modules, {id: mod.id})
     for (let i = mod.slot; i < mod.slot + mod.slots; ++i) {
       this.racks[mod.rack].slots[i].free = true;
     }
