@@ -27,7 +27,7 @@ export const useModDrag = defineStore("modDrag", {
   actions: {
     startModDrag(mod: IModule, $event: MouseEvent) {
       this.mod = mod;
-      this.slots.click = getSlot(mod, $event.clientX, $event.clientY);
+      this.slots.click = getSlot($event.clientX, $event.clientY);
       this.slots.mod = this.mod.slot;
       this.startRack = mod.rack;
     },
@@ -35,11 +35,12 @@ export const useModDrag = defineStore("modDrag", {
       if (this.mod === null) return;
 
       const synth = useSynthesizerDetails().synthesizer;
-      const slot = getSlot(this.mod, x, y);
       const rack = getRack(x, y);
+      const maxSlot = synth.racks[0].slots.length
+      const slot = clamp(getSlot(x, y), 0, maxSlot);
 
       const delta = slot - this.slots.click;
-      const newPlace = clamp(this.slots.mod + delta, 0, synth.racks[rack].slots.length);
+      const newPlace = clamp(this.slots.mod + delta, 0, maxSlot - this.mod.slots);
 
       synth.remove(this.mod);
       if (synth.hasRoom(rack, newPlace, this.mod)) {

@@ -1,7 +1,6 @@
 import { useSynthesizerDetails } from "../../synthesizers/details";
 import { clamp } from "lodash"
 import { RACK_HEIGHT, SLOT_SIZE } from "~~/lib/utils/constants";
-import IModule from "~~/lib/interfaces/IModule";
 
 interface ICoordinates {
   x: number;
@@ -47,9 +46,9 @@ export function getRack(x: number, y: number): number {
  *   slot is not only an index, but the whole object, making it possible
  *   to directly access the rack property.
  */
-export function getSlot(mod: IModule, x, y): number {
+export function getSlot(x, y): number {
   const synth = useSynthesizerDetails().synthesizer;
   const position: ICoordinates = relativePosition(x, y);
   const slot = Math.floor(position.x / SLOT_SIZE);
-  return clamp(slot, 0, synth.racks[0].slots.length - mod.slots);
+  return clamp(slot, 0, synth.racks[0].slots.length);
 }
