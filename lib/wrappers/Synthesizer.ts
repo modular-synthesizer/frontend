@@ -45,7 +45,7 @@ export default class Synthesizer {
     return true;
   }
 
-  public place(rack: number, slot: number, mod: IModule) {
+  public place(rack: number, slot: number, mod: Mod) {
     if (find(this.modules, {id: mod.id}) === undefined) {
       this.modules.push(mod);
     }
