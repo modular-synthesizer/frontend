@@ -1,14 +1,14 @@
 import { defineStore } from "pinia";
 import ICoordinates from "~~/lib/interfaces/ICoordinates";
-import IModule from "~~/lib/interfaces/IModule";
 import { useSynthesizerDetails } from "../synthesizers/details";
 import { getRack, getSlot } from "./utils/coordinates";
 import { clamp } from 'lodash'
 import { api } from "~~/lib/api/Api";
 import { useAuthentication } from "../authentication";
+import Mod from "~~/lib/wrappers/Mod";
 
 interface Payload {
-  mod: IModule;
+  mod: Mod;
   coords: ICoordinates;
   slots: {
     // The slot where the click has been started
@@ -27,7 +27,7 @@ export const useModDrag = defineStore("modDrag", {
     rack: 0,
   }),
   actions: {
-    startModDrag(mod: IModule, $event: MouseEvent) {
+    startModDrag(mod: Mod, $event: MouseEvent) {
       this.mod = mod;
       this.slots.click = getSlot($event.clientX, $event.clientY);
       this.slots.mod = this.mod.slot;

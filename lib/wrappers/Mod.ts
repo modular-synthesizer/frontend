@@ -6,6 +6,7 @@ import { useAudioContext } from "../stores/audioContext";
 import InnerAudioNode from "./InnerAudioNode";
 
 export default class Mod {
+  public readonly id: string;
   public readonly innerNodes: InnerNode[];
   public rack: number;
   public slot: number;
@@ -15,7 +16,8 @@ export default class Mod {
   public readonly outputs: Port[] = []
   public audioNodes: InnerAudioNode[] = []
 
-  constructor({ rack, slot, slots, type, innerNodes, inputs, outputs }: IModule) {
+  constructor({ id, rack, slot, slots, type, innerNodes, inputs, outputs }: IModule) {
+    this.id = id;
     this.rack = rack;
     this.slot = slot;
     this.slots = slots;

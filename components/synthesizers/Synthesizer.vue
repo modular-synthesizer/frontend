@@ -8,7 +8,7 @@
 <script lang="ts">
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 import Rack from '~~/components/synthesizers/Rack.vue';
-import IModule from '~~/lib/interfaces/IModule';
+import Mod from '~~/lib/wrappers/Mod';
 
 export default {
   components: { Rack },
@@ -18,7 +18,7 @@ export default {
       required: true
     },
     mods: {
-      type: Array<IModule>,
+      type: Array<Mod>,
       required: true
     }
   },

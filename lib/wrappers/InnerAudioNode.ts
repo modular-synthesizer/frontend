@@ -1,5 +1,3 @@
-import { InnerNode } from "./ITool";
-
 export default class InnerAudioNode {
   public readonly name: string;
   public readonly node: AudioNode;

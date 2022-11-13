@@ -6,19 +6,19 @@
 </template>
 
 <script lang="ts">
-import IModule from '~~/lib/interfaces/IModule';
 import { PropType } from 'vue'
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { mapActions } from 'pinia';
 import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
 import ProgrammableGain from "./ProgrammableGain.vue"
+import Mod from '~~/lib/wrappers/Mod';
 
 export default {
   name: "module-body",
   components: { ProgrammableGain },
   props: {
     mod: {
-      type: Object as PropType<IModule>,
+      type: Object as PropType<Mod>,
       required: true
     }
   },

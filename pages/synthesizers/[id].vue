@@ -1,5 +1,14 @@
 <template>
   <div class="wrapper">
+    <svg
+      @mousedown="startDrag(synthesizer, $event.clientX, $event.clientY)"
+      @mousemove="mousemove"
+      @mouseup="endDrags()"
+      @mouseleave="endDrags()"
+      @wheel.prevent="setScale($event.deltaY)"
+    >
+      <SynthesizerComponent :synthesizer="synthesizer" v-if="synthesizer !== null" :mods="mods" />
+    </svg>
     <v-toolbar collapse density="compact" color="primary">
       <v-dialog v-model="displayCreator" fullscreen>
         <template v-slot:activator="{ props }">
@@ -39,15 +48,6 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <svg
-      @mousedown="startDrag(synthesizer, $event.clientX, $event.clientY)"
-      @mousemove="mousemove"
-      @mouseup="endDrags()"
-      @mouseleave="endDrags()"
-      @wheel.prevent="setScale($event.deltaY)"
-    >
-      <SynthesizerComponent :synthesizer="synthesizer" v-if="synthesizer !== null" :mods="mods" />
-    </svg>
   </div>
 </template>
 
@@ -131,8 +131,11 @@ export default {
 
 <style scoped>
 svg, .wrapper {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background-color: silver;
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
 </style>
