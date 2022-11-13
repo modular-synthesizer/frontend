@@ -1,9 +1,10 @@
 import IPort from "./IPort";
-import { InnerNode } from "./ITool";
+import { InnerLink, InnerNode } from "./ITool";
 
 export default interface IModule {
   id: string;
   innerNodes: InnerNode[];
+  innerLinks: InnerLink[];
   rack: number;
   slot: number;
   slots: number;

@@ -11,11 +11,12 @@ import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { mapActions } from 'pinia';
 import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
 import ProgrammableGain from "./ProgrammableGain.vue"
+import SinOscillator from "./SinOscillator.vue"
 import Mod from '~~/lib/wrappers/Mod';
 
 export default {
   name: "module-body",
-  components: { ProgrammableGain },
+  components: { ProgrammableGain, SinOscillator },
   props: {
     mod: {
       type: Object as PropType<Mod>,
