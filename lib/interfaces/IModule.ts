@@ -1,3 +1,4 @@
+import IPort from "./IPort";
 import { InnerNode } from "./ITool";
 
 export default interface IModule {
@@ -7,4 +8,6 @@ export default interface IModule {
   slot: number;
   slots: number;
   type: string;
+  inputs: IPort[]
+  outputs: IPort[]
 }

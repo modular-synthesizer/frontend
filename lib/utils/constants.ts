@@ -20,3 +20,5 @@ export const MAX_ZOOM_IN = 2;
 // We sometimes must subtract the top bar height to coordinates and we
 // don't want to duplicate magic value so we store it here.
 export const TOPBAR_HEIGHT = 64;
+
+export const PORT_RADIUS = 13;
