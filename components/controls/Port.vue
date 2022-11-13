@@ -3,7 +3,8 @@
     <text :x="x" :y="y - radius - 4" text-anchor="middle" class="port-label">{{ label }}</text>
     <g
       :transform="`translate(${x},${y})`"
-      @mousedown.stop
+      @mousedown.stop="startLinkFrom(port)"
+      @mouseup.stop="endLinkTo(port)"
     >
       <circle
         :r="radius"
@@ -21,7 +22,10 @@
   </g>
 </template>
 
-<script lang="ts">import { PropType } from 'vue';
+<script lang="ts">
+import { mapActions } from 'pinia';
+import { PropType } from 'vue';
+import { useLinkDrag } from '~~/lib/stores/links/dragAndDrop';
 import { PORT_RADIUS, SLOT_SIZE } from '~~/lib/utils/constants';
 import PortWrapper from '~~/lib/wrappers/Port';
 
@@ -37,6 +41,9 @@ export default {
     y(): number {
       return this.dy * (SLOT_SIZE / 2)
     }
+  },
+  methods: {
+    ...mapActions(useLinkDrag, ['startLinkFrom', 'endLinkTo']),
   },
   props: {
     port: {

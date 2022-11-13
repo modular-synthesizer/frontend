@@ -64,6 +64,7 @@ import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
 import { useSynthesizerDetails } from '~~/lib/stores/synthesizers/details';
 import { useGenerators } from '~~/lib/stores/tools/generators';
 import Mod from '~~/lib/wrappers/Mod';
+import { useLinkDrag } from '~~/lib/stores/links/dragAndDrop';
 
 definePageMeta({
   menu: false
@@ -96,12 +97,14 @@ export default {
     endDrags() {
       this.endDrag();
       this.endModDrag();
+      this.cancelLink();
     },
     ...mapActions(useZoomStore, ['setScale']),
     ...mapActions(useToolsList, ['fetchTools']),
     ...mapActions(useModDrag, ['moveModDrag', 'endModDrag']),
     ...mapActions(useSynthesizerDetails, ['fetchSynthesizer']),
     ...mapActions(useGenerators, ['fetchScripts']),
+    ...mapActions(useLinkDrag, ['cancelLink']),
     selectTool(tool: ITool) {
       const payload = {
         auth_token: this.session.token,
