@@ -60,7 +60,6 @@ import { useZoomStore } from '~~/lib/stores/zoom';
 import { useAuthentication } from '~~/lib/stores/authentication';
 import { useToolsList } from '~~/lib/stores/tools/list';
 import ITool from '~~/lib/interfaces/ITool';
-import IModule from '~~/lib/interfaces/IModule';
 import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
 import { useSynthesizerDetails } from '~~/lib/stores/synthesizers/details';
 import { useGenerators } from '~~/lib/stores/tools/generators';
