@@ -65,6 +65,7 @@ import { useSynthesizerDetails } from '~~/lib/stores/synthesizers/details';
 import { useGenerators } from '~~/lib/stores/tools/generators';
 import Mod from '~~/lib/wrappers/Mod';
 import { useLinkDrag } from '~~/lib/stores/links/dragAndDrop';
+import { useLinksList } from '~~/lib/stores/links/linksList';
 
 definePageMeta({
   menu: false
@@ -126,6 +127,7 @@ export default {
         response.forEach(mod => {
           this.synthesizer.place(mod.rack, mod.slot, mod)
         });
+        useLinksList().fetchLinks();
       });
   },
   components: { SynthesizerComponent }

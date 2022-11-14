@@ -4,6 +4,7 @@ import Port, { InputPort, OutputPort } from "./Port";
 import InnerAudioNode from "./InnerAudioNode";
 import InnerNodesFactory from '../factories/InnerNodes'
 import InnerLinksFactory from '../factories/InnerLinks'
+import { usePorts } from "../stores/mods/ports";
 
 export default class Mod {
   public readonly id: string;
@@ -29,5 +30,7 @@ export default class Mod {
 
     this.audioNodes = InnerNodesFactory.create(innerNodes)
     this.innerLinks = InnerLinksFactory.link(this.audioNodes, innerLinks);
+
+    usePorts().addPorts([...this.inputs, ...this.outputs]);
   }
 }
