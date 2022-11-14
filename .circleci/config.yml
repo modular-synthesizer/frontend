@@ -1,4 +1,4 @@
-obs:
+jobs:
   docker-job:
     docker:
       - image: cimg/node:16.14
