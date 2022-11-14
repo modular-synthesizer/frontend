@@ -9,4 +9,6 @@ ENV NUXT_PORT=3000
 
 EXPOSE 3000
 
-ENTRYPOINT ["yarn", "dev"]
+CMD npm install
+
+ENTRYPOINT ["npm", "run", "dev"]
