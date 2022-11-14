@@ -60,7 +60,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - master
       - deployment-job:
           requires:
             - docker-job
