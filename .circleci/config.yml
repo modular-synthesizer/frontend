@@ -51,8 +51,11 @@ jobs:
 workflows:
   build:
     jobs:
-      - build:
+      - docker-job:
           filters:
             branches:
               only:
                 - main
+      - deployment-job:
+          requires:
+            - docker-job
