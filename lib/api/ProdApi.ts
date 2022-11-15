@@ -7,8 +7,6 @@ export default class ProdApi implements IApi {
 
   public constructor(uri: string) {
     this.uri = uri
-    console.log("pouet")
-    console.log(`API plugged on ${this.uri}`)
   }
 
   get(uri: string, payload: any = {}): Promise<any> {

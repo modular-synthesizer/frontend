@@ -12,10 +12,15 @@ class InnerNodesFactory {
      *   the corresponding Web Audio API node(s).
      */
     public create(list: InnerNode[]): InnerAudioNode[] {
-        const ctx = useAudioContext().context;
+        const ctx: AudioContext = useAudioContext().context;
         return list.reduce((arr, innerNode) => {
             const genFunction: Function = useGenerators().scripts[innerNode.generator];
-            const audioNodes: AudioNode[] = genFunction(innerNode.name, ctx);
+            const audioNodes: InnerAudioNode[] = genFunction(innerNode.name, ctx);
+            audioNodes.forEach((a: InnerAudioNode) => {
+                if (a.node instanceof AudioScheduledSourceNode) {
+                    a.node.start();
+                }
+            })
             return [...arr, ...audioNodes]
         }, [])
     }

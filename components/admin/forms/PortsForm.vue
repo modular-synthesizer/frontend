@@ -75,7 +75,6 @@ export default {
   }),
   methods: {
     submit() {
-      console.log("submission", this.port);
       if (this.$refs.form.validate()) {
         this.$emit("submitted", {type: this.type, port: cloneDeep(this.port)});
         this.$refs.form.reset();

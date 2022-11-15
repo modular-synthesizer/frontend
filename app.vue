@@ -20,6 +20,9 @@ import { useAudioContext } from './lib/stores/audioContext'
 
 export default {
   components: { Menu, VApp, VLayout, VMain },
+  data: () => ({
+    displayInitModal: true
+  }),
   setup() {
     api.setUri(useRuntimeConfig().public.api_uri);
   },
@@ -38,7 +41,6 @@ export default {
   },
   async mounted() {
     this.refresh();
-    await this.initContext();
   }
 }
 </script>

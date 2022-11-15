@@ -25,12 +25,16 @@ export default class Mod {
     this.slots = slots;
     this.type = type;
     this.innerNodes = innerNodes;
-    this.inputs = inputs.map(input => new InputPort(input));
-    this.outputs = outputs.map(output => new OutputPort(output));
+    this.inputs = inputs.map(input => new InputPort(input, this));
+    this.outputs = outputs.map(output => new OutputPort(output, this));
 
     this.audioNodes = InnerNodesFactory.create(innerNodes)
     this.innerLinks = InnerLinksFactory.link(this.audioNodes, innerLinks);
 
     usePorts().addPorts([...this.inputs, ...this.outputs]);
+  }
+
+  public node(name: string) {
+    return this.audioNodes.find((a: InnerAudioNode) => a.name === name)
   }
 }

@@ -12,11 +12,12 @@ import { mapActions } from 'pinia';
 import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
 import ProgrammableGain from "./ProgrammableGain.vue"
 import SinOscillator from "./SinOscillator.vue"
+import StandardOutput from "./StandardOutput.vue"
 import Mod from '~~/lib/wrappers/Mod';
 
 export default {
   name: "module-body",
-  components: { ProgrammableGain, SinOscillator },
+  components: { ProgrammableGain, SinOscillator, StandardOutput },
   props: {
     mod: {
       type: Object as PropType<Mod>,
@@ -31,6 +32,6 @@ export default {
   },
   methods: {
     ...mapActions(useModDrag, ['startModDrag'])
-  }
+  },
 }
 </script>

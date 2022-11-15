@@ -1,5 +1,13 @@
 <template>
   <div class="wrapper">
+    <v-dialog :persistent="true" v-model="displayInitModal">
+      <v-card>
+        <template v-slot:title>Blah</template>
+        <v-card-actions>
+          <v-btn variant="text" @click="initSoundPipeline">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <svg
       @mousedown="startDrag(synthesizer, $event.clientX, $event.clientY)"
       @mousemove="mousemove"
@@ -66,6 +74,8 @@ import { useGenerators } from '~~/lib/stores/tools/generators';
 import Mod from '~~/lib/wrappers/Mod';
 import { useLinkDrag } from '~~/lib/stores/links/dragAndDrop';
 import { useLinksList } from '~~/lib/stores/links/linksList';
+import { useContext } from 'unctx/index';
+import { useAudioContext } from '~~/lib/stores/audioContext';
 
 definePageMeta({
   menu: false
@@ -75,7 +85,8 @@ export default {
     return {
       displayCreator: false,
       mods: [] as Mod[],
-      generators: [] as string[]
+      generators: [] as string[],
+      displayInitModal: true
     };
   },
   computed: {
@@ -115,20 +126,24 @@ export default {
         rack: 0
       };
       api.post('/modules', payload).then(response => console.log(response))
+    },
+    initSoundPipeline() {
+      useAudioContext().initContext();
+      api.get("/modules", { auth_token: this.session.token, synthesizer_id: this.$route.params.id })
+        .then(response => {
+          this.mods = response.map(mod => new Mod(mod));
+          response.forEach(mod => {
+            this.synthesizer.place(mod.rack, mod.slot, mod)
+          });
+          useLinksList().fetchLinks();
+          this.displayInitModal = false
+        });
     }
   },
   async mounted() {
     this.fetchTools();
     await this.fetchScripts();
     this.fetchSynthesizer(this.$route.params.id);
-    api.get("/modules", { auth_token: this.session.token, synthesizer_id: this.$route.params.id })
-      .then(response => {
-        this.mods = response.map(mod => new Mod(mod));
-        response.forEach(mod => {
-          this.synthesizer.place(mod.rack, mod.slot, mod)
-        });
-        useLinksList().fetchLinks();
-      });
   },
   components: { SynthesizerComponent }
 }

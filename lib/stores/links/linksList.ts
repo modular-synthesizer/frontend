@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "~~/lib/api/Api";
 import ILink from "~~/lib/interfaces/ILink";
-import { InnerLink } from "~~/lib/interfaces/ITool";
 import Link from "~~/lib/wrappers/Link";
 import { useAuthentication } from "../authentication";
 

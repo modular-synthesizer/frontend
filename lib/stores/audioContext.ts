@@ -7,6 +7,7 @@ export const useAudioContext = defineStore('audioContext', {
   actions: {
     async initContext() {
       this.context = await new AudioContext();
+      while(this.context.state === "suspended");
     }
   }
 })

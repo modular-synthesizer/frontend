@@ -6,13 +6,23 @@ export default class Link {
   public readonly from: Port;
   public readonly to: Port;
   public readonly color: string;
+  public readonly id: string;
 
-  constructor({ from, to, color }: ILink) {
+  constructor({ id, from, to, color }: ILink) {
     const ports: Port[] = usePorts().ports;
 
-    this.from = ports.find(port => port.id === from);
+    this.from = ports.find(port => {
+      return port.id === from
+    });
     this.to = ports.find(port => port.id === to);
 
     this.color = color;
+    this.id = id;
+
+    this.connect();
+  }
+
+  public connect() {
+    this.from.connect(this.to);
   }
 }
