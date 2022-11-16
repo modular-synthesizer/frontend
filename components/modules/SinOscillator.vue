@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">import { PropType } from 'vue';
-import IModule from '~~/lib/interfaces/IModule';
+import Mod from '~~/lib/wrappers/Mod';
 import Port from "../controls/Port.vue"
 
 export default {
@@ -11,12 +11,9 @@ export default {
   components: { Port },
   props: {
     mod: {
-      type: Object as PropType<IModule>,
+      type: Object as PropType<Mod>,
       required: true
     }
-  },
-  mounted() {
-    this.mod.node("oscillator").start()
   }
 }
 </script>

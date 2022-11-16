@@ -74,8 +74,8 @@ import { useGenerators } from '~~/lib/stores/tools/generators';
 import Mod from '~~/lib/wrappers/Mod';
 import { useLinkDrag } from '~~/lib/stores/links/dragAndDrop';
 import { useLinksList } from '~~/lib/stores/links/linksList';
-import { useContext } from 'unctx/index';
 import { useAudioContext } from '~~/lib/stores/audioContext';
+import IModule from '~~/lib/interfaces/IModule';
 
 definePageMeta({
   menu: false
@@ -128,16 +128,16 @@ export default {
       api.post('/modules', payload).then(response => console.log(response))
     },
     initSoundPipeline() {
-      useAudioContext().initContext();
-      api.get("/modules", { auth_token: this.session.token, synthesizer_id: this.$route.params.id })
-        .then(response => {
-          this.mods = response.map(mod => new Mod(mod));
-          response.forEach(mod => {
-            this.synthesizer.place(mod.rack, mod.slot, mod)
+        this.displayInitModal = false
+        useAudioContext().initContext();
+        api.get("/modules", { auth_token: this.session.token, synthesizer_id: this.$route.params.id })
+          .then((response: IModule[]) => {
+            response.forEach(imod => {
+              this.mods.push(new Mod(imod));
+              this.synthesizer.place(imod.rack, imod.slot, imod)
+            });
+            useLinksList().fetchLinks();
           });
-          useLinksList().fetchLinks();
-          this.displayInitModal = false
-        });
     }
   },
   async mounted() {
