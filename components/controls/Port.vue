@@ -3,8 +3,6 @@
     <text :x="x" :y="y - radius - 4" text-anchor="middle" class="port-label">{{ label }}</text>
     <g
       :transform="`translate(${x},${y})`"
-      @mousedown.stop="startLinkFrom(port)"
-      @mouseup.stop="endLinkTo(port)"
     >
       <circle
         :r="radius"
@@ -17,7 +15,14 @@
       <circle :r="radius - 5" :stroke="fillColor" />
       <circle :r="radius - 7" stroke-width="2" stroke="white" />
       <circle :r="radius - 8" />
-      <circle opacity="0" :r="radius" />
+      <circle
+        opacity="0"
+        :r="radius"
+        @mouseenter="magnetize(port)"
+        @mouseout="unmagnetize()"
+        @mousedown.stop="startLinkFrom(port)"
+        @mouseup.stop="endLinkTo(port)"
+      />
     </g>
   </g>
 </template>
@@ -40,10 +45,10 @@ export default {
     },
     y(): number {
       return this.dy * (SLOT_SIZE / 2)
-    }
+    },
   },
   methods: {
-    ...mapActions(useLinkDrag, ['startLinkFrom', 'endLinkTo']),
+    ...mapActions(useLinkDrag, ['startLinkFrom', 'endLinkTo', 'magnetize', 'unmagnetize']),
   },
   props: {
     port: {
@@ -68,6 +73,10 @@ export default {
     dy: {
       type: Number, default: 0
     }
+  },
+  mounted() {
+    this.port.x = this.x;
+    this.port.y = this.y;
   }
 }
 </script>

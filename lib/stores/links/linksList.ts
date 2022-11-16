@@ -3,6 +3,7 @@ import { api } from "~~/lib/api/Api";
 import ILink from "~~/lib/interfaces/ILink";
 import Link from "~~/lib/wrappers/Link";
 import { useAuthentication } from "../authentication";
+import { remove } from "lodash"
 
 export const useLinksList = defineStore('linksList', {
   state: () => ({
@@ -18,6 +19,12 @@ export const useLinksList = defineStore('linksList', {
     },
     addLink(link: ILink) {
       this.links.push(new Link(link));
+    },
+    removeLink(link: Link) {
+      const auth_token: string = useAuthentication().session.token;
+      link.disconnect()
+      remove(this.links, {id: link.id});
+      api.delete(`/links/${link.id}`, { auth_token })
     }
   }
 })

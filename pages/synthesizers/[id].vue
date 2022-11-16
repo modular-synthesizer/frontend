@@ -15,7 +15,7 @@
       @mouseleave="endDrags()"
       @wheel.prevent="setScale($event.deltaY)"
     >
-      <SynthesizerComponent :synthesizer="synthesizer" v-if="synthesizer !== null" :mods="mods" />
+      <SynthesizerComponent :synthesizer="synthesizer" v-if="synthesizer !== null" :mods="mods" :links="links" />
     </svg>
     <v-toolbar collapse density="compact" color="primary">
       <v-dialog v-model="displayCreator" fullscreen>
@@ -93,6 +93,7 @@ export default {
     ...mapState(useAuthentication, ["session"]),
     ...mapState(useToolsList, ['tools']),
     ...mapState(useSynthesizerDetails, ['synthesizer']),
+    ...mapState(useLinksList, ['links']),
   },
   methods: {
     mousemove($event) {
@@ -100,6 +101,7 @@ export default {
       const y = $event.clientY;
       this.moveDrag(x, y);
       this.moveModDrag(x, y);
+      this.moveLink(x, y);
     },
     ...mapActions(useSynthesizerDrag, {
       startDrag: 'start',
@@ -116,7 +118,7 @@ export default {
     ...mapActions(useModDrag, ['moveModDrag', 'endModDrag']),
     ...mapActions(useSynthesizerDetails, ['fetchSynthesizer']),
     ...mapActions(useGenerators, ['fetchScripts']),
-    ...mapActions(useLinkDrag, ['cancelLink']),
+    ...mapActions(useLinkDrag, ['cancelLink', 'moveLink']),
     selectTool(tool: ITool) {
       const payload = {
         auth_token: this.session.token,

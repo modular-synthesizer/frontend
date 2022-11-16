@@ -25,4 +25,8 @@ export default class Link {
   public connect() {
     this.from.connect(this.to);
   }
+
+  public disconnect() {
+    this.from.audioNode.disconnect(this.to.audioNode)
+  }
 }

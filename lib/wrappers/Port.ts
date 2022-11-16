@@ -1,4 +1,5 @@
 import IPort from "../interfaces/IPort";
+import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 import Mod from "./Mod";
 
 export default abstract class Port implements IPort {
@@ -7,6 +8,8 @@ export default abstract class Port implements IPort {
   name: string;
   target: string;
   mod: Mod
+  public x: number = 0;
+  public y: number = 0;
 
   constructor({id, index, name, target}: IPort, mod: Mod) {
     this.id = id;
@@ -28,6 +31,13 @@ export default abstract class Port implements IPort {
 
   public get audioNode(): AudioNode {
     return this.mod.audioNodes.find(n => n.name === this.target).node;
+  }
+
+  public get ax() {
+    return this.x + this.mod.slot * SLOT_SIZE;
+  }
+  public get ay() {
+    return this.y + this.mod.rack * RACK_HEIGHT;
   }
 }
 
