@@ -1,6 +1,7 @@
 <template>
   <Port :port="mod.inputs[0]" :dx="2" :dy="5" label="IN" />
   <Port :port="mod.outputs[0]" :dx="2" :dy="35" label="OUT" />
+  <Knob :dx="2" :dy="10" :param="mod.param('gain')" />
 </template>
 
 <script lang="ts">import { PropType } from 'vue';

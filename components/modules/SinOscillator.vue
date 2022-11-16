@@ -1,6 +1,6 @@
 <template>
   <Port :port="mod.outputs[0]" :dx="4" :dy="35" label="OUT" />
-  <Knob :dx="4" :dy="10" />
+  <Knob :dx="4" :dy="10" :param="mod.param('frequency')" />
 </template>
 
 <script lang="ts">import { PropType } from 'vue';

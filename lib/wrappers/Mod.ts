@@ -4,6 +4,7 @@ import Port, { InputPort, OutputPort } from "./Port";
 import InnerAudioNode from "./InnerAudioNode";
 import InnerNodesFactory from '../factories/InnerNodes'
 import InnerLinksFactory from '../factories/InnerLinks'
+import Parameter from "./Parameter";
 import { usePorts } from "../stores/mods/ports";
 
 export default class Mod {
@@ -17,8 +18,9 @@ export default class Mod {
   public readonly inputs: Port[] = []
   public readonly outputs: Port[] = []
   public audioNodes: InnerAudioNode[] = []
+  public readonly parameters: Parameter[];
 
-  constructor({ id, rack, slot, slots, type, innerNodes, innerLinks, inputs, outputs }: IModule) {
+  constructor({ id, rack, slot, slots, type, innerNodes, innerLinks, inputs, outputs, parameters }: IModule) {
     this.id = id;
     this.rack = rack;
     this.slot = slot;
@@ -30,11 +32,16 @@ export default class Mod {
 
     this.audioNodes = InnerNodesFactory.create(innerNodes)
     this.innerLinks = InnerLinksFactory.link(this.audioNodes, innerLinks);
+    this.parameters = parameters.map(p => new Parameter(p, this));
 
     usePorts().addPorts([...this.inputs, ...this.outputs]);
   }
 
   public node(name: string) {
-    return this.audioNodes.find((a: InnerAudioNode) => a.name === name)
+    return this.audioNodes.find((a: InnerAudioNode) => a.name === name);
+  }
+
+  public param(name: string) {
+    return this.parameters.find((p: Parameter) => p.name === name);
   }
 }

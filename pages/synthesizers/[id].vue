@@ -76,6 +76,7 @@ import { useLinkDrag } from '~~/lib/stores/links/dragAndDrop';
 import { useLinksList } from '~~/lib/stores/links/linksList';
 import { useAudioContext } from '~~/lib/stores/audioContext';
 import IModule from '~~/lib/interfaces/IModule';
+import { useParameters } from '~~/lib/stores/tools/parameters';
 
 definePageMeta({
   menu: false
@@ -102,6 +103,7 @@ export default {
       this.moveDrag(x, y);
       this.moveModDrag(x, y);
       this.moveLink(x, y);
+      this.moveParameterSetting($event)
     },
     ...mapActions(useSynthesizerDrag, {
       startDrag: 'start',
@@ -112,6 +114,7 @@ export default {
       this.endDrag();
       this.endModDrag();
       this.cancelLink();
+      this.endParameterSetting();
     },
     ...mapActions(useZoomStore, ['setScale']),
     ...mapActions(useToolsList, ['fetchTools']),
@@ -119,6 +122,7 @@ export default {
     ...mapActions(useSynthesizerDetails, ['fetchSynthesizer']),
     ...mapActions(useGenerators, ['fetchScripts']),
     ...mapActions(useLinkDrag, ['cancelLink', 'moveLink']),
+    ...mapActions(useParameters, ["endParameterSetting", "moveParameterSetting"]),
     selectTool(tool: ITool) {
       const payload = {
         auth_token: this.session.token,
