@@ -4,15 +4,16 @@
 </template>
 
 <script lang="ts">import { PropType } from 'vue';
-import IModule from '~~/lib/interfaces/IModule';
+import Mod from '~~/lib/wrappers/Mod';
 import Port from "../controls/Port.vue"
+import Knob from "../controls/Knob.vue"
 
 export default {
   name: "ProgrammableGain",
-  components: { Port },
+  components: { Knob, Port },
   props: {
     mod: {
-      type: Object as PropType<IModule>,
+      type: Object as PropType<Mod>,
       required: true
     }
   }

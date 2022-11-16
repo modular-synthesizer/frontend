@@ -8,12 +8,6 @@ import { mapState } from 'pinia';
 import { useLinkDrag } from '~~/lib/stores/links/dragAndDrop';
 
 export default  {
-  props: {
-    port: {
-      type: Object as PropType<Port>,
-      required: true
-    }
-  },
   computed: {
     radius(): number {
       return PORT_RADIUS - 3

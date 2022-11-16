@@ -20,8 +20,8 @@
         :r="radius"
         @mouseenter="magnetize(port)"
         @mouseout="unmagnetize()"
-        @mousedown.stop="startLinkFrom(port)"
-        @mouseup.stop="endLinkTo(port)"
+        @mousedown.stop.left="startLinkFrom(port)"
+        @mouseup.stop.left="endLinkTo(port)"
       />
     </g>
   </g>
