@@ -13,25 +13,9 @@ export default {
     }
   },
   computed: {
-    x1(): number {
-        return this.link.from.ax
-    },
-
     r(): number {
         return PORT_RADIUS - 3
     },
-
-    y1(): number {
-        return this.link.from.ay
-    },
-
-    y2(): number {
-        return this.link.to.ay
-    },
-
-    x2(): number {
-        return this.link.to.ax
-    }
   },
   methods: {
     ...mapActions(useLinksList, ['removeLink']),
@@ -43,10 +27,10 @@ export default {
 <template>
     <g>
         <line
-            :x1="x1"
-            :x2="x2"
-            :y1="y1"
-            :y2="y2"
+            :x1="link.from.ax"
+            :x2="link.to.ax"
+            :y1="link.from.ay"
+            :y2="link.to.ay"
             :stroke="link.color"
             stroke-width="8"
             opacity="0.3"
@@ -54,8 +38,8 @@ export default {
 
         />
         <circle
-            :cx="x1"
-            :cy="y1"
+            :cx="link.from.ax"
+            :cy="link.from.ay"
             :r="r"
             :stroke="link.color"
             stroke-width="6"
@@ -68,8 +52,8 @@ export default {
             @mouseout="unmagnetize()"
         />
         <circle
-            :cx="x2"
-            :cy="y2"
+            :cx="link.to.ax"
+            :cy="link.to.ay"
             :r="r"
             :stroke="link.color"
             stroke-width="6"
