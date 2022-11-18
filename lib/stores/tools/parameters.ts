@@ -23,6 +23,7 @@ export const useParameters = defineStore('parameters', {
       }
     },
     endParameterSetting() {
+      if (this.parameter === null) return;
       const auth_token: string = useAuthentication().session.token;
       const payload = {
         auth_token,

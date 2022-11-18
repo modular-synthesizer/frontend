@@ -1,8 +1,6 @@
 <template>
-  <Port :port="mod.inputs[0]" :dx="2" :dy="5" label="IN" />
-  <Port :port="mod.outputs[0]" :dx="2" :dy="35" label="OUT" />
-  <Port :port="mod.inputs[1]" :dx="2" :dy="11" label="GAIN" />
-  <Knob :dx="2" :dy="15" :param="mod.param('gain')" />
+  <Port :port="mod.outputs[0]" :dx="4" :dy="35" label="OUT" />
+  <Knob :dx="4" :dy="10" :param="mod.param('frequency')" />
 </template>
 
 <script lang="ts">import { PropType } from 'vue';
@@ -11,7 +9,7 @@ import Port from "../controls/Port.vue"
 import Knob from "../controls/Knob.vue"
 
 export default {
-  name: "ProgrammableGain",
+  name: "SquareLFO",
   components: { Knob, Port },
   props: {
     mod: {

@@ -15,6 +15,7 @@
                   <v-row>
                     <v-col xs="12" lg="4">
                       <v-select
+                        v-if="categories.length > 0"
                         variant="outlined"
                         density="compact"
                         :items="categories"
@@ -173,7 +174,6 @@ import InnerNodeForm from '../forms/InnerNodeForm.vue';
 import InnerLinksForm from '../forms/InnerLinksForm.vue';
 import PortsForm from '../forms/PortsForm.vue'
 import ParametersForm from '../forms/ParametersForm.vue'
-import { useAuthentication } from '~~/lib/stores/authentication';
 
 export default {
     props: {
@@ -192,47 +192,49 @@ export default {
       ...mapState(useCategories, ["categories"]),
     },
     methods: {
-        create() {
-          this.tool.category_id = this.category;
-          if(this.$refs.form.validate()) {
-            this.$emit('created', cloneDeep(this.tool));
-            this.$refs.form.reset();
-            this.$refs.form.resetValidation();
-            this.creationDialog = false;
-          }
-        },
-        addInnerNode(node: InnerNode) {
-            this.tool.innerNodes.push(node);
-        },
-        addInnerLink(link: InnerLink) {
-          this.tool.innerLinks.push(cloneDeep(link));
-        },
-        addPort({ type, port }) {
-          if (type === "input") {
-            this.tool.inputs.push(port);
-          }
-          else {
-            this.tool.outputs.push(port);
-          }
-        },
-        addParameter(param: IToolParameter) {
-          this.tool.parameters.push(param);
-        },
-        uniqueNodeName() {
-            return !find(this.tool.innerNodes, { name: this.innerNode.name }) || "name.uniq";
-        },
-        nameLength() {
-          return this.tool.name.length > 3 || "tools.dialog.errors.name.short"
-        },
-        nameRequired() {
-          return !!this.tool.name || "tools.dialog.errors.name.required"
+      create() {
+        this.tool.category_id = this.category;
+        if(this.$refs.form.validate()) {
+          this.$emit('created', find(this.categories, {id: this.category}).name, cloneDeep(this.tool));
+          this.resetCategory();
+          this.creationDialog = false;
         }
-    },
-    mounted() {
+      },
+      addInnerNode(node: InnerNode) {
+          this.tool.innerNodes.push(node);
+      },
+      addInnerLink(link: InnerLink) {
+        this.tool.innerLinks.push(cloneDeep(link));
+      },
+      addPort({ type, port }) {
+        if (type === "input") {
+          this.tool.inputs.push(port);
+        }
+        else {
+          this.tool.outputs.push(port);
+        }
+      },
+      addParameter(param: IToolParameter) {
+        this.tool.parameters.push(param);
+      },
+      uniqueNodeName() {
+          return !find(this.tool.innerNodes, { name: this.innerNode.name }) || "name.uniq";
+      },
+      nameLength() {
+        return this.tool.name.length > 3 || "tools.dialog.errors.name.short"
+      },
+      nameRequired() {
+        return !!this.tool.name || "tools.dialog.errors.name.required"
+      },
+      resetCategory() {
         if (this.categories > 0) {
           this.category = this.categories[0];
           this.tool.category_id = this.category.id;
         }
+      }
+    },
+    mounted() {
+      this.resetCategory();
     },
     components: { InnerNodeForm, InnerLinksForm, ParametersForm, PortsForm }
 }

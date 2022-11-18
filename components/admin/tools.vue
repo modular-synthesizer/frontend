@@ -25,6 +25,7 @@
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
+import ICategory from '~~/lib/interfaces/ICategory';
 import ITool from '~~/lib/interfaces/ITool';
 import { useAuthentication } from '~~/lib/stores/authentication';
 import { useCategories } from '~~/lib/stores/categories';
@@ -32,19 +33,23 @@ import { useGenerators } from '~~/lib/stores/tools/generators';
 import { useToolsList } from '~~/lib/stores/tools/list';
 import ToolCreator from './dialogs/ToolCreator.vue'
 
+function emptyTool() {
+  return {
+    id: "",
+    name: "",
+    category_id: "",
+    innerNodes: [],
+    innerLinks: [],
+    inputs: [],
+    outputs: [],
+    parameters: [],
+    slots: 2,
+  }
+}
+
 export default {
   data: () => ({
-    tool: {
-      id: "",
-      name: "",
-      category_id: "",
-      innerNodes: [],
-      innerLinks: [],
-      inputs: [],
-      outputs: [],
-      parameters: [],
-      slots: 2,
-    }
+    tool: emptyTool(),
   }),
   computed: {
     ...mapState(useCategories, ['categories']),
@@ -53,10 +58,13 @@ export default {
     ...mapState(useAuthentication, ['session']),
   },
   methods: {
-    ...mapActions(useToolsList, ['fetchTools']),
-    add(tool: ITool) {
+    ...mapActions(useToolsList, ['fetchTools', 'addTool']),
+    add(category: ICategory, tool: ITool) {
       api.post("/tools", {auth_token: this.session.token, ...tool})
-        .then(response => this.tools.push(response));
+        .then(response => {
+          this.addTool(category, response);
+          this.tool = emptyTool();
+        });
     }
   },
   mounted() {

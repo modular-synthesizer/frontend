@@ -13,11 +13,12 @@ import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
 import ProgrammableGain from "./ProgrammableGain.vue"
 import SinOscillator from "./SinOscillator.vue"
 import StandardOutput from "./StandardOutput.vue"
+import SquareLFO from "./SquareLFO.vue"
 import Mod from '~~/lib/wrappers/Mod';
 
 export default {
   name: "module-body",
-  components: { ProgrammableGain, SinOscillator, StandardOutput },
+  components: { ProgrammableGain, SinOscillator, SquareLFO, StandardOutput },
   props: {
     mod: {
       type: Object as PropType<Mod>,
