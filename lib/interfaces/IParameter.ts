@@ -7,6 +7,9 @@ export default interface IParameter {
     maximum: number;
     step: number;
     precision: number;
-  },
-  targets: string[]
+  };
+  targets: string[];
+  x: number;
+  y: number;
+  component: string;
 }

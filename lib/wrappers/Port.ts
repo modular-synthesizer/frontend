@@ -7,16 +7,18 @@ export default abstract class Port implements IPort {
   index: number;
   name: string;
   target: string;
-  mod: Mod
-  public x: number = 0;
-  public y: number = 0;
+  mod: Mod;
+  public readonly x: number;
+  public readonly y: number;
 
-  constructor({id, index, name, target}: IPort, mod: Mod) {
+  constructor({id, index, name, target, x, y}: IPort, mod: Mod) {
     this.id = id;
     this.index = index;
     this.name = name;
     this.target = target;
     this.mod = mod
+    this.x = x;
+    this.y = y;
   }
 
   abstract isInput(): boolean;

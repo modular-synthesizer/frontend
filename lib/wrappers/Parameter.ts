@@ -15,6 +15,9 @@ export default class Parameter {
   public readonly targets: string[] = []
   public readonly mod: Mod;
   private ctx: AudioContext;
+  public readonly x: number;
+  public readonly y: number;
+  public readonly component: string;
 
   constructor(details: IParameter, mod: Mod) {
     this.id = details.id;
@@ -28,6 +31,9 @@ export default class Parameter {
     this.mod = mod;
     this.ctx = useAudioContext().context;
     this.setValue(this.value);
+    this.x = details.x;
+    this.y = details.y;
+    this.component = details.component;
   }
 
   public setValue(val: number) {

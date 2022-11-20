@@ -1,8 +1,8 @@
 <template>
   <g>
-    <text :x="x" :y="y - radius - 4" text-anchor="middle" class="port-label">{{ label }}</text>
+    <text :x="port.x" :y="port.y - radius - 4" text-anchor="middle" class="port-label">{{ label }}</text>
     <g
-      :transform="`translate(${x},${y})`"
+      :transform="`translate(${port.x},${port.y})`"
     >
       <circle
         :r="radius"
@@ -31,7 +31,7 @@
 import { mapActions } from 'pinia';
 import { PropType } from 'vue';
 import { useLinkDrag } from '~~/lib/stores/links/dragAndDrop';
-import { PORT_RADIUS, SLOT_SIZE } from '~~/lib/utils/constants';
+import { PORT_RADIUS } from '~~/lib/utils/constants';
 import PortWrapper from '~~/lib/wrappers/Port';
 
 export default {
@@ -39,14 +39,6 @@ export default {
   data: () => ({
     radius: PORT_RADIUS
   }),
-  computed: {
-    x(): number {
-      return this.dx * (SLOT_SIZE / 2)
-    },
-    y(): number {
-      return this.dy * (SLOT_SIZE / 2)
-    },
-  },
   methods: {
     ...mapActions(useLinkDrag, ['startLinkFrom', 'endLinkTo', 'magnetize', 'unmagnetize']),
   },
@@ -67,17 +59,7 @@ export default {
       type: String,
       default: ""
     },
-    dx: {
-      type: Number, default: 0
-    },
-    dy: {
-      type: Number, default: 0
-    }
   },
-  mounted() {
-    this.port.x = this.x;
-    this.port.y = this.y;
-  }
 }
 </script>
 

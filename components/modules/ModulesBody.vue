@@ -1,7 +1,9 @@
 <template>
   <g :transform="`translate(${x} ${y})`" @mousedown.stop="startModDrag(mod, $event)">
     <rect :width="width" :height="height" stroke="black" fill="#A3A3A3" />
-    <component :is="mod.type" :mod="mod" />
+    <Port v-for="port in mod.inputs" :key="port.id" :port="port" />
+    <Port v-for="port in mod.outputs" :key="port.id" :port="port" />
+    <component v-for="parameter in mod.parameters" :key="parameter.id" :is="parameter.component" :parameter="parameter" />
   </g>
 </template>
 
@@ -10,15 +12,13 @@ import { PropType } from 'vue'
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { mapActions } from 'pinia';
 import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
-import ProgrammableGain from "./ProgrammableGain.vue"
-import SinOscillator from "./SinOscillator.vue"
-import StandardOutput from "./StandardOutput.vue"
-import SquareLFO from "./SquareLFO.vue"
 import Mod from '~~/lib/wrappers/Mod';
+import Knob from "../controls/Knob.vue"
+import Port from "../controls/Port.vue"
 
 export default {
   name: "module-body",
-  components: { ProgrammableGain, SinOscillator, SquareLFO, StandardOutput },
+  components: { Knob, Port },
   props: {
     mod: {
       type: Object as PropType<Mod>,

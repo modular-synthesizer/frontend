@@ -1,10 +1,10 @@
 <template>
-  <g @mousedown.stop="startParameterSetting($event, param)">
-    <circle r="20" :cx="x" :cy="y" fill="white" stroke="black" stroke-width="3" />
+  <g @mousedown.stop="startParameterSetting($event, parameter)">
+    <circle r="20" :cx="parameter.x" :cy="parameter.y" fill="white" stroke="black" stroke-width="3" />
     <text
       class="value"
-      :x="x"
-      :y="y"
+      :x="parameter.x"
+      :y="parameter.y"
       text-anchor="middle"
       alignment-baseline="middle"
     >
@@ -16,33 +16,20 @@
 <script lang="ts">
 import { mapActions } from 'pinia';
 import { useParameters } from '~~/lib/stores/tools/parameters';
-import { SLOT_SIZE } from '~~/lib/utils/constants';
 import Parameter from '~~/lib/wrappers/Parameter';
 import { round } from "lodash"
 
 export default {
   name: "Knob",
   props: {
-    param: {
+    parameter: {
       type: Parameter,
       required: true
     },
-    dx: {
-      type: Number, default: 0
-    },
-    dy: {
-      type: Number, default: 0
-    }
   },
   computed: {
     value() {
-        return round(this.param.value, this.param.precision);
-    },
-    x(): number {
-      return this.dx * (SLOT_SIZE / 2)
-    },
-    y(): number {
-      return this.dy * (SLOT_SIZE / 2)
+        return round(this.parameter.value, this.parameter.precision);
     },
   },
   methods: {
