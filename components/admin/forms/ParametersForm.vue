@@ -1,8 +1,8 @@
 <template>
   <v-form @submit.prevent="submit" ref="form">
     <v-container fluid>
-      <v-row>
-        <v-col xs="12" md="6">
+      <v-row no-gutters>
+        <v-col xs="12" md="3" class="pr-1">
           <v-autocomplete
             :multiple="true"
             :items="tool.innerNodes"
@@ -14,7 +14,7 @@
             item-value="name"
           />
         </v-col>
-        <v-col xs="12" md="4">
+        <v-col xs="12" md="3" class="pr-1">
           <!-- Load all parameters descriptors into that select. Put descriptors in a store shared with the parameters tab-->
           <v-autocomplete
             variant="outlined"
@@ -23,6 +23,15 @@
             :label="$t('tools.dialog.fields.descriptor.label')"
             v-model="descriptor"
           />
+        </v-col>
+        <v-col xs="12" md="2" class="pr-1">
+          <v-text-field v-model="parameter.component" variant="outlined" density="compact" label="Composant" />
+        </v-col>
+        <v-col xs="12" md="1" class="pr-1">
+          <v-text-field v-model="parameter.x" type="number" variant="outlined" density="compact" label="X" />
+        </v-col>
+        <v-col xs="12" md="1" class="pr-1">
+          <v-text-field v-model="parameter.y" type="number" variant="outlined" density="compact" label="Y" />
         </v-col>
         <v-col xs="12" md="2">
           <v-btn @click="submit">{{ $t('common.add') }}</v-btn>
@@ -45,7 +54,10 @@ export default {
     descriptor: null,
     parameter: {
       targets: [],
-      descriptor: null
+      descriptor: null,
+      component: "",
+      x: 0,
+      y: 0
     } as IToolParameter
   }),
   computed: {

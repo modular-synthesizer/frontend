@@ -1,8 +1,8 @@
 <template>
   <v-form @submit.prevent="submit" ref="form">
     <v-container fluid>
-      <v-row>
-        <v-col xs="4" md="2">
+      <v-row no-gutters>
+        <v-col xs="4" md="2" class="pr-1">
           <v-select
             :items="types"
             v-model="type"
@@ -11,7 +11,7 @@
             :label="$t('tools.dialog.fields.type.label')"
           />
         </v-col>
-        <v-col xs="8" md="3">
+        <v-col xs="8" md="3" class="pr-1">
           <v-text-field
             v-model="port.name"
             variant="outlined"
@@ -20,7 +20,7 @@
             :rules="[nameRequired]"
           />
         </v-col>
-        <v-col xs="8" md="3">
+        <v-col xs="8" md="2" class="pr-1">
           <v-text-field
             v-model="port.target"
             variant="outlined"
@@ -29,13 +29,33 @@
             :rules="[targetRequired, validTarget]"
           />
         </v-col>
-        <v-col xs="4" md="2">
+        <v-col xs="4" md="1" class="pr-1">
           <v-text-field
             type="number"
             variant="outlined"
             density="compact"
             v-model="port.index"
             :label="$t('common.index')"
+            minimum="0"
+          />
+        </v-col>
+        <v-col xs="4" md="1" class="pr-1">
+          <v-text-field
+            type="number"
+            variant="outlined"
+            density="compact"
+            v-model="port.x"
+            label="X"
+            minimum="0"
+          />
+        </v-col>
+        <v-col xs="4" md="1" class="pr-1">
+          <v-text-field
+            type="number"
+            variant="outlined"
+            density="compact"
+            v-model="port.y"
+            label="Y"
             minimum="0"
           />
         </v-col>
@@ -70,7 +90,9 @@ export default {
     port: {
       target: null,
       name: null,
-      index: 0
+      index: 0,
+      x: 0,
+      y: 0,
     }
   }),
   methods: {

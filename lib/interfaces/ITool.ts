@@ -12,7 +12,10 @@ export default interface ITool {
 
 export interface IToolParameter {
   descriptor: string;
-  targets: string[]
+  targets: string[];
+  component: string;
+  x: number;
+  y: number;
 }
 
 export interface InnerNode {
