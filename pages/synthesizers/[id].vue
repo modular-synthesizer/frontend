@@ -35,7 +35,7 @@
           <v-container v-for="(cat_tools, category) in tools">
             <v-row>
               <v-col cols="12">
-                <div class="text-h4">{{ category }}</div>
+                <div class="text-h4">{{ $t(`categories.names.${category}`) }}</div>
               </v-col>
             </v-row>
             <v-row>
@@ -45,8 +45,8 @@
                     v-for="tool in cat_tools"
                     :key="`${category}.${tool.name}`"
                     :value="tool"
-                    :title="$t(`modules.creator.tools.${category}.${tool.name}.title`)"
-                    :subtitle="$t(`modules.creator.tools.${category}.${tool.name}.description`)"
+                    :title="$t(`modules.${category}.${tool.name}.title`)"
+                    :subtitle="$t(`modules.${category}.${tool.name}.description`)"
                     @click="selectTool(tool)"
                   />
                 </v-list>

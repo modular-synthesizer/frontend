@@ -12,6 +12,9 @@
     },
     "labels": {
       "name": "Ajouter une catégorie"
+    },
+    "names": {
+      "common": "Modules génériques"
     }
   },
   "common": {
@@ -49,22 +52,10 @@
     "title": "Connexion"
   },
   "modules": {
-    "creator": {
-      "tools": {
-        "common": {
-          "ProgrammableGain": {
-            "title": "Gain Programmable",
-            "description": "Un gain mono-canal programmable"
-          },
-          "SineOscillator": {
-            "title": "Oscillateurr sinusoidal",
-            "description": "Un oscillator simple produisant une onde sinusoïdale paramétrable"
-          },
-          "StandardOutput": {
-            "title": "Sortie standarde",
-            "description": "Une sortie standarde vous permettant d'écouter votre patch"
-          }
-        }
+    "common": {
+      "Oscillator": {
+        "title": "Oscillateur polyphonique",
+        "description": "Un oscillateur polyphonique avec quatre types d'ondes disponibles, donc tous les paramètres sont voltage-controlled."
       }
     }
   },
