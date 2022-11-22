@@ -19,6 +19,7 @@ export default abstract class Port implements IPort {
     this.mod = mod
     this.x = x;
     this.y = y;
+    console.log("building a normal port")
   }
 
   abstract isInput(): boolean;
@@ -27,8 +28,18 @@ export default abstract class Port implements IPort {
     return this.isInput() === !port.isInput();
   }
 
-  public connect(port: Port) {
-    this.audioNode.connect(port.audioNode, this.index, port.index);
+  /**
+   * We make the connection on the right end of the link (destination), cinding the origin to it
+   * for a simple reason : if all output ports (origins) are the same, there are several types of
+   * input ports (destinations), eg parameters ports and module input ports.
+   * @param inputPort 
+   */
+  public connect(origin: Port) {
+    origin.audioNode.connect(this.audioNode, origin.index, this.index)
+  }
+
+  public disconnect(origin: Port) {
+    origin.audioNode.disconnect(this.audioNode);
   }
 
   public get audioNode(): AudioNode {

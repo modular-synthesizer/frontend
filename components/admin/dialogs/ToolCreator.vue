@@ -6,7 +6,7 @@
     <v-form @submit.prevent="create" v-model="validForm" ref="form">
       <v-card>
         <template v-slot:title>{{ $t('tools.dialog.title') }}</template>
-        <v-card-text>
+        <v-card-text class="overflowed">
           <v-expansion-panels>
             <v-expansion-panel>
               <v-expansion-panel-title>{{ $t('tools.dialog.steps.informations') }}</v-expansion-panel-title>
@@ -239,3 +239,10 @@ export default {
     components: { InnerNodeForm, InnerLinksForm, ParametersForm, PortsForm }
 }
 </script>
+
+<style scoped>
+.overflowed {
+  max-height: 80vh;
+  overflow: auto;
+}
+</style>
