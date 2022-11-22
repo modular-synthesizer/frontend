@@ -35,7 +35,6 @@ import { PORT_RADIUS } from '~~/lib/utils/constants';
 import PortWrapper from '~~/lib/wrappers/Port';
 
 export default {
-  name: "Port",
   data: () => ({
     radius: PORT_RADIUS
   }),

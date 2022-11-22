@@ -1,6 +1,9 @@
 <template>
   <g @mousedown.stop="startParameterSetting($event, parameter)">
-    <circle r="20" :cx="parameter.x" :cy="parameter.y" fill="white" stroke="black" stroke-width="3" />
+    <circle r="16" :cx="parameter.x" :cy="parameter.y" fill="white" stroke="black" stroke-width="3" />
+    <g :transform="`translate(${parameter.x} ${parameter.y}) rotate(${angle},0,0)`">
+      <rect x="-1.5" width="3" y="9" height="7" fill="black" class="indicator"></rect>
+    </g>
     <text
       class="value"
       :x="parameter.x"
@@ -20,7 +23,6 @@ import Parameter from '~~/lib/wrappers/Parameter';
 import { round } from "lodash"
 
 export default {
-  name: "Knob",
   props: {
     parameter: {
       type: Parameter,
@@ -31,6 +33,11 @@ export default {
     value() {
         return round(this.parameter.value, this.parameter.precision);
     },
+    // The angle of the indicator in the button.
+    angle() {
+      const delta = this.parameter.maximum / this.parameter.value
+      return 20 + (320 / delta)
+    }
   },
   methods: {
     ...mapActions(useParameters, ['startParameterSetting'])
@@ -40,7 +47,7 @@ export default {
 
 <style scoped>
 .value {
-    font-size: 12px;
+    font-size: 10px;
     user-select: none;
     paint-order: stroke;
     stroke: white;

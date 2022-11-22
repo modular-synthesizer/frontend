@@ -13,14 +13,34 @@ class InnerLinksFactory {
      */
     public link(nodes: InnerAudioNode[], links: InnerLink[]): InnerLink[] {
         return links.map(link => {
-            const from = find(nodes, {name: link.from.node});
-            const to = find(nodes, {name: link.to.node});
-        
-            if (from !== undefined && to !== undefined) {
-                from.node.connect(to.node, link.from.index, link.to.index)
+            if (/^[a-z]+\.[a-z]+$/.test(link.to.node)) {
+                return this.linkToParameter(nodes, link)
             }
-            return link;
+            else {
+                return this.linkToOtherNode(nodes, link);
+            }
         });
+    }
+
+    public linkToOtherNode(nodes: InnerAudioNode[], link: InnerLink) {
+        const from = find(nodes, {name: link.from.node});
+        const to = find(nodes, {name: link.to.node});
+    
+        if (from !== undefined && to !== undefined) {
+            from.node.connect(to.node, link.from.index, link.to.index)
+        }
+        return link;
+    }
+
+    public linkToParameter(nodes: InnerAudioNode[], link: InnerLink) {
+        const [nodeName, paramName] = link.to.node.split(".")
+        const from = find(nodes, {name: link.from.node});
+        const to = find(nodes, {name: nodeName});
+    
+        if (from !== undefined && to !== undefined) {
+            from.node.connect(to.node[paramName])
+        }
+        return link;
     }
 }
 

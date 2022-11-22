@@ -23,10 +23,10 @@ export default class Link {
   }
 
   public connect() {
-    this.from.connect(this.to);
+    this.to.connect(this.from);
   }
 
   public disconnect() {
-    this.from.audioNode.disconnect(this.to.audioNode)
+    this.to.disconnect(this.from);
   }
 }
