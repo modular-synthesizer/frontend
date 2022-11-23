@@ -20,7 +20,7 @@ spec:
         - name: modusynth-frontend
           image: virtuatable/modusynth-frontend:<VERSION>
           args:
-            - shell
+            - web
           ports:
             - containerPort: 3000
           env:
