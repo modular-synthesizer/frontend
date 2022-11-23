@@ -26,18 +26,47 @@
           </v-row>
           <v-row>
             <v-col cols="6">
-              <Username v-model="account.username" />
+              <v-text-field
+                :label="$t('register.labels.username')"
+                :hint="$t('register.hints.username')"
+                :placeholder="$t('register.placeholders.username')"
+                :rules="[requiredUsername, minSizeUsername]"
+                variant="outlined"
+                v-model="account.username"
+              ></v-text-field>
             </v-col>
             <v-col cols="6">
-              <Email v-model="account.email" />
+              <v-text-field
+                :label="$t('register.labels.email')"
+                :hint="$t('register.hints.email')"
+                :placeholder="$t('register.placeholders.email')"
+                :rules="[requiredEmail, formatEmail]"
+                type="email"
+                v-model="account.email"
+                variant="outlined"
+              ></v-text-field>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="6">
-              <Password v-model="account.password" />
+              <v-text-field
+                :label="$t('register.labels.password')"
+                :hint="$t('register.hints.password')"
+                :rules="[requiredPassword]"
+                type="password"
+                variant="outlined"
+                v-model="account.password"
+              ></v-text-field>
             </v-col>
             <v-col cols="6">
-              <Password v-model="account.password_confirmation" :confirms="account.password" />
+              <v-text-field
+                :label="$t('register.labels.password')"
+                :hint="$t('register.hints.password')"
+                :rules="[requiredPassword, passwordConfirmation]"
+                type="password"
+                variant="outlined"
+                v-model="account.password_confirmation"
+              ></v-text-field>
             </v-col>
           </v-row>
           <v-row no-gutters>
@@ -53,16 +82,13 @@
 
 <script lang="ts">
 import { api } from '~~/lib/api/Api';
-import Password from '~/components/inputs/password.vue';
-import Email from '~/components/inputs/email.vue';
-import Username from '~/components/inputs/username.vue';
 import IApiError from '~~/lib/interfaces/IApiError';
+import { EMAIL_FORMAT } from "~~/lib/utils/constants";
 
 definePageMeta({
   authenticated: false
 })
 export default {
-  components: { Email, Password, Username },
   data() {
     return {
       account: {
@@ -85,6 +111,26 @@ export default {
             this.duplicates = `errors.${apiError.key}.uniq`
           }
         })
+    },
+    requiredUsername() {
+      return this.username.length > 0 || this.$t("errors.username.required");
+    },
+    minSizeUsername() {
+      return this.username.length >= 6 || this.$t("errors.username.minsize");
+    },
+    requiredPassword() {
+      return this.password.length > 0 || this.$t("errors.password.required");
+    },
+    passwordConfirmation() {
+      return this.password_confirmation == ""
+        || this.password_confirmation == this.password
+        || this.$t("errors.password.confirmation")
+    },
+    requiredEmail() {
+      return this.modelValue.length > 0 || this.$t("errors.email.required")
+    },
+    formatEmail() {
+      return this.modelValue.match(EMAIL_FORMAT) || this.$t("errors.email.format")
     }
   }
 }

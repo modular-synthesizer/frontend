@@ -15,12 +15,26 @@
       </v-row>
       <v-row>
         <v-col cols="6" offset="3">
-          <Username v-model="account.username" />
+          <v-text-field
+            :label="$t('register.labels.username')"
+            :hint="$t('register.hints.username')"
+            :placeholder="$t('register.placeholders.username')"
+            :rules="[requiredUsername, minSizeUsername]"
+            variant="outlined"
+            v-model="account.username"
+          ></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="6" offset="3">
-          <Password v-model="account.password" />
+          <v-text-field
+            :label="$t('register.labels.password')"
+            :hint="$t('register.hints.password')"
+            :rules="[requiredPassword]"
+            type="password"
+            variant="outlined"
+            v-model="account.password"
+          ></v-text-field>
         </v-col>
       </v-row>
       <v-row>
@@ -33,8 +47,6 @@
 </template>
 
 <script lang="ts">
-import Username from '~~/components/inputs/username.vue';
-import Password from '~~/components/inputs/password.vue';
 import { mapActions } from 'pinia';
 import { useAuthentication } from '~~/lib/stores/authentication';
 
@@ -51,7 +63,6 @@ export default {
       error: ""
     };
   },
-  components: { Username, Password },
   methods: {
     ...mapActions(useAuthentication, ['login']),
     submitLogin() {
@@ -60,7 +71,16 @@ export default {
           const { key, message } = error.response.data;
           this.error = `errors.${key}.${message}`;
         })
-    }
+    },
+    requiredUsername() {
+      return this.username.length > 0 || this.$t("errors.username.required");
+    },
+    minSizeUsername() {
+      return this.username.length >= 6 || this.$t("errors.username.minsize");
+    },
+    requiredPassword() {
+      return this.password.length > 0 || this.$t("errors.password.required");
+    },
   }
 }
 </script>
