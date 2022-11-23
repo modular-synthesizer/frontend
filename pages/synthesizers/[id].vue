@@ -144,16 +144,16 @@ export default {
         this.displayInitModal = false
         this.overlay = true;
         useAudioContext().initContext();
-        api.get("/modules", { auth_token: this.session.token, synthesizer_id: this.$route.params.id })
-          .then(async (response: IModule[]) => {
-            response.forEach(imod => {
-              this.mods.push(new Mod(imod));
-              this.synthesizer.place(imod.rack, imod.slot, imod)
+          api.get("/modules", { auth_token: this.session.token, synthesizer_id: this.$route.params.id })
+            .then(async (response: IModule[]) => {
+              response.forEach(imod => {
+                this.mods.push(new Mod(imod));
+                this.synthesizer.place(imod.rack, imod.slot, imod)
+              });
+              await useLinksList().fetchLinks();
+              this.overlay = true;
             });
-            await useLinksList().fetchLinks();
-            this.overlay = true;
-          });
-    }
+        }
   },
   async mounted() {
     this.fetchTools();
