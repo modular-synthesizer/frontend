@@ -14,11 +14,14 @@ import { mapActions } from 'pinia';
 import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
 import Mod from '~~/lib/wrappers/Mod';
 import Knob from "../controls/Knob.vue"
+import SmallKnob from "../controls/SmallKnob.vue"
+import LargeKnob from "../controls/LargeKnob.vue"
+import MuteButton from "../controls/MuteButton.vue"
 import Port from "../controls/Port.vue"
 
 export default {
   name: "module-body",
-  components: { Knob, Port },
+  components: { Knob, LargeKnob, MuteButton, Port, SmallKnob },
   props: {
     mod: {
       type: Object as PropType<Mod>,

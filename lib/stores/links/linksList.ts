@@ -10,12 +10,10 @@ export const useLinksList = defineStore('linksList', {
     links: [] as Link[]
   }),
   actions: {
-    fetchLinks() {
+    async fetchLinks() {
       const auth_token: string = useAuthentication().session.token;
-      api.get("/links", { auth_token })
-        .then(response => {
-          response.forEach(link => this.addLink(link))
-        })
+      const response = await api.get("/links", { auth_token });
+      response.forEach(link => this.addLink(link));
     },
     addLink(link: ILink) {
       this.links.push(new Link(link));

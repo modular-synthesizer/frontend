@@ -1,5 +1,5 @@
 <template>
-  <GenericKnob :parameter="parameter" />
+  <GenericKnob :parameter="parameter" :r="25" :cursor-size="8"/>
 </template>
 
 <script lang="ts">

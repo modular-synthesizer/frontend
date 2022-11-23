@@ -56,6 +56,7 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+    <v-overlay v-model="overlay"></v-overlay>
   </div>
 </template>
 
@@ -87,7 +88,8 @@ export default {
       displayCreator: false,
       mods: [] as Mod[],
       generators: [] as string[],
-      displayInitModal: true
+      displayInitModal: true,
+      overlay: false,
     };
   },
   computed: {
@@ -131,18 +133,25 @@ export default {
         slot: 0,
         rack: 0
       };
-      api.post('/modules', payload).then(response => console.log(response))
+      this.overlay = true;
+      api.post('/modules', payload).then(response => {
+        this.mods.push(new Mod(response));
+        this.displayCreator = false;
+        this.overlay = false
+      })
     },
     initSoundPipeline() {
         this.displayInitModal = false
+        this.overlay = true;
         useAudioContext().initContext();
         api.get("/modules", { auth_token: this.session.token, synthesizer_id: this.$route.params.id })
-          .then((response: IModule[]) => {
+          .then(async (response: IModule[]) => {
             response.forEach(imod => {
               this.mods.push(new Mod(imod));
               this.synthesizer.place(imod.rack, imod.slot, imod)
             });
-            useLinksList().fetchLinks();
+            await useLinksList().fetchLinks();
+            this.overlay = true;
           });
     }
   },
