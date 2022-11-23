@@ -21,7 +21,7 @@
         @mouseenter="magnetize(port)"
         @mouseout="unmagnetize()"
         @mousedown.stop.left="startLinkFrom(port)"
-        @mouseup.stop.left="endLinkTo(port)"
+        @mouseup.left="endLinkTo(port)"
       />
     </g>
   </g>
