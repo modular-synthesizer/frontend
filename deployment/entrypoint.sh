@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function web {
-  yarn start
+  npx nuxt start
 }
 
 function shell {
