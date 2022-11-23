@@ -17,9 +17,15 @@ export default {
      * Do not directly pass this props as it is used to make the
      * v-model available when instanciating this component.
      */
-    modelValue: {
+    _modelValue: {
       type: String,
       required: true
+    }
+  },
+  computed: {
+    modelValue: {
+      get() { return this._modelValue },
+      set() { this.notifyChange() }
     }
   },
   methods: {
