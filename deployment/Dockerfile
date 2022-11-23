@@ -11,4 +11,4 @@ EXPOSE 3000
 
 RUN yarn install
 
-CMD ["yarn", "dev"]
+ENTRYPOINT ["deployment/entrypoint.sh"]
