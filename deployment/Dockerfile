@@ -9,7 +9,6 @@ ENV NUXT_PORT=3000
 
 EXPOSE 3000
 
-RUN npm install -g yarn
 RUN yarn install
 
 CMD ["yarn", "dev"]
