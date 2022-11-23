@@ -76,8 +76,9 @@ import Mod from '~~/lib/wrappers/Mod';
 import { useLinkDrag } from '~~/lib/stores/links/dragAndDrop';
 import { useLinksList } from '~~/lib/stores/links/linksList';
 import { useAudioContext } from '~~/lib/stores/audioContext';
-import IModule from '~~/lib/interfaces/IModule';
 import { useParameters } from '~~/lib/stores/tools/parameters';
+import { useModulesList } from '~~/lib/stores/mods/modsList';
+import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 definePageMeta({
   menu: false
@@ -86,7 +87,6 @@ export default {
   data() {
     return {
       displayCreator: false,
-      mods: [] as Mod[],
       generators: [] as string[],
       displayInitModal: true,
       overlay: false,
@@ -97,6 +97,7 @@ export default {
     ...mapState(useToolsList, ['tools']),
     ...mapState(useSynthesizerDetails, ['synthesizer']),
     ...mapState(useLinksList, ['links']),
+    ...mapState(useModulesList, ['mods']),
   },
   methods: {
     mousemove($event) {
@@ -140,25 +141,19 @@ export default {
         this.overlay = false
       })
     },
-    initSoundPipeline() {
-        this.displayInitModal = false
-        this.overlay = true;
-        useAudioContext().initContext();
-          api.get("/modules", { auth_token: this.session.token, synthesizer_id: this.$route.params.id })
-            .then(async (response: IModule[]) => {
-              response.forEach(imod => {
-                this.mods.push(new Mod(imod));
-                this.synthesizer.place(imod.rack, imod.slot, imod)
-              });
-              await useLinksList().fetchLinks();
-              this.overlay = true;
-            });
-        }
+    async initSoundPipeline() {
+      this.displayInitModal = false
+      this.overlay = true;
+      useAudioContext().initContext();
+      await useModulesList().fetchModules(this.synthesizer as Synthesizer);
+      await useLinksList().fetchLinks();
+      this.overlay = true;
+    }
   },
   async mounted() {
     this.fetchTools();
     await this.fetchScripts();
-    this.fetchSynthesizer(this.$route.params.id);
+    this.fetchSynthesizer(this.$route.params.id as string);
   },
   components: { SynthesizerComponent }
 }

@@ -5,7 +5,7 @@ import { useAuthentication } from "../authentication";
 
 export const useSynthesizerDetails = defineStore('synthesizerDetails', {
   state: () => ({
-    synthesizer: null as Synthesizer,
+    synthesizer: null as unknown as Synthesizer,
   }),
   actions: {
     fetchSynthesizer(id: string) {
