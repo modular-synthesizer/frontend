@@ -113,24 +113,24 @@ export default {
         })
     },
     requiredUsername() {
-      return this.username.length > 0 || this.$t("errors.username.required");
+      return this.account.username.length > 0 || this.$t("errors.username.required");
     },
     minSizeUsername() {
-      return this.username.length >= 6 || this.$t("errors.username.minsize");
+      return this.account.username.length >= 6 || this.$t("errors.username.minsize");
     },
     requiredPassword() {
-      return this.password.length > 0 || this.$t("errors.password.required");
+      return this.account.password.length > 0 || this.$t("errors.password.required");
     },
     passwordConfirmation() {
-      return this.password_confirmation == ""
-        || this.password_confirmation == this.password
+      return this.account.password_confirmation == ""
+        || this.account.password_confirmation == this.account.password
         || this.$t("errors.password.confirmation")
     },
     requiredEmail() {
-      return this.modelValue.length > 0 || this.$t("errors.email.required")
+      return this.account.email.length > 0 || this.$t("errors.email.required")
     },
     formatEmail() {
-      return this.modelValue.match(EMAIL_FORMAT) || this.$t("errors.email.format")
+      return this.account.email.match(EMAIL_FORMAT) || this.$t("errors.email.format")
     }
   }
 }

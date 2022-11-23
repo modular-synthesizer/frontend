@@ -73,13 +73,13 @@ export default {
         })
     },
     requiredUsername() {
-      return this.username.length > 0 || this.$t("errors.username.required");
+      return this.account.username.length > 0 || this.$t("errors.username.required");
     },
     minSizeUsername() {
-      return this.username.length >= 6 || this.$t("errors.username.minsize");
+      return this.account.username.length >= 6 || this.$t("errors.username.minsize");
     },
     requiredPassword() {
-      return this.password.length > 0 || this.$t("errors.password.required");
+      return this.account.password.length > 0 || this.$t("errors.password.required");
     },
   }
 }
