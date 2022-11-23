@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function web {
-  yarn dev
+  yarn start
 }
 
 function shell {
