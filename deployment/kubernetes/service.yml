@@ -4,10 +4,10 @@ metadata:
   namespace: modusynth
   name: frontend-service
   labels:
-    app: modusynth
+    app: modusynth-gui
 spec:
   selector:
-    app: modusynth
+    app: modusynth-gui
   ports:
     - name: http
       protocol: TCP

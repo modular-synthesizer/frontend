@@ -4,12 +4,12 @@ metadata:
   namespace: modusynth
   name: frontend-deployment
   labels:
-    app: modusynth
+    app: modusynth-gui
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: modusynth
+      app: modusynth-gui
   template:
     metadata:
       labels:

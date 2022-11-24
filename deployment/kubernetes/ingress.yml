@@ -4,7 +4,7 @@ metadata:
   namespace: modusynth
   name: frontend-ingress
   labels:
-    app: modusynth
+    app: modusynth-gui
 spec:
   tls:
     - secretName: synple-app
