@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      api_uri: process.env.API_URL || 'http://51.158.57.50/api',
+      api_uri: 'https://synple.app/api'
       dev_mode: process.env.DEV_MODE == 'true'
     }
   }
