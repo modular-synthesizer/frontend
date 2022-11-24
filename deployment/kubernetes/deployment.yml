@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        app: modusynth
+        app: modusynth-gui
     spec:
       dnsPolicy: Default
       containers:
