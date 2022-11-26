@@ -146,7 +146,9 @@ export default {
         return;
       }
       api.post('/modules', payload).then(response => {
-        this.mods.push(new Mod(response));
+        const mod: Mod = new Mod(response);
+        this.mods.push(mod);
+        this.synthesizer.place(mod.rack, mod.slot, mod);
         this.displayCreator = false;
       })
     },
