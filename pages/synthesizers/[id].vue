@@ -1,23 +1,8 @@
 <template>
   <div class="wrapper">
-    <v-dialog :persistent="true" v-model="displayInitModal" class="welcome-dialog">
-      <v-card>
-        <template v-slot:title>Bienvenue sur Synple</template>
-        <v-card-text>
-          Notre but : vous permettre de créer simplement des synthétiseurs
-        </v-card-text>
-        <v-card-actions>
-          <v-btn :disabled="loading" variant="text" @click="initSoundPipeline">
-            <div v-if="loading" class="text-center">
-              <v-progress-circular indeterminate size="30" />
-            </div>
-            <span v-else>Close</span>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <synthesizer-initializer v-if="!loaded" @interacted="initSoundPipeline" />
     <svg
-      v-if="!displayInitModal"
+      v-else
       @mousedown="startDrag(synthesizer, $event.clientX, $event.clientY)"
       @mousemove="mousemove"
       @mouseup="endDrags()"
@@ -98,6 +83,7 @@ export default {
       generators: [] as string[],
       displayInitModal: true,
       loading: false,
+      loaded: false,
     };
   },
   computed: {
@@ -153,11 +139,10 @@ export default {
       })
     },
     async initSoundPipeline() {
-      this.loading = true;
       useAudioContext().initContext();
       await useModulesList().fetchModules(this.synthesizer as Synthesizer);
       await useLinksList().fetchLinks();
-      this.displayInitModal = false
+      this.loaded = true;
     }
   },
   async mounted() {
