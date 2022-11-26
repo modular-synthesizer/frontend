@@ -43,6 +43,8 @@ export const useModDrag = defineStore("modDrag", {
       const delta = slot - this.slots.click;
       const newPlace = clamp(this.slots.mod + delta, 0, synth.maxSlot - this.mod.slots);
 
+      if (newPlace === this.mod.slot && rack === this.mod.rack) return;
+
       synth.remove(this.mod);
       if (synth.hasRoom(rack, newPlace, this.mod)) {
         synth.place(rack, newPlace, this.mod);
