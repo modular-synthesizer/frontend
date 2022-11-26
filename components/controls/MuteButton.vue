@@ -3,6 +3,8 @@
 </template>
 
 <script lang="ts">
+import { api } from '~~/lib/api/Api';
+import { useAuthentication } from '~~/lib/stores/authentication';
 import Parameter from '~~/lib/wrappers/Parameter';
 
 export default {
@@ -23,11 +25,17 @@ export default {
   },
   mounted() {
     this.baseValue = this.parameter.value
+    this.muted = Math.round(this.parameter.value) == 0
   },
   methods: {
     trigger() {
       this.muted = !this.muted;
-      this.parameter.setValue(this.muted ? 0 : 1)
+      this.parameter.setValue(this.muted ? 0 : 1);
+      const payload = {
+        auth_token: useAuthentication().session.token,
+        parameters: [{id: this.parameter.id, value: this.parameter.value}]
+      }
+      api.put(`/modules/${this.parameter.mod.id}`, payload)
     }
   }
 }
