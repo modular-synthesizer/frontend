@@ -67,6 +67,17 @@ export default class Synthesizer {
     return this.racks[0].slots.length;
   }
 
+  public firstFreeSlot(size: number): {rack: number, slot: number} {
+    for (let rack of this.racks) {
+      let nbFree = 0;
+      for (let slot: number = 0; slot < rack.slots.length; slot++) {
+        rack.slots[slot].free ? nbFree++ : nbFree = 0;
+        if (nbFree == size) return {rack: rack.index, slot: slot - nbFree};
+      }
+    }
+    return {rack: -1, slot: -1}
+  }
+
   public toString(): string {
     return this.racks.map(rack => {
       return rack.slots.map(slot => slot.free ? '.' : '0').join('');

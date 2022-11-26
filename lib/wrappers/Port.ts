@@ -19,7 +19,6 @@ export default abstract class Port implements IPort {
     this.mod = mod
     this.x = x;
     this.y = y;
-    console.log("building a normal port")
   }
 
   abstract isInput(): boolean;

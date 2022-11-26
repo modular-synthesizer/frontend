@@ -4,6 +4,7 @@ import ILink from "~~/lib/interfaces/ILink";
 import Link from "~~/lib/wrappers/Link";
 import { useAuthentication } from "../authentication";
 import { remove } from "lodash"
+import { useSynthesizerDetails } from "../synthesizers/details";
 
 export const useLinksList = defineStore('linksList', {
   state: () => ({
@@ -11,8 +12,10 @@ export const useLinksList = defineStore('linksList', {
   }),
   actions: {
     async fetchLinks() {
+      this.links = [];
       const auth_token: string = useAuthentication().session.token;
-      const response = await api.get("/links", { auth_token });
+      const synthesizer_id = useSynthesizerDetails().synthesizer.id;
+      const response = await api.get("/links", { auth_token, synthesizer_id });
       response.forEach(link => this.addLink(link));
     },
     addLink(link: ILink) {

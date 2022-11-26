@@ -131,9 +131,12 @@ export default {
         auth_token: this.session.token,
         tool_id: tool.id,
         synthesizer_id: this.synthesizer.id,
-        slot: 0,
-        rack: 0
+        ...this.synthesizer.firstFreeSlot(tool.slots),
       };
+      if (payload.slot === -1 || payload.rack === -1) {
+        this.displayCreator = false;
+        return;
+      }
       this.overlay = true;
       api.post('/modules', payload).then(response => {
         this.mods.push(new Mod(response));
