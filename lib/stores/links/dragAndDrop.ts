@@ -24,8 +24,8 @@ export const useLinkDrag = defineStore('linkDrag', {
       this.dragCoordinates.y = y;
     },
     endLinkTo(port: Port) {
-      if (this.startPort.id === port.id) this.cancelLink();
       if (this.startPort === null) return;
+      if (this.startPort.id === port.id) this.cancelLink();
 
       const auth_token: string = useAuthentication().session.token;
       const synthesizer: Synthesizer = useSynthesizerDetails().synthesizer;

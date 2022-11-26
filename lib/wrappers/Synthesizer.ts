@@ -66,4 +66,10 @@ export default class Synthesizer {
   public get maxSlot(): number {
     return this.racks[0].slots.length;
   }
+
+  public toString(): string {
+    return this.racks.map(rack => {
+      return rack.slots.map(slot => slot.free ? '.' : '0').join('');
+    }).join("\n");
+  }
 }
