@@ -9,10 +9,10 @@ export const useAuthentication = defineStore('authentication', {
     storage: storage()
   }),
   getters: {
-    authenticated() {
+    authenticated(): boolean {
       return this.session.token !== ""
     },
-    admin() {
+    admin(): boolean {
       return !!this.session.admin;
     }
   },

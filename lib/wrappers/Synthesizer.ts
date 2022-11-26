@@ -1,7 +1,6 @@
 import { ISynthesizer } from "../interfaces/ISynthesizer";
 import { times } from "lodash";
 import Rack from "./Rack";
-import { find, remove } from "lodash";
 import IModule from "../interfaces/IModule";
 import Mod from "./Mod";
 
@@ -24,6 +23,8 @@ export default class Synthesizer {
   // The list of racks available in the synthesizer.
   public racks: Rack[] = [];
 
+  public slots: number;
+
   public modules: Mod[] = []
 
   public constructor(infos: ISynthesizer) {
@@ -32,6 +33,7 @@ export default class Synthesizer {
     this.x = infos.x;
     this.y = infos.y;
     this.scale = infos.scale;
+    this.slots = infos.slots;
 
     times(infos.racks, (index: number) => {
       this.racks.push(new Rack(index, infos.slots));
@@ -39,48 +41,33 @@ export default class Synthesizer {
   }
 
   public hasRoom(rack: number, slot: number, mod: IModule): boolean {
-    for (let i = slot; i < slot + mod.slots; ++i) {
-      if (!this.racks[rack].slots[i].free) return false;
-    }
-    return true;
+    const results = this.racks[rack].toString().substring(slot, slot + mod.slots);
+    return results === '0'.repeat(mod.slots);
   }
 
   public place(rack: number, slot: number, mod: Mod) {
-    if (find(this.modules, {id: mod.id}) === undefined) {
-      this.modules.push(mod);
-    }
-    for (let i = slot; i < slot + mod.slots; ++i) {
-      this.racks[rack].slots[i].free = false;
-    }
+    this.racks[rack].add(mod);
     mod.rack = rack;
     mod.slot = slot;
   }
 
-  public remove(mod: IModule) {
-    remove(this.modules, {id: mod.id})
-    for (let i = mod.slot; i < mod.slot + mod.slots; ++i) {
-      this.racks[mod.rack].slots[i].free = true;
-    }
+  public remove(mod: Mod) {
+    this.racks[mod.rack].remove(mod);
   }
 
   public get maxSlot(): number {
-    return this.racks[0].slots.length;
+    return this.slots;
   }
 
   public firstFreeSlot(size: number): {rack: number, slot: number} {
     for (let rack of this.racks) {
-      let nbFree = 0;
-      for (let slot: number = 0; slot < rack.slots.length; slot++) {
-        rack.slots[slot].free ? nbFree++ : nbFree = 0;
-        if (nbFree == size) return {rack: rack.index, slot: slot - nbFree};
-      }
+      const results: number = rack.freeSpace(size);
+      if (results > -1) return {rack: rack.index, slot: results};
     }
     return {rack: -1, slot: -1}
   }
 
   public toString(): string {
-    return this.racks.map(rack => {
-      return rack.slots.map(slot => slot.free ? '.' : '0').join('');
-    }).join("\n");
+    return this.racks.map(rack => rack.toString()).join("\n");
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <g :transform="`translate(0 ${rackHeight * rack.index})`">
-    <g v-for="slot in rack.slots" :transform="`translate(${slotSize * slot.index} 0)`">
+    <g v-for="slot in rack.slots" :transform="`translate(${slotSize * (slot - 1)} 0)`">
       <Fixation :y="0" />
       <Fixation :y="rackHeight - slotSize" />
     </g>

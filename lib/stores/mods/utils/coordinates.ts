@@ -50,5 +50,5 @@ export function getSlot(x, y): number {
   const synth = useSynthesizerDetails().synthesizer;
   const position: ICoordinates = relativePosition(x, y);
   const slot = Math.floor(position.x / SLOT_SIZE);
-  return clamp(slot, 0, synth.racks[0].slots.length);
+  return clamp(slot, 0, synth.racks[0].slots);
 }

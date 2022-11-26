@@ -24,7 +24,7 @@ export const useModDrag = defineStore("modDrag", {
     mod: null,
     coords: {x: 0, y: 0},
     slots: {click: 0, mod: 0},
-    rack: 0,
+    startRack: 0,
   }),
   actions: {
     startModDrag(mod: Mod, $event: MouseEvent) {
@@ -48,6 +48,9 @@ export const useModDrag = defineStore("modDrag", {
       synth.remove(this.mod);
       if (synth.hasRoom(rack, newPlace, this.mod)) {
         synth.place(rack, newPlace, this.mod);
+      }
+      else {
+        synth.place(rack, this.mod.slot, this.mod);
       }
     },
     endModDrag() {

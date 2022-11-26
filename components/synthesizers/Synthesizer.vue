@@ -33,6 +33,6 @@ export default {
   },
   computed: {
     ...mapState(useLinkDrag, ['startPort'])
-  }
+  },
 }
 </script>
