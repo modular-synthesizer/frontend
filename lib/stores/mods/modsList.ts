@@ -11,7 +11,6 @@ export const useModulesList = defineStore("modulesList", {
   }),
   actions: {
     async fetchModules(synthesizer: Synthesizer) {
-      console.log("fetch modules list");
       const payload = {
         auth_token: useAuthentication().session.token,
         synthesizer_id: synthesizer.id
@@ -24,7 +23,6 @@ export const useModulesList = defineStore("modulesList", {
       });
     },
     resetMods() {
-      console.log("reset modules list");
       this.mods = []
     }
   }

@@ -1,14 +1,23 @@
 <template>
   <div class="wrapper">
-    <v-dialog :persistent="true" v-model="displayInitModal">
+    <v-dialog :persistent="true" v-model="displayInitModal" class="welcome-dialog">
       <v-card>
-        <template v-slot:title>Blah</template>
+        <template v-slot:title>Bienvenue sur Synple</template>
+        <v-card-text>
+          Notre but : vous permettre de créer simplement des synthétiseurs
+        </v-card-text>
         <v-card-actions>
-          <v-btn variant="text" @click="initSoundPipeline">Close</v-btn>
+          <v-btn :disabled="loading" variant="text" @click="initSoundPipeline">
+            <div v-if="loading" class="text-center">
+              <v-progress-circular indeterminate size="30" />
+            </div>
+            <span v-else>Close</span>
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
     <svg
+      v-if="!displayInitModal"
       @mousedown="startDrag(synthesizer, $event.clientX, $event.clientY)"
       @mousemove="mousemove"
       @mouseup="endDrags()"
@@ -56,7 +65,6 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-overlay v-model="overlay"></v-overlay>
   </div>
 </template>
 
@@ -89,7 +97,7 @@ export default {
       displayCreator: false,
       generators: [] as string[],
       displayInitModal: true,
-      overlay: false,
+      loading: false,
     };
   },
   computed: {
@@ -137,20 +145,17 @@ export default {
         this.displayCreator = false;
         return;
       }
-      this.overlay = true;
       api.post('/modules', payload).then(response => {
         this.mods.push(new Mod(response));
         this.displayCreator = false;
-        this.overlay = false
       })
     },
     async initSoundPipeline() {
-      this.displayInitModal = false
-      this.overlay = true;
+      this.loading = true;
       useAudioContext().initContext();
       await useModulesList().fetchModules(this.synthesizer as Synthesizer);
       await useLinksList().fetchLinks();
-      this.overlay = true;
+      this.displayInitModal = false
     }
   },
   async mounted() {
@@ -172,5 +177,9 @@ svg, .wrapper {
   position: absolute;
   top: 0px;
   left: 0px;
+}
+
+.welcome-dialog {
+  max-width: 50%;
 }
 </style>
