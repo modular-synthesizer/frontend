@@ -50,7 +50,7 @@ export const useModDrag = defineStore("modDrag", {
         synth.place(rack, newPlace, this.mod);
       }
       else {
-        synth.place(rack, this.mod.slot, this.mod);
+        synth.place(this.mod.rack, this.mod.slot, this.mod);
       }
     },
     endModDrag() {
