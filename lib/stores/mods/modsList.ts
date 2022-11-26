@@ -11,7 +11,7 @@ export const useModulesList = defineStore("modulesList", {
   }),
   actions: {
     async fetchModules(synthesizer: Synthesizer) {
-      this.mods = [];
+      console.log("fetch modules list");
       const payload = {
         auth_token: useAuthentication().session.token,
         synthesizer_id: synthesizer.id
@@ -19,9 +19,13 @@ export const useModulesList = defineStore("modulesList", {
       const modules = await api.get("/modules", payload)
       modules.forEach((imod: IModule) => {
         const instance: Mod = new Mod(imod)
-        this.mods.push(instance);
         synthesizer.place(imod.rack, imod.slot, instance);
+        this.mods.push(instance);
       });
+    },
+    resetMods() {
+      console.log("reset modules list");
+      this.mods = []
     }
   }
 })

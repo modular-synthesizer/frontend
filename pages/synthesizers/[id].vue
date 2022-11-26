@@ -154,6 +154,8 @@ export default {
     }
   },
   async mounted() {
+    useModulesList().resetMods();
+    useLinksList().resetLinks();
     this.fetchTools();
     await this.fetchScripts();
     this.fetchSynthesizer(this.$route.params.id as string);

@@ -12,7 +12,6 @@ export const useLinksList = defineStore('linksList', {
   }),
   actions: {
     async fetchLinks() {
-      this.links = [];
       const auth_token: string = useAuthentication().session.token;
       const synthesizer_id = useSynthesizerDetails().synthesizer.id;
       const response = await api.get("/links", { auth_token, synthesizer_id });
@@ -26,6 +25,9 @@ export const useLinksList = defineStore('linksList', {
       link.disconnect()
       remove(this.links, {id: link.id});
       api.delete(`/links/${link.id}`, { auth_token })
+    },
+    resetLinks() {
+      this.links = []
     }
   }
 })
