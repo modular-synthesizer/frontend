@@ -1,7 +1,7 @@
 <template>
   <VAppBar color="primary">
-    <VAppBarTitle>Modusynth</VAppBarTitle>
     <template v-slot:prepend>
+      <VAppBarTitle>Synple</VAppBarTitle>
       <VBtn icon to="/"><VIcon>mdi-home</VIcon></VBtn>
       <template v-if="authenticated">
         <VBtn icon to="/synthesizers">
