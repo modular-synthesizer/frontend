@@ -9,7 +9,7 @@
       <v-toolbar>
         <v-toolbar-title>Modules</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn icon @click="display = false">
+        <v-btn icon @click="display = false" :disabled="loading">
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
@@ -23,6 +23,7 @@
           <v-col cols="12">
             <v-list>
               <v-list-item
+                :disabled="loading"
                 v-for="tool in cat_tools"
                 :key="`${category}.${tool.name}`"
                 :value="tool"
@@ -53,6 +54,7 @@ type ToolsList = {[key: string]: Array<ITool>};
 export default {
   data: () => ({
     display: false,
+    loading: false,
   }),
   props: {
     tools: {
@@ -68,7 +70,12 @@ export default {
     ...mapState(useAuthentication, ['session']),
   },
   methods: {
+    close() {
+      this.loading = false;
+      this.display = false;
+    },
     select(tool: ITool) {
+      this.loading = true;
       const payload = {
         auth_token: this.session.token,
         tool_id: tool.id,
@@ -76,15 +83,14 @@ export default {
         ...this.synthesizer.firstFreeSlot(tool.slots),
       };
       if (payload.slot === -1 || payload.rack === -1) {
-        this.display = false;
-        return;
+        this.close();
       }
-      api.post('/modules', payload).then((response: IModule) => {
-        this.$emit('selected', new Mod(response));
-        // this.mods.push(mod);
-        // this.synthesizer.place(mod.rack, mod.slot, mod);
-        this.display = false;
-      })
+      else {
+        api.post('/modules', payload).then((response: IModule) => {
+          this.$emit('selected', new Mod(response));
+          this.close();
+        })
+      }
     },
   }
 }
