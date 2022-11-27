@@ -47,6 +47,18 @@
       "uniq": "Ce nom d'utilisateur est déjà utilisé"
     }
   },
+  "init": {
+    "paragraphs": {
+      "welcome": "Bienvenue sur Synple, le synthétiseur modulaire... En plus simple !",
+      "goal": "Ici vous trouverez une interface vous permettant d'éditer votre propre synthétiseur, avec des modules déjà créés ou, quand vous serez familiarisé avec le système, en créant les vôtres !",
+      "instructions": "Quelques instructions simples avant de vous laisser expérimenter :",
+      "modules": "Pour ajouter un noeud, cliquez sur le button \"+\" en haut à gauche.",
+      "links": "Pour créer des liens, faites un cliqué-glissé d'un pour d'entrée à un port de sortie ou inversement.",
+      "parameters": "Pour modifier un paramètre, cliquez-glissez à partir de son bouton vers le haut ou le bas.",
+      "output": "Pour éteindre une sortie audio, appuyez sur le gros bouton vert dessus, il passera au rouge et arrêtera le son"
+    },
+    "title": "Synple"
+  },
   "login": {
     "button": "Se connecter",
     "title": "Connexion"

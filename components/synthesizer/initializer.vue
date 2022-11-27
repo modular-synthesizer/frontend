@@ -1,16 +1,26 @@
 <template>
   <v-dialog :persistent="true" v-model="display" class="welcome-dialog">
-    <v-card>
-      <template v-slot:title>Bienvenue sur Synple</template>
+    <v-card class="mx-auto" max-width="100%">
+      <template v-slot:title>{{ $t('init.title') }}</template>
       <v-card-text>
-        Notre but : vous permettre de créer simplement des synthétiseurs
-      </v-card-text>
+        <div class="mb-2">{{ $t('init.paragraphs.welcome') }}</div>
+        <div class="mb-2">{{ $t('init.paragraphs.goal') }}</div>
+          <div class="mb-2">{{ $t('init.paragraphs.instructions') }}</div>
+          <div class="pl-5">
+            <ul>
+              <li class="mb-1">{{ $t('init.paragraphs.modules') }}</li>
+              <li class="mb-1">{{ $t('init.paragraphs.links') }}</li>
+              <li class="mb-1">{{ $t('init.paragraphs.parameters') }}</li>
+              <li class="mb-1">{{ $t('init.paragraphs.output') }}</li>
+            </ul>
+          </div>
+        </v-card-text>
       <v-card-actions>
-        <v-btn :disabled="loading" variant="text" @click="click">
+        <v-btn color="primary" :disabled="loading" variant="text" @click="click">
           <div v-if="loading" class="text-center">
             <v-progress-circular indeterminate size="30" />
           </div>
-          <span v-else>Close</span>
+          <span v-else>{{ $t('common.close') }}</span>
         </v-btn>
       </v-card-actions>
     </v-card>

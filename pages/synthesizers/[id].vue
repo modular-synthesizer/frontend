@@ -12,66 +12,27 @@
       <SynthesizerComponent :synthesizer="synthesizer" v-if="synthesizer !== null" :mods="mods" :links="links" />
     </svg>
     <v-toolbar collapse density="compact" color="primary">
-      <v-dialog v-model="displayCreator" fullscreen>
-        <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" icon>
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </template>
-        <v-card>
-          <v-toolbar>
-            <v-toolbar-title>Modules</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="displayCreator = false">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </v-toolbar>
-          <v-container v-for="(cat_tools, category) in tools">
-            <v-row>
-              <v-col cols="12">
-                <div class="text-h4">{{ $t(`categories.names.${category}`) }}</div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12">
-                <v-list>
-                  <v-list-item
-                    v-for="tool in cat_tools"
-                    :key="`${category}.${tool.name}`"
-                    :value="tool"
-                    :title="$t(`modules.${category}.${tool.name}.title`)"
-                    :subtitle="$t(`modules.${category}.${tool.name}.description`)"
-                    @click="selectTool(tool)"
-                  />
-                </v-list>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
-      </v-dialog>
+      <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
     </v-toolbar>
   </div>
 </template>
 
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
-import { api } from "~~/lib/api/Api";
 import SynthesizerComponent from "~~/components/synthesizers/Synthesizer.vue"
 import { useSynthesizerDrag } from '~~/lib/stores/dragSynthesizer';
 import { useZoomStore } from '~~/lib/stores/zoom';
-import { useAuthentication } from '~~/lib/stores/authentication';
 import { useToolsList } from '~~/lib/stores/tools/list';
-import ITool from '~~/lib/interfaces/ITool';
 import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
 import { useSynthesizerDetails } from '~~/lib/stores/synthesizers/details';
 import { useGenerators } from '~~/lib/stores/tools/generators';
-import Mod from '~~/lib/wrappers/Mod';
 import { useLinkDrag } from '~~/lib/stores/links/dragAndDrop';
 import { useLinksList } from '~~/lib/stores/links/linksList';
 import { useAudioContext } from '~~/lib/stores/audioContext';
 import { useParameters } from '~~/lib/stores/tools/parameters';
 import { useModulesList } from '~~/lib/stores/mods/modsList';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
+import Mod from '~~/lib/wrappers/Mod';
 
 definePageMeta({
   menu: false
@@ -87,14 +48,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(useAuthentication, ["session"]),
     ...mapState(useToolsList, ['tools']),
     ...mapState(useSynthesizerDetails, ['synthesizer']),
     ...mapState(useLinksList, ['links']),
     ...mapState(useModulesList, ['mods']),
   },
   methods: {
-    mousemove($event) {
+    mousemove($event: MouseEvent) {
       const x = $event.clientX;
       const y = $event.clientY;
       this.moveDrag(x, y);
@@ -120,23 +80,9 @@ export default {
     ...mapActions(useGenerators, ['fetchScripts']),
     ...mapActions(useLinkDrag, ['cancelLink', 'moveLink']),
     ...mapActions(useParameters, ["endParameterSetting", "moveParameterSetting"]),
-    selectTool(tool: ITool) {
-      const payload = {
-        auth_token: this.session.token,
-        tool_id: tool.id,
-        synthesizer_id: this.synthesizer.id,
-        ...this.synthesizer.firstFreeSlot(tool.slots),
-      };
-      if (payload.slot === -1 || payload.rack === -1) {
-        this.displayCreator = false;
-        return;
-      }
-      api.post('/modules', payload).then(response => {
-        const mod: Mod = new Mod(response);
+    insertModule(mod: Mod) {
         this.mods.push(mod);
         this.synthesizer.place(mod.rack, mod.slot, mod);
-        this.displayCreator = false;
-      })
     },
     async initSoundPipeline() {
       useAudioContext().initContext();
