@@ -1,5 +1,9 @@
 <template>
-  <g :transform="`translate(${x} ${y})`" @mousedown.stop="startModDrag(mod, $event)">
+  <g
+    :transform="`translate(${x} ${y})`"
+    @mousedown.stop="startModDrag(mod, $event)"
+    @click.right.prevent="showContext($event, mod)"
+  >
     <rect :width="width" :height="height" stroke="black" fill="#A3A3A3" />
     <Port v-for="port in mod.inputs" :key="port.id" :port="port" />
     <Port v-for="port in mod.outputs" :key="port.id" :port="port" />
@@ -18,6 +22,7 @@ import SmallKnob from "../controls/SmallKnob.vue"
 import LargeKnob from "../controls/LargeKnob.vue"
 import MuteButton from "../controls/MuteButton.vue"
 import Port from "../controls/Port.vue"
+import { useContextMenu } from '~~/lib/stores/mods/context';
 
 export default {
   name: "module-body",
@@ -35,7 +40,8 @@ export default {
     height() { return RACK_HEIGHT }
   },
   methods: {
-    ...mapActions(useModDrag, ['startModDrag'])
+    ...mapActions(useModDrag, ['startModDrag']),
+    ...mapActions(useContextMenu, {showContext: 'show'}),
   },
 }
 </script>

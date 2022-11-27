@@ -27,6 +27,6 @@ export default class Link {
   }
 
   public disconnect() {
-    this.to.disconnect(this.from);
+    this.to.disconnect(this.from, this);
   }
 }

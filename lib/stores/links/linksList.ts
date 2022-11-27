@@ -3,7 +3,7 @@ import { api } from "~~/lib/api/Api";
 import ILink from "~~/lib/interfaces/ILink";
 import Link from "~~/lib/wrappers/Link";
 import { useAuthentication } from "../authentication";
-import { remove } from "lodash"
+import { find, remove } from "lodash"
 import { useSynthesizerDetails } from "../synthesizers/details";
 
 export const useLinksList = defineStore('linksList', {
@@ -25,6 +25,12 @@ export const useLinksList = defineStore('linksList', {
       link.disconnect()
       remove(this.links, {id: link.id});
       api.delete(`/links/${link.id}`, { auth_token })
+    },
+    removeLinkById(linkId: string) {
+      const link = find(this.links, {id: linkId});
+      if (link !== undefined) {
+        this.removeLink(link);
+      }
     },
     resetLinks() {
       this.links = []

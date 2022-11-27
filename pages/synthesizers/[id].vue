@@ -3,7 +3,7 @@
     <synthesizer-initializer v-if="!loaded" @interacted="initSoundPipeline" />
     <svg
       v-else
-      @mousedown="startDrag(synthesizer, $event.clientX, $event.clientY)"
+      @mousedown="mousedown"
       @mousemove="mousemove"
       @mouseup="endDrags()"
       @mouseleave="endDrags()"
@@ -14,6 +14,7 @@
     <v-toolbar collapse density="compact" color="primary">
       <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
     </v-toolbar>
+    <module-context />
   </div>
 </template>
 
@@ -33,6 +34,7 @@ import { useParameters } from '~~/lib/stores/tools/parameters';
 import { useModulesList } from '~~/lib/stores/mods/modsList';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 import Mod from '~~/lib/wrappers/Mod';
+import { useContextMenu } from '~~/lib/stores/mods/context';
 
 definePageMeta({
   menu: false
@@ -52,8 +54,12 @@ export default {
     ...mapState(useSynthesizerDetails, ['synthesizer']),
     ...mapState(useLinksList, ['links']),
     ...mapState(useModulesList, ['mods']),
+    ...mapState(useContextMenu, {contextX: 'x', contextY: 'y', displayContext: 'display'}),
   },
   methods: {
+    mousedown($event: MouseEvent) {
+      this.startDrag(this.synthesizer, $event.clientX, $event.clientY);
+    },
     mousemove($event: MouseEvent) {
       const x = $event.clientX;
       const y = $event.clientY;
@@ -111,8 +117,7 @@ svg, .wrapper {
   top: 0px;
   left: 0px;
 }
-
-.welcome-dialog {
-  max-width: 50%;
+.menu-wrapper {
+  position: absolute;
 }
 </style>

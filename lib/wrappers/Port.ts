@@ -2,7 +2,7 @@ import IPort from "../interfaces/IPort";
 import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 import Link from "./Link";
 import Mod from "./Mod";
-import { find } from 'lodash';
+import { remove } from 'lodash';
 
 export default abstract class Port implements IPort {
   id: string;
@@ -37,13 +37,15 @@ export default abstract class Port implements IPort {
    * @param inputPort 
    */
   public connect(origin: Port, via: Link) {
-    if (find(this.links, {id: via.id})) return;
-
     this.links.push(via);
+    origin.links.push(via);
+
     origin.audioNode.connect(this.audioNode, origin.index, this.index)
   }
 
-  public disconnect(origin: Port) {
+  public disconnect(origin: Port, via: Link) {
+    remove(this.links, {id: via.id});
+    remove(origin.links, {id: via.id});
     origin.audioNode.disconnect(this.audioNode);
   }
 

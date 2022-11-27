@@ -6,6 +6,7 @@ import { clamp } from 'lodash'
 import { api } from "~~/lib/api/Api";
 import { useAuthentication } from "../authentication";
 import Mod from "~~/lib/wrappers/Mod";
+import { useContextMenu } from "./context";
 
 interface Payload {
   mod: Mod;
@@ -28,6 +29,7 @@ export const useModDrag = defineStore("modDrag", {
   }),
   actions: {
     startModDrag(mod: Mod, $event: MouseEvent) {
+      useContextMenu().hide();
       this.mod = mod;
       this.slots.click = getSlot($event.clientX, $event.clientY);
       this.slots.mod = this.mod.slot;
