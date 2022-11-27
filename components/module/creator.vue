@@ -7,7 +7,7 @@
     </template>
     <v-card>
       <v-toolbar>
-        <v-toolbar-title>Modules</v-toolbar-title>
+        <v-toolbar-title>{{ $t('modules.creator.title') }}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon @click="display = false" :disabled="loading">
           <v-icon>mdi-close</v-icon>
