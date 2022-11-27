@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col :offset="3" :cols="6">
+      <v-col :offset-lg="3" :offset-md="1" :lg="6" :md="10">
         <div class="text-h3">Synple</div>
         <div class="text-h6 text-grey-lighten-1">Modular synthesis made easier, on a web browser</div>
 

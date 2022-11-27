@@ -20,10 +20,14 @@
   "common": {
     "actions": "Actions",
     "add": "Ajouter",
+    "admin": "Admin",
     "close": "Fermer",
     "create": "Créer",
     "index": "Index",
+    "login": "Se connecter",
+    "logout": "Se déconnecter",
     "name": "Nom",
+    "register": "S'inscrire",
     "uuid": "Identifiant",
     "validate": "Valider"
   },

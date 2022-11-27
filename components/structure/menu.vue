@@ -1,7 +1,7 @@
 <template>
   <VAppBar color="primary">
     <template v-slot:prepend>
-      <VAppBarTitle>Synple</VAppBarTitle>
+      <VAppBarTitle class="mr-2">Synple</VAppBarTitle>
       <VBtn icon to="/"><VIcon>mdi-home</VIcon></VBtn>
       <template v-if="authenticated">
         <VBtn icon to="/synthesizers">
@@ -10,11 +10,11 @@
       </template>
     </template>
     <template v-slot:append>
-      <VBtn to="/admin" v-if="admin">Administrer</VBtn>
-      <VBtn @click="logout" v-if="authenticated">Se déconnecter</VBtn>
+      <VBtn to="/admin" v-if="admin">{{ $t('common.admin') }}</VBtn>
+      <VBtn @click="logout" v-if="authenticated">{{ $t('common.logout') }}</VBtn>
       <template v-else>
-        <VBtn to="/register">S'inscrire</VBtn>
-        <VBtn to="/login">Se connecter</VBtn>
+        <VBtn to="/register">{{ $t('common.register') }}</VBtn>
+        <VBtn to="/login">{{ $t('common.login') }}</VBtn>
       </template>
     </template>
   </VAppBar>
