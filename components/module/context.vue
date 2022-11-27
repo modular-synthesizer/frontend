@@ -1,7 +1,8 @@
 <template>
   <div :style="{top: `${y}px`, left: `${x}px`}" v-if="display" class="menu-wrapper" v-click-outside="clickConfig">
-    <v-list>
+    <v-list density="compact">
       <v-list-item @click="disconnectLinks">Disconnect</v-list-item>
+      <v-list-item @click="deleteModule">Delete</v-list-item>
     </v-list>
   </div>
 </template>
@@ -21,7 +22,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useContextMenu, ['disconnectLinks']),
+    ...mapActions(useContextMenu, ['disconnectLinks', 'deleteModule']),
   }
 }
 </script>

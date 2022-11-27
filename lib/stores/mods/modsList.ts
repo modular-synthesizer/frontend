@@ -4,6 +4,7 @@ import IModule from "~~/lib/interfaces/IModule";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import Mod from "~~/lib/wrappers/Mod";
 import { useAuthentication } from "../authentication";
+import { find,remove } from 'lodash';
 
 export const useModulesList = defineStore("modulesList", {
   state: () => ({
@@ -21,6 +22,14 @@ export const useModulesList = defineStore("modulesList", {
         synthesizer.place(imod.rack, imod.slot, instance);
         this.mods.push(instance);
       });
+    },
+    async removeModById(modId: string) {
+      const mod = find(this.mods, {id: modId});
+
+      if (mod === undefined) return;
+
+      api.delete(`/modules/${mod.id}`, {auth_token: useAuthentication().session.token})
+        .then(() => remove(this.mods, {id: mod.id}));
     },
     resetMods() {
       this.mods = []

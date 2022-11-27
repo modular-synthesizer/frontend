@@ -3,6 +3,7 @@ import { api } from "~~/lib/api/Api";
 import Mod from "~~/lib/wrappers/Mod";
 import { useAuthentication } from "../authentication";
 import { useLinksList } from "../links/linksList";
+import { useModulesList } from "./modsList";
 
 export const useContextMenu = defineStore('contxtMenu', {
   state: () => ({
@@ -19,7 +20,6 @@ export const useContextMenu = defineStore('contxtMenu', {
       this.mod = mod;
     },
     hide() {
-      console.log("Hides the context");
       this.display = false;
     },
     disconnectLinks() {
@@ -30,6 +30,10 @@ export const useContextMenu = defineStore('contxtMenu', {
       }
 
       this.hide();
+    },
+    deleteModule() {
+      this.disconnectLinks();
+      useModulesList().removeModById(this.mod.id);
     }
   }
 })
