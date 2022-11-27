@@ -23,7 +23,7 @@ export default class Link {
   }
 
   public connect() {
-    this.to.connect(this.from);
+    this.to.connect(this.from, this);
   }
 
   public disconnect() {

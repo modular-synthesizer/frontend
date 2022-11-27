@@ -1,5 +1,7 @@
+import { findDir } from "@vue/compiler-core";
 import { defineStore } from "pinia";
 import { api } from "~~/lib/api/Api";
+import Link from "~~/lib/wrappers/Link";
 import Port from "~~/lib/wrappers/Port";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { useAuthentication } from "../authentication";
@@ -26,6 +28,15 @@ export const useLinkDrag = defineStore('linkDrag', {
     endLinkTo(port: Port) {
       if (this.startPort === null) return;
       if (this.startPort.id === port.id) this.cancelLink();
+      
+      const found: boolean = useLinksList().links.find(link => {
+        return (
+          (link.from.id == this.startPort.id && link.to.id == port.id) ||
+          (link.from.id == port.id && link.to.id == this.startPort.id)
+        );
+      }) !== undefined;
+
+      if (found) return;
 
       const auth_token: string = useAuthentication().session.token;
       const synthesizer: Synthesizer = useSynthesizerDetails().synthesizer;

@@ -1,6 +1,8 @@
 import IPort from "../interfaces/IPort";
 import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
+import Link from "./Link";
 import Mod from "./Mod";
+import { find } from 'lodash';
 
 export default abstract class Port implements IPort {
   id: string;
@@ -10,6 +12,7 @@ export default abstract class Port implements IPort {
   mod: Mod;
   public readonly x: number;
   public readonly y: number;
+  public readonly links: Link[] = [];
 
   constructor({id, index, name, target, x, y}: IPort, mod: Mod) {
     this.id = id;
@@ -33,7 +36,10 @@ export default abstract class Port implements IPort {
    * input ports (destinations), eg parameters ports and module input ports.
    * @param inputPort 
    */
-  public connect(origin: Port) {
+  public connect(origin: Port, via: Link) {
+    if (find(this.links, {id: via.id})) return;
+
+    this.links.push(via);
     origin.audioNode.connect(this.audioNode, origin.index, this.index)
   }
 
