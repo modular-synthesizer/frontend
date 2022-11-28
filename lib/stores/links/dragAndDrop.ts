@@ -28,8 +28,9 @@ export const useLinkDrag = defineStore('linkDrag', {
       this.dragCoordinates.y = y;
     },
     endLinkTo(port: Port) {
-      if (this.startPort === null) return;
-      if (this.startPort.id === port.id) this.cancelLink();
+      if (this.startPort === null ||
+        this.startPort.id === port.id ||
+        this.startPort.isInput === port.isInput) return this.cancelLink();
       
       const found: boolean = useLinksList().links.find(link => {
         return (
@@ -57,7 +58,10 @@ export const useLinkDrag = defineStore('linkDrag', {
       this.startPort = null;
     },
     magnetize(port: Port) {
-      if (!this.startPort || this.startPort.id === port.id) return;
+      if (
+        this.startPort === null ||
+        this.startPort.id === port.id ||
+        this.startPort.isInput === port.isInput) return;
       this.magnet = port;
     },
     unmagnetize() {
