@@ -4,9 +4,12 @@
     <svg
       v-else
       @mousedown="mousedown"
+      @touchstart="touchstart"
       @mousemove="mousemove"
-      @mouseup="endDrags()"
-      @mouseleave="endDrags()"
+      @touchmove="touchmove"
+      @mouseup="endDrags"
+      @mouseleave="endDrags"
+      @touchend="endDrags"
       @wheel.prevent="setScale($event.deltaY)"
     >
       <SynthesizerComponent :synthesizer="synthesizer" v-if="synthesizer !== null" :mods="mods" :links="links" />
@@ -60,13 +63,21 @@ export default {
     mousedown($event: MouseEvent) {
       this.startDrag(this.synthesizer, $event.clientX, $event.clientY);
     },
+    touchstart(payload: TouchEvent) {
+      this.startDrag(this.synthesizer, payload.touches[0].clientX, payload.touches[0].clientY);
+    },
+    touchmove(payload: TouchEvent) {
+      const x = payload.touches[0].clientX;
+      const y = payload.touches[0].clientY;
+      this.moveDrag(x, y);
+    },
     mousemove($event: MouseEvent) {
       const x = $event.clientX;
       const y = $event.clientY;
       this.moveDrag(x, y);
       this.moveModDrag(x, y);
       this.moveLink(x, y);
-      this.moveParameterSetting($event)
+      this.moveParameterSetting(x, y)
     },
     ...mapActions(useSynthesizerDrag, {
       startDrag: 'start',

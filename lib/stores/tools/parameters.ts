@@ -13,13 +13,13 @@ export const useParameters = defineStore('parameters', {
       this.parameter = parameter;
       this.yOrigin = $event.clientY;
     },
-    moveParameterSetting($event: MouseEvent) {
+    moveParameterSetting({x, y}: {x: number, y: number}) {
       if (this.parameter === null) return;
 
-      const delta = $event.clientY - this.yOrigin;
+      const delta = x - this.yOrigin;
       if (Math.abs(delta) >= 5) {
         this.parameter.moveValue(- (delta / 5) * this.parameter.step);
-        this.yOrigin = $event.clientY;
+        this.yOrigin = y;
       }
     },
     endParameterSetting() {

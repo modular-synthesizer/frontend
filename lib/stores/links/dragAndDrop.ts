@@ -1,7 +1,5 @@
-import { findDir } from "@vue/compiler-core";
 import { defineStore } from "pinia";
 import { api } from "~~/lib/api/Api";
-import Link from "~~/lib/wrappers/Link";
 import Port from "~~/lib/wrappers/Port";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { useAuthentication } from "../authentication";
