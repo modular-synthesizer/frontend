@@ -131,4 +131,20 @@ svg, .wrapper {
 .menu-wrapper {
   position: absolute;
 }
+
+body, #__nuxt {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow-y: hidden;
+}
+.body {
+  z-index: 1;
+}
+
+#__nuxt {
+  z-index: 2;
+}
 </style>
