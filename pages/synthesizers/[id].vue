@@ -146,5 +146,6 @@ body, #__nuxt {
 
 #__nuxt {
   z-index: 2;
+  overscroll-behavior: none;
 }
 </style>
