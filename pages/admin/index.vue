@@ -6,6 +6,7 @@
           <v-tab value="categories">{{ $t('admin.tabs.categories') }}</v-tab>
           <v-tab value="parameters">{{ $t('admin.tabs.parameters') }}</v-tab>
           <v-tab value="tools">{{ $t('admin.tabs.tools') }}</v-tab>
+          <v-tab value="generators">{{ $t('admin.tabs.generators') }}</v-tab>
         </v-tabs>
         <v-window v-model="tab">
           <v-window-item value="categories">
@@ -16,6 +17,9 @@
           </v-window-item>
           <v-window-item value="tools">
             <Tools />
+          </v-window-item>
+          <v-window-item value="generators">
+            <Generators />
           </v-window-item>
         </v-window>
       </v-col>
@@ -29,12 +33,13 @@ import Categories from '~~/components/admin/categories.vue';
 import { useGenerators } from '~~/lib/stores/tools/generators';
 import Parameters from '../../components/admin/parameters.vue';
 import Tools from '../../components/admin/tools.vue';
+import Generators from '../../components/admin/generators.vue'
 
 export default {
     data: () => ({
         tab: "categories"
     }),
-    components: { Categories, Parameters, Tools },
+    components: { Categories, Generators, Parameters, Tools },
     methods: {
       ...mapActions(useGenerators, ['fetchGenerators'])
     },

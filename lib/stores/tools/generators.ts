@@ -5,7 +5,7 @@ import { useAuthentication } from "../authentication";
 export const useGenerators = defineStore('generators', {
   state: () => ({
     generators: [] as string[],
-    scripts: {}
+    scripts: {} as {[key: string]: any}
   }),
   actions: {
     async fetchGenerators() {
@@ -25,6 +25,15 @@ export const useGenerators = defineStore('generators', {
         })
       )
       this.scripts = Object.fromEntries(results);
-    }
+    },
+    createGenerator(name: string, code: string) {
+      const payload = { name, code, auth_token: useAuthentication().session.token }
+      api.post('/generators', payload).then(() => this.addGenerator(name));
+    },
+    addGenerator(name: string) {
+      this.generators.push(name);
+      api.get(`/generators/${name}`, {auth_token: useAuthentication().session.token})
+        .then(results => this.scripts[name] = Function('name', 'context', results.code));
+    },
   }
 })
