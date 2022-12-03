@@ -10,6 +10,11 @@
   </VApp>
 </template>
 
+<script setup lang="ts">
+console.log(useRuntimeConfig());
+api.setUri(useRuntimeConfig().public.api_uri);
+</script>
+
 <script lang="ts">
 import Menu from '~~/components/structure/menu.vue'
 import { VLayout, VMain, VApp } from 'vuetify/components'
@@ -23,9 +28,6 @@ export default {
   data: () => ({
     displayInitModal: true
   }),
-  setup() {
-    api.setUri(useRuntimeConfig().public.api_uri);
-  },
   methods: {
     ...mapActions(useAuthentication, ['refresh']),
     ...mapActions(useAudioContext, ['initContext']),
