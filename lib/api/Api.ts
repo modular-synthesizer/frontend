@@ -25,7 +25,6 @@ export default class Api implements IApi {
   }
 
   public auth_post(uri: string, payload: any = {}): Promise<any> {
-    console.log({...payload, auth_token: this.token})
     return this.post(uri, {...payload, auth_token: this.token})
   }
 

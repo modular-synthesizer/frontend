@@ -11,7 +11,6 @@
 </template>
 
 <script setup lang="ts">
-console.log(useRuntimeConfig());
 api.setUri(useRuntimeConfig().public.api_uri);
 </script>
 
