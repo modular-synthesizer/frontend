@@ -1,19 +1,7 @@
 <template>
   <div class="wrapper">
     <synthesizer-initializer v-if="!loaded" @interacted="initSoundPipeline" />
-    <svg
-      v-else
-      @mousedown="mousedown"
-      @touchstart="touchstart"
-      @mousemove="mousemove"
-      @touchmove="touchmove"
-      @mouseup="endDrags"
-      @mouseleave="endDrags"
-      @touchend="endDrags"
-      @wheel.prevent="setScale($event.deltaY)"
-    >
-      <SynthesizerComponent :synthesizer="synthesizer" v-if="synthesizer !== null" :mods="mods" :links="links" />
-    </svg>
+    <synthesizer-stage :id="synthesizer.id" />
     <v-toolbar collapse density="compact" color="primary">
       <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
     </v-toolbar>

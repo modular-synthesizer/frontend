@@ -1,12 +1,12 @@
 <template>
-  <synthesizers-events-handler>
+  <synthesizer-events-handler>
     <g :transform="`translate(${synthesizer.x} ${synthesizer.y}) scale(${synthesizer.scale} ${synthesizer.scale})`">
       <Rack v-for="rack in synthesizer.racks" :rack="rack" />
       <ModulesBody v-for="mod in modules" :mod="mod" />
       <Connection v-for="link in links" :link="link" />
       <!--LinkCreator v-if="startPort" /-->
     </g>
-  </synthesizers-events-handler>
+  </synthesizer-events-handler>
 </template>
 
 <script lang="ts">
