@@ -48,6 +48,6 @@ export default {
   },
   mounted() {
     this.fetch();
-  }
-}
+  },
+};
 </script>
