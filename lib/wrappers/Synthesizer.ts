@@ -3,6 +3,7 @@ import { times } from "lodash";
 import Rack from "./Rack";
 import IModule from "../interfaces/IModule";
 import Mod from "./Mod";
+import ICoordinates from "../interfaces/ICoordinates";
 
 /**
  * A synthesizer is the main object of the application. It is materialized
@@ -69,5 +70,9 @@ export default class Synthesizer {
 
   public toString(): string {
     return this.racks.map(rack => rack.toString()).join("\n");
+  }
+
+  public get coordinates(): ICoordinates {
+    return { x: this.x, y: this.y };
   }
 }

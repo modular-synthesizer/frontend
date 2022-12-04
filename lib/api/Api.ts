@@ -38,6 +38,10 @@ export default class Api implements IApi {
       .then(response => response.data)
   }
 
+  public auth_put(uri: string, payload: any = {}): Promise<any> {
+    return this.put(uri, {...payload, auth_token: this.token})
+  }
+
   public setUri(uri: string) {
     this.uri = uri;
   }
