@@ -5,7 +5,6 @@ import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { useAuthentication } from "../authentication";
 import { useContextMenu } from "../mods/context";
 import { useSynthesizerDetails } from "../synthesizers/details";
-import { useLinksList } from "./linksList";
 
 export const useLinkDrag = defineStore('linkDrag', {
   state: () => ({

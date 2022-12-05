@@ -20,8 +20,7 @@
         :r="radius"
         @mouseenter="magnetize(port)"
         @mouseout="unmagnetize()"
-        @mousedown.stop.left="startLinkFrom(port)"
-        @mouseup.left="endLinkTo(port)"
+        @mousedown.stop.left="dragstart(port, $event)"
       />
     </g>
   </g>
@@ -30,7 +29,6 @@
 <script lang="ts">
 import { mapActions } from 'pinia';
 import { PropType } from 'vue';
-import { useLinkDrag } from '~~/lib/stores/links/dragAndDrop';
 import { PORT_RADIUS } from '~~/lib/utils/constants';
 import PortWrapper from '~~/lib/wrappers/Port';
 
@@ -39,7 +37,7 @@ export default {
     radius: PORT_RADIUS
   }),
   methods: {
-    ...mapActions(useLinkDrag, ['startLinkFrom', 'endLinkTo', 'magnetize', 'unmagnetize']),
+    ...mapActions(useLinkDrag, ['dragstart', 'dragend', 'magnetize', 'unmagnetize']),
   },
   props: {
     port: {

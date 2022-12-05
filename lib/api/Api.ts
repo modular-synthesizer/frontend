@@ -33,6 +33,10 @@ export default class Api implements IApi {
       .then(response => response.data)
   }
 
+  public auth_delete(uri: string, payload: any = {}): Promise<any> {
+    return this.delete(uri, {...payload, auth_token: this.token})
+  }
+
   public put(uri: string, payload: any = {}): Promise<any> {
     return axios.put(`${this.uri}${uri}`, payload)
       .then(response => response.data)

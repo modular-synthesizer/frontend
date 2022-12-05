@@ -1,8 +1,5 @@
 <script lang="ts">
 import { mapActions } from "pinia";
-import { useLinkDrag } from "~~/lib/stores/links/dragAndDrop";
-import { useLinksList } from "~~/lib/stores/links/linksList";
-import { useContextMenu } from "~~/lib/stores/mods/context";
 import { PORT_RADIUS } from "~~/lib/utils/constants";
 import Link from "~~/lib/wrappers/Link";
 
@@ -19,8 +16,8 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useLinksList, ['removeLink']),
-    ...mapActions(useLinkDrag, ['startLinkFrom', 'endLinkTo', 'magnetize', 'unmagnetize']),
+    ...mapActions(useLinksList, ['remove']),
+    ...mapActions(useLinkDrag, ['dragstart', 'dragend', 'magnetize', 'unmagnetize']),
   }
 }
 </script>
@@ -35,7 +32,7 @@ export default {
             :stroke="link.color"
             stroke-width="8"
             opacity="0.3"
-            @click="removeLink(link)"
+            @click.prevent="remove(link.id)"
 
         />
         <circle
@@ -46,10 +43,9 @@ export default {
             stroke-width="6"
             fill="white"
             stroke-alignment="inner"
-            @click="removeLink(link)"
-            @mousedown.left.stop="startLinkFrom(link.from)"
+            @click.prevent="remove(link.id)"
+            @mousedown.left.stop="dragstart(link.from, $event)"
             @mouseenter="magnetize(link.from)"
-            @mouseup="endLinkTo(link.from)"
             @mouseout="unmagnetize()"
         />
         <circle
@@ -60,10 +56,9 @@ export default {
             stroke-width="6"
             fill="white"
             stroke-alignment="inner"
-            @click="removeLink(link)"
-            @mousedown.left.stop="startLinkFrom(link.to)"
+            @click.prevent="remove(link.id)"
+            @mousedown.left.stop="dragstart(link.to, $event)"
             @mouseenter="magnetize(link.to)"
-            @mouseup="endLinkTo(link.to)"
             @mouseout="unmagnetize()"
         />
     </g>

@@ -50,7 +50,7 @@ export default {
       console.info("Modules initialisation")
       await useModulesList().fetch(this.id);
       console.info("Links initialisation")
-      await useConnectionsList().fetch(this.id);
+      await useLinksList().fetch(this.id);
       this.loading = false;
       this.display = false;
     }

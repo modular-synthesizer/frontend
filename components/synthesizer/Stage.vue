@@ -4,7 +4,7 @@
       <synthesizer-rack v-for="rack in synthesizer.racks" :rack="rack" />
       <synthesizer-module v-for="mod in modules" :mod="mod" />
       <synthesizer-link v-for="link in links" :link="link" />
-      <!--LinkCreator v-if="startPort" /-->
+      <LinkCreator />
     </g>
   </synthesizer-events-handler>
 </template>
@@ -22,7 +22,7 @@ export default {
   computed: {
     ...mapState(useSynthesizerDetails, ['synthesizer']),
     ...mapState(useModulesList, ['modules']),
-    ...mapState(useConnectionsList, ['links']),
+    ...mapState(useLinksList, ['links']),
   },
 }
 </script>

@@ -5,8 +5,8 @@
     @click.right.prevent="showContext($event, mod)"
   >
     <rect :width="width" :height="height" stroke="black" fill="#A3A3A3" />
-    <Port v-for="port in mod.inputs" :key="port.id" :port="port" />
-    <Port v-for="port in mod.outputs" :key="port.id" :port="port" />
+    <module-port v-for="port in mod.inputs" :key="port.id" :port="port" />
+    <module-port v-for="port in mod.outputs" :key="port.id" :port="port" />
     <component v-for="parameter in mod.parameters" :key="parameter.id" :is="parameter.component" :parameter="parameter" />
   </g>
 </template>
@@ -21,12 +21,11 @@ import Knob from "../controls/Knob.vue"
 import SmallKnob from "../controls/SmallKnob.vue"
 import LargeKnob from "../controls/LargeKnob.vue"
 import MuteButton from "../controls/MuteButton.vue"
-import Port from "../controls/Port.vue"
 import { useContextMenu } from '~~/lib/stores/mods/context';
 
 export default {
   name: "module-body",
-  components: { Knob, LargeKnob, MuteButton, Port, SmallKnob },
+  components: { Knob, LargeKnob, MuteButton, SmallKnob },
   props: {
     mod: {
       type: Object as PropType<Mod>,
