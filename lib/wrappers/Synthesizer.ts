@@ -26,7 +26,7 @@ export default class Synthesizer {
 
   public slots: number;
 
-  public modules: Mod[] = []
+  public modules: Mod[] = [];
 
   public constructor(infos: ISynthesizer) {
     this.id = infos.id;

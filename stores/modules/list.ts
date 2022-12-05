@@ -13,6 +13,7 @@ export const useModulesList = defineStore('modulesList', {
      * @param synthesizer_id the unique UUID of the synthesizer to fetch the modules from.
      */
     async fetch(synthesizer_id: string) {
+      this.modules = [];
       const response: IModule[] = await api.auth_get('/modules', { synthesizer_id });
       this.modules = response.map((imod: IModule) => new Mod(imod));
     },

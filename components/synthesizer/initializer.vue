@@ -28,15 +28,31 @@
 </template>
 
 <script lang="ts">
+import { useAudioContext } from '~~/stores/audioContext';
+
 export default {
+  props: {
+    id: {
+      type: String,
+      required: true,
+    }
+  },
   data: () => ({
     display: true,
     loading: false,
   }),
   methods: {
-    click() {
-      this.$emit("interacted");
+    async click() {
       this.loading = true;
+      await useAudioContext().initContext();
+      console.info("Details initialisation")
+      await useSynthesizerDetails().fetch(this.id);
+      console.info("Modules initialisation")
+      await useModulesList().fetch(this.id);
+      console.info("Links initialisation")
+      await useConnectionsList().fetch(this.id);
+      this.loading = false;
+      this.display = false;
     }
   }
 }
