@@ -20,7 +20,7 @@
         :r="radius"
         @mouseenter="magnetize(port)"
         @mouseout="unmagnetize()"
-        @mousedown.stop.left="dragstart(port, $event)"
+        @mousedown.stop="dragstart"
       />
     </g>
   </g>
@@ -37,7 +37,10 @@ export default {
     radius: PORT_RADIUS
   }),
   methods: {
-    ...mapActions(useLinkDrag, ['dragstart', 'dragend', 'magnetize', 'unmagnetize']),
+    ...mapActions(useLinkDrag, ['magnetize', 'unmagnetize']),
+    dragstart($event: MouseEvent) {
+      useLinkDrag().dragstart(this.port, $event);
+    },
   },
   props: {
     port: {

@@ -12,7 +12,6 @@
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
 import { useToolsList } from '~~/lib/stores/tools/list';
-import { useSynthesizerDetails } from '~~/lib/stores/synthesizers/details';
 import { useGenerators } from '~~/lib/stores/tools/generators';
 import Mod from '~~/lib/wrappers/Mod';
 

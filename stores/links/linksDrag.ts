@@ -28,10 +28,8 @@ export const useLinkDrag = defineStore('linkDrag', {
       this.coords.y = y;
     },
     dragend(): void {
-      console.info("dragend")
       if (this.start === null || this.magnet === null) return this.dragcancel();
       
-      console.info("both ports are connectable");
       const found: boolean = useLinksList().links.find(link => {
         return (
           (link.from.id == this.start?.id && link.to.id == this.magnet?.id) ||

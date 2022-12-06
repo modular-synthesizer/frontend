@@ -9,7 +9,7 @@ export default { }
 
 <template>
   <svg
-    @mousedown="moduleDragstart"
+    @mousedown="dragstart"
     @mousemove="dragmove"
     @mouseup="dragend"
     @mouseleave="dragend"

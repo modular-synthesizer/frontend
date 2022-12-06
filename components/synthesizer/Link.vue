@@ -2,6 +2,7 @@
 import { mapActions } from "pinia";
 import { PORT_RADIUS } from "~~/lib/utils/constants";
 import Link from "~~/lib/wrappers/Link";
+import Port from "~~/lib/wrappers/Port";
 
 export default {
   props: {
@@ -17,7 +18,10 @@ export default {
   },
   methods: {
     ...mapActions(useLinksList, ['remove']),
-    ...mapActions(useLinkDrag, ['dragstart', 'dragend', 'magnetize', 'unmagnetize']),
+    ...mapActions(useLinkDrag, ['magnetize', 'unmagnetize']),
+    dragstart(port: Port, $event: MouseEvent) {
+      useLinkDrag().dragstart(port, $event);
+    },
   }
 }
 </script>
@@ -44,7 +48,7 @@ export default {
             fill="white"
             stroke-alignment="inner"
             @click.prevent="remove(link.id)"
-            @mousedown.left.stop="dragstart(link.from, $event)"
+            @mousedown.stop="dragstart(link.from, $event)"
             @mouseenter="magnetize(link.from)"
             @mouseout="unmagnetize()"
         />
@@ -57,7 +61,7 @@ export default {
             fill="white"
             stroke-alignment="inner"
             @click.prevent="remove(link.id)"
-            @mousedown.left.stop="dragstart(link.to, $event)"
+            @mousedown.stop="dragstart(link.to, $event)"
             @mouseenter="magnetize(link.to)"
             @mouseout="unmagnetize()"
         />

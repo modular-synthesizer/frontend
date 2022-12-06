@@ -1,10 +1,13 @@
 <template>
-  <g
-    :transform="`translate(${x} ${y})`"
-    @mousedown.stop="startModDrag(mod, $event)"
-    @click.right.prevent="showContext($event, mod)"
-  >
-    <rect :width="width" :height="height" stroke="black" fill="#A3A3A3" />
+  <g :transform="`translate(${x} ${y})`"
+      @mousedown.stop="dragstart"
+      @touchstart.stop>
+    <rect
+      :width="width"
+      :height="height"
+      stroke="black"
+      fill="#A3A3A3"
+    />
     <module-port v-for="port in mod.inputs" :key="port.id" :port="port" />
     <module-port v-for="port in mod.outputs" :key="port.id" :port="port" />
     <component v-for="parameter in mod.parameters" :key="parameter.id" :is="parameter.component" :parameter="parameter" />
@@ -15,13 +18,13 @@
 import { PropType } from 'vue'
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { mapActions } from 'pinia';
-import { useModDrag } from '~~/lib/stores/mods/dragAndDrop';
 import Mod from '~~/lib/wrappers/Mod';
 import Knob from "../controls/Knob.vue"
 import SmallKnob from "../controls/SmallKnob.vue"
 import LargeKnob from "../controls/LargeKnob.vue"
 import MuteButton from "../controls/MuteButton.vue"
 import { useContextMenu } from '~~/lib/stores/mods/context';
+import { useModDrag } from '~~/stores/mods/modsDrag';
 
 export default {
   name: "module-body",
@@ -39,8 +42,10 @@ export default {
     height() { return RACK_HEIGHT }
   },
   methods: {
-    ...mapActions(useModDrag, ['startModDrag']),
     ...mapActions(useContextMenu, {showContext: 'show'}),
+    dragstart($event: MouseEvent) {
+      useModDrag().dragstart(this.mod, $event);
+    }
   },
 }
 </script>

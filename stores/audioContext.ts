@@ -6,9 +6,7 @@ export const useAudioContext = defineStore('audioContext', {
   }),
   actions: {
     async initContext() {
-      console.info("passage dans l'initialisation du contexte audio")
       this.context = await new AudioContext();
-      console.info(this.context.state);
       await this.context.resume();
     }
   }

@@ -4,7 +4,7 @@ import { api } from "~~/lib/api/Api";
 import { useSynthesizerDetails } from "./details";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 
-export const useSynthesizerDrag = defineStore('moduleDrag', {
+export const useSynthesizerDrag = defineStore('synthesizerDrag', {
   state: () => ({
     dragging: false,
     // The current coordinates where the cursor is moved on the screen.
@@ -12,7 +12,7 @@ export const useSynthesizerDrag = defineStore('moduleDrag', {
   }),
   getters: {
     synth(): Synthesizer {
-      return useSynthesizerDetails().synthesizer;
+      return useSynthesizerDetails().synthesizer as Synthesizer;
     }
   },
   actions: {
@@ -31,8 +31,8 @@ export const useSynthesizerDrag = defineStore('moduleDrag', {
     },
     dragend() {
       if (!this.dragging) return;
-      api.auth_put(`/synthesizers/${this.synth.id}`, this.synth.coordinates)
-        .then(() => this.dragging = false);
+      api.auth_put(`/synthesizers/${this.synth.id}`, this.synth.coordinates);
+      this.dragging = false;
     }
   }
 })

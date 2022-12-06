@@ -45,11 +45,8 @@ export default {
     async click() {
       this.loading = true;
       await useAudioContext().initContext();
-      console.info("Details initialisation")
       await useSynthesizerDetails().fetch(this.id);
-      console.info("Modules initialisation")
       await useModulesList().fetch(this.id);
-      console.info("Links initialisation")
       await useLinksList().fetch(this.id);
       this.loading = false;
       this.display = false;

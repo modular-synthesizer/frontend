@@ -41,9 +41,9 @@ export default class Synthesizer {
     })
   }
 
-  public hasRoom(rack: number, slot: number, mod: IModule): boolean {
-    const results = this.racks[rack].toString().substring(slot, slot + mod.slots);
-    return results === '0'.repeat(mod.slots);
+  public hasRoom(rack: number, slot: number, slots: number): boolean {
+    const results = this.racks[rack].toString().substring(slot, slot + slots);
+    return results === '0'.repeat(slots);
   }
 
   public place(rack: number, slot: number, mod: Mod) {
