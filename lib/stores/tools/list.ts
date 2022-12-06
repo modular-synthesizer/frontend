@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "~~/lib/api/Api";
 import ITool from "~~/lib/interfaces/ITool";
-import { useAuthentication } from '../authentication'
 
 export const useToolsList = defineStore('toolsList', {
   state: () =>({

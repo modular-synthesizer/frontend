@@ -1,8 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "../api/Api";
 import { ZOOM_RATIO, MAX_ZOOM_OUT, MAX_ZOOM_IN } from "../utils/constants";
-import { useAuthentication } from "./authentication";
-import { useSynthesizerDetails } from "./synthesizers/details";
 
 export const useZoomStore = defineStore('zoom', {
   actions: {

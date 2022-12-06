@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "~~/lib/api/Api";
 import Parameter from "~~/lib/wrappers/Parameter";
-import { useAuthentication } from "../authentication";
 
 export const useParameters = defineStore('parameters', {
   state: () => ({

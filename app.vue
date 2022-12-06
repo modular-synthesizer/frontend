@@ -19,7 +19,6 @@ import Menu from '~~/components/structure/menu.vue'
 import { VLayout, VMain, VApp } from 'vuetify/components'
 import { api } from '~~/lib/api/Api'
 import { mapActions, mapState } from 'pinia'
-import { useAuthentication } from './lib/stores/authentication'
 import { useAudioContext } from './lib/stores/audioContext'
 
 export default {

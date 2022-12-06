@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { api } from "~~/lib/api/Api";
-import { useAuthentication } from "../authentication";
 
 export const useGenerators = defineStore('generators', {
   state: () => ({

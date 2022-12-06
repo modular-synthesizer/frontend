@@ -22,14 +22,14 @@ export const useContextMenu = defineStore('contxtMenu', {
       if (this.mod === null) return;
 
       for (let link of this.mod.links) {
-        useLinksList().removeLinkById(link.id);
+        useLinksList().remove(link.id);
       }
 
       this.hide();
     },
     deleteModule() {
       this.disconnectLinks();
-      useModulesList().removeModById(this.mod.id);
+      useModulesList().remove(this.mod.id);
     }
   }
 })

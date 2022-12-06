@@ -23,7 +23,6 @@
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
 import { VAppBar, VAppBarTitle } from 'vuetify/components'
-import { useAuthentication } from '~~/lib/stores/authentication';
 
 export default {
   component: { VAppBar, VAppBarTitle, },

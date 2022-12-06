@@ -1,13 +1,9 @@
 <template>
   <g :transform="`translate(${x} ${y})`"
-      @mousedown.stop="dragstart"
-      @touchstart.stop>
-    <rect
-      :width="width"
-      :height="height"
-      stroke="black"
-      fill="#A3A3A3"
-    />
+    @mousedown.stop="dragstart"
+    @click.right.stop.prevent="showContext($event, mod)"
+  >
+    <rect :width="width" :height="height" stroke="black" fill="#A3A3A3" />
     <module-port v-for="port in mod.inputs" :key="port.id" :port="port" />
     <module-port v-for="port in mod.outputs" :key="port.id" :port="port" />
     <component v-for="parameter in mod.parameters" :key="parameter.id" :is="parameter.component" :parameter="parameter" />
@@ -15,16 +11,14 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue'
+import { PropType } from 'vue';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { mapActions } from 'pinia';
 import Mod from '~~/lib/wrappers/Mod';
-import Knob from "../controls/Knob.vue"
-import SmallKnob from "../controls/SmallKnob.vue"
-import LargeKnob from "../controls/LargeKnob.vue"
-import MuteButton from "../controls/MuteButton.vue"
-import { useContextMenu } from '~~/lib/stores/mods/context';
-import { useModDrag } from '~~/stores/mods/modsDrag';
+import Knob from "../controls/Knob.vue";
+import SmallKnob from "../controls/SmallKnob.vue";
+import LargeKnob from "../controls/LargeKnob.vue";
+import MuteButton from "../controls/MuteButton.vue";
 
 export default {
   name: "module-body",

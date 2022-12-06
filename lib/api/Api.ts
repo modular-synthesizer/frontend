@@ -1,6 +1,5 @@
 import IApi from "./IApi";
 import axios from "axios";
-import { useAuthentication } from "../stores/authentication";
 
 export default class Api implements IApi {
 

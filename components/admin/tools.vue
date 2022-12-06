@@ -27,7 +27,6 @@ import { mapActions, mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
 import ICategory from '~~/lib/interfaces/ICategory';
 import ITool from '~~/lib/interfaces/ITool';
-import { useAuthentication } from '~~/lib/stores/authentication';
 import { useCategories } from '~~/lib/stores/categories';
 import { useGenerators } from '~~/lib/stores/tools/generators';
 import { useToolsList } from '~~/lib/stores/tools/list';

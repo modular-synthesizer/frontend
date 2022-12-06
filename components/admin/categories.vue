@@ -45,7 +45,6 @@
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
-import { useAuthentication } from '~~/lib/stores/authentication';
 import { remove } from "lodash"
 import { useCategories } from '~~/lib/stores/categories';
 

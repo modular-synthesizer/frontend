@@ -34,7 +34,6 @@
 import { mapActions, mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
 import IParameter from '~~/lib/interfaces/IParameter';
-import { useAuthentication } from '~~/lib/stores/authentication';
 import { useDescriptors } from '~~/lib/stores/descriptors';
 import Constraints from './constraints.vue';
 import ParameterCreator from './dialogs/ParameterCreator.vue';

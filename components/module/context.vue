@@ -9,7 +9,6 @@
 
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
-import { useContextMenu } from '~~/lib/stores/mods/context';
 
 export default {
   computed: {

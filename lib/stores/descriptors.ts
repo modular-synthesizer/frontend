@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "../api/Api";
 import IParameter from "../interfaces/IParameter";
-import { useAuthentication } from "./authentication";
 
 export const useDescriptors = defineStore('descriptors', {
   state: () => ({

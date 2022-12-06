@@ -5,7 +5,6 @@ import InnerAudioNode from "./InnerAudioNode";
 import InnerNodesFactory from '../factories/InnerNodes'
 import InnerLinksFactory from '../factories/InnerLinks'
 import Parameter from "./Parameter";
-import { usePorts } from "../stores/mods/ports";
 import { flatten } from 'lodash';
 import Link from "./Link";
 
