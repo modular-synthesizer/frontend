@@ -21,7 +21,7 @@ export const useModulesList = defineStore('modulesList', {
     },
     async remove(id: string) {
       await api.auth_delete(`/modules/${id}`);
-      this.disconnect(find(this.modules, { id }));
+      this.disconnect(find(this.modules, { id }) as Mod);
       remove(this.modules, { id });
     },
     disconnect(mod: Mod) {
