@@ -46,7 +46,6 @@
 import { mapActions, mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
 import { remove } from "lodash"
-import { useCategories } from '~~/lib/stores/categories';
 
 export default {
   data: () => ({

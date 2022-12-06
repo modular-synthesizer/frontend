@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { api } from "../api/Api";
-import IParameter from "../interfaces/IParameter";
+import { api } from "~~/lib/api/Api";
+import IParameter from "~~/lib/interfaces/IParameter";
 
 export const useDescriptors = defineStore('descriptors', {
   state: () => ({

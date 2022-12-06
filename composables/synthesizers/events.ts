@@ -1,7 +1,4 @@
 import ICoordinates from "~~/lib/interfaces/ICoordinates";
-import { useLinkDrag } from "~~/stores/links/linksDrag";
-import { useParameters } from "~~/lib/stores/tools/parameters";
-import { useZoomStore } from "~~/stores/synthesizers/zoom";
 
 export function dragmove($event: MouseEvent) {
   const {x, y}: ICoordinates = {x: $event.clientX, y: $event.clientY}

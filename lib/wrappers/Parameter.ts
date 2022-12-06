@@ -1,5 +1,4 @@
 import IParameter from "~~/lib/interfaces/IParameter"
-import { useAudioContext } from "../stores/audioContext";
 import Mod from "./Mod";
 import { clamp } from "lodash"
 

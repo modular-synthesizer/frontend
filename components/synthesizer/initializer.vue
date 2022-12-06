@@ -28,8 +28,6 @@
 </template>
 
 <script lang="ts">
-import { useAudioContext } from '~~/stores/audioContext';
-
 export default {
   props: {
     id: {

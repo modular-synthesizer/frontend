@@ -4,7 +4,6 @@ import { getRack, getSlot } from "~~/lib/utils/coordinates";
 import { clamp } from 'lodash'
 import { api } from "~~/lib/api/Api";
 import Mod from "~~/lib/wrappers/Mod";
-import { useContextMenu } from "~~/lib/stores/mods/context";
 
 interface Payload {
   mod: Mod|null;

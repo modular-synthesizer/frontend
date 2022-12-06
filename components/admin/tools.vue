@@ -27,9 +27,6 @@ import { mapActions, mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
 import ICategory from '~~/lib/interfaces/ICategory';
 import ITool from '~~/lib/interfaces/ITool';
-import { useCategories } from '~~/lib/stores/categories';
-import { useGenerators } from '~~/lib/stores/tools/generators';
-import { useToolsList } from '~~/lib/stores/tools/list';
 import ToolCreator from './dialogs/ToolCreator.vue'
 
 function emptyTool() {
@@ -61,7 +58,7 @@ export default {
     add(category: ICategory, tool: ITool) {
       api.post("/tools", {auth_token: this.session.token, ...tool})
         .then(response => {
-          this.addTool(category, response);
+          this.addTool(category.id, response);
           this.tool = emptyTool();
         });
     }

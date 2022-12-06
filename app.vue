@@ -19,7 +19,6 @@ import Menu from '~~/components/structure/menu.vue'
 import { VLayout, VMain, VApp } from 'vuetify/components'
 import { api } from '~~/lib/api/Api'
 import { mapActions, mapState } from 'pinia'
-import { useAudioContext } from './lib/stores/audioContext'
 
 export default {
   components: { Menu, VApp, VLayout, VMain },
@@ -28,7 +27,6 @@ export default {
   }),
   methods: {
     ...mapActions(useAuthentication, ['refresh']),
-    ...mapActions(useAudioContext, ['initContext']),
   },
   computed: {
     ...mapState(useAuthentication, ['session']),
