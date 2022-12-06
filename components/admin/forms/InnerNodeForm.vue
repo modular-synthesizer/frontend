@@ -33,7 +33,6 @@
 <script lang="ts">import { PropType } from 'vue';
 import ITool from '~~/lib/interfaces/ITool';
 import { find } from "lodash";
-import { useGenerators } from '~~/lib/stores/tools/generators';
 import { mapActions, mapState } from 'pinia';
 
 export default {

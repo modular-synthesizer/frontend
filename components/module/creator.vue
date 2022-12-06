@@ -45,7 +45,6 @@ import { PropType } from 'vue';
 import { api } from '~~/lib/api/Api';
 import IModule from '~~/lib/interfaces/IModule';
 import ITool from '~~/lib/interfaces/ITool';
-import { useAuthentication } from '~~/lib/stores/authentication';
 import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 

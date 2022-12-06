@@ -46,7 +46,6 @@ import { mapActions, mapState } from 'pinia';
 import { PropType } from 'vue';
 import IParameter from '~~/lib/interfaces/IParameter';
 import ITool, { IToolParameter } from '~~/lib/interfaces/ITool';
-import { useDescriptors } from '~~/lib/stores/descriptors';
 import { cloneDeep } from "lodash"
 
 export default {

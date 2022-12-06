@@ -1,5 +1,4 @@
 import ILink from "../interfaces/ILink";
-import { usePorts } from "../stores/mods/ports";
 import Port from "./Port";
 
 export default class Link {

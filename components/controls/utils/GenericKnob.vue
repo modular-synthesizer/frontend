@@ -18,7 +18,6 @@
 
 <script lang="ts">
 import { mapActions } from 'pinia';
-import { useParameters } from '~~/lib/stores/tools/parameters';
 import Parameter from '~~/lib/wrappers/Parameter';
 import { round } from "lodash"
 

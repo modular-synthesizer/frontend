@@ -4,7 +4,6 @@
 
 <script lang="ts">
 import { api } from '~~/lib/api/Api';
-import { useAuthentication } from '~~/lib/stores/authentication';
 import Parameter from '~~/lib/wrappers/Parameter';
 
 export default {

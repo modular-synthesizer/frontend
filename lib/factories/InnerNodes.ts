@@ -1,6 +1,4 @@
 import { InnerNode } from "../interfaces/ITool";
-import { useAudioContext } from "../stores/audioContext";
-import { useGenerators } from "../stores/tools/generators";
 import InnerAudioNode from "../wrappers/InnerAudioNode";
 
 class InnerNodesFactory {

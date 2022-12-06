@@ -1,6 +1,9 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-  ssr: false,
+  imports: {
+    dirs: ['stores/**', 'composables/**'],
+  },
+  ssr: true,
   css: [
     'vuetify/lib/styles/main.sass',
     'mdi/css/materialdesignicons.min.css',
@@ -25,7 +28,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      api_uri: 'https://synple.app/api',
+      api_uri: process.env.API_URL || 'https://synple.app/api',
       dev_mode: process.env.DEV_MODE == 'true'
     }
   }

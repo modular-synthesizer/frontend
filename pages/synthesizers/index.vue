@@ -8,13 +8,13 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="3">
+          <v-col cols="4">
             <v-text-field v-model="synthesizer.name" variant="outlined" density="compact" label="Name" />
           </v-col>
-          <v-col cols="1">
+          <v-col cols="2">
             <v-text-field v-model="synthesizer.racks" type="number" variant="outlined" density="compact" label="Racks" />
           </v-col>
-          <v-col cols="1">
+          <v-col cols="2">
             <v-text-field v-model="synthesizer.slots" type="number" variant="outlined" density="compact" label="Slots" />
           </v-col>
           <v-col cols="3">
@@ -23,41 +23,31 @@
         </v-row>
       </v-container>
     </v-form>
-    <synthesizers-list :synthesizers="synthesizers" />
+    <v-container>
+      <v-row>
+        <v-col cols="12" sm="6" md="4" lg="3" v-for="synth in synthesizers">
+          <synthesizer-card :synthesizer="synth" />
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
-import { api } from '~~/lib/api/Api';
-import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
-import { useAuthentication } from '~~/lib/stores/authentication';
+import { mapActions, mapState } from 'pinia';
 
 export default {
   data: () => ({
-    synthesizers: [] as ISynthesizer[],
-    synthesizer: {
-      name: "",
-      racks: 2,
-      slots: 100
-    }
+    synthesizer: createEmptySynthesizer()
   }),
   computed: {
-    ...mapState(useAuthentication, ['session']),
+    ...mapState(useSynthesizersList, ['synthesizers'])
   },
   methods: {
-    create(synthesizer) {
-      api.post('/synthesizers', {...synthesizer, auth_token: this.session.token})
-        .then(response => {
-          this.synthesizers.push(response)
-        })
-    },
+    ...mapActions(useSynthesizersList, ['create', 'fetch'])
   },
   mounted() {
-    api.get('/synthesizers', {auth_token: this.session.token})
-      .then(response => {
-        this.synthesizers = response.synthesizers;
-      })
-  }
-}
+    this.fetch();
+  },
+};
 </script>

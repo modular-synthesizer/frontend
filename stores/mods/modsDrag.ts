@@ -1,15 +1,12 @@
 import { defineStore } from "pinia";
 import ICoordinates from "~~/lib/interfaces/ICoordinates";
-import { useSynthesizerDetails } from "../synthesizers/details";
-import { getRack, getSlot } from "./utils/coordinates";
+import { getRack, getSlot } from "~~/lib/utils/coordinates";
 import { clamp } from 'lodash'
 import { api } from "~~/lib/api/Api";
-import { useAuthentication } from "../authentication";
 import Mod from "~~/lib/wrappers/Mod";
-import { useContextMenu } from "./context";
 
 interface Payload {
-  mod: Mod;
+  mod: Mod|null;
   coords: ICoordinates;
   slots: {
     // The slot where the click has been started
@@ -20,50 +17,53 @@ interface Payload {
   rack: number;
 }
 
-export const useModDrag = defineStore("modDrag", {
+export const useModDrag = defineStore("moduleDrag", {
   state: (): Payload => ({
     mod: null,
     coords: {x: 0, y: 0},
     slots: {click: 0, mod: 0},
-    startRack: 0,
+    rack: 0,
   }),
+  getters: {
+    synth() {
+      return useSynthesizerDetails().synthesizer
+    }
+  },
   actions: {
-    startModDrag(mod: Mod, $event: MouseEvent) {
-      useContextMenu().hide();
+    dragstart(mod: Mod, $event: MouseEvent) {
       this.mod = mod;
       this.slots.click = getSlot($event.clientX, $event.clientY);
       this.slots.mod = this.mod.slot;
-      this.startRack = mod.rack;
+      this.rack = mod.rack;
+      // useContextMenu().hide();
     },
-    moveModDrag(x: number, y: number) {
+    dragmove(x: number, y: number) {
       if (this.mod === null) return;
 
-      const synth = useSynthesizerDetails().synthesizer;
       const rack = getRack(x, y);
-      const slot = clamp(getSlot(x, y), 0, synth.maxSlot);
+      const slot = clamp(getSlot(x, y), 0, this.synth.maxSlot);
 
       const delta = slot - this.slots.click;
-      const newPlace = clamp(this.slots.mod + delta, 0, synth.maxSlot - this.mod.slots);
+      const newPlace = clamp(this.slots.mod + delta, 0, this.synth.maxSlot - this.mod.slots);
 
       if (newPlace === this.mod.slot && rack === this.mod.rack) return;
 
-      synth.remove(this.mod);
-      if (synth.hasRoom(rack, newPlace, this.mod)) {
-        synth.place(rack, newPlace, this.mod);
+      this.synth.remove(this.mod as Mod);
+      if (this.synth.hasRoom(rack, newPlace, this.mod.slots)) {
+        this.synth.place(rack, newPlace, this.mod as Mod);
       }
       else {
-        synth.place(this.mod.rack, this.mod.slot, this.mod);
+        this.synth.place(this.mod.rack, this.mod.slot, this.mod as Mod);
       }
     },
-    endModDrag() {
+    dragend() {
       if (this.mod === null) return;
 
       const payload = {
         slot: this.mod.slot,
         rack: this.mod.rack,
-        auth_token: useAuthentication().session.token
       }
-      api.put(`/modules/${this.mod.id}`, payload);
+      api.auth_put(`/modules/${this.mod.id}`, payload);
       this.mod = null;
     }
   }

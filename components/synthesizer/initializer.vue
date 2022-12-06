@@ -29,14 +29,25 @@
 
 <script lang="ts">
 export default {
+  props: {
+    id: {
+      type: String,
+      required: true,
+    }
+  },
   data: () => ({
     display: true,
     loading: false,
   }),
   methods: {
-    click() {
-      this.$emit("interacted");
+    async click() {
       this.loading = true;
+      await useAudioContext().initContext();
+      await useSynthesizerDetails().fetch(this.id);
+      await useModulesList().fetch(this.id);
+      await useLinksList().fetch(this.id);
+      this.loading = false;
+      this.display = false;
     }
   }
 }

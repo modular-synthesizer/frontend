@@ -1,9 +1,5 @@
 import { defineStore } from "pinia";
-import { api } from "~~/lib/api/Api";
 import Mod from "~~/lib/wrappers/Mod";
-import { useAuthentication } from "../authentication";
-import { useLinksList } from "../links/linksList";
-import { useModulesList } from "./modsList";
 
 export const useContextMenu = defineStore('contxtMenu', {
   state: () => ({
@@ -26,14 +22,14 @@ export const useContextMenu = defineStore('contxtMenu', {
       if (this.mod === null) return;
 
       for (let link of this.mod.links) {
-        useLinksList().removeLinkById(link.id);
+        useLinksList().remove(link.id);
       }
 
       this.hide();
     },
     deleteModule() {
       this.disconnectLinks();
-      useModulesList().removeModById(this.mod.id);
+      useModulesList().remove(this.mod.id);
     }
   }
 })

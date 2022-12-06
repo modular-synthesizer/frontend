@@ -48,7 +48,6 @@
 
 <script lang="ts">
 import { mapActions } from 'pinia';
-import { useAuthentication } from '~~/lib/stores/authentication';
 
 definePageMeta({
   authenticated: false

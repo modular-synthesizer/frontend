@@ -1,11 +1,4 @@
-export default class ISimpleSynthesizer {
-  id: string;
-  name: string;
-  nodes_count: number;
-  links_count: number;
-}
-
-export class ISynthesizer {
+export default interface ISynthesizer {
   id: string;
   name: string;
   slots: number;

@@ -26,7 +26,6 @@
 <script lang="ts">
 import { mapActions } from 'pinia';
 import Categories from '~~/components/admin/categories.vue';
-import { useGenerators } from '~~/lib/stores/tools/generators';
 import Parameters from '../../components/admin/parameters.vue';
 import Tools from '../../components/admin/tools.vue';
 

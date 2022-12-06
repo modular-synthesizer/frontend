@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { api } from "../api/Api";
-import ISession from "../interfaces/ISession";
+import { api } from "~~/lib/api/Api";
+import ISession from "~~/lib/interfaces/ISession";
 import { storage } from "./storage"
 
 export const useAuthentication = defineStore('authentication', {
