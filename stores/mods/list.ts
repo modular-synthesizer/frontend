@@ -9,6 +9,11 @@ export const useModulesList = defineStore('modulesList', {
   state: () => ({
     modules: [] as Mod[],
   }),
+  getters: {
+    synth() {
+      return useSynthesizerDetails().synthesizer
+    }
+  },
   actions: {
     /**
      * Fetches the modules of a synthesizer and puts them in an accessible list.
@@ -17,7 +22,11 @@ export const useModulesList = defineStore('modulesList', {
     async fetch(synthesizer_id: string) {
       this.modules = [];
       const response: IModule[] = await api.auth_get('/modules', { synthesizer_id });
-      this.modules = response.map((imod: IModule) => new Mod(imod));
+      this.modules = response.map((imod: IModule) => {
+        const mod: Mod = new Mod(imod);
+        this.synth.place(mod.rack, mod.slot, mod)
+        return mod
+      });
     },
     async remove(id: string) {
       await api.auth_delete(`/modules/${id}`);
