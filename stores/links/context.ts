@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import Mod from "~~/lib/wrappers/Mod";
 
-export const useModuleMenu = defineStore('moduleMenu', {
+export const useLinkMenu = defineStore('moduleMenu', {
   state: () => ({
     mod: null as unknown as Mod
   }),
@@ -12,14 +12,11 @@ export const useModuleMenu = defineStore('moduleMenu', {
     },
     disconnectLinks() {
       if (this.mod === null) return;
-
-      for (let link of this.mod.links) {
-        useLinksList().remove(link.id);
-      }
+      useModulesList().disconnect(this.mod as Mod);
       useContextMenus().hide();
     },
     deleteModule() {
-      this.disconnectLinks();
+      if (this.mod === null) return;
       useModulesList().remove(this.mod.id);
       useContextMenus().hide();
     }

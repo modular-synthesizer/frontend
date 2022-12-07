@@ -1,7 +1,7 @@
 <template>
   <g :transform="`translate(${x} ${y})`"
     @mousedown.stop="dragstart"
-    @click.right.stop.prevent="showContext($event, mod)"
+    @click.right.stop.prevent="showMenu(mod, $event)"
   >
     <rect :width="width" :height="height" stroke="black" fill="#A3A3A3" />
     <module-port v-for="port in mod.inputs" :key="port.id" :port="port" />
@@ -36,10 +36,10 @@ export default {
     height() { return RACK_HEIGHT }
   },
   methods: {
-    ...mapActions(useContextMenu, {showContext: 'show'}),
+    ...mapActions(useModuleMenu, {showMenu: 'show'}),
     dragstart($event: MouseEvent) {
       useModDrag().dragstart(this.mod, $event);
-    }
+    },
   },
 }
 </script>

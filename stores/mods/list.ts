@@ -30,7 +30,9 @@ export const useModulesList = defineStore('modulesList', {
     },
     async remove(id: string) {
       await api.auth_delete(`/modules/${id}`);
-      this.disconnect(find(this.modules, { id }) as Mod);
+      const mod: Mod = find(this.modules, { id }) as Mod;
+      useSynthesizerDetails().synthesizer.remove(mod)
+      this.disconnect(mod);
       remove(this.modules, { id });
     },
     disconnect(mod: Mod) {

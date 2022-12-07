@@ -1,7 +1,6 @@
-import { ISynthesizer } from "../interfaces/ISynthesizer";
+import ISynthesizer from "../interfaces/ISynthesizer";
 import { times } from "lodash";
 import Rack from "./Rack";
-import IModule from "../interfaces/IModule";
 import Mod from "./Mod";
 import ICoordinates from "../interfaces/ICoordinates";
 

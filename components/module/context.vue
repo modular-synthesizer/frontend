@@ -12,16 +12,19 @@ import { mapActions, mapState } from 'pinia';
 
 export default {
   computed: {
-    ...mapState(useContextMenu, ['x', 'y', 'display']),
+    ...mapState(useContextMenus, ['x', 'y', 'displayed']),
     clickConfig() {
       return {
-        handler: () => useContextMenu().hide(),
-        events: ['dblclick', 'click', 'mousedown']
+        handler: () => useContextMenus().hide(),
+        events: ['mousedown']
       }
     },
+    display() {
+      return this.displayed === "modules"
+    }
   },
   methods: {
-    ...mapActions(useContextMenu, ['disconnectLinks', 'deleteModule']),
+    ...mapActions(useModuleMenu, ['disconnectLinks', 'deleteModule']),
   }
 }
 </script>

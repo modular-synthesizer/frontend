@@ -17,6 +17,7 @@ export const useSynthesizerDrag = defineStore('synthesizerDrag', {
   },
   actions: {
     dragstart(x: number, y: number) {
+      useContextMenus().hide()
       this.dragging = true;
       this.coords.x = x;
       this.coords.y = y;
