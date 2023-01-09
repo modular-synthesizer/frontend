@@ -4,13 +4,14 @@ import { InnerLink, InnerNode } from "./ITool";
 
 export default interface IModule {
   id: string;
-  innerNodes: InnerNode[];
-  innerLinks: InnerLink[];
+  nodes: InnerNode[];
+  links: InnerLink[];
   rack: number;
   slot: number;
   slots: number;
   type: string;
-  inputs: IPort[]
-  outputs: IPort[]
-  parameters: IParameter[]
+  inputs: IPort[];
+  outputs: IPort[];
+  parameters: IParameter[];
+  category: string;
 }

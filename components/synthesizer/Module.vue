@@ -4,8 +4,8 @@
     @click.right.stop.prevent="showMenu(mod, $event)"
   >
     <rect :width="width" :height="height" stroke="black" fill="#A3A3A3" />
-    <module-port v-for="port in mod.inputs" :key="port.id" :port="port" />
-    <module-port v-for="port in mod.outputs" :key="port.id" :port="port" />
+    <module-port v-for="port in mod.inputs" :key="port.id" :port="port" :label="port.name" />
+    <module-port v-for="port in mod.outputs" :key="port.id" :port="port" :label="port.name" />
     <component v-for="parameter in mod.parameters" :key="parameter.id" :is="parameter.component" :parameter="parameter" />
   </g>
 </template>

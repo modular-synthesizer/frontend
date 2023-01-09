@@ -10,8 +10,8 @@ import Link from "./Link";
 
 export default class Mod {
   public readonly id: string;
-  public readonly innerNodes: InnerNode[];
-  public readonly innerLinks: InnerLink[]
+  public readonly nodes: InnerNode[];
+  public readonly links: InnerLink[]
   public rack: number;
   public slot: number;
   public readonly slots: number;
@@ -20,19 +20,21 @@ export default class Mod {
   public readonly outputs: Port[] = []
   public audioNodes: InnerAudioNode[] = []
   public readonly parameters: Parameter[];
+  public readonly category: string;
 
-  constructor({ id, rack, slot, slots, type, innerNodes, innerLinks, inputs, outputs, parameters }: IModule) {
+  constructor({ id, rack, slot, slots, type, nodes, links, inputs, outputs, parameters, category }: IModule) {
     this.id = id;
     this.rack = rack;
     this.slot = slot;
     this.slots = slots;
     this.type = type;
-    this.innerNodes = innerNodes;
+    this.nodes = nodes;
     this.inputs = inputs.map(input => new InputPort(input, this));
     this.outputs = outputs.map(output => new OutputPort(output, this));
+    this.category = category;
 
-    this.audioNodes = InnerNodesFactory.create(innerNodes)
-    this.innerLinks = InnerLinksFactory.link(this.audioNodes, innerLinks);
+    this.audioNodes = InnerNodesFactory.create(nodes)
+    this.links = InnerLinksFactory.link(this.audioNodes, links);
     this.parameters = parameters.map(p => new Parameter(p, this));
 
     usePorts().addPorts([...this.inputs, ...this.outputs]);
@@ -50,7 +52,7 @@ export default class Mod {
     return [...this.inputs, ...this.outputs]
   }
 
-  public get links(): Link[] {
+  public get connections(): Link[] {
     return flatten(this.ports.map((port: Port) => port.links))
   }
 }

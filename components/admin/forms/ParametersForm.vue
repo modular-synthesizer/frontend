@@ -24,15 +24,6 @@
             v-model="descriptor"
           />
         </v-col>
-        <v-col xs="12" md="2" class="pr-1">
-          <v-text-field v-model="parameter.component" variant="outlined" density="compact" label="Composant" />
-        </v-col>
-        <v-col xs="12" md="1" class="pr-1">
-          <v-text-field v-model="parameter.x" type="number" variant="outlined" density="compact" label="X" />
-        </v-col>
-        <v-col xs="12" md="1" class="pr-1">
-          <v-text-field v-model="parameter.y" type="number" variant="outlined" density="compact" label="Y" />
-        </v-col>
         <v-col xs="12" md="2">
           <v-btn @click="submit">{{ $t('common.add') }}</v-btn>
         </v-col>

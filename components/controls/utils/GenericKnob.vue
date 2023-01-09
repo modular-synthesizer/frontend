@@ -1,5 +1,12 @@
 <template>
   <g @mousedown.stop="startParameterSetting($event, parameter)">
+    <text
+      v-if="$te(translationKey)"
+      :transform="`translate(${parameter.x}, ${parameter.y - r - 5})`"
+      text-anchor="middle"
+    >
+      {{ $t(translationKey) }}
+    </text>
     <g :transform="`translate(${parameter.x} ${parameter.y}) rotate(${angle},0,0)`">
       <polygon :points="`-10,${r-cursorSize} 0,${r+cursorSize} 10,${r-cursorSize}`" fill="black" stroke="black" />
     </g>
@@ -20,6 +27,7 @@
 import { mapActions } from 'pinia';
 import Parameter from '~~/lib/wrappers/Parameter';
 import { round } from "lodash"
+import { useI18n } from "vue-i18n"
 
 export default {
   props: {
@@ -44,10 +52,16 @@ export default {
     angle() {
       const delta = this.parameter.maximum / this.parameter.value
       return 20 + (320 / delta)
+    },
+    translationKey(): string {
+      return `modules.${this.parameter.mod.category}.${this.parameter.mod.type}.parameters.${this.parameter.name}`
     }
   },
   methods: {
-    ...mapActions(useParameters, ['startParameterSetting'])
+    ...mapActions(useParameters, ['startParameterSetting']),
+    $te(key: string) {
+      return useI18n().te(key)
+    },
   },
 }
 </script>

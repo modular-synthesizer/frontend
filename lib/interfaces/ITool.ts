@@ -1,21 +1,22 @@
+import ICategory from "./ICategory";
+
 export default interface ITool {
-  id: string,
+  id: string;
   name: string;
-  category_id: string,
-  innerNodes: InnerNode[],
-  innerLinks: InnerLink[],
-  inputs: IToolPort[],
-  outputs: IToolPort[],
-  parameters: IToolParameter[],
-  slots: number
+  category: ICategory;
+  categoryId: string;
+  nodes: InnerNode[];
+  links: InnerLink[];
+  inputs: IToolPort[];
+  outputs: IToolPort[];
+  parameters: IToolParameter[];
+  slots: number;
 }
 
 export interface IToolParameter {
-  descriptor: string;
+  descriptorId: string;
   targets: string[];
-  component: string;
-  x: number;
-  y: number;
+  name: String;
 }
 
 export interface InnerNode {
@@ -24,13 +25,17 @@ export interface InnerNode {
 }
 
 export interface InnerLink {
-  from: { node: string, index: number },
-  to: { node: string, index: number },
-  color: string;
+  from: { node: string, index: number };
+  to: { node: string, index: number };
 }
 
 export interface IToolPort {
-  name: string,
-  target: string,
-  index: number
+  name: string;
+  target: string;
+  index: number;
+}
+
+export interface IControl {
+  component: string;
+  payload: any;
 }

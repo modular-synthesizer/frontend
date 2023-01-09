@@ -4,7 +4,7 @@ import ITool from "~~/lib/interfaces/ITool";
 
 export const useToolsList = defineStore('toolsList', {
   state: () =>({
-    tools: {} as {[key: string]: ITool[]}
+    tools: [] as ITool[],
   }),
   actions: {
     fetchTools() {
@@ -12,8 +12,8 @@ export const useToolsList = defineStore('toolsList', {
       return api.get("/tools", {auth_token: auth.session.token})
         .then(response => this.tools = response);
     },
-    addTool(key: string, tool: ITool) {
-      this.tools[key] = [ ...this.tools[key], tool ]
+    addTool(tool: ITool) {
+      this.tools.push(tool)
     }
   }
 })

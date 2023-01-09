@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="creationDialog" width="50%">
+  <v-dialog v-model="creationDialog" :width="lgAndUp ? '50%': '80%'">
     <template v-slot:activator="{ props }">
       <v-btn color="primary" v-bind="props">{{ $t('common.add') }}</v-btn>
     </template>
@@ -173,6 +173,8 @@ import InnerNodeForm from '../forms/InnerNodeForm.vue';
 import InnerLinksForm from '../forms/InnerLinksForm.vue';
 import PortsForm from '../forms/PortsForm.vue'
 import ParametersForm from '../forms/ParametersForm.vue'
+import { useDisplay } from 'vuetify/lib/framework.mjs';
+
 
 export default {
     props: {
@@ -187,6 +189,10 @@ export default {
         creationDialog: false,
         innerNode: { name: "", generator: "" },
     }),
+    setup() {
+      const { lgAndUp } = useDisplay();
+      return { lgAndUp }
+    },
     computed: {
       ...mapState(useCategories, ["categories"]),
     },

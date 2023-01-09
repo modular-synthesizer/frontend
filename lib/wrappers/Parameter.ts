@@ -17,6 +17,7 @@ export default class Parameter {
   public readonly x: number;
   public readonly y: number;
   public readonly component: string;
+  public readonly field: string;
 
   constructor(details: IParameter, mod: Mod) {
     this.id = details.id;
@@ -29,16 +30,15 @@ export default class Parameter {
     this.targets = details.targets;
     this.mod = mod;
     this.ctx = useAudioContext().context;
+    this.field = details.field;
     this.setValue(this.value);
-    this.x = details.x;
-    this.y = details.y;
-    this.component = details.component;
   }
 
   public setValue(val: number) {
     this.value = clamp(val, this.minimum, this.maximum);
     this.targets.forEach((target: string) => {
-      const param: AudioParam = this.mod.node(target).node[this.name];
+      const param: AudioParam = this.mod.node(target).node[this.field];
+      console.log(this.mod.node(target), this.mod.node(target).node, this.field)
       param.setValueAtTime(this.value, this.ctx.currentTime);
     });
   }
