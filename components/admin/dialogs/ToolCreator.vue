@@ -65,7 +65,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr v-for="node in tool.innerNodes">
+                          <tr v-for="node in tool.nodes">
                             <td>{{ node.name }}</td>
                             <td>{{ node.generator }}</td>
                           </tr>
@@ -91,7 +91,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr v-for="link in tool.innerLinks">
+                          <tr v-for="link in tool.links">
                             <td>{{ link.from.node }}.{{ link.from.index }}</td>
                             <td>{{ link.to.node }}.{{ link.to.index }}</td>
                           </tr>
@@ -206,10 +206,10 @@ export default {
         }
       },
       addInnerNode(node: InnerNode) {
-          this.tool.innerNodes.push(node);
+          this.tool.nodes.push(node);
       },
       addInnerLink(link: InnerLink) {
-        this.tool.innerLinks.push(cloneDeep(link));
+        this.tool.links.push(cloneDeep(link));
       },
       addPort({ type, port }) {
         if (type === "input") {
@@ -223,7 +223,7 @@ export default {
         this.tool.parameters.push(param);
       },
       uniqueNodeName() {
-          return !find(this.tool.innerNodes, { name: this.innerNode.name }) || "name.uniq";
+          return !find(this.tool.nodes, { name: this.innerNode.name }) || "name.uniq";
       },
       nameLength() {
         return this.tool.name.length > 3 || "tools.dialog.errors.name.short"
