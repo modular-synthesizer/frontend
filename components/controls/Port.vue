@@ -28,10 +28,9 @@
 
 <script lang="ts">
 import { mapActions } from 'pinia';
-import { PropType } from 'vue';
 import { PORT_RADIUS } from '~~/lib/utils/constants';
 import Mod from '~~/lib/wrappers/Mod';
-import PortWrapper from '~~/lib/wrappers/Port';
+import Port from '~~/lib/wrappers/Port';
 
 export default {
   data: () => ({
@@ -60,8 +59,14 @@ export default {
       default: ""
     },
     x: { type: Number, default: 0},
-    y: { type: Number, default: 0}
+    y: { type: Number, default: 0},
+    target: { type: String, required: true }
   },
+  computed: {
+    port() {
+      return this.mod.ports.find(p => p.name === this.target) as Port;
+    }
+  }
 }
 </script>
 
