@@ -27,9 +27,8 @@ export default {
     }
   },
   mounted() {
-  //   this.baseValue = this.parameter.value
-  //   this.muted = Math.round(this.parameter.value) == 0
-  console.log(this.target, this.mod);
+    this.baseValue = this.parameter.value;
+    this.muted = Math.round(this.parameter.value) == 0;
   },
   methods: {
     trigger() {
