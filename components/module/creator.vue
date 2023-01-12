@@ -13,10 +13,10 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
-      <v-container v-for="(cat_tools, category) in tools">
+      <v-container v-if="tools.length > 0" v-for="(category, name) in categories">
         <v-row>
           <v-col cols="12">
-            <div class="text-h4">{{ $t(`categories.names.${category}`) }}</div>
+            <div class="text-h4">{{ $t(`categories.names.${name}`) }}</div>
           </v-col>
         </v-row>
         <v-row>
@@ -24,11 +24,11 @@
             <v-list>
               <v-list-item
                 :disabled="loading"
-                v-for="tool in cat_tools"
-                :key="`${category}.${tool.name}`"
+                v-for="tool in category"
+                :key="`${name}.${tool.name}`"
                 :value="tool"
-                :title="$t(`modules.${category}.${tool.name}.title`)"
-                :subtitle="$t(`modules.${category}.${tool.name}.description`)"
+                :title="$t(`modules.${name}.${tool.name}.title`)"
+                :subtitle="$t(`modules.${name}.${tool.name}.description`)"
                 @click="select(tool)"
               />
             </v-list>
@@ -40,15 +40,13 @@
 </template>
 
 <script lang="ts">
+import { groupBy } from 'lodash';
 import { mapState } from 'pinia';
-import { PropType } from 'vue';
 import { api } from '~~/lib/api/Api';
 import IModule from '~~/lib/interfaces/IModule';
 import ITool from '~~/lib/interfaces/ITool';
 import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
-
-type ToolsList = {[key: string]: Array<ITool>};
 
 export default {
   data: () => ({
@@ -57,8 +55,8 @@ export default {
   }),
   props: {
     tools: {
-      type: Object as PropType<ToolsList>,
-      default: []
+      type: Array<ITool>,
+      default: () => []
     },
     synthesizer: {
       type: Synthesizer,
@@ -67,6 +65,9 @@ export default {
   },
   computed: {
     ...mapState(useAuthentication, ['session']),
+    categories() {
+      return groupBy(this.tools, tool => tool.category.name);
+    },
   },
   methods: {
     close() {
