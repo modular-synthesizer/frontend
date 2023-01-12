@@ -2,19 +2,19 @@
   <g @mousedown.stop="startParameterSetting($event, parameter)">
     <text
       v-if="$te(translationKey)"
-      :transform="`translate(${parameter.x}, ${parameter.y - r - 5})`"
+      :transform="`translate(${x}, ${y - r - 5})`"
       text-anchor="middle"
     >
       {{ $t(translationKey) }}
     </text>
-    <g :transform="`translate(${parameter.x} ${parameter.y}) rotate(${angle},0,0)`">
+    <g :transform="`translate(${x} ${y}) rotate(${angle},0,0)`">
       <polygon :points="`-10,${r-cursorSize} 0,${r+cursorSize} 10,${r-cursorSize}`" fill="black" stroke="black" />
     </g>
-    <circle :r="r" :cx="parameter.x" :cy="parameter.y" fill="white" stroke="black" stroke-width="3" />
+    <circle :r="r" :cx="x" :cy="y" fill="white" stroke="black" stroke-width="3" />
     <text
       class="value"
-      :x="parameter.x"
-      :y="parameter.y"
+      :x="x"
+      :y="y"
       text-anchor="middle"
       alignment-baseline="middle"
     >
@@ -31,6 +31,8 @@ import { useI18n } from "vue-i18n"
 
 export default {
   props: {
+    x: { type: Number, default: 0 },
+    y: { type: Number, default: 0 },
     parameter: {
       type: Parameter,
       required: true
@@ -62,7 +64,7 @@ export default {
     $te(key: string) {
       return useI18n().te(key)
     },
-  },
+  }
 }
 </script>
 

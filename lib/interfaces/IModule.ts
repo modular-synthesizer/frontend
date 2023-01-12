@@ -1,3 +1,4 @@
+import { IControl } from "./IControl";
 import IParameter from "./IParameter";
 import IPort from "./IPort";
 import { InnerLink, InnerNode } from "./ITool";
@@ -14,4 +15,5 @@ export default interface IModule {
   outputs: IPort[];
   parameters: IParameter[];
   category: string;
+  controls: IControl[];
 }

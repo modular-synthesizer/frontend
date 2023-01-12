@@ -7,6 +7,7 @@ import InnerLinksFactory from '../factories/InnerLinks'
 import Parameter from "./Parameter";
 import { flatten } from 'lodash';
 import Link from "./Link";
+import { IControl } from "../interfaces/IControl";
 
 export default class Mod {
   public readonly id: string;
@@ -21,8 +22,9 @@ export default class Mod {
   public audioNodes: InnerAudioNode[] = []
   public readonly parameters: Parameter[];
   public readonly category: string;
+  public readonly controls: IControl[] = [];
 
-  constructor({ id, rack, slot, slots, type, nodes, links, inputs, outputs, parameters, category }: IModule) {
+  constructor({ id, rack, slot, slots, type, nodes, links, inputs, outputs, parameters, category, controls }: IModule) {
     this.id = id;
     this.rack = rack;
     this.slot = slot;
@@ -32,6 +34,7 @@ export default class Mod {
     this.inputs = inputs.map(input => new InputPort(input, this));
     this.outputs = outputs.map(output => new OutputPort(output, this));
     this.category = category;
+    this.controls = controls;
 
     this.audioNodes = InnerNodesFactory.create(nodes)
     this.links = InnerLinksFactory.link(this.audioNodes, links);
@@ -44,8 +47,8 @@ export default class Mod {
     return this.audioNodes.find((a: InnerAudioNode) => a.name === name);
   }
 
-  public param(name: string) {
-    return this.parameters.find((p: Parameter) => p.name === name);
+  public param(name: string): Parameter {
+    return this.parameters.find((p: Parameter) => p.name === name) as Parameter;
   }
 
   public get ports(): Port[] {

@@ -1,8 +1,9 @@
 import IPort from "../interfaces/IPort";
-import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 import Link from "./Link";
 import Mod from "./Mod";
 import { remove } from 'lodash';
+import { IControl } from "../interfaces/IControl";
+import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 
 export default abstract class Port implements IPort {
   id: string;
@@ -10,18 +11,14 @@ export default abstract class Port implements IPort {
   name: string;
   target: string;
   mod: Mod;
-  public readonly x: number;
-  public readonly y: number;
   public readonly links: Link[] = [];
 
-  constructor({id, index, name, target, x, y}: IPort, mod: Mod) {
+  constructor({id, index, name, target}: IPort, mod: Mod) {
     this.id = id;
     this.index = index;
     this.name = name;
     this.target = target;
-    this.mod = mod
-    this.x = x;
-    this.y = y;
+    this.mod = mod;
   }
 
   abstract isInput(): boolean;
@@ -50,14 +47,18 @@ export default abstract class Port implements IPort {
   }
 
   public get audioNode(): AudioNode {
-    return this.mod.audioNodes.find(n => n.name === this.target).node;
+    return this.mod.audioNodes.find(n => n.name === this.target)?.node as AudioNode;
+  }
+
+  public get control(): IControl {
+    return this.mod.controls.find(c => c.payload.target === this.name) as IControl;
   }
 
   public get ax() {
-    return this.x + this.mod.slot * SLOT_SIZE;
+    return this.control.payload.x + this.mod.slot * SLOT_SIZE;
   }
   public get ay() {
-    return this.y + this.mod.rack * RACK_HEIGHT;
+    return this.control.payload.y + this.mod.rack * RACK_HEIGHT;
   }
 }
 

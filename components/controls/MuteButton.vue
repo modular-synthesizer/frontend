@@ -1,17 +1,18 @@
 <template>
-  <circle :r="13" :cx="parameter.x" :cy="parameter.y" :fill="color" stroke="black" stroke-width="3" @click="trigger" />
+  <circle :r="13" :cx="x" :cy="y" :fill="color" stroke="black" stroke-width="3" @click="trigger" />
 </template>
 
 <script lang="ts">
 import { api } from '~~/lib/api/Api';
-import Parameter from '~~/lib/wrappers/Parameter';
+import Mod from '~~/lib/wrappers/Mod';
 
 export default {
+  name: 'MuteButton',
   props: {
-    parameter: {
-      type: Parameter,
-      required: true
-    }
+    mod: { type: Mod, required: true },
+    x: { type: Number, default: 0 },
+    y: { type: Number, default: 0 },
+    target: { type: String, required: true }
   },
   data: () => ({
     baseValue: 1,
@@ -20,11 +21,15 @@ export default {
   computed: {
     color() {
       return this.muted ? 'red' : 'green'
+    },
+    parameter() {
+      return this.mod.param(this.target);
     }
   },
   mounted() {
-    this.baseValue = this.parameter.value
-    this.muted = Math.round(this.parameter.value) == 0
+  //   this.baseValue = this.parameter.value
+  //   this.muted = Math.round(this.parameter.value) == 0
+  console.log(this.target, this.mod);
   },
   methods: {
     trigger() {

@@ -3,6 +3,4 @@ export default interface IPort {
   index: number;
   name: string;
   target: string;
-  x: number;
-  y: number;
 }
