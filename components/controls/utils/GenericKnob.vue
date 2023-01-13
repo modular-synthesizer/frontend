@@ -1,23 +1,18 @@
 <template>
   <g @mousedown.stop="startParameterSetting($event, parameter)">
     <text
-      v-if="$te(translationKey)"
-      :transform="`translate(${x}, ${y - r - 5})`"
+      v-if="displayLabel"
+      :transform="`translate(${x}, ${y - r - 6})`"
       text-anchor="middle"
+      class="label-text"
     >
-      {{ $t(translationKey) }}
+      {{ label }}
     </text>
     <g :transform="`translate(${x} ${y}) rotate(${angle},0,0)`">
       <polygon :points="`-10,${r-cursorSize} 0,${r+cursorSize} 10,${r-cursorSize}`" fill="black" stroke="black" />
     </g>
     <circle :r="r" :cx="x" :cy="y" fill="white" stroke="black" stroke-width="3" />
-    <text
-      class="value"
-      :x="x"
-      :y="y"
-      text-anchor="middle"
-      alignment-baseline="middle"
-    >
+    <text class="value" :x="x" :y="y" text-anchor="middle" alignment-baseline="middle">
       {{ value }}
     </text>
   </g>
@@ -27,7 +22,6 @@
 import { mapActions } from 'pinia';
 import Parameter from '~~/lib/wrappers/Parameter';
 import { round } from "lodash"
-import { useI18n } from "vue-i18n"
 
 export default {
   props: {
@@ -45,26 +39,26 @@ export default {
       type: Number,
       default: 8
     },
+    label: {
+      type: String,
+      default: ""
+    }
   },
   computed: {
-    value() {
+    value(): Number {
         return round(this.parameter.value, this.parameter.precision);
     },
-    // The angle of the indicator in the button.
-    angle() {
+    angle(): Number {
       const delta = this.parameter.maximum / this.parameter.value
       return 20 + (320 / delta)
     },
-    translationKey(): string {
-      return `modules.${this.parameter.mod.category}.${this.parameter.mod.type}.parameters.${this.parameter.name}`
+    displayLabel(): boolean {
+      return this.label !== ""
     }
   },
   methods: {
     ...mapActions(useParameters, ['startParameterSetting']),
-    $te(key: string) {
-      return useI18n().te(key)
-    },
-  }
+  },
 }
 </script>
 
@@ -79,5 +73,9 @@ export default {
     stroke-linejoin: miter;
     stroke-opacity: .5;
     font-weight: 500;
+}
+.label-text {
+  font-size: 10px;
+  user-select: none;
 }
 </style>

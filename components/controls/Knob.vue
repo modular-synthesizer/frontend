@@ -12,6 +12,7 @@ export default {
     x: { type: Number, default: 0 },
     y: { type: Number, default: 0 },
     target: { type: String, required: true },
+    label: { type: String, default: "" },
     mod: { type: Mod, required: true }
   },
   components: { GenericKnob }
