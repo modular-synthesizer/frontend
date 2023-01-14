@@ -9,8 +9,5 @@ export default interface IParameter {
     precision: number;
   };
   targets: string[];
-  x: number;
-  y: number;
-  component: string;
   field: string;
 }

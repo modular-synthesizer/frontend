@@ -1,7 +1,7 @@
 <template>
   <v-row n-gutters>
     <v-col id="preview" cols="4" class="bg-grey-lighten-2">
-      {{ tool }}
+      <tools-preview v-model="tool" />
     </v-col>
     <v-col id="steps" cols="8">
       <v-tabs align-tabs="center" v-model="currentTab">
@@ -13,7 +13,9 @@
         <v-tab value="controls">Contrôles</v-tab>
       </v-tabs>
       <v-window v-model="currentTab">
-        <v-window-item value="informations">Informations</v-window-item>
+        <v-window-item value="informations">
+          <tools-informations v-model="tool" />
+        </v-window-item>
         <v-window-item value="nodes">Noeuds</v-window-item>
         <v-window-item value="links">Liens</v-window-item>
         <v-window-item value="ports">Ports</v-window-item>
@@ -49,6 +51,8 @@ export default {
 <style scoped>
 #preview {
   max-height: calc(100vh - 54px);
-  overflow-y: scroll;
+  overflow-y: hidden;
+  margin: 0px;
+  padding: 0px;
 }
 </style>

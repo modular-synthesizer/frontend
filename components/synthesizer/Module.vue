@@ -7,6 +7,7 @@
     <template v-for="control in mod.controls">
       <component :is="control.component" :mod="mod" v-bind="control.payload"/>
     </template>
+    <module-screws :slots="mod.slots" />
   </g>
 </template>
 
