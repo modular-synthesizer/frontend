@@ -1,4 +1,5 @@
 import ICategory from "./ICategory";
+import { IControl } from "./IControl";
 
 export default interface ITool {
   id: string;
@@ -34,9 +35,4 @@ export interface IToolPort {
   name: string;
   target: string;
   index: number;
-}
-
-export interface IControl {
-  component: string;
-  payload: any;
 }

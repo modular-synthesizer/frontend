@@ -45,3 +45,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+#preview {
+  max-height: calc(100vh - 54px);
+  overflow-y: scroll;
+}
+</style>

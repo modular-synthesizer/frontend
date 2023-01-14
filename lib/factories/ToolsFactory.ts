@@ -16,6 +16,14 @@ export class ToolsFactory {
       controls: []
     }
   }
+
+  public emptyControl() {
+    return {
+      id: "",
+      component: "SmallKnob",
+      payload: {}
+    }
+  }
 }
 
 const factory = new ToolsFactory();
