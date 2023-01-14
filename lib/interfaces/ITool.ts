@@ -11,6 +11,7 @@ export default interface ITool {
   outputs: IToolPort[];
   parameters: IToolParameter[];
   slots: number;
+  controls: IControl[]
 }
 
 export interface IToolParameter {

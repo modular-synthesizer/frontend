@@ -3,7 +3,7 @@
     <VLayout>
       <Menu v-if="displayMenu" />
       <!-- This makes the application wait for the token to be refreshed before display-->
-      <VMain v-if="displayContent">
+      <VMain v-if="displayContent" class="d-flex flex-column">
         <NuxtPage />
       </VMain>
     </VLayout>
