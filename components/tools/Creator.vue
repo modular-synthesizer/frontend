@@ -19,7 +19,9 @@
         <v-window-item value="nodes">Noeuds</v-window-item>
         <v-window-item value="links">Liens</v-window-item>
         <v-window-item value="ports">Ports</v-window-item>
-        <v-window-item value="parameters">Paramètres</v-window-item>
+        <v-window-item value="parameters">
+          <tools-parameters v-model="tool.parameters" />
+        </v-window-item>
         <v-window-item value="controls">
           <tools-controls v-model="tool.controls" />
         </v-window-item>

@@ -75,7 +75,7 @@
                 variant="plain"
                 icon="mdi-chevron-down"
                 @click="shiftItem(idx, 1)"
-                :disabled="idx >= controls.length - 1"
+                :disabled="idx > controls.length - 2"
               />
             </td>
           </tr>

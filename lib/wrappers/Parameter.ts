@@ -14,9 +14,6 @@ export default class Parameter {
   public readonly targets: string[] = []
   public readonly mod: Mod;
   private ctx: AudioContext;
-  public readonly x: number;
-  public readonly y: number;
-  public readonly component: string;
   public readonly field: string;
 
   constructor(details: IParameter, mod: Mod) {

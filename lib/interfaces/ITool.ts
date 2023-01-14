@@ -16,9 +16,15 @@ export default interface ITool {
 }
 
 export interface IToolParameter {
-  descriptorId: string;
+  id: string;
   targets: string[];
   name: String;
+  constraints: {
+    maximum: number,
+    minimum: number,
+    step: number,
+    precision: number
+  }
 }
 
 export interface InnerNode {
