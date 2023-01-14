@@ -42,7 +42,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="control in controls">
+          <tr v-for="(control, idx) in controls">
             <td>{{ control.id }}</td>
             <td>{{ control.component }}</td>
             <td>
@@ -57,9 +57,26 @@
               </v-chip>
             </td>
             <td>
-              <v-btn variant="plain" @click="deleteControl(control)">
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
+              <v-btn
+                size="small"
+                variant="plain"
+                @click="deleteControl(control)"
+                icon="mdi-delete"
+              />
+              <v-btn
+                size="small"
+                variant="plain"
+                icon="mdi-chevron-up"
+                @click="shiftItem(idx, -1)"
+                :disabled="idx == 0"
+              />
+              <v-btn
+                size="small"
+                variant="plain"
+                icon="mdi-chevron-down"
+                @click="shiftItem(idx, 1)"
+                :disabled="idx >= controls.length - 1"
+              />
             </td>
           </tr>
         </tbody>
@@ -106,7 +123,11 @@ export default {
     },
     deleteControl(control: IControl) {
       remove(this.controls, control);
-    }
+    },
+    shiftItem(index: number, shift: number) {
+      const item: IControl = this.controls.splice(index, 1)[0];
+      this.controls.splice(index + shift, 0, item);
+    },
   }
 }
 </script>
