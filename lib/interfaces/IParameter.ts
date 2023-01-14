@@ -12,4 +12,5 @@ export default interface IParameter {
   x: number;
   y: number;
   component: string;
+  field: string;
 }

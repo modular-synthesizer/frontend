@@ -71,7 +71,13 @@
     "common": {
       "LinkedGains": {
         "title": "Gains multiples",
-        "description": "Des gains se multipliant entre eux pour réduire ou augmenter un signal de 0.000001 à 1000 fois le signal de base."
+        "description": "Des gains se multipliant entre eux pour réduire ou augmenter un signal de 0.000001 à 1000 fois le signal de base.",
+        "parameters": {
+          "gain": "Gain"
+        },
+        "ports": {
+
+        }
       },
       "LowFrequencyOscillator": {
         "title": "Oscillateur basse fréquence",

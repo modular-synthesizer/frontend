@@ -1,17 +1,19 @@
 <template>
-  <GenericKnob :parameter="parameter" />
+  <GenericKnob :parameter="mod.param(target)" :x="x" :y="y" :label="label" />
 </template>
 
 <script lang="ts">
 import GenericKnob from "~~/components/controls/utils/GenericKnob.vue"
-import Parameter from "~~/lib/wrappers/Parameter";
+import Mod from "~~/lib/wrappers/Mod";
 
 export default {
+  name: 'Knob',
   props: {
-    parameter: {
-      type: Parameter,
-      required: true
-    },
+    x: { type: Number, default: 0 },
+    y: { type: Number, default: 0 },
+    target: { type: String, required: true },
+    label: { type: String, default: "" },
+    mod: { type: Mod, required: true }
   },
   components: { GenericKnob }
 }

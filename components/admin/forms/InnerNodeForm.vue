@@ -63,7 +63,7 @@ export default {
       }
     },
     nameUnicity() {
-      const nameExists: boolean = find(this.tool.innerNodes, {name: this.innerNode.name})
+      const nameExists: boolean = find(this.tool.nodes, {name: this.innerNode.name})
       return !nameExists || "name.uniq";
     },
     ...mapActions(useGenerators, ['fetchGenerators'])

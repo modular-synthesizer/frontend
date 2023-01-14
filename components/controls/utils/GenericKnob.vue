@@ -1,16 +1,18 @@
 <template>
   <g @mousedown.stop="startParameterSetting($event, parameter)">
-    <g :transform="`translate(${parameter.x} ${parameter.y}) rotate(${angle},0,0)`">
+    <text
+      v-if="displayLabel"
+      :transform="`translate(${x}, ${y - r - 6})`"
+      text-anchor="middle"
+      class="label-text"
+    >
+      {{ label }}
+    </text>
+    <g :transform="`translate(${x} ${y}) rotate(${angle},0,0)`">
       <polygon :points="`-10,${r-cursorSize} 0,${r+cursorSize} 10,${r-cursorSize}`" fill="black" stroke="black" />
     </g>
-    <circle :r="r" :cx="parameter.x" :cy="parameter.y" fill="white" stroke="black" stroke-width="3" />
-    <text
-      class="value"
-      :x="parameter.x"
-      :y="parameter.y"
-      text-anchor="middle"
-      alignment-baseline="middle"
-    >
+    <circle :r="r" :cx="x" :cy="y" fill="white" stroke="black" stroke-width="3" />
+    <text class="value" :x="x" :y="y" text-anchor="middle" alignment-baseline="middle">
       {{ value }}
     </text>
   </g>
@@ -23,6 +25,8 @@ import { round } from "lodash"
 
 export default {
   props: {
+    x: { type: Number, default: 0 },
+    y: { type: Number, default: 0 },
     parameter: {
       type: Parameter,
       required: true
@@ -35,19 +39,25 @@ export default {
       type: Number,
       default: 8
     },
+    label: {
+      type: String,
+      default: ""
+    }
   },
   computed: {
-    value() {
+    value(): Number {
         return round(this.parameter.value, this.parameter.precision);
     },
-    // The angle of the indicator in the button.
-    angle() {
+    angle(): Number {
       const delta = this.parameter.maximum / this.parameter.value
       return 20 + (320 / delta)
+    },
+    displayLabel(): boolean {
+      return this.label !== ""
     }
   },
   methods: {
-    ...mapActions(useParameters, ['startParameterSetting'])
+    ...mapActions(useParameters, ['startParameterSetting']),
   },
 }
 </script>
@@ -63,5 +73,9 @@ export default {
     stroke-linejoin: miter;
     stroke-opacity: .5;
     font-weight: 500;
+}
+.label-text {
+  font-size: 10px;
+  user-select: none;
 }
 </style>

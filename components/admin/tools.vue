@@ -10,14 +10,12 @@
       </tr>
     </thead>
     <tbody>
-      <template v-for="(list, category) in tools">
-        <tr v-for="tool in list">
-          <td>{{ category }}</td>
+        <tr v-for="tool in tools">
+          <td>{{ tool.category.name }}</td>
           <td>{{ tool.id }}</td>
           <td>{{ tool.name }}</td>
           <td>{{ tool.slots }}</td>
         </tr>
-      </template>
     </tbody>
   </v-table>
 </template>
@@ -25,7 +23,6 @@
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
-import ICategory from '~~/lib/interfaces/ICategory';
 import ITool from '~~/lib/interfaces/ITool';
 import ToolCreator from './dialogs/ToolCreator.vue'
 
@@ -34,8 +31,8 @@ function emptyTool() {
     id: "",
     name: "",
     category_id: "",
-    innerNodes: [],
-    innerLinks: [],
+    nodes: [],
+    links: [],
     inputs: [],
     outputs: [],
     parameters: [],
@@ -55,10 +52,10 @@ export default {
   },
   methods: {
     ...mapActions(useToolsList, ['fetchTools', 'addTool']),
-    add(category: ICategory, tool: ITool) {
+    add(tool: ITool) {
       api.post("/tools", {auth_token: this.session.token, ...tool})
         .then(response => {
-          this.addTool(category.id, response);
+          this.addTool(response);
           this.tool = emptyTool();
         });
     }

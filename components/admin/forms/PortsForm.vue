@@ -20,7 +20,7 @@
             :rules="[nameRequired]"
           />
         </v-col>
-        <v-col xs="8" md="2" class="pr-1">
+        <v-col xs="8" md="3" class="pr-1">
           <v-text-field
             v-model="port.target"
             variant="outlined"
@@ -29,33 +29,13 @@
             :rules="[targetRequired, validTarget]"
           />
         </v-col>
-        <v-col xs="4" md="1" class="pr-1">
+        <v-col xs="4" md="2" class="pr-1">
           <v-text-field
             type="number"
             variant="outlined"
             density="compact"
             v-model="port.index"
             :label="$t('common.index')"
-            minimum="0"
-          />
-        </v-col>
-        <v-col xs="4" md="1" class="pr-1">
-          <v-text-field
-            type="number"
-            variant="outlined"
-            density="compact"
-            v-model="port.x"
-            label="X"
-            minimum="0"
-          />
-        </v-col>
-        <v-col xs="4" md="1" class="pr-1">
-          <v-text-field
-            type="number"
-            variant="outlined"
-            density="compact"
-            v-model="port.y"
-            label="Y"
             minimum="0"
           />
         </v-col>
@@ -81,7 +61,7 @@ export default {
   },
   computed: {
     innerNodes(): string[] {
-      return this.tool.innerNodes.map(n => n.name)
+      return this.tool.nodes.map(n => n.name)
     }
   },
   data: () => ({
@@ -110,7 +90,7 @@ export default {
       return !!this.port.target || this.$t("ports.target.required");
     },
     validTarget() {
-      const targetExists: boolean = !!find(this.tool.innerNodes, node => {
+      const targetExists: boolean = !!find(this.tool.nodes, node => {
         return this.port.target.startsWith(node.name)
       });
       return targetExists || this.$t("ports.target.unknown");

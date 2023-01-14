@@ -1,8 +1,8 @@
 <template>
   <g>
-    <text :x="port.x" :y="port.y - radius - 4" text-anchor="middle" class="port-label">{{ label }}</text>
+    <text :x="x" :y="y - radius - 4" text-anchor="middle" class="port-label">{{ label }}</text>
     <g
-      :transform="`translate(${port.x},${port.y})`"
+      :transform="`translate(${x},${y})`"
     >
       <circle
         :r="radius"
@@ -28,9 +28,9 @@
 
 <script lang="ts">
 import { mapActions } from 'pinia';
-import { PropType } from 'vue';
 import { PORT_RADIUS } from '~~/lib/utils/constants';
-import PortWrapper from '~~/lib/wrappers/Port';
+import Mod from '~~/lib/wrappers/Mod';
+import Port from '~~/lib/wrappers/Port';
 
 export default {
   data: () => ({
@@ -43,9 +43,8 @@ export default {
     },
   },
   props: {
-    port: {
-      type: Object as PropType<PortWrapper>,
-      required: true
+    mod: {
+      type: Mod, required: true
     },
     fillColor: {
       type: String,
@@ -59,7 +58,15 @@ export default {
       type: String,
       default: ""
     },
+    x: { type: Number, default: 0},
+    y: { type: Number, default: 0},
+    target: { type: String, required: true }
   },
+  computed: {
+    port() {
+      return this.mod.ports.find(p => p.name === this.target) as Port;
+    }
+  }
 }
 </script>
 
