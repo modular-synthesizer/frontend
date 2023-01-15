@@ -13,7 +13,7 @@
         <tbody>
           <tr v-for="parameter in parameters">
             <td>{{ parameter.id }}</td>
-            <td><tools-contraints :constraint="parameter.constraints" /></td>
+            <td><tools-constraints v-bind="parameter.constraints" /></td>
             <td>{{ parameter.name }}</td>
             <td>
               <v-chip closable v-for="target in parameter.targets" class="mr-1" size="small">
