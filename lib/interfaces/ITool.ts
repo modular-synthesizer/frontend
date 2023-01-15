@@ -8,8 +8,7 @@ export default interface ITool {
   categoryId: string;
   nodes: InnerNode[];
   links: InnerLink[];
-  inputs: IToolPort[];
-  outputs: IToolPort[];
+  ports: IToolPort[];
   parameters: IToolParameter[];
   slots: number;
   controls: IControl[]
@@ -41,4 +40,5 @@ export interface IToolPort {
   name: string;
   target: string;
   index: number;
+  kind: string;
 }

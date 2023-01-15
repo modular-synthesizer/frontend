@@ -12,7 +12,13 @@ export const useLinksList = defineStore('links', {
     async fetch(synthesizer_id: string) {
       this.links = [];
       const results: ILink[] = await api.auth_get('/links', { synthesizer_id });
-      this.links = results.map((ilink: ILink) => new Link(ilink));
+      const ports = usePorts().ports;
+      this.links = results
+        .filter((ilink: ILink) => {
+          return find(ports, {id: ilink.from}) !== undefined
+              && find(ports, {id: ilink.to}) !== undefined
+        })
+        .map((ilink: ILink) => new Link(ilink));
     },
     async add(link: Link) {
       this.links.push(link);

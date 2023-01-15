@@ -1,6 +1,6 @@
 <template>
   <svg>
-    <g transform="translate(100, 100) scale(1.5)">
+    <g transform="translate(100, 50) scale(1.5)">
       <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
       <module-screws :slots="tool.slots" />
       <template v-for="control in tool.controls">

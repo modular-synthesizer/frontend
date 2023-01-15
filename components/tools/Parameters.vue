@@ -8,10 +8,11 @@
             <th>Descripteur</th>
             <th>Nom</th>
             <th>Cibles</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="parameter in parameters">
+          <tr v-for="(parameter, idx) in parameters">
             <td>{{ parameter.id }}</td>
             <td><tools-constraints v-bind="parameter.constraints" /></td>
             <td>{{ parameter.name }}</td>
@@ -19,6 +20,9 @@
               <v-chip closable v-for="target in parameter.targets" class="mr-1" size="small">
                 {{ target }}
               </v-chip>
+            </td>
+            <td>
+              <v-btn icon="mdi-delete" variant="plain" size="small" @click="removeParameter(idx)" />
             </td>
           </tr>
         </tbody>
@@ -39,6 +43,11 @@ export default {
   },
   computed: {
     parameters() { return this.modelValue; }
+  },
+  methods: {
+    removeParameter(index: number) {
+      this.parameters.splice(index, 1);
+    }
   }
 }
 </script>

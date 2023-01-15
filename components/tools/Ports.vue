@@ -7,18 +7,17 @@
             <th>Nom</th>
             <th>Type</th>
             <th>Cible</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="port in tool.inputs">
+          <tr v-for="(port, idx) in tool.ports">
             <td>{{ port.name }}</td>
-            <td>input</td>
+            <td>{{ port.kind }}</td>
             <td>{{ port.target }}</td>
-          </tr>
-          <tr v-for="port in tool.outputs">
-            <td>{{ port.name }}</td>
-            <td>output</td>
-            <td>{{ port.target }}</td>
+            <td>
+              <v-btn icon="mdi-delete" variant="plain" size="small" @click="removePort(idx)" />
+            </td>
           </tr>
         </tbody>
       </v-table>
@@ -28,7 +27,7 @@
 
 <script lang="ts">
 import { PropType } from 'vue';
-import ITool from '~~/lib/interfaces/ITool';
+import ITool, { IToolPort } from '~~/lib/interfaces/ITool';
 
 export default {
   props: {
@@ -39,6 +38,11 @@ export default {
   },
   computed: {
     tool() { return this.modelValue; }
+  },
+  methods: {
+    removePort(index: number) {
+      this.tool.ports.splice(index, 1)
+    }
   }
 }
 </script>

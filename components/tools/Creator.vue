@@ -1,9 +1,9 @@
 <template>
   <v-row n-gutters>
-    <v-col id="preview" cols="4" class="bg-grey-lighten-2">
+    <v-col id="preview" cols="4" class="bg-grey-lighten-2 scroll-y">
       <tools-preview v-model="tool" />
     </v-col>
-    <v-col id="steps" cols="8">
+    <v-col id="steps" cols="8" class="scroll-y">
       <v-tabs align-tabs="center" v-model="currentTab">
         <v-tab value="informations">Informations</v-tab>
         <v-tab value="nodes">Noeuds</v-tab>
@@ -53,10 +53,14 @@ export default {
 </script>
 
 <style scoped>
-#preview {
+.scroll-y {
   max-height: calc(100vh - 54px);
-  overflow-y: hidden;
+  overflow-y: auto;
+}
+#preview {
   margin: 0px;
   padding: 0px;
+  overflow: hidden;
+  border-right: 2px solid #BBBBBB;
 }
 </style>
