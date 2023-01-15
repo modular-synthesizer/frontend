@@ -37,6 +37,7 @@ export interface InnerLink {
 }
 
 export interface IToolPort {
+  id: string;
   name: string;
   target: string;
   index: number;

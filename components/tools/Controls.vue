@@ -25,8 +25,8 @@
               hint="Entrez les couples clefs/valeur sous la forme k=v et appuyez sur Entrée"
             />
           </v-col>
-          <v-col cols="1" class="flex-grow-1 pr-2">
-            <v-btn variant="flat" color="primary" size="large" @click="submitNewControl">Ajouter</v-btn>
+          <v-col cols="2" class="flex-grow-1 pr-2">
+            <v-btn color="blue-grey-lighten-5" size="large" @click="submitNewControl">Ajouter</v-btn>
           </v-col>
         </v-row>
       </v-form>

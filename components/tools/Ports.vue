@@ -4,17 +4,21 @@
       <v-table>
         <thead>
           <tr>
+            <th>UUID</th>
             <th>Nom</th>
             <th>Type</th>
             <th>Cible</th>
+            <th>Index</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(port, idx) in tool.ports">
+            <td>{{ port.id }}</td>
             <td>{{ port.name }}</td>
             <td>{{ port.kind }}</td>
             <td>{{ port.target }}</td>
+            <td>{{ port.index }}</td>
             <td>
               <v-btn icon="mdi-delete" variant="plain" size="small" @click="removePort(idx)" />
             </td>

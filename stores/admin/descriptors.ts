@@ -9,7 +9,7 @@ export const useDescriptors = defineStore('descriptors', {
   actions: {
     fetchDescriptors() {
       const token: string = useAuthentication().session.token;
-      api.get("/parameters", {auth_token: token})
+      return api.get("/parameters", {auth_token: token})
         .then(parameters => {
           this.parameters = parameters.parameters;
         });
