@@ -1,21 +1,23 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <div class="text-h4">{{ kind === 'input' ? 'Entrées' : 'Sorties' }}</div>
       <v-table>
         <thead>
           <tr>
-            <th>UUID</th>
             <th>Nom</th>
             <th>Type</th>
             <th>Cible</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="port in ports">
-            <td>{{ port.id }}</td>
+          <tr v-for="port in tool.inputs">
             <td>{{ port.name }}</td>
-            <td>{{ kind }}</td>
+            <td>input</td>
+            <td>{{ port.target }}</td>
+          </tr>
+          <tr v-for="port in tool.outputs">
+            <td>{{ port.name }}</td>
+            <td>output</td>
             <td>{{ port.target }}</td>
           </tr>
         </tbody>
@@ -25,20 +27,18 @@
 </template>
 
 <script lang="ts">
-import { IToolPort } from '~~/lib/interfaces/ITool';
+import { PropType } from 'vue';
+import ITool from '~~/lib/interfaces/ITool';
 
 export default {
   props: {
     modelValue: {
-      type: Array<IToolPort>,
-      default: () => []
+      type: Object as PropType<ITool>,
+        required: true
     },
-    kind: {
-      type: String, default: 'input'
-    }
   },
   computed: {
-    ports() { return this.modelValue; }
+    tool() { return this.modelValue; }
   }
 }
 </script>
