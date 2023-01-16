@@ -10,7 +10,8 @@
       </template>
     </template>
     <template v-slot:append>
-      <VBtn to="/admin" v-if="admin">{{ $t('common.admin') }}</VBtn>
+      <v-btn to="/tools" v-if="admin">Outils</v-btn>
+      <v-btn to="/admin" v-if="admin">{{ $t('common.admin') }}</v-btn>
       <VBtn @click="logout" v-if="authenticated">{{ $t('common.logout') }}</VBtn>
       <template v-else>
         <VBtn to="/register">{{ $t('common.register') }}</VBtn>
