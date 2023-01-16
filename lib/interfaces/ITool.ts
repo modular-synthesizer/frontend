@@ -17,7 +17,8 @@ export default interface ITool {
 export interface IToolParameter {
   id: string;
   targets: string[];
-  name: String;
+  name: string;
+  descriptorId?: string,
   constraints: {
     maximum: number,
     minimum: number,

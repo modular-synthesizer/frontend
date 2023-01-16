@@ -60,6 +60,12 @@
               <v-btn
                 size="small"
                 variant="plain"
+                @click="startEdit(control)"
+                icon="mdi-pencil"
+              />
+              <v-btn
+                size="small"
+                variant="plain"
                 @click="deleteControl(control)"
                 icon="mdi-delete"
               />
@@ -86,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import { cloneDeep, flatten, omit, remove } from 'lodash';
+import { cloneDeep, findIndex, flatten, omit, remove } from 'lodash';
 import ToolsFactory from '~~/lib/factories/ToolsFactory';
 import { IControl } from '~~/lib/interfaces/IControl';
 
@@ -112,14 +118,26 @@ export default {
       control.payload = omit(control.payload, name);
     },
     setPayloadValue(value: any) {
-      const filtered: string[] = value.filter((v: string) => /^[a-zA-z]+\=.+$/.test(v));
+      this.updateChips(value);
+    },
+    updateChips(values: string[]) {
+      const filtered: string[] = values.filter((v: string) => /^[a-zA-z]+\=.+$/.test(v));
       const mapped = flatten(filtered.map((v: string) => v.split(" ")))
       this.control.payload = Object.fromEntries(mapped.map(v => v.split("=")));
       this.chips = mapped;
     },
     submitNewControl() {
-      this.controls.push(cloneDeep(this.control));
+      this.updateChips(this.chips);
+      const result: IControl = cloneDeep(this.control);
+      if (this.control.id === "") {
+        this.controls.push(result);
+      }
+      else {
+        const found = findIndex(this.controls, {id: this.control.id});
+        if (found > -1) this.controls[found] = result 
+      }
       this.control = ToolsFactory.emptyControl();
+      this.chips = [];
     },
     deleteControl(control: IControl) {
       remove(this.controls, control);
@@ -128,6 +146,10 @@ export default {
       const item: IControl = this.controls.splice(index, 1)[0];
       this.controls.splice(index + shift, 0, item);
     },
+    startEdit(control: IControl) {
+      this.control = cloneDeep(control);
+      this.chips = Object.entries(control.payload).map(t => `${t[0]}=${t[1]}`);
+    }
   }
 }
 </script>

@@ -52,6 +52,7 @@
               </v-chip>
             </td>
             <td>
+              <v-btn icon="mdi-pencil" variant="plain" size="small" @click="startEditing(parameter)" />
               <v-btn icon="mdi-delete" variant="plain" size="small" @click="removeParameter(idx)" />
             </td>
           </tr>
@@ -62,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { cloneDeep, find } from 'lodash';
+import { cloneDeep, find, findIndex } from 'lodash';
 import { mapState } from 'pinia';
 import { IToolParameter } from '~~/lib/interfaces/ITool';
 
@@ -78,7 +79,7 @@ export default {
       id: "",
       name: "",
       descriptorId: "",
-      targets: []
+      targets: [] as string[]
     }
   }),
   computed: {
@@ -95,13 +96,28 @@ export default {
     addParameter() {
       const constraints = find(this.descriptors, {id: this.parameter.descriptorId})?.constraints
       if (constraints !== undefined) {
-        this.parameters.push({...cloneDeep(this.parameter), constraints});
+        const results: IToolParameter = {...cloneDeep(this.parameter), constraints}
+        if (this.parameter.id === "") {
+          this.parameters.push(results);
+        }
+        else {
+          const index: number = findIndex(this.parameters, {id: this.parameter.id});
+          if (index > -1) this.parameters[index] = results;
+        }
         this.parameter = {id: "", name: "", targets: [], descriptorId: ""};
         this.resetDescriptor();
       }
     },
     resetDescriptor() {
       this.parameter.descriptorId = this.descriptors[0].id;
+    },
+    startEditing(parameter: IToolParameter) {
+      this.parameter = {
+        id: parameter.id,
+        name: parameter.name,
+        descriptorId: parameter.descriptorId as string,
+        targets: parameter.targets,
+      };
     }
   },
   mounted() {
