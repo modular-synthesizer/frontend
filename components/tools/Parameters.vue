@@ -25,7 +25,7 @@
         />
       </v-col>
       <v-col cols="2">
-        <v-btn @click="addParameter" color="blue-grey-lighten-5" size="large">Ajouter</v-btn>
+        <v-btn @click="addParameter" color="blue-grey-lighten-5" size="large">Valider</v-btn>
       </v-col>
     </v-row>
   </v-form>

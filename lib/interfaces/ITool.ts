@@ -28,11 +28,13 @@ export interface IToolParameter {
 }
 
 export interface InnerNode {
+  id?: string;
   name: string;
   generator: string;
 }
 
 export interface InnerLink {
+  id?: string;
   from: { node: string, index: number };
   to: { node: string, index: number };
 }

@@ -16,8 +16,12 @@
         <v-window-item value="informations">
           <tools-informations v-model="tool" />
         </v-window-item>
-        <v-window-item value="nodes">Noeuds</v-window-item>
-        <v-window-item value="links">Liens</v-window-item>
+        <v-window-item value="nodes">
+          <tools-nodes v-model="tool.nodes" />
+        </v-window-item>
+        <v-window-item value="links">
+          <tools-links v-model="tool.links" />
+        </v-window-item>
         <v-window-item value="ports">
           <tools-ports v-model="tool" />
         </v-window-item>
@@ -28,6 +32,9 @@
           <tools-controls v-model="tool.controls" />
         </v-window-item>
       </v-window>
+      <div class="bottom-liner">
+        <v-btn class="absolute" color="secondary" @click="saveTool">Sauvegarder</v-btn>
+      </div>
     </v-col>
   </v-row>
 </template>
@@ -43,11 +50,17 @@ export default {
       required: true
     }
   },
+  emits: ['update:modelValue'],
   data: () => ({
     currentTab: "informations"
   }),
   computed: {
     tool() { return this.modelValue }
+  },
+  methods: {
+    saveTool() {
+      this.$emit('update:modelValue', this.modelValue)
+    }
   }
 }
 </script>
@@ -62,5 +75,16 @@ export default {
   padding: 0px;
   overflow: hidden;
   border-right: 2px solid #BBBBBB;
+}
+#steps {
+  padding-bottom: 64px;
+}
+.bottom-liner {
+  width: 100%;
+  padding: 10px;
+  padding-left: 0;
+  position: absolute;
+  bottom: 0px;
+  background-color: white;
 }
 </style>

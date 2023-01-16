@@ -26,7 +26,7 @@
             />
           </v-col>
           <v-col cols="2" class="flex-grow-1 pr-2">
-            <v-btn color="blue-grey-lighten-5" size="large" @click="submitNewControl">Ajouter</v-btn>
+            <v-btn color="blue-grey-lighten-5" size="large" @click="submitNewControl">Valider</v-btn>
           </v-col>
         </v-row>
       </v-form>
