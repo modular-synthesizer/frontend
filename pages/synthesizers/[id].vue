@@ -36,7 +36,6 @@ export default {
   },
   methods: {
     ...mapActions(useToolsList, ['fetchTools']),
-    ...mapActions(useGenerators, ['fetchScripts']),
     insertModule(mod: Mod) {
         this.modules.push(mod);
         this.synthesizer.place(mod.rack, mod.slot, mod);
@@ -44,7 +43,7 @@ export default {
   },
   async mounted() {
     this.fetchTools();
-    await this.fetchScripts();
+    await useGenerators().fetchGenerators();
   }
 }
 </script>

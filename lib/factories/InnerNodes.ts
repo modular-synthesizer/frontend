@@ -1,3 +1,5 @@
+import { find } from "lodash";
+import { IGenerator } from "../interfaces/IGenerator";
 import { InnerNode } from "../interfaces/ITool";
 import InnerAudioNode from "../wrappers/InnerAudioNode";
 
@@ -10,9 +12,11 @@ class InnerNodesFactory {
      *   the corresponding Web Audio API node(s).
      */
     public create(list: InnerNode[]): InnerAudioNode[] {
-        const ctx: AudioContext = useAudioContext().context;
-        return list.reduce((arr, innerNode) => {
-            const genFunction: Function = useGenerators().scripts[innerNode.generator];
+        const ctx: AudioContext = useAudioContext().context as AudioContext;
+        const gens: IGenerator[] = useGenerators().generators;
+        return list.reduce((arr, innerNode): InnerAudioNode[] => {
+            const gen: IGenerator = find(gens, {name: innerNode.generator}) as IGenerator;
+            const genFunction: Function = Function('name', 'context', gen.code);
             const audioNodes: InnerAudioNode[] = genFunction(innerNode.name, ctx);
             audioNodes.forEach((a: InnerAudioNode) => {
                 if (a.node instanceof AudioScheduledSourceNode) {
@@ -20,7 +24,7 @@ class InnerNodesFactory {
                 }
             })
             return [...arr, ...audioNodes]
-        }, [])
+        }, [] as InnerAudioNode[])
     }
 }
 
