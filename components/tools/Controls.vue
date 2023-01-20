@@ -124,7 +124,13 @@ export default {
     updateChips(values: string[]) {
       const filtered: string[] = values.filter((v: string) => /^[a-zA-z]+\=.+$/.test(v));
       const mapped = flatten(filtered.map((v: string) => v.split(" ")))
-      this.control.payload = Object.fromEntries(mapped.map(v => v.split("=")));
+
+      const parsedValues = mapped.map(v => {
+        const splitted = v.split("=");
+        const value = /^[0-9]+$/.test(splitted[1]) ? Number(splitted[1]) : splitted[1];
+        return [splitted[0], value]
+      })
+      this.control.payload = Object.fromEntries(parsedValues);
       this.chips = mapped;
     },
     submitNewControl() {

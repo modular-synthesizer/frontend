@@ -60,6 +60,21 @@ export default {
             "id": "",
             "name": "allpass",
             "generator": "allpassBiquad"
+        },
+        {
+            "id": "",
+            "name": "cvgain",
+            "generator": "createGain"
+        },
+        {
+            "id": "",
+            "name": "cvfrequency",
+            "generator": "createGain"
+        },
+        {
+            "id": "",
+            "name": "cvq",
+            "generator": "createGain"
         }
     ],
     "links": [
@@ -150,6 +165,94 @@ export default {
                 "node": "allpass",
                 "index": 0
             }
+        },
+        {
+            "id": "",
+            "from": {
+                "node": "cvq",
+                "index": 0
+            },
+            "to": {
+                "node": "lowpass.q",
+                "index": 0
+            }
+        },
+        {
+            "id": "",
+            "from": {
+                "node": "cvq",
+                "index": 0
+            },
+            "to": {
+                "node": "highpass.q",
+                "index": 0
+            }
+        },
+        {
+            "id": "",
+            "from": {
+                "node": "cvq",
+                "index": 0
+            },
+            "to": {
+                "node": "lowshelf.q",
+                "index": 0
+            }
+        },
+        {
+            "id": "",
+            "from": {
+                "node": "cvq",
+                "index": 0
+            },
+            "to": {
+                "node": "highshelf.q",
+                "index": 0
+            }
+        },
+        {
+            "id": "",
+            "from": {
+                "node": "cvq",
+                "index": 0
+            },
+            "to": {
+                "node": "peaking.q",
+                "index": 0
+            }
+        },
+        {
+            "id": "",
+            "from": {
+                "node": "cvq",
+                "index": 0
+            },
+            "to": {
+                "node": "notch.q",
+                "index": 0
+            }
+        },
+        {
+            "id": "",
+            "from": {
+                "node": "cvq",
+                "index": 0
+            },
+            "to": {
+                "node": "bandpass.q",
+                "index": 0
+            }
+        },
+        {
+            "id": "",
+            "from": {
+                "node": "cvq",
+                "index": 0
+            },
+            "to": {
+                "node": "allpass.q",
+                "index": 0
+            }
         }
     ],
     "ports": [
@@ -215,6 +318,13 @@ export default {
             "kind": "output",
             "index": 0,
             "target": "allpass"
+        },
+        {
+            "id": "",
+            "name": "cvq",
+            "kind": "input",
+            "index": 0,
+            "target": "cvq"
         }
     ],
     "parameters": [
@@ -304,7 +414,8 @@ export default {
             "payload": {
                 "target": "highpass",
                 "x": 30,
-                "y": 320
+                "y": 320,
+                "label": "HPS"
             }
         },
         {
@@ -313,7 +424,8 @@ export default {
             "payload": {
                 "target": "highshelf",
                 "x": 110,
-                "y": 320
+                "y": 320,
+                "label": "HSF"
             }
         },
         {
@@ -322,7 +434,8 @@ export default {
             "payload": {
                 "target": "lowshelf",
                 "x": 150,
-                "y": 320
+                "y": 320,
+                "label": "LSF"
             }
         },
         {
@@ -331,7 +444,8 @@ export default {
             "payload": {
                 "target": "notch",
                 "x": 30,
-                "y": 360
+                "y": 360,
+                "label": "NTH"
             }
         },
         {
@@ -340,7 +454,8 @@ export default {
             "payload": {
                 "target": "peaking",
                 "x": 70,
-                "y": 360
+                "y": 360,
+                "label": "PKG"
             }
         },
         {
@@ -349,7 +464,8 @@ export default {
             "payload": {
                 "target": "bandpass",
                 "x": 110,
-                "y": 360
+                "y": 360,
+                "label": "BPS"
             }
         },
         {
@@ -358,7 +474,8 @@ export default {
             "payload": {
                 "target": "allpass",
                 "x": 150,
-                "y": 360
+                "y": 360,
+                "label": "APS"
             }
         },
         {
@@ -367,7 +484,8 @@ export default {
             "payload": {
                 "x": 70,
                 "y": 320,
-                "target": "highshelf"
+                "target": "lowpass",
+                "label": "LPS"
             }
         },
         {
@@ -384,10 +502,10 @@ export default {
             "id": "",
             "component": "LargeKnob",
             "payload": {
-                "x": 85,
                 "y": 60,
                 "target": "Q",
-                "label": "Q"
+                "label": "Q",
+                "x": 90
             }
         },
         {
@@ -405,8 +523,9 @@ export default {
             "component": "Port",
             "payload": {
                 "target": "gain",
-                "x": 85,
-                "y": 150
+                "y": 150,
+                "x": 90,
+                "label": "IN"
             }
         }
     ]
