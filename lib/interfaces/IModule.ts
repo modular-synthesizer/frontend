@@ -11,8 +11,7 @@ export default interface IModule {
   slot: number;
   slots: number;
   type: string;
-  inputs: IPort[];
-  outputs: IPort[];
+  ports: IPort[];
   parameters: IParameter[];
   category: string;
   controls: IControl[];

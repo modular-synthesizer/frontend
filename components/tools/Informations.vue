@@ -7,7 +7,7 @@
       <v-text-field v-model="tool.name" variant="outlined" label="Name" />
     </v-col>
     <v-col :cols="tool.id === '' ? 6 : 4">
-      <v-text-field v-model="tool.slots" variant="outlined" label="Slots" type="number" />
+      <v-text-field v-model.number="tool.slots" variant="outlined" label="Slots" type="number" />
     </v-col>
   </v-row>
 </template>

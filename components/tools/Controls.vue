@@ -60,7 +60,7 @@
               <v-btn
                 size="small"
                 variant="plain"
-                @click="startEdit(control)"
+                @click="startEdit(idx)"
                 icon="mdi-pencil"
               />
               <v-btn
@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import { cloneDeep, findIndex, flatten, omit, remove } from 'lodash';
+import { cloneDeep, flatten, omit, remove } from 'lodash';
 import ToolsFactory from '~~/lib/factories/ToolsFactory';
 import { IControl } from '~~/lib/interfaces/IControl';
 
@@ -109,6 +109,7 @@ export default {
     components: [
       'SmallKnob', 'LargeKnob', 'Knob', 'Port'
     ],
+    editIndex: -1,
   }),
   computed: {
     controls() { return this.modelValue; }
@@ -129,15 +130,15 @@ export default {
     submitNewControl() {
       this.updateChips(this.chips);
       const result: IControl = cloneDeep(this.control);
-      if (this.control.id === "") {
+      if (this.editIndex <= -1) {
         this.controls.push(result);
       }
       else {
-        const found = findIndex(this.controls, {id: this.control.id});
-        if (found > -1) this.controls[found] = result 
+        this.controls[this.editIndex] = result;
       }
       this.control = ToolsFactory.emptyControl();
       this.chips = [];
+      this.editIndex = -1;
     },
     deleteControl(control: IControl) {
       remove(this.controls, control);
@@ -146,9 +147,10 @@ export default {
       const item: IControl = this.controls.splice(index, 1)[0];
       this.controls.splice(index + shift, 0, item);
     },
-    startEdit(control: IControl) {
-      this.control = cloneDeep(control);
-      this.chips = Object.entries(control.payload).map(t => `${t[0]}=${t[1]}`);
+    startEdit(index: number) {
+      this.editIndex = index;
+      this.control = cloneDeep(this.controls[index]);
+      this.chips = Object.entries(this.control.payload).map(t => `${t[0]}=${t[1]}`);
     }
   }
 }

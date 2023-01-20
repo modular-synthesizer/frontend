@@ -80,7 +80,8 @@ export default {
       name: "",
       descriptorId: "",
       targets: [] as string[]
-    }
+    },
+    editing: false,
   }),
   computed: {
     parameters() { return this.modelValue; },
@@ -97,7 +98,7 @@ export default {
       const constraints = find(this.descriptors, {id: this.parameter.descriptorId})?.constraints
       if (constraints !== undefined) {
         const results: IToolParameter = {...cloneDeep(this.parameter), constraints}
-        if (this.parameter.id === "") {
+        if (!this.editing) {
           this.parameters.push(results);
         }
         else {
@@ -107,11 +108,13 @@ export default {
         this.parameter = {id: "", name: "", targets: [], descriptorId: ""};
         this.resetDescriptor();
       }
+      this.editing = false;
     },
     resetDescriptor() {
       this.parameter.descriptorId = this.descriptors[0].id;
     },
     startEditing(parameter: IToolParameter) {
+      this.editing = true;
       this.parameter = {
         id: parameter.id,
         name: parameter.name,

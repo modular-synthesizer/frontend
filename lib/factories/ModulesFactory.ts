@@ -10,8 +10,7 @@ export class ModulesFactory {
       slot: 0,
       slots: 0,
       type: "",
-      inputs: [],
-      outputs: [],
+      ports: [],
       parameters: [],
       category: "",
       controls: []

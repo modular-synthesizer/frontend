@@ -68,7 +68,8 @@ export default {
       kind: "input",
       index: 0,
       target: ""
-    } as IToolPort
+    } as IToolPort,
+    editing: false,
   }),
   computed: {
     tool() { return this.modelValue; },
@@ -81,11 +82,12 @@ export default {
       this.tool.ports.splice(index, 1)
     },
     startEdit(port: IToolPort) {
+      this.editing = true;
       this.port = cloneDeep(port);
     },
     validate() {
       const result: IToolPort = cloneDeep(this.port);
-      if (this.port.id === "") {
+      if (!this.editing) {
         this.tool.ports.push(result);
       }
       else {
@@ -93,6 +95,7 @@ export default {
         if (found > -1) this.tool.ports[found] = result 
       }
       this.port = {id: "", name: "", kind: "input", index: 0, target: ""}
+      this.editing = false;
     }
   }
 }
