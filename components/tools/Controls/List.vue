@@ -19,7 +19,7 @@
               closable
               class="mr-1"
               v-for="(value, name) in control.payload"
-              @click:close="removePayloadValue(control, `${name}=${value}`)"
+              @click:close="removePayloadValue(control, `${name}`)"
             >
               {{ name }} = {{ value }}
             </v-chip>

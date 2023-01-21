@@ -6,6 +6,8 @@
       </v-col>
       <v-col cols="12">
         <v-btn to="/tools/new">Nouveau</v-btn>
+        <v-btn class="ml-2" @click="triggerImport">Importer</v-btn>
+        <input type="file" v-show="false" ref="filePicker" @change="updatePicker" />
       </v-col>
     </v-row>
     <v-row class="mt-5">
@@ -36,6 +38,9 @@
               <td>{{ tool.controls.length }}</td>
               <td>
                 <v-btn :to="`/tools/${tool.id}`" icon="mdi-pencil" variant="plain" size="small" />
+                <v-btn @click="exportTool(tool)" icon variant="plain" size="small">
+                  <v-icon>mdi-export</v-icon>
+                </v-btn>
               </td>
             </tr>
           </tbody>
@@ -47,6 +52,7 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
+import ITool from '~~/lib/interfaces/ITool';
 
 export default {
   computed: {
@@ -54,6 +60,28 @@ export default {
   },
   mounted() {
     useToolsList().fetchTools();
+  },
+  methods: {
+    exportTool(tool: ITool) {
+      const blob = new Blob([JSON.stringify(tool)], {type: 'application/json'})
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${tool.name}.json`
+      link.click();
+      URL.revokeObjectURL(link.href);
+    },
+    triggerImport() {
+      (this.$refs.filePicker as any).click();
+    },
+    updatePicker($event: Event) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const content = JSON.stringify(event.target?.result);
+        localStorage.setItem("import-json", content);
+        this.$router.push("/tools/new");
+      }
+      reader.readAsText(($event.target as any).files[0]);
+    }
   }
 }
 </script>
