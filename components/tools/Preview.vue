@@ -45,7 +45,7 @@ export default {
 
 <style scoped>
 svg {
-  height: 100%;
+  height: calc(100% - 64px);
   width: 100%;
 }
 </style>

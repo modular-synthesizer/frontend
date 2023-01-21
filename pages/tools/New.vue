@@ -1,5 +1,5 @@
 <template>
-  <tools-creator v-model="tool" @update:model-value="saveTool" />
+  <tools-creator v-model="tool" @update:model-value="saveTool" :creation-mode="true" />
 </template>
 
 <script lang="ts">
@@ -404,6 +404,20 @@ export default {
                 "step": 1,
                 "precision": 0
             }
+        },
+        {
+            "id": "",
+            "name": "cvq",
+            "descriptorId": "6367c7eebbd88700076d7abf",
+            "targets": [
+                "cvq"
+            ],
+            "constraints": {
+                "minimum": 0,
+                "maximum": 10,
+                "step": 0.01,
+                "precision": 2
+            }
         }
     ],
     "slots": 9,
@@ -414,8 +428,8 @@ export default {
             "payload": {
                 "target": "highpass",
                 "x": 30,
-                "y": 320,
-                "label": "HPS"
+                "label": "HPS",
+                "y": 315
             }
         },
         {
@@ -424,8 +438,8 @@ export default {
             "payload": {
                 "target": "highshelf",
                 "x": 110,
-                "y": 320,
-                "label": "HSF"
+                "label": "HSF",
+                "y": 315
             }
         },
         {
@@ -434,8 +448,8 @@ export default {
             "payload": {
                 "target": "lowshelf",
                 "x": 150,
-                "y": 320,
-                "label": "LSF"
+                "label": "LSF",
+                "y": 315
             }
         },
         {
@@ -483,9 +497,9 @@ export default {
             "component": "Port",
             "payload": {
                 "x": 70,
-                "y": 320,
                 "target": "lowpass",
-                "label": "LPS"
+                "label": "LPS",
+                "y": 315
             }
         },
         {
@@ -502,10 +516,10 @@ export default {
             "id": "",
             "component": "LargeKnob",
             "payload": {
-                "y": 60,
                 "target": "Q",
                 "label": "Q",
-                "x": 90
+                "x": 90,
+                "y": 95
             }
         },
         {
@@ -520,12 +534,21 @@ export default {
         },
         {
             "id": "",
+            "component": "SmallKnob",
+            "payload": {
+                "target": "cvq",
+                "label": "cv",
+                "x": 110,
+                "y": 40
+            }
+        },
+        {
+            "id": "",
             "component": "Port",
             "payload": {
-                "target": "gain",
-                "y": 150,
-                "x": 90,
-                "label": "IN"
+                "x": 70,
+                "y": 40,
+                "target": "cvq"
             }
         }
     ]

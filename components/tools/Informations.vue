@@ -1,13 +1,13 @@
 <template>
   <v-row class="mt-5">
     <v-col cols="4" v-if="tool.id !== ''">
-      <v-text-field v-model="tool.id" disabled variant="outlined" label="UUID" />
+      <v-text-field v-model="tool.id" disabled variant="outlined" label="UUID" density="comfortable" />
     </v-col>
     <v-col :cols="tool.id === '' ? 6 : 4">
-      <v-text-field v-model="tool.name" variant="outlined" label="Name" />
+      <v-text-field v-model="tool.name" variant="outlined" label="Name" density="comfortable" />
     </v-col>
     <v-col :cols="tool.id === '' ? 6 : 4">
-      <v-text-field v-model.number="tool.slots" variant="outlined" label="Slots" type="number" />
+      <v-text-field v-model.number="tool.slots" variant="outlined" label="Slots" type="number" density="comfortable" />
     </v-col>
   </v-row>
 </template>
