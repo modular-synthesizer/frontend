@@ -1,19 +1,25 @@
 <template>
   <v-row class="mt-5">
-    <v-col cols="4" v-if="tool.id !== ''">
-      <v-text-field v-model="tool.id" disabled variant="outlined" label="UUID" density="comfortable" />
-    </v-col>
-    <v-col :cols="tool.id === '' ? 6 : 4">
+    <v-col cols="4">
       <v-text-field v-model="tool.name" variant="outlined" label="Name" density="comfortable" />
     </v-col>
-    <v-col :cols="tool.id === '' ? 6 : 4">
+  </v-row>
+  <v-row>
+    <v-col cols="4">
       <v-text-field v-model.number="tool.slots" variant="outlined" label="Slots" type="number" density="comfortable" />
+    </v-col>
+  </v-row>
+  <v-row>
+    <v-col cols="4">
+      <v-select :items="selectableCategories" variant="outlined" density="comfortable" label="Catégorie" v-model="tool.categoryId" />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
+import { mapState } from 'pinia';
 import { PropType } from 'vue';
+import ICategory from '~~/lib/interfaces/ICategory';
 import ITool from '~~/lib/interfaces/ITool';
 
 export default {
@@ -24,7 +30,16 @@ export default {
     }
   },
   computed: {
-    tool() { return this.modelValue }
+    tool() { return this.modelValue },
+    ...mapState(useCategories, ['categories']),
+    selectableCategories() {
+      return this.categories.map((category: ICategory) => {
+        return {title: category.name, value: category.id}
+      })
+    }
+  },
+  mounted() {
+    useCategories().fetchCategories();
   }
 }
 </script>

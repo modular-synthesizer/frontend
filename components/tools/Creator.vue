@@ -52,17 +52,14 @@ export default {
       type: Object as PropType<ITool>,
       required: true
     },
-    creationMode: {
-      type: Boolean,
-      default: () => false
-    }
   },
   emits: ['update:modelValue'],
   data: () => ({
     currentTab: "informations"
   }),
   computed: {
-    tool() { return this.modelValue }
+    tool() { return this.modelValue },
+    creationMode() { return this.tool.id === "" }
   },
   methods: {
     saveTool() {

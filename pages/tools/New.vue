@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts">
+import { api } from '~~/lib/api/Api';
 import ToolsFactory from '~~/lib/factories/ToolsFactory';
 
 export default {
@@ -12,6 +13,9 @@ export default {
   methods: {
     saveTool() {
       console.log(this.tool);
+      api.auth_post('/tools', this.tool).then((response: any) => {
+        console.log(response);
+      })
     }
   },
   mounted() {

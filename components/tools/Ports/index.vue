@@ -42,11 +42,11 @@ export default {
       this.port = cloneDeep(port);
     },
     updatePort(index: number, port: IToolPort) {
-      console.log(index, port);
+      this.tool.ports[index] = port;
       this.reset();
     },
     addPort(port: IToolPort) {
-      console.log(port);
+      this.tool.ports.push(port);
       this.reset();
     },
     reset() {

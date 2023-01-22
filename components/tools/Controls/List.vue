@@ -14,15 +14,7 @@
           <td v-if="!creationMode">{{ control.id }}</td>
           <td>{{ control.component }}</td>
           <td>
-            <v-chip
-              size="small"
-              closable
-              class="mr-1"
-              v-for="(value, name) in control.payload"
-              @click:close="removePayloadValue(control, `${name}`)"
-            >
-              {{ name }} = {{ value }}
-            </v-chip>
+            <tools-controls-payload :control="control" @closed="removePayloadValue" />
           </td>
           <td>
             <v-btn

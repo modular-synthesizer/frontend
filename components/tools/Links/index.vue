@@ -1,6 +1,6 @@
 <template>
   <tools-links-form v-model="link" :creation-mode="creationMode" @created="addLink" @reset="reset" />
-  <tools-links-list :links="links" />
+  <tools-links-list :links="links" :creation-mode="creationMode" />
 </template>
 
 <script lang="ts">
