@@ -1,5 +1,5 @@
 <template>
-  <g @mousedown.stop="startParameterSetting($event, parameter)">
+  <g v-if="parameter !== undefined" @mousedown.stop="startParameterSetting($event, parameter)">
     <text
       v-if="displayLabel"
       :transform="`translate(${x}, ${y - r - 6})`"

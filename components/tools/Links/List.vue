@@ -13,8 +13,8 @@
         <tbody>
           <tr v-for="(link, idx) in links">
             <td v-if="!creationMode">{{ link.id }}</td>
-            <td>{{ link.from.node }}.{{ link.from.index }}</td>
-            <td>{{ link.to.node }}.{{ link.to.index }}</td>
+            <td>{{ link.from }}</td>
+            <td>{{ link.to }}</td>
             <td>
               <v-btn icon="mdi-delete" variant="plain" size="small" @click="removeLink(idx)" />
             </td>

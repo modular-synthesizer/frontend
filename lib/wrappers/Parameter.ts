@@ -34,8 +34,13 @@ export default class Parameter {
   public setValue(val: number) {
     this.value = clamp(val, this.minimum, this.maximum);
     this.targets.forEach((target: string) => {
-      const param: AudioParam = this.mod.node(target).node[this.field];
-      param.setValueAtTime(this.value, this.ctx.currentTime);
+      try {
+        const param: AudioParam = this.mod.node(target).node[this.field];
+        param.setValueAtTime(this.value, this.ctx.currentTime);
+      }
+      catch(exception) {
+        console.log(target, this.mod.node(target))
+      }
     });
   }
 
