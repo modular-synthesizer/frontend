@@ -1,4 +1,7 @@
 import IModule from "../interfaces/IModule";
+import InnerAudioNode from "../wrappers/InnerAudioNode";
+import Mod from "../wrappers/Mod";
+import InnerNodesFactory from "./InnerNodes"
 
 export class ModulesFactory {
   public empty(): IModule {
@@ -15,6 +18,11 @@ export class ModulesFactory {
       category: "",
       controls: []
     }
+  }
+
+  public async build(details: IModule) {
+    const audioNodes: InnerAudioNode[] = await InnerNodesFactory.create(details.nodes);
+    return new Mod({...details, nodes: audioNodes})
   }
 }
 

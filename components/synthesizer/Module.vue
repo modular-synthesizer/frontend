@@ -4,7 +4,7 @@
     @click.right.stop.prevent="showMenu(mod, $event)"
   >
     <rect :width="width" :height="height" stroke="black" fill="#A3A3A3" />
-    <template v-for="control in mod.controls">
+    <template v-if="mod.controls.length > 0" v-for="control in mod.controls">
       <component :is="control.component" :mod="mod" v-bind="control.payload"/>
     </template>
     <module-screws :slots="mod.slots" />

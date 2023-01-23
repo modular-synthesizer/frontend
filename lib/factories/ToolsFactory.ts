@@ -9,8 +9,7 @@ export class ToolsFactory {
       category: {id: "", name: ""},
       nodes: [],
       links: [],
-      inputs: [],
-      outputs: [],
+      ports: [],
       parameters: [],
       slots: 1,
       controls: []

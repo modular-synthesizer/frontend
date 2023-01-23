@@ -22,7 +22,12 @@ export default class Link {
   }
 
   public connect() {
-    this.to.connect(this.from, this);
+    try {
+      this.to.connect(this.from, this);
+    }
+    catch(exception) {
+      console.log(this.from, this.to)
+    }
   }
 
   public disconnect() {

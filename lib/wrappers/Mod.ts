@@ -12,7 +12,6 @@ import IPort from "../interfaces/IPort";
 
 export default class Mod {
   public readonly id: string;
-  public readonly nodes: InnerNode[];
   public readonly links: InnerLink[]
   public rack: number;
   public slot: number;
@@ -24,13 +23,12 @@ export default class Mod {
   public readonly category: string;
   public readonly controls: IControl[] = [];
 
-  constructor({ id, rack, slot, slots, type, nodes, links, ports, parameters, category, controls }: IModule) {
+  constructor({ id, rack, slot, slots, type, nodes, links, ports, parameters, category, controls }: any) {
     this.id = id;
     this.rack = rack;
     this.slot = slot;
     this.slots = slots;
     this.type = type;
-    this.nodes = nodes;
     this.category = category;
     this.controls = controls;
     
@@ -38,7 +36,7 @@ export default class Mod {
       return iport.kind === "input" ? new InputPort(iport, this) : new OutputPort(iport, this);
     });
 
-    this.audioNodes = InnerNodesFactory.create(nodes)
+    this.audioNodes = nodes
     this.links = InnerLinksFactory.link(this.audioNodes, links);
     this.parameters = parameters.map(p => new Parameter(p, this));
 

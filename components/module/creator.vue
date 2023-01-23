@@ -43,6 +43,7 @@
 import { groupBy } from 'lodash';
 import { mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
+import ModulesFactory from '~~/lib/factories/ModulesFactory';
 import IModule from '~~/lib/interfaces/IModule';
 import ITool from '~~/lib/interfaces/ITool';
 import Mod from '~~/lib/wrappers/Mod';
@@ -87,8 +88,10 @@ export default {
       }
       else {
         api.post('/modules', payload).then((response: IModule) => {
-          this.$emit('selected', new Mod(response));
-          this.close();
+          ModulesFactory.build(response).then((mod: Mod) => {
+            this.$emit('selected', mod);
+            this.close();
+          })
         })
       }
     },

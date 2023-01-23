@@ -4,6 +4,7 @@ import IModule from "~~/lib/interfaces/IModule";
 import Mod from "~~/lib/wrappers/Mod";
 import { find, remove } from 'lodash'
 import Link from "~~/lib/wrappers/Link";
+import ModulesFactory from "~~/lib/factories/ModulesFactory";
 
 export const useModulesList = defineStore('modulesList', {
   state: () => ({
@@ -22,11 +23,11 @@ export const useModulesList = defineStore('modulesList', {
     async fetch(synthesizer_id: string) {
       this.modules = [];
       const response: IModule[] = await api.auth_get('/modules', { synthesizer_id });
-      this.modules = response.map((imod: IModule) => {
-        const mod: Mod = new Mod(imod);
+      for (let imod of response) {
+        const mod: Mod = await ModulesFactory.build(imod as unknown as IModule);
         this.synth.place(mod.rack, mod.slot, mod)
-        return mod
-      });
+        this.modules.push(mod);
+      }
     },
     async remove(id: string) {
       await api.auth_delete(`/modules/${id}`);

@@ -26,7 +26,7 @@ export default {
       return this.mod.param(this.target);
     }
   },
-  mounted() {
+  mounted() {console.log(this.mod, this.target, this.mod.param(this.target))
     this.baseValue = this.parameter.value;
     this.muted = Math.round(this.parameter.value) == 0;
   },

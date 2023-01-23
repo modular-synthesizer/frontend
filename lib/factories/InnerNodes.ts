@@ -3,6 +3,8 @@ import { IGenerator } from "../interfaces/IGenerator";
 import { InnerNode } from "../interfaces/ITool";
 import InnerAudioNode from "../wrappers/InnerAudioNode";
 
+const AsyncFunction = async function () {}.constructor;
+
 class InnerNodesFactory {
     /**
      * Instanciates a set of inner nodes from the API to transform them in audio
@@ -11,20 +13,31 @@ class InnerNodesFactory {
      * @return the list of instanciated inner nodes with a :node field containing
      *   the corresponding Web Audio API node(s).
      */
-    public create(list: InnerNode[]): InnerAudioNode[] {
+    public async create(list: InnerNode[]): Promise<InnerAudioNode[]> {
         const ctx: AudioContext = useAudioContext().context as AudioContext;
         const gens: IGenerator[] = useGenerators().generators;
-        return list.reduce((arr, innerNode): InnerAudioNode[] => {
+        const results: InnerAudioNode[] = [];
+
+        console.log(list);
+
+        for(let innerNode of list) {
             const gen: IGenerator = find(gens, {name: innerNode.generator}) as IGenerator;
-            const genFunction: Function = Function('name', 'context', gen.code);
-            const audioNodes: InnerAudioNode[] = genFunction(innerNode.name, ctx);
+
+            const executor = {func: async function(name: string, ctx: AudioContext) {}};
+            const fullcode: string = "executor.func = async function(name, context) { " + gen.code + " };"
+            eval(fullcode);
+
+            const audioNodes: InnerAudioNode[] = await executor.func(innerNode.name, ctx) as unknown as InnerAudioNode[];
+
+            console.log(audioNodes);
+
             audioNodes.forEach((a: InnerAudioNode) => {
-                if (a.node instanceof AudioScheduledSourceNode) {
-                    a.node.start();
-                }
+                if (a.node instanceof AudioScheduledSourceNode) a.node.start();
+                results.push(a);
             })
-            return [...arr, ...audioNodes]
-        }, [] as InnerAudioNode[])
+        }
+
+        return results;
     }
 }
 
