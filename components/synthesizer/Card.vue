@@ -4,7 +4,7 @@
     <template v-slot:subtitle>{{ synthesizer.id }}</template>
     <v-card-actions>
       <v-btn :to="uri">Editer</v-btn>
-      <v-btn @click="remove(synthesizer)">Supprimer</v-btn>
+      <deletion-dialog :url="`/synthesizers/${synthesizer.id}`" :text="`'${synthesizer.name}''`" @removed="fetchList">Supprimer</deletion-dialog>
     </v-card-actions>
   </v-card>
 </template>
@@ -27,8 +27,7 @@ export default {
     }
   },
   methods: {
-    async remove(synthesizer: ISynthesizer) {
-      await api.auth_delete(`/synthesizers/${synthesizer.id}`);
+    fetchList() {
       useSynthesizersList().fetch();
     }
   }

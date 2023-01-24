@@ -37,9 +37,15 @@
               <td>{{ tool.parameters.length }}</td>
               <td>{{ tool.controls.length }}</td>
               <td>
-                <v-btn icon variant="plain" size="small" @click="deleteTool(tool)">
+                <deletion-dialog
+                  :url="`/tools/${tool.id}`"
+                  size="small"
+                  icon
+                  @removed="fetchTools"
+                  :text="`l'outil '${tool.name}'`"
+                >
                   <v-icon>mdi-delete</v-icon>
-                </v-btn>
+                </deletion-dialog>
                 <v-btn @click="exportTool(tool)" icon variant="plain" size="small">
                   <v-icon>mdi-export</v-icon>
                 </v-btn>
@@ -54,7 +60,6 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
-import { api } from '~~/lib/api/Api';
 import ITool from '~~/lib/interfaces/ITool';
 
 export default {
@@ -85,10 +90,8 @@ export default {
       }
       reader.readAsText(($event.target as any).files[0]);
     },
-    deleteTool(tool: ITool) {
-      api.auth_delete(`/tools/${tool.id}`).then(() => {
-        useToolsList().fetchTools();
-      })
+    fetchTools() {
+      useToolsList().fetchTools();
     }
   }
 }
