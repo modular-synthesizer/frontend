@@ -23,10 +23,13 @@ export const useLinksList = defineStore('links', {
     async add(link: Link) {
       this.links.push(link);
     },
-    async remove(id: string) {
-      await api.auth_delete(`/links/${id}`);
+    delete(id: string) {
       find(this.links, { id })?.disconnect();
       remove(this.links, { id })
+    },
+    async remove(id: string) {
+      // await api.auth_delete(`/links/${id}`);
+      this.delete(id);
     }
   }
 })

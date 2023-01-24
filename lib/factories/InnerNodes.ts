@@ -18,8 +18,6 @@ class InnerNodesFactory {
         const gens: IGenerator[] = useGenerators().generators;
         const results: InnerAudioNode[] = [];
 
-        console.log(list);
-
         for(let innerNode of list) {
             const gen: IGenerator = find(gens, {name: innerNode.generator}) as IGenerator;
 
@@ -28,8 +26,6 @@ class InnerNodesFactory {
             eval(fullcode);
 
             const audioNodes: InnerAudioNode[] = await executor.func(innerNode.name, ctx) as unknown as InnerAudioNode[];
-
-            console.log(audioNodes);
 
             audioNodes.forEach((a: InnerAudioNode) => {
                 if (a.node instanceof AudioScheduledSourceNode) a.node.start();
