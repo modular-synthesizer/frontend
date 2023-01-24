@@ -15,9 +15,7 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
-import { useSynthesizerDelete } from '~~/stores/synthesizers/delete';
 
 export default {
   props: {
@@ -41,9 +39,6 @@ export default {
   data: () => ({
     dialog: false,
   }),
-  computed: {
-    ...mapState(useSynthesizerDelete, ['displayDialog', 'mod']),
-  },
   methods: {
     remove() {
       api.auth_delete(this.url).then(() => {
