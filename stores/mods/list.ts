@@ -38,7 +38,6 @@ export const useModulesList = defineStore('modulesList', {
     },
     disconnect(mod: Mod) {
       mod.connections.forEach((link: Link) => {
-        console.log(link);
         useLinksList().delete(link.id);
       })
     }

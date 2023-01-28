@@ -28,7 +28,7 @@ export const useLinksList = defineStore('links', {
       remove(this.links, { id })
     },
     async remove(id: string) {
-      // await api.auth_delete(`/links/${id}`);
+      await api.auth_delete(`/links/${id}`);
       this.delete(id);
     }
   }

@@ -14,7 +14,7 @@ export const useModuleMenu = defineStore('moduleMenu', {
       if (this.mod === null) return;
 
       for (let link of this.mod.links) {
-        useLinksList().remove(link.id);
+        useLinksList().delete(link.id as string);
       }
       useContextMenus().hide();
     },

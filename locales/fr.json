@@ -69,15 +69,13 @@
   },
   "modules": {
     "common": {
+      "BiquadFilterNode": {
+        "title": "Filtre de modification du spectre",
+        "description": "Passe-haut, passe-bas, notch, peaking, etc. Ce filtre polyphonique et polyvalent permet de sculpter le son."
+      },
       "LinkedGains": {
         "title": "Gains multiples",
-        "description": "Des gains se multipliant entre eux pour réduire ou augmenter un signal de 0.000001 à 1000 fois le signal de base.",
-        "parameters": {
-          "gain": "Gain"
-        },
-        "ports": {
-
-        }
+        "description": "Des gains se multipliant entre eux pour réduire ou augmenter un signal de 0.000001 à 1000 fois le signal de base."
       },
       "LowFrequencyOscillator": {
         "title": "Oscillateur basse fréquence",
@@ -87,9 +85,17 @@
         "title": "Oscillateur polyphonique",
         "description": "Un oscillateur polyphonique avec quatre types d'ondes disponibles, dont tous les paramètres sont voltage-controlled."
       },
+      "SingleGain": {
+        "title": "Gain Simple",
+        "description": "Un gain simple, avec une entrée, une sortie, et un seul bouton de réglage"
+      },
       "StandardOutput": {
         "title": "Sortie audio",
         "description": "Une sortie audio simple envoyant le patch sur votre sortie audio par défaut."
+      },
+      "UserMicrophone": {
+        "title": "Entrée standard",
+        "description": "L'entrée audio par défaut de votre ordinateur. Ce peut êtyre un micro, un instrument, etc."
       }
     },
     "creator": {
