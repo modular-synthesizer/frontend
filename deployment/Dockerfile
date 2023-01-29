@@ -11,6 +11,6 @@ EXPOSE 3000
 
 RUN yarn install
 
-RUN yarn build
+RUN yarn generate
 
 ENTRYPOINT ["deployment/entrypoint.sh"]
