@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  namespace: modusynth
+  namespace: <NAMESPACE>
   name: frontend-ingress
   labels:
     app: modusynth-gui
@@ -11,7 +11,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /.*
+          - path: <PREFIX>/.*
             pathType: Prefix
             backend:
               service:
