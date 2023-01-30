@@ -30,7 +30,6 @@
                 :label="$t('register.labels.username')"
                 :hint="$t('register.hints.username')"
                 :placeholder="$t('register.placeholders.username')"
-                :rules="[requiredUsername, minSizeUsername]"
                 variant="outlined"
                 v-model="account.username"
               ></v-text-field>
@@ -40,7 +39,6 @@
                 :label="$t('register.labels.email')"
                 :hint="$t('register.hints.email')"
                 :placeholder="$t('register.placeholders.email')"
-                :rules="[requiredEmail, formatEmail]"
                 type="email"
                 v-model="account.email"
                 variant="outlined"
@@ -52,7 +50,6 @@
               <v-text-field
                 :label="$t('register.labels.password')"
                 :hint="$t('register.hints.password')"
-                :rules="[requiredPassword]"
                 type="password"
                 variant="outlined"
                 v-model="account.password"
@@ -62,7 +59,6 @@
               <v-text-field
                 :label="$t('register.labels.password')"
                 :hint="$t('register.hints.password')"
-                :rules="[requiredPassword, passwordConfirmation]"
                 type="password"
                 variant="outlined"
                 v-model="account.password_confirmation"
@@ -81,14 +77,18 @@
 </template>
 
 <script lang="ts">
-import { api } from '~~/lib/api/Api';
-import IApiError from '~~/lib/interfaces/IApiError';
-import { EMAIL_FORMAT } from "~~/lib/utils/constants";
+import { useVuelidate } from "@vuelidate/core"
+import { required, email } from "@vuelidate/validators"
+import { api } from "~~/lib/api/Api"
+import IApiError from "~~/lib/interfaces/IApiError"
 
 definePageMeta({
   authenticated: false
 })
 export default {
+  setup: () => ({
+    v$: useVuelidate(),
+  }),
   data() {
     return {
       account: {
@@ -101,37 +101,28 @@ export default {
       duplicates: "",
     }
   },
+  validations: () => ({
+    account: {
+      username: { required },
+      password: { required },
+      password_confirmation: { required },
+      email: { required, email }
+    }
+  }),
   methods: {
     async register(_$event: Event) {
-      api.post('/accounts', this.account)
-        .then(_response => this.registered = true)
-        .catch(error => {
-          const apiError: IApiError = error.response.data;
-          if (apiError.message == 'uniq') {
-            this.duplicates = `errors.${apiError.key}.uniq`
-          }
-        })
+      this.v$.$validate();
+      if(!this.v$.$error) {
+        api.post('/accounts', this.account)
+          .then(_response => this.registered = true)
+          .catch(error => {
+            const apiError: IApiError = error.response.data;
+            if (apiError.message == 'uniq') {
+              this.duplicates = `errors.${apiError.key}.uniq`
+            }
+          })
+      }
     },
-    requiredUsername() {
-      return this.account.username.length > 0 || this.$t("errors.username.required");
-    },
-    minSizeUsername() {
-      return this.account.username.length >= 6 || this.$t("errors.username.minsize");
-    },
-    requiredPassword() {
-      return this.account.password.length > 0 || this.$t("errors.password.required");
-    },
-    passwordConfirmation() {
-      return this.account.password_confirmation == ""
-        || this.account.password_confirmation == this.account.password
-        || this.$t("errors.password.confirmation")
-    },
-    requiredEmail() {
-      return this.account.email.length > 0 || this.$t("errors.email.required")
-    },
-    formatEmail() {
-      return this.account.email.match(EMAIL_FORMAT) || this.$t("errors.email.format")
-    }
   }
 }
 </script>
