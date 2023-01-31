@@ -6,11 +6,9 @@
           <div class="text-h2 mb-2">{{ $t('login.title') }}</div>
         </v-col>
       </v-row>
-      <v-row v-if="error != ''">
-        <v-col cols="12">
-          <v-alert type="error">
-            {{ $t(error) }}
-          </v-alert>
+      <v-row class="mb-2">
+        <v-col cols="6" offset="3">
+          <vuelidate-errors v-if="v$.$error" :errors="v$.$errors" />
         </v-col>
       </v-row>
       <v-row>
@@ -19,9 +17,8 @@
             :label="$t('register.labels.username')"
             :hint="$t('register.hints.username')"
             :placeholder="$t('register.placeholders.username')"
-            :rules="[requiredUsername, minSizeUsername]"
             variant="outlined"
-            v-model="account.username"
+            v-model="v$.account.username.$model"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -30,10 +27,9 @@
           <v-text-field
             :label="$t('register.labels.password')"
             :hint="$t('register.hints.password')"
-            :rules="[requiredPassword]"
             type="password"
             variant="outlined"
-            v-model="account.password"
+            v-model="v$.account.password.$model"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -47,14 +43,28 @@
 </template>
 
 <script lang="ts">
+import useVuelidate from '@vuelidate/core';
+import { minLength, required } from '@vuelidate/validators';
 import { mapActions } from 'pinia';
+import IApiError from '~~/lib/interfaces/IApiError';
 
 definePageMeta({
   authenticated: false
 })
 export default {
+  setup() {
+    return {
+      v$: useVuelidate(),
+    };
+  },
   data() {
     return {
+      vuelidateExternalResults: {
+        account: {
+          username: [],
+          email: [],
+        },
+      },
       account: {
         username: "",
         password: ""
@@ -62,23 +72,23 @@ export default {
       error: ""
     };
   },
+  validations: {
+    account: {
+      username: { required, minsize: minLength(6) },
+      password: { required }
+    }
+  },
   methods: {
     ...mapActions(useAuthentication, ['login']),
     submitLogin() {
+      this.v$.$validate();
       this.login(this.account.username, this.account.password)
         .catch((error: any) => {
-          const { key, message } = error.response.data;
-          this.error = `errors.${key}.${message}`;
+            const err: IApiError = error.response.data;
+            Object.assign(this.vuelidateExternalResults.account, {
+              [err.key]: [err.message],
+            });
         })
-    },
-    requiredUsername() {
-      return this.account.username.length > 0 || this.$t("errors.username.required");
-    },
-    minSizeUsername() {
-      return this.account.username.length >= 6 || this.$t("errors.username.minsize");
-    },
-    requiredPassword() {
-      return this.account.password.length > 0 || this.$t("errors.password.required");
     },
   }
 }
