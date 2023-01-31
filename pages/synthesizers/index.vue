@@ -12,10 +12,10 @@
             <v-text-field v-model="synthesizer.name" variant="outlined" density="compact" label="Name" />
           </v-col>
           <v-col cols="2">
-            <v-text-field v-model="synthesizer.racks" type="number" variant="outlined" density="compact" label="Racks" />
+            <v-text-field v-model="synthesizer.racks" type="number" variant="outlined" density="compact" label="Racks" :min="1" />
           </v-col>
           <v-col cols="2">
-            <v-text-field v-model="synthesizer.slots" type="number" variant="outlined" density="compact" label="Slots" />
+            <v-text-field v-model="synthesizer.slots" type="number" variant="outlined" density="compact" label="Slots" :min=20 />
           </v-col>
           <v-col cols="3">
             <v-btn type="submit">Créer</v-btn>
