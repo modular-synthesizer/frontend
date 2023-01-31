@@ -17,6 +17,11 @@
               <div class="text-h3 mb-4">{{ $t('register.title') }}</div>
             </v-col>
           </v-row>
+          <v-row class="mb-2">
+            <v-col cols="12">
+              <vuelidate-errors v-if="v$.$error" :errors="v$.$errors" />
+            </v-col>
+          </v-row>
           <v-row v-if="duplicates != ''">
             <v-col cols="12">
               <v-alert type="error" class="mb-2">
@@ -31,7 +36,7 @@
                 :hint="$t('register.hints.username')"
                 :placeholder="$t('register.placeholders.username')"
                 variant="outlined"
-                v-model="account.username"
+                v-model="v$.account.username.$model"
               ></v-text-field>
             </v-col>
             <v-col cols="6">
@@ -40,7 +45,7 @@
                 :hint="$t('register.hints.email')"
                 :placeholder="$t('register.placeholders.email')"
                 type="email"
-                v-model="account.email"
+                v-model="v$.account.email.$model"
                 variant="outlined"
               ></v-text-field>
             </v-col>
@@ -52,7 +57,7 @@
                 :hint="$t('register.hints.password')"
                 type="password"
                 variant="outlined"
-                v-model="account.password"
+                v-model="v$.account.password.$model"
               ></v-text-field>
             </v-col>
             <v-col cols="6">
@@ -61,7 +66,7 @@
                 :hint="$t('register.hints.password')"
                 type="password"
                 variant="outlined"
-                v-model="account.password_confirmation"
+                v-model="v$.account.password_confirmation.$model"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -78,7 +83,7 @@
 
 <script lang="ts">
 import { useVuelidate } from "@vuelidate/core"
-import { required, email } from "@vuelidate/validators"
+import { required, email, sameAs } from "@vuelidate/validators"
 import { api } from "~~/lib/api/Api"
 import IApiError from "~~/lib/interfaces/IApiError"
 
@@ -91,22 +96,28 @@ export default {
   }),
   data() {
     return {
+      vuelidateExternalResults: {
+        account: {
+          username: [],
+          email: [],
+        },
+      },
       account: {
         username: "",
         password: "",
         password_confirmation: "",
-        email: ""
+        email: "",
       },
       registered: false,
       duplicates: "",
-    }
+    };
   },
   validations: () => ({
     account: {
       username: { required },
       password: { required },
-      password_confirmation: { required },
-      email: { required, email }
+      password_confirmation: { required, confirmation: sameAs('password') },
+      email: { required, format: email }
     }
   }),
   methods: {
@@ -116,10 +127,10 @@ export default {
         api.post('/accounts', this.account)
           .then(_response => this.registered = true)
           .catch(error => {
-            const apiError: IApiError = error.response.data;
-            if (apiError.message == 'uniq') {
-              this.duplicates = `errors.${apiError.key}.uniq`
-            }
+            const err: IApiError = error.response.data;
+            Object.assign(this.vuelidateExternalResults.account, {
+              [err.key]: [err.message],
+            });
           })
       }
     },
