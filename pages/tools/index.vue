@@ -49,6 +49,9 @@
                 <v-btn @click="exportTool(tool)" icon variant="plain" size="small">
                   <v-icon>mdi-export</v-icon>
                 </v-btn>
+                <v-btn :to="`/tools/${tool.id}`" icon variant="plain" size="small">
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
               </td>
             </tr>
           </tbody>

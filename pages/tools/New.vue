@@ -12,8 +12,8 @@ export default {
   }),
   methods: {
     saveTool() {
-      api.auth_post('/tools', this.tool).then((response: any) => {
-        console.log(response);
+      api.auth_post('/tools', this.tool).then((_response: any) => {
+        this.$router.push('/tools');
       })
     }
   },
