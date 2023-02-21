@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
 function web {
-  npx nuxt start
+  npm run start
+}
+
+function dev {
+  npm run dev
 }
 
 function shell {
@@ -11,6 +15,10 @@ function shell {
 case "$1" in
   "web")
   web
+  ;;
+
+  "dev")
+  dev
   ;;
 
   "shell")
