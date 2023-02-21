@@ -10,14 +10,9 @@
   </VApp>
 </template>
 
-<script setup lang="ts">
-api.setUri(useRuntimeConfig().public.api_uri);
-</script>
-
 <script lang="ts">
 import Menu from '~~/components/structure/menu.vue'
 import { VLayout, VMain, VApp } from 'vuetify/components'
-import { api } from '~~/lib/api/Api'
 import { mapActions, mapState } from 'pinia'
 
 export default {

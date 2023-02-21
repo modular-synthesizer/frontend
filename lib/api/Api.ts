@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default class Api implements IApi {
 
-  private uri: string = "";
+  private uri: string = "/proxy";
 
   public get token(): string {
     return useAuthentication().session.token;
@@ -43,10 +43,6 @@ export default class Api implements IApi {
 
   public auth_put(uri: string, payload: any = {}): Promise<any> {
     return this.put(uri, {...payload, auth_token: this.token})
-  }
-
-  public setUri(uri: string) {
-    this.uri = uri;
   }
 }
 

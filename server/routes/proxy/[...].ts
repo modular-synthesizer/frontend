@@ -26,9 +26,9 @@ export default defineEventHandler(async (event) => {
     data: body,
   };
 
-  const results = (await instance(config) as any).data;
+  const results = (await instance(config) as any);
 
-  return {
-    config, results
-  }
+  setResponseStatus(event, results.status)
+
+  return results.data
 })
