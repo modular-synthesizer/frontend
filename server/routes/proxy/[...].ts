@@ -1,3 +1,6 @@
+import axios from "axios";
+import * as https from "https";
+
 export default defineEventHandler(async (event) => {
 
   let body;
@@ -9,10 +12,23 @@ export default defineEventHandler(async (event) => {
     body = {};
   }
 
-  return {
+  const instance = axios.create({
+    httpsAgent: new https.Agent({  
+      rejectUnauthorized: false
+    }),
+    validateStatus: function(status) { return true }
+  });
+
+  const config = {
     method: event.node.req.method,
     url: `${process.env.API_URL}${event.path?.replace("/proxy", "")}`,
     params: getQuery(event),
     body,
+  };
+
+  const results = (await instance(config) as any).data;
+
+  return {
+    config, results
   }
 })
