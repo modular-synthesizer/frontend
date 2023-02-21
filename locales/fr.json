@@ -1,9 +1,18 @@
 {
   "admin": {
     "tabs": {
+      "applications": "Applications",
       "categories": "Catégories",
       "parameters": "Paramètres",
       "tools": "Outils"
+    }
+  },
+  "applications": {
+    "hints": {
+      "name": "Entrez un nom pour l'application"
+    },
+    "labels": {
+      "name": "Nom de l'application"
     }
   },
   "categories": {

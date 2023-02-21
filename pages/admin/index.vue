@@ -5,6 +5,7 @@
         <v-tabs v-model="tab" bkacground-color="primary">
           <v-tab value="categories">{{ $t('admin.tabs.categories') }}</v-tab>
           <v-tab value="parameters">{{ $t('admin.tabs.parameters') }}</v-tab>
+          <v-tab value="applications">{{ $t('admin.tabs.applications') }}</v-tab>
         </v-tabs>
         <v-window v-model="tab">
           <v-window-item value="categories">
@@ -12,6 +13,9 @@
           </v-window-item>
           <v-window-item value="parameters">
             <Parameters />
+          </v-window-item>
+          <v-window-item value="applications">
+            <Applications />
           </v-window-item>
         </v-window>
       </v-col>
@@ -22,13 +26,14 @@
 <script lang="ts">
 import { mapActions } from 'pinia';
 import Categories from '~~/components/admin/categories.vue';
-import Parameters from '../../components/admin/parameters.vue';
+import Parameters from '~~/components/admin/parameters.vue';
+import Applications from '~~/components/admin/applications.vue';
 
 export default {
     data: () => ({
         tab: "categories"
     }),
-    components: { Categories, Parameters },
+    components: { Applications, Categories, Parameters },
     methods: {
       ...mapActions(useGenerators, ['fetchGenerators'])
     },
