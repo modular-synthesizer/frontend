@@ -29,6 +29,16 @@ spec:
                 configMapKeyRef:
                   name: api
                   key: url
+            - name: PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: frontend-credentials
+                  key: public-key
+            - name: PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: frontend-credentials
+                  key: private-key
           resources:
             limits:
               cpu: 500m

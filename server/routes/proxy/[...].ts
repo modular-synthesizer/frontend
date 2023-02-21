@@ -24,11 +24,15 @@ export default defineEventHandler(async (event) => {
     url: `${process.env.API_URL}${event.path?.replace("/proxy", "")}`,
     params: getQuery(event),
     data: body,
+    headers: {
+      "X-PUBLIC-KEY": process.env.PUBLIC_KEY,
+      "X-PRIVATE-KEY": process.env.PRIVATE_KEY,
+    }
   };
 
   const results = (await instance(config) as any);
 
-  setResponseStatus(event, results.status)
+  setResponseStatus(event, results.status);
 
   return results.data
 })
