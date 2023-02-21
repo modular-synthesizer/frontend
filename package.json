@@ -9,7 +9,7 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "nuxt": "3.0.0",
+    "nuxt": "3.2.2",
     "vue-i18n": "^9.2.2"
   },
   "dependencies": {
