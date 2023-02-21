@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     method: event.node.req.method,
     url: `${process.env.API_URL}${event.path?.replace("/proxy", "")}`,
     params: getQuery(event),
-    body,
+    data: body,
   };
 
   const results = (await instance(config) as any).data;
