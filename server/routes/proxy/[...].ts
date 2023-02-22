@@ -38,7 +38,5 @@ export default defineEventHandler(async (event) => {
 
   setResponseStatus(event, results.status);
 
-  console.log("making query on " + url + " with public key size " + headers["X-PUBLIC-KEY"] + " and private key size " + headers["X-PRIVATE-KEY"]);
-
   return results.data
 })
