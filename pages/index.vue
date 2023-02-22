@@ -3,7 +3,7 @@
     <v-img src="/images/synthesizer.jpg" height="400" cover>
       <v-overlay :no-click-animation="true" persistent contained v-model="overlay" scrim="primary" class="d-flex flex-column-reverse">
         <div class="ml-6 mb-4 d-flex flex-column-reverse">
-          <div class="text-h5 text-grey-lighten-1 mt-4 lesser-stroke">La synthèse modulaire, simple et accessible</div>
+          <div class="text-h5 text-grey-lighten-1 mt-4 lesser-stroke">{{ $t('homepage.subtitle') }}</div>
           <div class="text-white text-h1 stroke">Synple</div>
         </div>
       </v-overlay>
@@ -43,7 +43,7 @@ export default {
         'd-flex': true,
         'flex-row': !this.mobile,
         'flex-column': this.mobile,
-        'justify-space-around': true
+        'justify-space-between': true
       }
     },
     descriptionsWidth(): string {
