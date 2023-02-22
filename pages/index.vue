@@ -3,35 +3,17 @@
     <v-img src="/images/synthesizer.jpg" height="400" cover>
       <v-overlay :no-click-animation="true" persistent contained v-model="overlay" scrim="primary" class="d-flex flex-column-reverse">
         <div class="ml-6 mb-4 d-flex flex-column-reverse">
-          <div class="text-h5 text-grey-lighten-1 mt-4 lesser-stroke">La synthèse modulaire accessible à toutes et tous.</div>
+          <div class="text-h5 text-grey-lighten-1 mt-4 lesser-stroke">La synthèse modulaire, simple et accessible</div>
           <div class="text-white text-h1 stroke">Synple</div>
         </div>
       </v-overlay>
     </v-img>
     <v-row class="mt-8">
       <v-col :xs="12" :class="descriptionsClasses">
-        <v-card :width="descriptionsWidth" :class="itemClasses" color="grey-lighten-4" elevation="0">
+        <v-card :width="descriptionsWidth" :class="itemClasses" color="grey-lighten-4" elevation="0" v-for="block in blocks">
           <v-card-text>
-            <div class="text-h4 text-purple-darken-4">Simple</div>
-            <div class="content-in-columns text-h5 mt-5 text-grey">
-              Nous mettons tout en oeuvre pour que votre expérience soit la plus fluide possible. Vous savez cliquer-glisser ? C'est suffisant pour utiliser l'application !
-            </div>
-          </v-card-text>
-        </v-card>
-        <v-card :width="descriptionsWidth" :class="itemClasses" color="grey-lighten-4" elevation="0">
-          <v-card-text>
-            <div class="text-h4 text-purple-darken-4">Puissant</div>
-            <div class="content-in-columns text-h5 mt-5 text-grey">
-              Nous mettons à votre disposition un ensemble complet et divers d'outils afin que vous puissiez donner libre court à votre inspiration !
-            </div>
-          </v-card-text>
-        </v-card>
-        <v-card :width="descriptionsWidth" :class="itemClasses" color="grey-lighten-4" elevation="0">
-          <v-card-text>
-            <div class="text-h4 text-purple-darken-4">Personnalisable</div>
-            <div class="content-in-columns text-h5 mt-5 text-grey">
-              Malgré tous nos efforts, vous ne trouvez pas votre bonheur ? Pas de problème, créez vos propres modules simplement avec l'éditeur dédié !
-            </div>
+            <div class="text-h4 text-purple-darken-4">{{ $t(`homepage.blocks.${block}.title`) }}</div>
+            <div class="content-in-columns text-h5 mt-5 text-grey">{{ $t(`homepage.blocks.${block}.text`) }}</div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -53,6 +35,9 @@ export default {
     mobile: useDisplay().mobile
   }),
   computed: {
+    blocks() {
+      return ['simple', 'powerful', 'customizable']
+    },
     descriptionsClasses(): any {
       return {
         'd-flex': true,

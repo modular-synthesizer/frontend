@@ -61,6 +61,23 @@
       "unknown": "Ce nom d'utilisateur est inconnu"
     }
   },
+  "homepage": {
+    "blocks": {
+      "simple": {
+        "title": "Simple",
+        "text": "Nous mettons tout en oeuvre pour que votre expérience soit la plus fluide possible. Vous savez cliquer-glisser ? C'est suffisant pour utiliser l'application !"
+      },
+      "powerful": {
+        "title": "Puissant",
+        "text": "Nous mettons à votre disposition un ensemble complet et divers d'outils afin que vous puissiez donner libre court à votre inspiration !"
+      },
+      "customizable": {
+        "title": "Personnalisable",
+        "text": "Malgré tous nos efforts, vous ne trouvez pas votre bonheur ? Pas de problème, créez vos propres modules simplement avec l'éditeur dédié !"
+      }
+    },
+    "subtitle": "La synthèse modulaire, simple et accessible"
+  },
   "init": {
     "paragraphs": {
       "welcome": "Bienvenue sur Synple, le synthétiseur modulaire... En plus simple !",
