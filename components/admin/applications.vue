@@ -18,20 +18,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <v-table>
-          <thead>
-            <tr>
-              <th>{{ $t('common.uuid') }}</th>
-              <th>{{ $t('common.name') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="application in applications">
-              <td>{{ application.id }}</td>
-              <td>{{ application.name }}</td>
-            </tr>
-          </tbody>
-        </v-Table>
+        <v-data-table v-if="applications" :headers="headers" :items="applications" item-value="id" />
       </v-col>
     </v-row>
   </v-container>
@@ -52,6 +39,14 @@ export default {
   }),
   async mounted() {
     this.applications = await api.auth_get("/applications")
+  },
+  computed: {
+    headers() {
+      return [
+        {title: this.$t('common.uuid'), key: 'id'},
+        {title: this.$t('common.name'), key: 'name'}
+      ]
+    }
   },
   methods: {
     add() {
