@@ -7,7 +7,10 @@
     </v-row>
     <v-row>
       <v-col :offset="3" cols="6">
-        <v-alert type="info">La variable "context" est accessible pour créer des noeuds dans le code, ainsi que la variable "destination" pour sortir l'audio</v-alert>
+        <v-alert type="info">
+          La variable "context" est accessible pour créer des noeuds dans le code,
+          ainsi que la variable "destination" pour sortir l'audio
+        </v-alert>
       </v-col>
     </v-row>
     <v-row>
@@ -47,26 +50,27 @@ export default {
     context: null as unknown as AudioContext,
     destination: null as unknown as GainNode,
     muted: false,
+    previousVolume: 1,
     code: localStorage.getItem("sandbox-code")
   }),
   methods: {
     init() {
-      if (this.initialized) return;
       this.context = new AudioContext();
       this.destination = this.context.createGain();
       this.destination.connect(this.context.destination);
-      this.initialized = true;
     },
     async run() {
-      this.context.close();
-      this.initialized = false;
+      if (this.context !== null) {
+        this.context.close();
+      }
       this.init();
       const fct = new Function('context', 'destination', this.code);
       fct(this.context, this.destination);
+      if (this.muted) this.context.suspend();
     },
     mute() {
       this.muted = !this.muted;
-      this.destination.gain.setValueAtTime(this.muted ? 0 : 1, this.context.currentTime);
+      this.muted ? this.context.suspend() : this.context.resume();
     },
     save(_event: PointerEvent) {
       const highlighter = this.$refs.highlighter as any;

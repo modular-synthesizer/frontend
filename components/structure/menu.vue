@@ -10,6 +10,7 @@
       </template>
     </template>
     <template v-slot:append>
+      <v-btn v-if="admin" to="/admin/sandbox">Sandbox</v-btn>
       <v-btn to="/tools" v-if="admin">Outils</v-btn>
       <v-btn to="/admin" v-if="admin">{{ $t('common.admin') }}</v-btn>
       <VBtn @click="logout" v-if="authenticated">{{ $t('common.logout') }}</VBtn>
