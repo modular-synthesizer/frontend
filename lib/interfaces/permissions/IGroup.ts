@@ -1,4 +1,4 @@
-import IScope from "./IRight";
+import IRight from "./IRight";
 
 /**
  * A group is a set of users possessing certain rights throughout the application. Rights can be used server-side
@@ -8,5 +8,6 @@ import IScope from "./IRight";
 export default interface IGroup {
   id?: string;
   slug: string;
-  scopes: IScope;
+  rights: IRight[];
+  is_default: boolean;
 }

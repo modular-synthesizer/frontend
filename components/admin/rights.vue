@@ -7,19 +7,11 @@
     </v-row>
     <v-row>
       <v-col xs="12">
-        <v-data-table :headers="headers" :items="rights">
-          <template v-slot:item="{ item }">
-            <tr>
-              <td>{{ item.columns.id }}</td>
-              <td>{{ item.columns.label }}</td>
-              <td>
-                <v-btn icon small variant="plain" @click="remove(item.raw)">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-              </td>
-            </tr>
-          </template>
-        </v-data-table>
+        <RightsTable v-slot="{ right }" :rights="rights">
+          <v-btn icon small variant="plain" @click="remove(right)">
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+        </RightsTable>
       </v-col>
     </v-row>
   </v-container>
@@ -30,10 +22,11 @@ import { mapActions, mapState } from 'pinia';
 import { useRights } from '~~/stores/permissions/rights';
 import SoloFieldForm from '~~/components/common/SoloFieldForm.vue';
 import IRight from '~~/lib/interfaces/permissions/IRight';
+import RightsTable from "./utils/RightsTable.vue";
 
 export default {
   name: "AdminRights",
-  components: { SoloFieldForm },
+  components: { SoloFieldForm, RightsTable },
   data: () => ({
     right: { label: '' } as IRight
   }),

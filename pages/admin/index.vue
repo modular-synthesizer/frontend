@@ -8,23 +8,27 @@
       </v-list>
     </v-navigation-drawer>
     <v-container>
-      <v-window v-model="tab">
-        <v-window-item value="groups">
-          <AdminGroups />
-        </v-window-item>
-        <v-window-item value="rights">
-          <AdminRights />
-        </v-window-item>
-        <v-window-item value="categories">
-          <Categories />
-        </v-window-item>
-        <v-window-item value="parameters">
-          <Parameters />
-        </v-window-item>
-        <v-window-item value="applications">
-          <Applications />
-        </v-window-item>
-      </v-window>
+      <v-row>
+        <v-col cols="8" offset="2">
+          <v-window v-model="tab">
+            <v-window-item value="groups">
+              <AdminGroups />
+            </v-window-item>
+            <v-window-item value="rights">
+              <AdminRights />
+            </v-window-item>
+            <v-window-item value="categories">
+              <Categories />
+            </v-window-item>
+            <v-window-item value="parameters">
+              <Parameters />
+            </v-window-item>
+            <v-window-item value="applications">
+              <Applications />
+            </v-window-item>
+          </v-window>
+        </v-col>
+      </v-row>
     </v-container>
   </v-container>
 </template>
