@@ -19,6 +19,8 @@
           lang="javascript"
           theme="light"
           :textEditor="true"
+          @getCodeValue="save"
+          ref="highlighter"
         ></HighCode>
       </v-col>
     </v-row>
@@ -45,7 +47,7 @@ export default {
     context: null as unknown as AudioContext,
     destination: null as unknown as GainNode,
     muted: false,
-    code: "const context = new AudioContext({})"
+    code: localStorage.getItem("sandbox-code")
   }),
   methods: {
     init() {
@@ -65,7 +67,15 @@ export default {
     mute() {
       this.muted = !this.muted;
       this.destination.gain.setValueAtTime(this.muted ? 0 : 1, this.context.currentTime);
+    },
+    save(_event: PointerEvent) {
+      const highlighter = this.$refs.highlighter as any;
+      localStorage.setItem("sandbox-code", highlighter.modelValue);
     }
-  }
+  },
 }
+</script>
+
+<script setup lang="ts">
+const highlighter = ref(null);
 </script>

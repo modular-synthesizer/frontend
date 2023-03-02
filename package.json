@@ -23,9 +23,7 @@
     "pinia": "^2.0.23",
     "sass": "^1.55.0",
     "vue-class-component": "^7.2.6",
-    "vue-code-highlight": "^0.7.8",
     "vue-highlight-code": "^0.1.16",
-    "vue3-highlightjs": "^1.0.5",
     "vuetify": "3.1.5"
   }
 }
