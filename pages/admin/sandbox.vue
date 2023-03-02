@@ -12,7 +12,14 @@
     </v-row>
     <v-row>
       <v-col :cols="6" :offset="3">
-        <v-textarea variant="outlined" :rows="20" @click="init" no-resize v-model="code" />
+        <HighCode
+          class="code"
+          :codeValue="code"
+          width="100%"
+          lang="javascript"
+          theme="light"
+          :textEditor="true"
+        ></HighCode>
       </v-col>
     </v-row>
     <v-row>
@@ -28,13 +35,17 @@
 </template>
 
 <script lang="ts">
+import { HighCode } from 'vue-highlight-code';
+import 'vue-highlight-code/dist/style.css';
+
 export default {
+  components: { HighCode },
   data: () => ({
     initialized: false,
     context: null as unknown as AudioContext,
     destination: null as unknown as GainNode,
     muted: false,
-    code: ''
+    code: "const context = new AudioContext({})"
   }),
   methods: {
     init() {
