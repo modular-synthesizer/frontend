@@ -19,6 +19,7 @@
           class="code"
           :codeValue="code"
           width="100%"
+          height="500px"
           lang="javascript"
           theme="light"
           :textEditor="true"
@@ -51,7 +52,7 @@ export default {
     destination: null as unknown as GainNode,
     muted: false,
     previousVolume: 1,
-    code: localStorage.getItem("sandbox-code")
+    code: localStorage.getItem("sandbox-code") ?? ""
   }),
   methods: {
     init() {
