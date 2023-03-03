@@ -1,12 +1,12 @@
 <template>
   <v-container>
     <v-row>
-      <v-col :offset="3">
+      <v-col :offset="offset">
         <div class="text-h3">Bac à sable</div>
       </v-col>
     </v-row>
     <v-row>
-      <v-col :offset="3" cols="6">
+      <v-col :offset="offset" :cols="cols">
         <v-alert type="info">
           La variable "context" est accessible pour créer des noeuds dans le code,
           ainsi que la variable "destination" pour sortir l'audio
@@ -14,7 +14,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col :cols="6" :offset="3">
+      <v-col :cols="cols" :offset="offset">
         <HighCode
           class="code"
           :codeValue="code"
@@ -29,7 +29,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="6" offset="3">
+      <v-col :cols="cols" :offset="offset">
         <v-btn color="primary" @click="run">Valider</v-btn>
         <v-btn icon :color="muted ? 'error' : 'success'" size="small" class="ml-2" @click="mute">
           <v-icon v-if="muted">mdi-volume-off</v-icon>
@@ -52,7 +52,9 @@ export default {
     destination: null as unknown as GainNode,
     muted: false,
     previousVolume: 1,
-    code: localStorage.getItem("sandbox-code") ?? ""
+    code: localStorage.getItem("sandbox-code") ?? "",
+    offset: 2,
+    cols: 8,
   }),
   methods: {
     init() {
