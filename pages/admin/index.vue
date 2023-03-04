@@ -26,6 +26,9 @@
             <v-window-item value="applications">
               <Applications />
             </v-window-item>
+            <v-window-item value="generators">
+              <Generators />
+            </v-window-item>
           </v-window>
         </v-col>
       </v-row>
@@ -38,9 +41,10 @@ import Categories from '~~/components/admin/categories.vue';
 import Parameters from '~~/components/admin/parameters.vue';
 import Applications from '~~/components/admin/applications.vue';
 import AdminRights from '~~/components/admin/rights.vue';
+import Generators from "~~/components/admin/generators.vue"
 
 export default {
-  components: { Applications, Categories, Parameters, AdminRights },
+  components: { Applications, Categories, Generators, Parameters, AdminRights },
   data: () => ({
     tab: 'groups',
     items: [
@@ -48,7 +52,8 @@ export default {
       {name: 'rights', icon: 'mdi-account-group'},
       {name: 'categories', icon: 'mdi-folder-outline'},
       {name: 'parameters', icon: 'mdi-music-circle'},
-      {name: 'applications', icon: 'mdi-lock-outline'}
+      {name: 'applications', icon: 'mdi-lock-outline'},
+      {name: "generators", icon: "mdi-factory"},
     ]
   }),
   methods: {

@@ -77,6 +77,7 @@ export default {
     },
     save(_event: PointerEvent) {
       const highlighter = this.$refs.highlighter as any;
+      this.code = highlighter.modelValue;
       localStorage.setItem("sandbox-code", highlighter.modelValue);
     }
   },
