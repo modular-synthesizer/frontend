@@ -55,7 +55,13 @@ export default {
     },
     ...mapState(useDescriptors, {descriptors: 'parameters'}),
     descriptorsList() {
-      return this.descriptors.map(d => ({title: d.name, value: d.id}))
+      return this.descriptors.map(d => {
+        const c = d.constraints;
+        return {
+          title: `${d.name} [${c.minimum};${c.maximum}] +/- ${c.step}p${c.precision}`,
+          value: d.id
+        }
+      })
     }
   },
   methods: {
