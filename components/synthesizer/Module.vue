@@ -20,11 +20,12 @@ import Knob from "../controls/Knob.vue";
 import SmallKnob from "../controls/SmallKnob.vue";
 import LargeKnob from "../controls/LargeKnob.vue";
 import MuteButton from "../controls/MuteButton.vue";
+import MidiController from "../controls/MidiController.vue";
 import Port from "../controls/Port.vue";
 
 export default {
   name: "module-body",
-  components: { Knob, LargeKnob, MuteButton, SmallKnob, Port },
+  components: { Knob, LargeKnob, MuteButton, SmallKnob, Port, MidiController },
   props: {
     mod: {
       type: Object as PropType<Mod>,

@@ -28,7 +28,10 @@ class InnerNodesFactory {
             const audioNodes: InnerAudioNode[] = await executor.func(innerNode.name, ctx) as unknown as InnerAudioNode[];
 
             audioNodes.forEach((a: InnerAudioNode) => {
-                if (a.node instanceof AudioScheduledSourceNode) a.node.start();
+                if (a.node instanceof AudioScheduledSourceNode) {
+                    console.log(a);
+                    a.node.start();
+                }
                 results.push(a);
             })
         }

@@ -55,7 +55,7 @@ export default {
   },
   data: () => ({
     components: [
-      'SmallKnob', 'LargeKnob', 'Knob', 'Port'
+      'SmallKnob', 'LargeKnob', 'Knob', 'Port', 'MidiController'
     ],
   }),
   computed: {

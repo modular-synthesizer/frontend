@@ -33,6 +33,7 @@ import Mod from '~~/lib/wrappers/Mod';
 import Port from '~~/lib/wrappers/Port';
 
 export default {
+  name: 'controls-port',
   data: () => ({
     radius: PORT_RADIUS
   }),
