@@ -10,7 +10,7 @@
           <div class="text-h5">{{ $t('parameters.dialog.steps.informations') }}</div>
           <v-container fluid>
             <v-row>
-              <v-col cols="6">
+              <v-col cols="4">
                 <v-text-field
                   v-model="parameter.name"
                   variant="outlined"
@@ -19,7 +19,16 @@
                   required
                 />
               </v-col>
-              <v-col cols="6">
+              <v-col cols="4">
+                <v-text-field
+                  v-model="parameter.field"
+                  variant="outlined"
+                  :label="$t('parameters.dialog.fields.field.label')"
+                  :rules="[fieldRequired]"
+                  required
+                />
+              </v-col>
+              <v-col cols="4">
                 <v-text-field
                   v-model="parameter.value"
                   type="number"
@@ -117,6 +126,9 @@ export default {
     },
     nameRequired() {
       return this.parameter.name !== "" || "parameters.name.required"
+    },
+    fieldRequired() {
+      return this.parameter.field !== "" || "parameters.field.required"
     },
     debouncedClamp: debounce(function() {
       if (this != undefined) {
