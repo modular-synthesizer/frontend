@@ -16,13 +16,9 @@ export default {
   }),
   mounted() {
     navigator.requestMIDIAccess().then((access: MIDIAccess) => {
-      console.log(access);
       for (let input of access.inputs.values()) {
-        console.log(input);
         input.onmidimessage = (message: MIDIMessage) => {
-          console.log(message);
           if (message.data[0] === 144) {
-            console.log(message.data[1])
           }
         }
       }

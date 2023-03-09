@@ -19,7 +19,6 @@ export const useRights = defineStore('rights', {
       this.rights.push(await api.auth_post('/rights', { label }))
     },
     async remove(right: IRight) {
-      console.log(right);
       await api.auth_delete(`/rights/${right.id}`);
       remove(this.rights, right);
     }

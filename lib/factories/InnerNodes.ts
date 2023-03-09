@@ -26,13 +26,6 @@ class InnerNodesFactory {
             eval(fullcode);
 
             const audioNodes: InnerAudioNode[] = await executor.func(innerNode.name, ctx) as unknown as InnerAudioNode[];
-            
-            if(fullcode.indexOf('OscillatorNode') > 0) {
-                console.log(innerNode.generator);
-                console.log(fullcode)
-                console.log(audioNodes);
-                console.log(audioNodes[0].node.frequency.value);
-            }
 
             audioNodes.forEach((a: InnerAudioNode) => {
                 if (a.node instanceof AudioScheduledSourceNode) a.node.start()
