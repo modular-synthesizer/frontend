@@ -7,7 +7,6 @@ import GenericKnob from "~~/components/controls/utils/GenericKnob.vue"
 import Mod from "~~/lib/wrappers/Mod";
 
 export default {
-  name: 'SmallKnob',
   props: {
     x: { type: Number, default: 0 },
     y: { type: Number, default: 0 },

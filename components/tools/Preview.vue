@@ -4,7 +4,7 @@
       <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
       <module-screws :slots="tool.slots" />
       <template v-for="control in tool.controls">
-        <component :is="control.component" :mod="mod" v-bind="control.payload" />
+        <ControlsWrapper :mod="mod" :control="control" />
       </template>
       <rect :width="modWidth" :height="modHeight" fill="transparent" />
     </g>

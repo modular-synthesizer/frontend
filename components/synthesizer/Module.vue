@@ -5,7 +5,7 @@
   >
     <rect :width="width" :height="height" stroke="black" fill="#A3A3A3" />
     <template v-if="mod.controls.length > 0" v-for="control in mod.controls">
-      <component :is="control.component" :mod="mod" v-bind="control.payload"/>
+      <ControlsWrapper :mod="mod" :control="control" />
     </template>
     <module-screws :slots="mod.slots" />
   </g>
@@ -16,16 +16,8 @@ import { PropType } from 'vue';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { mapActions } from 'pinia';
 import Mod from '~~/lib/wrappers/Mod';
-import Knob from "../controls/Knob.vue";
-import SmallKnob from "../controls/SmallKnob.vue";
-import LargeKnob from "../controls/LargeKnob.vue";
-import MuteButton from "../controls/MuteButton.vue";
-import MidiController from "../controls/MidiController.vue";
-import Port from "../controls/Port.vue";
-
 export default {
   name: "module-body",
-  components: { Knob, LargeKnob, MuteButton, SmallKnob, Port, MidiController },
   props: {
     mod: {
       type: Object as PropType<Mod>,
