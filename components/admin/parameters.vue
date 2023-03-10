@@ -12,6 +12,7 @@
             <tr>
               <th>{{ $t('common.uuid') }}</th>
               <th>{{ $t('common.name') }}</th>
+              <th>Champ ciblé</th>
               <th>Default</th>
               <th>Constraints</th>
             </tr>
@@ -20,6 +21,7 @@
             <tr v-for="parameter in parameters">
               <td>{{ parameter.id }}</td>
               <td>{{ parameter.name }}</td>
+              <td>{{ parameter.field }}</td>
               <td>{{ parameter.value }}</td>
               <td><constraints :constraints="parameter.constraints" /></td>
             </tr>

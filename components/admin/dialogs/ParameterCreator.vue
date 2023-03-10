@@ -50,7 +50,7 @@
               <v-col xs="12" sm="6" md="3">
                 <v-text-field
                   variant="outlined"
-                  v-model="parameter.constraints.minimum"
+                  v-model.number="parameter.constraints.minimum"
                   :label="$t('parameters.dialog.fields.minimum.label')"
                   type="number"
                   @update:modelValue="debouncedClamp"
