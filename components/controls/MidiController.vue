@@ -4,6 +4,7 @@
 
 <script lang="ts">
 import Mod from '~~/lib/wrappers/Mod';
+import { onKeyDown, onKeyUp } from '@/composables/useMidi';
 
 export default {
   props: {
@@ -15,14 +16,9 @@ export default {
     inputs: [] as MIDIInput[],
   }),
   mounted() {
-    navigator.requestMIDIAccess().then((access: MIDIAccess) => {
-      for (let input of access.inputs.values()) {
-        input.onmidimessage = (message: MIDIMessage) => {
-          if (message.data[0] === 144) {
-          }
-        }
-      }
-    })
+    onKeyDown((note: number) => {
+      console.log("key down", this.mod.id, note);
+    });
   },
   computed: {
     pitchSource(): ConstantSourceNode {
