@@ -6,21 +6,30 @@ interface ListenersList {
   noteOff: midiListenerCallback[];
 }
 
+let wasReleased: boolean = true;
+
 export const midiListeners: ListenersList = { noteOn: [], noteOff: [] };
 
 function initKeyboardDevice() {
   const keyboardMapper: keyboardMapper = {
     //    70    72          75    77    79
     // 69    71    73    74    76    78    80
-    KeyQ: 69, Digit2: 70, KeyW: 71, Digit3: 72, KeyE: 73, KeyR: 74, Digit4: 75, KeyT: 76, Digit5: 77, KeyY: 78, Digit6: 79, KeyU: 80
+    KeyQ: 69, Digit2: 70, KeyW: 71, Digit3: 72, KeyE: 73, KeyR: 74, Digit5: 75, KeyT: 76, Digit6: 77, KeyY: 78, Digit7: 79, KeyU: 80
   };
-
-  window.onkeydown = function(event: KeyboardEvent) {
-    const found: boolean = Object.keys(keyboardMapper).includes(event.code);
-    if (found) {
-      triggerListeners(midiListeners.noteOn, keyboardMapper[event.code] as number);
+  const eventHandler = (collection: midiListenerCallback[], val: boolean) => {
+    return function(event: KeyboardEvent) {
+      if (wasReleased === val) return;
+      wasReleased = val;
+      const found: boolean = Object.keys(keyboardMapper).includes(event.code);
+      console.log(event.code, found);
+      if (found) {
+        triggerListeners(collection, keyboardMapper[event.code] as number);
+      }
     }
   }
+
+  window.onkeydown = eventHandler(midiListeners.noteOn, false)
+  window.onkeyup = eventHandler(midiListeners.noteOff, true)
 }
 
 /**
@@ -54,5 +63,5 @@ export function onKeyDown(callback: midiListenerCallback) {
 }
 
 export function onKeyUp(callback: midiListenerCallback) {
-  midiListeners.noteOn.push(callback);
+  midiListeners.noteOff.push(callback);
 }
