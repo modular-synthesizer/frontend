@@ -1,14 +1,17 @@
+import { find, get, includes, keys, pull, remove } from "lodash";
 import keyboardMapper from "~~/lib/types/keyboardMapper";
 import midiListenerCallback from "~~/lib/types/midiListenerCallback";
 
 interface ListenersList {
   noteOn: midiListenerCallback[];
   noteOff: midiListenerCallback[];
+  lastNoteOff: midiListenerCallback[];
+  firstNoteOn: midiListenerCallback[];
 }
 
-let wasReleased: boolean = true;
+let keyPressed: number[] = [];
 
-export const midiListeners: ListenersList = { noteOn: [], noteOff: [] };
+export const midiListeners: ListenersList = { noteOn: [], noteOff: [], lastNoteOff: [], firstNoteOn: [] };
 
 function initKeyboardDevice() {
   const keyboardMapper: keyboardMapper = {
@@ -16,20 +19,27 @@ function initKeyboardDevice() {
     // 69    71    73    74    76    78    80
     KeyQ: 69, Digit2: 70, KeyW: 71, Digit3: 72, KeyE: 73, KeyR: 74, Digit5: 75, KeyT: 76, Digit6: 77, KeyY: 78, Digit7: 79, KeyU: 80
   };
-  const eventHandler = (collection: midiListenerCallback[], val: boolean) => {
-    return function(event: KeyboardEvent) {
-      if (wasReleased === val) return;
-      wasReleased = val;
-      const found: boolean = Object.keys(keyboardMapper).includes(event.code);
-      console.log(event.code, found);
-      if (found) {
-        triggerListeners(collection, keyboardMapper[event.code] as number);
-      }
-    }
+
+  window.onkeydown = function(event: KeyboardEvent) {
+    const note = get(keyboardMapper, event.code);
+
+    if (note === undefined) return;
+
+    if (keyPressed.length === 0) triggerListeners(midiListeners.firstNoteOn, note)
+
+    if (includes(keyPressed, note)) return;
+    keyPressed.push(note);
+    triggerListeners(midiListeners.noteOn, note);
   }
 
-  window.onkeydown = eventHandler(midiListeners.noteOn, false)
-  window.onkeyup = eventHandler(midiListeners.noteOff, true)
+  window.onkeyup = function(event: KeyboardEvent) {
+    const note = get(keyboardMapper, event.code);
+
+    if (note === undefined) return;
+    pull(keyPressed, note);
+    triggerListeners(midiListeners.noteOff, note);
+    if (keyPressed.length <= 0) triggerListeners(midiListeners.lastNoteOff, note);
+  }
 }
 
 /**
@@ -64,4 +74,12 @@ export function onKeyDown(callback: midiListenerCallback) {
 
 export function onKeyUp(callback: midiListenerCallback) {
   midiListeners.noteOff.push(callback);
+}
+
+export function onLastKeyUp(callback: midiListenerCallback) {
+  midiListeners.lastNoteOff.push(callback)
+}
+
+export function onFirstKeyDown(callback: midiListenerCallback) {
+  midiListeners.firstNoteOn.push(callback)
 }
