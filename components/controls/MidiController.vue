@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import Mod from '~~/lib/wrappers/Mod';
-import { onKeyDown, onKeyUp, onLastKeyUp } from '@/composables/useMidi';
+import { onKeyDown, onLastKeyUp, onFirstKeyDown } from '@/composables/useMidi';
 import Envelope from '~~/lib/utils/envelope';
 
 export default {
@@ -22,15 +22,15 @@ export default {
   },
   mounted() {
     this.env.bind(this.envelopeSource);
-    onFirstKeyDown((note: number) => {
+    onFirstKeyDown((_note: number) => {
       this.env.trigger();
     })
     onKeyDown((note: number) => {
-      const voltage: number = 2 ** ((note - 69) / 12) - 1
+      const voltage: number = (note - 69) / 12;
       this.pitchSource.offset.cancelScheduledValues(this.ctx.currentTime);
       this.pitchSource.offset.setValueAtTime(voltage, this.ctx.currentTime);
     });
-    onLastKeyUp((note: number) => {
+    onLastKeyUp((_note: number) => {
       this.env.release();
     });
   },
