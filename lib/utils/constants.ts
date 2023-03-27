@@ -22,3 +22,5 @@ export const MAX_ZOOM_IN = 2;
 export const TOPBAR_HEIGHT = 64;
 
 export const PORT_RADIUS = 13;
+
+export const POLYPHONY_CHANNELS = 16;

@@ -1,14 +1,14 @@
-import { InnerLink, InnerNode } from "../interfaces/ITool";
-import IModule from "../interfaces/IModule";
+import { InnerLink } from "../interfaces/ITool";
 import Port, { InputPort, OutputPort } from "./Port";
 import InnerAudioNode from "./InnerAudioNode";
-import InnerNodesFactory from '../factories/InnerNodes'
 import InnerLinksFactory from '../factories/InnerLinks'
 import Parameter from "./Parameter";
 import { flatten } from 'lodash';
 import Link from "./Link";
 import { IControl } from "../interfaces/IControl";
 import IPort from "../interfaces/IPort";
+import Channel from "./Channel";
+import IParameter from "../interfaces/IParameter";
 
 export default class Mod {
   public readonly id: string;
@@ -22,8 +22,9 @@ export default class Mod {
   public readonly parameters: Parameter[];
   public readonly category: string;
   public readonly controls: IControl[] = [];
+  public readonly channels: Channel[];
 
-  constructor({ id, rack, slot, slots, type, nodes, links, ports, parameters, category, controls }: any) {
+  constructor({ id, rack, slot, slots, type, nodes, links, ports, parameters, category, controls, channels }: any) {
     this.id = id;
     this.rack = rack;
     this.slot = slot;
@@ -31,6 +32,9 @@ export default class Mod {
     this.type = type;
     this.category = category;
     this.controls = controls;
+    this.channels = channels;
+
+    console.log(this.channels)
     
     this.ports = ports.map((iport: IPort) => {
       return iport.kind === "input" ? new InputPort(iport, this) : new OutputPort(iport, this);
@@ -38,7 +42,7 @@ export default class Mod {
 
     this.audioNodes = nodes
     this.links = InnerLinksFactory.link(this.audioNodes, links);
-    this.parameters = parameters.map(p => new Parameter(p, this));
+    this.parameters = parameters.map((p: IParameter) => new Parameter(p, this));
 
     usePorts().addPorts(this.ports);
   }

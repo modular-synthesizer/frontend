@@ -1,4 +1,6 @@
 import IModule from "../interfaces/IModule";
+import { POLYPHONY_CHANNELS } from "../utils/constants";
+import Channel from "../wrappers/Channel";
 import InnerAudioNode from "../wrappers/InnerAudioNode";
 import Mod from "../wrappers/Mod";
 import InnerNodesFactory from "./InnerNodes"
@@ -22,7 +24,14 @@ export class ModulesFactory {
 
   public async build(details: IModule) {
     const audioNodes: InnerAudioNode[] = await InnerNodesFactory.create(details.nodes);
-    return new Mod({...details, nodes: audioNodes})
+
+    const channels: Channel[] = [];
+    for (let i = 0 ; i < POLYPHONY_CHANNELS ; ++i) {
+      const channel = new Channel(i);
+      channel.nodes = await InnerNodesFactory.create(details.nodes);
+      channels.push(channel);
+    }
+    return new Mod({...details, nodes: audioNodes, channels})
   }
 }
 
