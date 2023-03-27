@@ -6,6 +6,7 @@
 import Mod from '~~/lib/wrappers/Mod';
 import { onKeyDown, onLastKeyUp, onFirstKeyDown } from '@/composables/useMidi';
 import Envelope from '~~/lib/utils/envelope';
+import Channel from '~~/lib/wrappers/Channel';
 
 export default {
   props: {
@@ -21,26 +22,24 @@ export default {
     }
   },
   mounted() {
-    this.env.bind(this.envelopeSource);
+    this.env.bind(this.mod.channels[0].getNode(this.envelope)?.node as ConstantSourceNode);
+    console.log(this.env);
     onFirstKeyDown((_note: number) => {
+      console.log("triggering envelope");
       this.env.trigger();
     })
     onKeyDown((note: number) => {
       const voltage: number = (note - 69) / 12;
-      this.pitchSource.offset.cancelScheduledValues(this.ctx.currentTime);
-      this.pitchSource.offset.setValueAtTime(voltage, this.ctx.currentTime);
+      const pitch: ConstantSourceNode = this.mod.channels[0].getNode(this.pitch)?.node as ConstantSourceNode
+      pitch.offset.cancelScheduledValues(this.ctx.currentTime);
+      pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
     });
     onLastKeyUp((_note: number) => {
+      console.log("releasing envelope");
       this.env.release();
     });
   },
   computed: {
-    pitchSource(): ConstantSourceNode {
-      return this.mod.node(this.pitch)?.node as ConstantSourceNode;
-    },
-    envelopeSource(): ConstantSourceNode {
-      return this.mod.node(this.envelope)?.node as ConstantSourceNode;
-    },
     ctx(): AudioContext {
       return useAudioContext().context as AudioContext;
     },

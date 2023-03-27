@@ -13,8 +13,10 @@ export const useModuleMenu = defineStore('moduleMenu', {
     disconnectLinks() {
       if (this.mod === null) return;
 
-      for (let link of this.mod.links) {
-        useLinksList().delete(link.id as string);
+      for(let channel of this.mod.channels) {
+        for (let link of channel.links) {
+          useLinksList().delete(link.id as string);
+        }
       }
       useContextMenus().hide();
     },
