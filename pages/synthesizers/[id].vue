@@ -44,7 +44,7 @@ export default {
   async mounted() {
     this.fetchTools();
     await useGenerators().fetchGenerators();
-    initMidiDevices();
+    initKeyboardDevice();
   }
 }
 </script>

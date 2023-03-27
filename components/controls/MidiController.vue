@@ -4,10 +4,9 @@
 
 <script lang="ts">
 import Mod from '~~/lib/wrappers/Mod';
-import { onKeyDown, onLastKeyUp, onFirstKeyDown } from '@/composables/useMidi';
 import Envelope from '~~/lib/utils/envelope';
-import Channel from '~~/lib/wrappers/Channel';
 import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
+import KeyMapper from '~~/lib/interfaces/KeyMapper';
 
 export default {
   props: {
@@ -20,28 +19,30 @@ export default {
       inputs: [] as MIDIInput[],
       env: new Envelope(),
       keysCount: 0,
-      channelsOccupancy: new Array(POLYPHONY_CHANNELS).fill(false)
     }
   },
   mounted() {
     for (let channel of this.mod.channels) {
       this.env.bind(channel.getNode(this.envelope)?.node as ConstantSourceNode);
     }
-    onFirstKeyDown((_note: number) => {
-      this.env.trigger();
-    })
-    onKeyDown((note: number) => {
+    onKeyDown((note: number, mapper: KeyMapper) => {
       const voltage: number = (note - 69) / 12;
       const channel = this.mod.freeChannel();
       channel.used = true;
+      mapper.channel = channel.index;
+
+      this.env.trigger(channel.index);
 
       const pitch: ConstantSourceNode = channel.getNode(this.pitch)?.node as ConstantSourceNode
       pitch.offset.cancelScheduledValues(this.ctx.currentTime);
       pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
     });
-    onLastKeyUp((_note: number) => {
-      this.env.release();
-    });
+    onKeyUp((note: number, mapper: KeyMapper) => {
+      console.log("PATATE", mapper)
+      this.env.release(mapper.channel);
+      this.mod.channel(mapper.channel).used = false;
+      mapper.channel = -1
+    })
   },
   computed: {
     ctx(): AudioContext {
