@@ -4,8 +4,9 @@
 
 <script lang="ts">
 import Mod from '~~/lib/wrappers/Mod';
-import { onKeyDown, onLastKeyUp, onFirstKeyDown } from '@/composables/useMidi';
 import Envelope from '~~/lib/utils/envelope';
+import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
+import KeyMapper from '~~/lib/interfaces/KeyMapper';
 
 export default {
   props: {
@@ -16,31 +17,35 @@ export default {
   data: function() {
     return {
       inputs: [] as MIDIInput[],
-      env: new Envelope(),
+      envelopes: [] as Envelope[],
       keysCount: 0,
     }
   },
   mounted() {
-    this.env.bind(this.envelopeSource);
-    onFirstKeyDown((_note: number) => {
-      this.env.trigger();
-    })
-    onKeyDown((note: number) => {
+    for (let channel of this.mod.channels) {
+      const env = new Envelope();
+      env.bind(channel.getNode(this.envelope)?.node as ConstantSourceNode);
+      this.envelopes.push(env);
+    }
+    onKeyDown((note: number, mapper: KeyMapper) => {
       const voltage: number = (note - 69) / 12;
-      this.pitchSource.offset.cancelScheduledValues(this.ctx.currentTime);
-      this.pitchSource.offset.setValueAtTime(voltage, this.ctx.currentTime);
+      const channel = this.mod.freeChannel();
+      channel.used = true;
+      mapper.channel = channel.index;
+
+      this.envelopes[channel.index].trigger();
+
+      const pitch: ConstantSourceNode = channel.getNode(this.pitch)?.node as ConstantSourceNode
+      pitch.offset.cancelScheduledValues(this.ctx.currentTime);
+      pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
     });
-    onLastKeyUp((_note: number) => {
-      this.env.release();
-    });
+    onKeyUp((note: number, mapper: KeyMapper) => {
+      this.envelopes[mapper.channel].release();
+      this.mod.channel(mapper.channel).used = false;
+      mapper.channel = -1
+    })
   },
   computed: {
-    pitchSource(): ConstantSourceNode {
-      return this.mod.node(this.pitch)?.node as ConstantSourceNode;
-    },
-    envelopeSource(): ConstantSourceNode {
-      return this.mod.node(this.envelope)?.node as ConstantSourceNode;
-    },
     ctx(): AudioContext {
       return useAudioContext().context as AudioContext;
     },

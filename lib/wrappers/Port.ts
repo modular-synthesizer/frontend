@@ -1,9 +1,11 @@
 import IPort from "../interfaces/IPort";
 import Link from "./Link";
 import Mod from "./Mod";
-import { remove } from 'lodash';
+import { find, remove } from 'lodash';
 import { IControl } from "../interfaces/IControl";
 import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
+import Channel from "./Channel";
+import InnerAudioNode from "./InnerAudioNode";
 
 export default abstract class Port implements IPort {
   id: string;
@@ -39,13 +41,28 @@ export default abstract class Port implements IPort {
     this.links.push(via);
     origin.links.push(via);
 
-    origin.audioNode.connect(this.audioNode, origin.index, this.index)
+    this.mod.channels.forEach((channel: Channel) => {
+      const fromNode: InnerAudioNode = origin.mod.channel(channel.index).getNode(origin.target) as InnerAudioNode
+      const toNode: InnerAudioNode = channel.getNode(this.target) as InnerAudioNode;
+      fromNode.node.connect(toNode.node, origin.index, this.index);
+    })
+
+    // origin.audioNode.connect(this.audioNode, origin.index, this.index)
   }
 
   public disconnect(origin: Port, via: Link) {
     remove(this.links, {id: via.id});
     remove(origin.links, {id: via.id});
-    origin.audioNode.disconnect(this.audioNode);
+
+
+    this.mod.channels.forEach((channel: Channel) => {
+      const fromNode: AudioNode = origin.mod.channel(channel.index).getNode(origin.target)?.node as AudioNode;
+      const toNode: AudioNode = channel.getNode(this.target)?.node as AudioNode;
+
+      fromNode.disconnect(toNode);
+    });
+
+    // origin.audioNode.disconnect(this.audioNode);
   }
 
   public get audioNode(): AudioNode {
