@@ -24,7 +24,9 @@ export default {
     }
   },
   mounted() {
-    this.env.bind(this.mod.channels[0].getNode(this.envelope)?.node as ConstantSourceNode);
+    for (let channel of this.mod.channels) {
+      this.env.bind(channel.getNode(this.envelope)?.node as ConstantSourceNode);
+    }
     onFirstKeyDown((_note: number) => {
       this.env.trigger();
     })
