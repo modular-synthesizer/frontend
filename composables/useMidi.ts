@@ -26,24 +26,14 @@ export function initKeyboardDevice() {
     {key: "KeyY", midicode: 78, channel: -1},
     {key: "Digit7", midicode: 79, channel: -1},
     {key: "KeyU", midicode: 80, channel: -1}
-  ]
-  // const keyboardMapper: keyboardMapper = {
-  //   //    70    72          75    77    79
-  //   // 69    71    73    74    76    78    80
-  //   KeyQ: 69, Digit2: 70, KeyW: 71, Digit3: 72, KeyE: 73, KeyR: 74, Digit5: 75, KeyT: 76, Digit6: 77, KeyY: 78, Digit7: 79, KeyU: 80
-  // };
+  ];
 
   window.onkeydown = function(event: KeyboardEvent) {
-
-    console.log(event.code);
-
     if (!some(keyboardMap, {key: event.code})) return;
 
     const mapper = find(keyboardMap, {key: event.code}) as KeyMapper;
     if (mapper.channel !== -1) return;
     const note = mapper.midicode;
-
-    console.log(mapper, note);
 
     triggerListeners(midiListeners.noteOn, note, mapper);
   }

@@ -17,13 +17,15 @@ export default {
   data: function() {
     return {
       inputs: [] as MIDIInput[],
-      env: new Envelope(),
+      envelopes: [] as Envelope[],
       keysCount: 0,
     }
   },
   mounted() {
     for (let channel of this.mod.channels) {
-      this.env.bind(channel.getNode(this.envelope)?.node as ConstantSourceNode);
+      const env = new Envelope();
+      env.bind(channel.getNode(this.envelope)?.node as ConstantSourceNode);
+      this.envelopes.push(env);
     }
     onKeyDown((note: number, mapper: KeyMapper) => {
       const voltage: number = (note - 69) / 12;
@@ -31,15 +33,14 @@ export default {
       channel.used = true;
       mapper.channel = channel.index;
 
-      this.env.trigger(channel.index);
+      this.envelopes[channel.index].trigger();
 
       const pitch: ConstantSourceNode = channel.getNode(this.pitch)?.node as ConstantSourceNode
       pitch.offset.cancelScheduledValues(this.ctx.currentTime);
       pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
     });
     onKeyUp((note: number, mapper: KeyMapper) => {
-      console.log("PATATE", mapper)
-      this.env.release(mapper.channel);
+      this.envelopes[mapper.channel].release();
       this.mod.channel(mapper.channel).used = false;
       mapper.channel = -1
     })
