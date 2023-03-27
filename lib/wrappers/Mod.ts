@@ -1,7 +1,5 @@
 import { InnerLink } from "../interfaces/ITool";
 import Port, { InputPort, OutputPort } from "./Port";
-import InnerAudioNode from "./InnerAudioNode";
-import InnerLinksFactory from '../factories/InnerLinks'
 import Parameter from "./Parameter";
 import { flatten } from 'lodash';
 import Link from "./Link";
@@ -12,19 +10,19 @@ import IParameter from "../interfaces/IParameter";
 
 export default class Mod {
   public readonly id: string;
-  public readonly links: InnerLink[]
+  // public readonly links: InnerLink[]
   public rack: number;
   public slot: number;
   public readonly slots: number;
   public readonly type: string;
   public readonly ports: Port[] = [];
-  public audioNodes: InnerAudioNode[] = []
+  // public audioNodes: InnerAudioNode[] = []
   public readonly parameters: Parameter[];
   public readonly category: string;
   public readonly controls: IControl[] = [];
   public readonly channels: Channel[];
 
-  constructor({ id, rack, slot, slots, type, nodes, links, ports, parameters, category, controls, channels }: any) {
+  constructor({ id, rack, slot, slots, type, ports, parameters, category, controls, channels }: any) {
     this.id = id;
     this.rack = rack;
     this.slot = slot;
@@ -33,15 +31,12 @@ export default class Mod {
     this.category = category;
     this.controls = controls;
     this.channels = channels;
-
-    console.log(this.channels)
     
     this.ports = ports.map((iport: IPort) => {
       return iport.kind === "input" ? new InputPort(iport, this) : new OutputPort(iport, this);
     });
 
-    this.audioNodes = nodes
-    this.links = InnerLinksFactory.link(this.audioNodes, links);
+    // this.links = InnerLinksFactory.link(this.audioNodes, links);
     this.parameters = parameters.map((p: IParameter) => new Parameter(p, this));
 
     usePorts().addPorts(this.ports);
@@ -55,9 +50,9 @@ export default class Mod {
     return this.ports.filter((p: Port) => p.kind === "output");
   }
 
-  public node(name: string) {
-    return this.audioNodes.find((a: InnerAudioNode) => a.name === name);
-  }
+  // public node(name: string) {
+  //   return this.audioNodes.find((a: InnerAudioNode) => a.name === name);
+  // }
 
   public param(name: string): Parameter {
     return this.parameters.find((p: Parameter) => p.name === name) as Parameter;
@@ -65,5 +60,9 @@ export default class Mod {
 
   public get connections(): Link[] {
     return flatten(this.ports.map((port: Port) => port.links))
+  }
+
+  public channel(index: number): Channel {
+    return this.channels[index];
   }
 }

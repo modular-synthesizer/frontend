@@ -1,3 +1,4 @@
+import { InnerLink } from "../interfaces/ITool";
 import InnerAudioNode from "./InnerAudioNode";
 
 /**
@@ -8,8 +9,13 @@ import InnerAudioNode from "./InnerAudioNode";
 export default class Channel {
   public readonly index: number;
   public nodes: InnerAudioNode[] = []
+  public links: InnerLink[] = []
 
   constructor(index: number) {
     this.index = index;
+  }
+
+  public getNode(name: string) {
+    return this.nodes.find((a: InnerAudioNode) => a.name === name);
   }
 }

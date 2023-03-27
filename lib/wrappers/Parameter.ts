@@ -1,6 +1,7 @@
 import IParameter from "~~/lib/interfaces/IParameter"
 import Mod from "./Mod";
 import { clamp } from "lodash"
+import Channel from "./Channel";
 
 export default class Parameter {
   
@@ -34,8 +35,10 @@ export default class Parameter {
   public setValue(val: number) {
     this.value = clamp(val, this.minimum, this.maximum);
     this.targets.forEach((target: string) => {
-      const param: AudioParam = this.mod.node(target).node[this.field as keyof AudioNode];
-      if (param !== undefined) param.setValueAtTime(this.value, this.ctx.currentTime);
+      this.mod.channels.forEach((channel: Channel) => {
+        const param: AudioParam = channel.getNode(target)?.node[this.field as keyof AudioNode] as unknown as AudioParam;
+        if (param !== undefined) param.setValueAtTime(this.value, this.ctx.currentTime);
+      })
     });
   }
 
