@@ -1,7 +1,7 @@
 import { InnerLink } from "../interfaces/ITool";
 import Port, { InputPort, OutputPort } from "./Port";
 import Parameter from "./Parameter";
-import { flatten } from 'lodash';
+import { find, flatten, some } from 'lodash';
 import Link from "./Link";
 import { IControl } from "../interfaces/IControl";
 import IPort from "../interfaces/IPort";
@@ -64,5 +64,12 @@ export default class Mod {
 
   public channel(index: number): Channel {
     return this.channels[index];
+  }
+
+  public freeChannel(): Channel {
+    if (some(this.channels, {used: false})) {
+      return find(this.channels, {used: false}) as Channel;
+    }
+    return this.channels[0];
   }
 }

@@ -10,6 +10,7 @@ export default class Channel {
   public readonly index: number;
   public nodes: InnerAudioNode[] = []
   public links: InnerLink[] = []
+  public used: Boolean = false;
 
   constructor(index: number) {
     this.index = index;

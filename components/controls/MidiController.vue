@@ -7,6 +7,7 @@ import Mod from '~~/lib/wrappers/Mod';
 import { onKeyDown, onLastKeyUp, onFirstKeyDown } from '@/composables/useMidi';
 import Envelope from '~~/lib/utils/envelope';
 import Channel from '~~/lib/wrappers/Channel';
+import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
 
 export default {
   props: {
@@ -19,23 +20,24 @@ export default {
       inputs: [] as MIDIInput[],
       env: new Envelope(),
       keysCount: 0,
+      channelsOccupancy: new Array(POLYPHONY_CHANNELS).fill(false)
     }
   },
   mounted() {
     this.env.bind(this.mod.channels[0].getNode(this.envelope)?.node as ConstantSourceNode);
-    console.log(this.env);
     onFirstKeyDown((_note: number) => {
-      console.log("triggering envelope");
       this.env.trigger();
     })
     onKeyDown((note: number) => {
       const voltage: number = (note - 69) / 12;
-      const pitch: ConstantSourceNode = this.mod.channels[0].getNode(this.pitch)?.node as ConstantSourceNode
+      const channel = this.mod.freeChannel();
+      channel.used = true;
+
+      const pitch: ConstantSourceNode = channel.getNode(this.pitch)?.node as ConstantSourceNode
       pitch.offset.cancelScheduledValues(this.ctx.currentTime);
       pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
     });
     onLastKeyUp((_note: number) => {
-      console.log("releasing envelope");
       this.env.release();
     });
   },
