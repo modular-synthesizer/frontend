@@ -96,33 +96,37 @@
   },
   "modules": {
     "common": {
-      "BiquadFilterNode": {
-        "title": "Filtre de modification du spectre",
-        "description": "Passe-haut, passe-bas, notch, peaking, etc. Ce filtre polyphonique et polyvalent permet de sculpter le son."
+      "delay": {
+        "title": "Délai",
+        "description": "Permet de retarder un signal d'un montant exprimé en secondes."
       },
-      "LinkedGains": {
-        "title": "Gains multiples",
-        "description": "Des gains se multipliant entre eux pour réduire ou augmenter un signal de 0.000001 à 1000 fois le signal de base."
+      "LFO": {
+        "title": "Oscillateur basse fréquence (LFO)",
+        "description": "Un oscillateur basse fréquence principalement utilisé pour orchestrer les paramètres d'autres noeuds dans le temps."
       },
-      "LowFrequencyOscillator": {
-        "title": "Oscillateur basse fréquence",
-        "description": "Un oscillateur basse fréquence utilisé pour orchestrer les paramètres d'autres noeuds dans le temps."
+      "microphone": {
+        "title": "Entrée standard",
+        "description": "L'entrée audio par défaut de votre ordinateur. Ce peut êtyre un micro, un instrument, etc."
       },
-      "Oscillator": {
-        "title": "Oscillateur polyphonique",
-        "description": "Un oscillateur polyphonique avec quatre types d'ondes disponibles, dont tous les paramètres sont voltage-controlled."
+      "MidiKeyboard": {
+        "title": "Périphériques d'entrée MIDI",
+        "description": "Permet d'utiliser tout périphérique MIDI connecté à votre ordinateur, ou le clavier de ce dernier."
       },
-      "SingleGain": {
-        "title": "Gain Simple",
-        "description": "Un gain simple, avec une entrée, une sortie, et un seul bouton de réglage"
-      },
-      "StandardOutput": {
+      "output": {
         "title": "Sortie audio",
         "description": "Une sortie audio simple envoyant le patch sur votre sortie audio par défaut."
       },
-      "UserMicrophone": {
-        "title": "Entrée standard",
-        "description": "L'entrée audio par défaut de votre ordinateur. Ce peut êtyre un micro, un instrument, etc."
+      "VCA": {
+        "title": "Amplificateur contrôlé par le voltage (VCA)",
+        "description": "Permet d'augmenter ou de diminuer l'intensité d'un signal."
+      },
+      "VCF": {
+        "title": "Filtre contrôlé par le voltage (VCF)",
+        "description": "Passe-haut, passe-bas, notch, peaking, etc. Ce filtre polyvalent permet de sculpter le son."
+      },
+      "VCO": {
+        "title": "Oscillateur contrôlé par le voltage (VCO)",
+        "description": "Un oscillateur avec quatre types d'ondes disponibles, dont tous les paramètres peuvent être contrôlés par le voltage."
       }
     },
     "creator": {
