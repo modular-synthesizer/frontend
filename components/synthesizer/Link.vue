@@ -15,6 +15,19 @@ export default {
     r(): number {
         return PORT_RADIUS - 3
     },
+    path(): string {
+      const x1 = this.link.from.ax;
+      const y1 = this.link.from.ay;
+      const x2 = this.link.to.ax;
+      const y2 = this.link.to.ay;
+      return `M ${x2},${y2} Q ${this.cx},${this.cy} ${x1},${y1}`;
+    },
+    cx(): number {
+      return Math.abs(3 * this.link.to.ax + this.link.from.ax) / 4;
+    },
+    cy(): number {
+      return Math.abs(this.link.to.ay + this.link.from.ay) / 2 + 250;
+    }
   },
   methods: {
     ...mapActions(useLinksList, ['remove']),
@@ -28,16 +41,13 @@ export default {
 
 <template>
   <g>
-    <line
-      :x1="link.from.ax"
-      :x2="link.to.ax"
-      :y1="link.from.ay"
-      :y2="link.to.ay"
+    <path
+      :d="path"
       :stroke="link.color"
-      stroke-width="8"
       opacity="0.3"
+      stroke-width="8"
+      fill="none" 
       @click.prevent="remove(link.id)"
-
     />
     <circle
       :cx="link.from.ax"
