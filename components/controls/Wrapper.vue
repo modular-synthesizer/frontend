@@ -10,7 +10,7 @@ import {
   ControlsMuteButton,
   ControlsPort,
   ControlsSmallKnob,
-  ControlsVoltageViewer,
+  ControlsEnvelopeTrigger
 } from "#components"
 
 import { IControl } from "~~/lib/interfaces/IControl";
@@ -24,7 +24,7 @@ export default {
     ControlsMuteButton,
     ControlsPort,
     ControlsSmallKnob,
-    ControlsVoltageViewer,
+    ControlsEnvelopeTrigger,
   },
   props: {
     control: {
