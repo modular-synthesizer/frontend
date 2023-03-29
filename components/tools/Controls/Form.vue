@@ -55,7 +55,7 @@ export default {
   },
   data: () => ({
     components: [
-      'SmallKnob', 'LargeKnob', 'Knob', 'Port', 'MidiController'
+      'SmallKnob', 'LargeKnob', 'Knob', 'Port', 'MidiController', 'EnvelopeTrigger'
     ],
   }),
   computed: {
