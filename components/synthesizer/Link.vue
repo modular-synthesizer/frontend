@@ -22,11 +22,14 @@ export default {
       const y2 = this.link.to.ay;
       return `M ${x2},${y2} Q ${this.cx},${this.cy} ${x1},${y1}`;
     },
+    distance() {
+      return Math.sqrt((this.link.from.ax - this.link.to.ax) ** 2 + (this.link.from.ay - this.link.to.ay) ** 2);
+    },
     cx(): number {
-      return Math.abs(3 * this.link.to.ax + this.link.from.ax) / 4;
+      return Math.abs(this.link.to.ax + this.link.from.ax) / 2;
     },
     cy(): number {
-      return Math.abs(this.link.to.ay + this.link.from.ay) / 2 + 250;
+      return Math.abs(this.link.to.ay + this.link.from.ay) / 2 + 0.5 * this.distance;
     }
   },
   methods: {
