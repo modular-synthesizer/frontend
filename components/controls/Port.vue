@@ -47,10 +47,6 @@ export default {
     mod: {
       type: Mod, required: true
     },
-    fillColor: {
-      type: String,
-      default: "#555555"
-    },
     strokeColor: {
       type: String,
       default: "black"
@@ -66,6 +62,10 @@ export default {
   computed: {
     port() {
       return this.mod.ports.find(p => p.name === this.target) as Port;
+    },
+    fillColor() {
+      if (this.port === undefined) return "#CC0000";
+      return this.port.isInput() ? "#555555" : "#000099"
     }
   }
 }
