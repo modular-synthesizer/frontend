@@ -29,7 +29,8 @@ export default {
       return Math.abs(this.link.to.ax + this.link.from.ax) / 2;
     },
     cy(): number {
-      return Math.abs(this.link.to.ay + this.link.from.ay) / 2 + 0.5 * this.distance;
+      const dangle: number = Math.min(this.distance, 125)
+      return Math.abs(this.link.to.ay + this.link.from.ay) / 2 + dangle;
     }
   },
   methods: {
