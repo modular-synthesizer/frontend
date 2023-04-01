@@ -45,6 +45,7 @@ export default {
     this.fetchTools();
     await useGenerators().fetchGenerators();
     initKeyboardDevice();
+    initGates();
   }
 }
 </script>

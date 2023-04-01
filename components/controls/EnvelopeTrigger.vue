@@ -3,6 +3,9 @@
 </template>
 
 <script lang="ts">
+import Envelope from '~~/lib/signal/envelope';
+import Gate from '~~/lib/signal/gate';
+import Channel from '~~/lib/wrappers/Channel';
 import Mod from '~~/lib/wrappers/Mod';
 
 export default {
@@ -35,37 +38,18 @@ export default {
     }
   },
   methods: {
-    initValue(time: number) {
-      for (let channel of this.mod.channels) {
-        const analyserNode: AnalyserNode = channel.getNode(this.analyser)?.node as unknown as AnalyserNode;
-        const buffer: Float32Array = new Float32Array(1);
-        analyserNode.getFloatTimeDomainData(buffer);
-        const oldValue = this.value[channel.index];
-        const newValue = buffer[0];
-        const gain: GainNode = channel.getNode(this.target)?.node as GainNode;
-        if (oldValue !== newValue) {
-          gain.gain.cancelAndHoldAtTime(time);
-          if (newValue === 1) {
-            console.log("triggering attack for channel " + channel.index);
-            gain.gain.setTargetAtTime(1, time, this.a / 1000)
-            gain.gain.setTargetAtTime(this.s / 100, time,  (this.a + this.d) / 1000)
-          }
-          else {
-            console.log("triggering release for channel " + channel.index);
-            gain.gain.setTargetAtTime(0, time, this.r / 1000)
-          }
-        }
-        this.value[channel.index] = buffer[0];
-      }
-    },
     param(name: string) {
       return this.mod.param(name);
     },
   },
   mounted() {
-    const ctx: AudioContext|null = useAudioContext().context
-    if (ctx === null) return;
-    window.setInterval(() => this.initValue(ctx.currentTime));
+    this.mod.channels.forEach((channel: Channel) => {
+      const gate = new Gate(channel, this.analyser);
+      const envelope = new Envelope(channel, this.target);
+      gate.onTrigger(() => envelope.trigger(this.a, this.d, this.s));
+      gate.onRelease(() => envelope.release(this.r));
+      addGate(gate);
+    });
   }
 }
 </script>

@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import Mod from '~~/lib/wrappers/Mod';
-import Envelope from '~~/lib/utils/envelope';
+import Envelope from '~~/lib/signal/envelope';
 import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
 import KeyMapper from '~~/lib/interfaces/KeyMapper';
 
@@ -22,26 +22,23 @@ export default {
     }
   },
   mounted() {
-    for (let channel of this.mod.channels) {
-      const env = new Envelope();
-      env.bind(channel.getNode(this.envelope)?.node as ConstantSourceNode);
-      this.envelopes.push(env);
-    }
     onKeyDown((note: number, mapper: KeyMapper) => {
       const voltage: number = (note - 69) / 12;
       const channel = this.mod.freeChannel();
       channel.used = true;
       mapper.channel = channel.index;
 
-      this.envelopes[channel.index].trigger();
-
       const pitch: ConstantSourceNode = channel.getNode(this.pitch)?.node as ConstantSourceNode
+      const gate: ConstantSourceNode = channel.getNode(this.envelope)?.node as ConstantSourceNode
       pitch.offset.cancelScheduledValues(this.ctx.currentTime);
       pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
+      gate.offset.setValueAtTime(1, this.ctx.currentTime);
     });
     onKeyUp((note: number, mapper: KeyMapper) => {
-      this.envelopes[mapper.channel].release();
-      this.mod.channel(mapper.channel).used = false;
+      const channel = this.mod.channels[mapper.channel];
+      const gate: ConstantSourceNode = channel.getNode(this.envelope)?.node as ConstantSourceNode
+      gate.offset.setValueAtTime(0, this.ctx.currentTime);
+      channel.used = false;
       mapper.channel = -1
     })
   },
