@@ -3,6 +3,9 @@
     <synthesizer-initializer v-if="!loaded" :id="id" />
     <synthesizer-stage :id="id" />
     <v-toolbar collapse density="compact" color="primary">
+      <v-btn icon to="/synthesizers">
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
       <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
     </v-toolbar>
     <module-context />
