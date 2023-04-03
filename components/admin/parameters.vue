@@ -64,6 +64,7 @@ export default {
       const payload = {
         auth_token: this.session.token,
         name: parameter.name,
+        field: parameter.field,
         default: parameter.value,
         ...parameter.constraints
       }
