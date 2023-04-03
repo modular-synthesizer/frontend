@@ -11,6 +11,8 @@ export default class Envelope {
   // The target is the name of the node in the channel used to trigger or release the volume.
   private target: string;
 
+  private timeout: number = -1
+
   constructor(channel: Channel, target: string) {
     this.channel = channel;
     this.target= target;
@@ -27,7 +29,9 @@ export default class Envelope {
   trigger(a: number, d: number, s: number) {
     this.param.cancelAndHoldAtTime(this.t);
     this.param.setTargetAtTime(1, this.t, a / 1000)
-    this.param.setTargetAtTime(s / 100, this.t,  (a + d) / 1000)
+    this.timeout = window.setTimeout(() => {
+      this.param.setTargetAtTime(s / 100, this.t,  d / 1000)
+    }, a);
   }
   
   /**
@@ -35,6 +39,7 @@ export default class Envelope {
    * @param r the release time, in milliseconds (converted in seconds).
    */
   release(r: number) {
+    window.clearTimeout(this.timeout);
     this.param.cancelAndHoldAtTime(this.t);
     this.param.setTargetAtTime(0, this.t, r / 1000)
   }
