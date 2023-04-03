@@ -4,6 +4,7 @@
       <Fixation :y="0" />
       <Fixation :y="rackHeight - slotSize" />
     </g>
+    <ExpandersSlots :rack="rack" />
   </g>
 </template>
 

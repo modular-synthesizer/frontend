@@ -5,6 +5,7 @@
       <synthesizer-module v-for="mod in modules" :mod="mod" />
       <synthesizer-link v-for="link in links" :link="link" />
       <LinkCreator />
+      <ExpandersRacks :synthesizer="synthesizer" />
     </g>
   </synthesizer-events-handler>
 </template>

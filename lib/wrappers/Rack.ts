@@ -9,7 +9,7 @@ export default class Rack {
 
   public readonly  index: number;
 
-  public readonly slots: number;
+  public slots: number;
 
   public readonly mods: Mod[] = [];
 
