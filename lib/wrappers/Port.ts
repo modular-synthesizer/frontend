@@ -70,7 +70,7 @@ export default abstract class Port implements IPort {
   }
 
   public get control(): IControl {
-    return this.mod.controls.find(c => c.payload.target === this.name) as IControl;
+    return this.mod.controls.find(c => c.payload.target === this.name && c.component === 'Port') as IControl;
   }
 
   public get ax() {
