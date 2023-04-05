@@ -2,7 +2,7 @@
   <div class="wrapper">
     <synthesizer-initializer v-if="!loaded" :id="id" />
     <synthesizer-stage :id="id" />
-    <v-toolbar collapse density="compact" color="primary">
+    <v-toolbar collapse density="compact" color="primary" v-if="!mobile">
       <v-btn icon to="/synthesizers">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
@@ -15,6 +15,7 @@
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
 import Mod from '~~/lib/wrappers/Mod';
+import { useDisplay } from 'vuetify'
 
 definePageMeta({
   menu: false
@@ -36,6 +37,8 @@ export default {
     ...mapState(useToolsList, ['tools']),
     ...mapState(useSynthesizerDetails, ['synthesizer']),
     ...mapState(useModulesList, ['modules']),
+    mobile() { return useDisplay().mobile.value; },
+    platform() { return useDisplay().platform; },
   },
   methods: {
     ...mapActions(useToolsList, ['fetchTools']),

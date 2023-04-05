@@ -1,17 +1,19 @@
 <template>
   <synthesizer-events-handler>
-    <g :transform="`translate(${synthesizer.x} ${synthesizer.y}) scale(${synthesizer.scale} ${synthesizer.scale})`" v-if="synthesizer">
+    <synthesizer-modules-container :synthesizer="synthesizer">
       <synthesizer-rack v-for="rack in synthesizer.racks" :rack="rack" />
       <synthesizer-module v-for="mod in modules" :mod="mod" />
       <synthesizer-link v-for="link in links" :link="link" />
       <LinkCreator />
       <ExpandersRacks :synthesizer="synthesizer" />
-    </g>
+    </synthesizer-modules-container>
   </synthesizer-events-handler>
 </template>
 
 <script lang="ts">
 import { mapState } from 'pinia';
+import { useDisplay } from 'vuetify'
+import { RACK_HEIGHT } from '~~/lib/utils/constants';
 
 export default {
   props: {
