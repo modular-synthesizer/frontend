@@ -1,5 +1,5 @@
 <template>
-  <GenericKnob :parameter="mod.param(target)" :x="x" :y="y" :r="25" :cursor-size="8" :label="label" />
+  <GenericKnob :mod="mod" :parameter="mod.param(target)" :x="x" :y="y" :r="25" :cursor-size="8" :label="label" />
 </template>
 
 <script lang="ts">

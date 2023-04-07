@@ -9,6 +9,7 @@
       <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
     </v-toolbar>
     <module-context />
+    <module-parameter-editor />
   </div>
 </template>
 

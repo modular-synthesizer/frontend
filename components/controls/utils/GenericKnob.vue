@@ -1,5 +1,9 @@
 <template>
-  <g v-if="parameter !== undefined" @mousedown.stop="startParameterSetting($event, parameter)">
+  <g
+    v-if="parameter !== undefined"
+    @mousedown.stop="startParameterSetting($event, parameter)"
+    @click.right.prevent.stop="openDialog(ex, y)"
+  >
     <text
       v-if="displayLabel"
       :transform="`translate(${x}, ${y - r - 6})`"
@@ -13,18 +17,22 @@
     </g>
     <circle :r="r" :cx="x" :cy="y" fill="white" stroke="black" stroke-width="3" />
     <text class="value" :x="x" :y="y" text-anchor="middle" alignment-baseline="middle">
-      {{ value }}
+      {{ displayDialog }}
     </text>
   </g>
 </template>
 
 <script lang="ts">
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import Parameter from '~~/lib/wrappers/Parameter';
 import { round } from "lodash"
+import { useKnobEdition } from "@/stores/knobs/edition"
+import Mod from '~~/lib/wrappers/Mod';
+import { SLOT_SIZE } from '~~/lib/utils/constants';
 
 export default {
   props: {
+    mod: { type: Mod, required: true },
     x: { type: Number, default: 0 },
     y: { type: Number, default: 0 },
     parameter: {
@@ -45,6 +53,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(useKnobEdition, ["displayDialog"]),
     value(): Number {
         return round(this.parameter.value, this.parameter.precision);
     },
@@ -54,10 +63,14 @@ export default {
     },
     displayLabel(): boolean {
       return this.label !== ""
+    },
+    ex() {
+      return (this.mod.slot * SLOT_SIZE) + this.x
     }
   },
   methods: {
     ...mapActions(useParameters, ['startParameterSetting']),
+    ...mapActions(useKnobEdition, ["openDialog"])
   },
 }
 </script>

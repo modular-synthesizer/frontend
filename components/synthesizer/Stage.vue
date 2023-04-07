@@ -12,8 +12,6 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
-import { useDisplay } from 'vuetify'
-import { RACK_HEIGHT } from '~~/lib/utils/constants';
 
 export default {
   props: {
