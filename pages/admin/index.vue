@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import Categories from '~~/components/admin/categories.vue';
-import Parameters from '~~/components/admin/parameters.vue';
+import Parameters from '~~/components/admin/descriptors.vue';
 import Applications from '~~/components/admin/applications.vue';
 import AdminRights from '~~/components/admin/rights.vue';
 import Generators from "~~/components/admin/generators.vue"

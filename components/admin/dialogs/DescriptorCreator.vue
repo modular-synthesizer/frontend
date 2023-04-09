@@ -5,14 +5,14 @@
     </template>
     <v-form @submit.prevent="create" v-model="validForm" ref="form">
       <v-card class="mx-auto" width="50%">
-        <template v-slot:title>{{ $t('parameters.dialog.title')}}</template>
+        <template v-slot:title>{{ $t('descriptors.dialog.title')}}</template>
         <v-card-text>
-          <div class="text-h5">{{ $t('parameters.dialog.steps.informations') }}</div>
+          <div class="text-h5">{{ $t('descriptors.dialog.steps.informations') }}</div>
           <v-container fluid>
             <v-row>
               <v-col cols="4">
                 <v-text-field
-                  v-model="parameter.name"
+                  v-model="descriptor.name"
                   variant="outlined"
                   :label="$t('common.name')"
                   :rules="[nameRequired]"
@@ -21,65 +21,56 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model="parameter.field"
-                  variant="outlined"
-                  :label="$t('parameters.dialog.fields.field.label')"
-                  :rules="[fieldRequired]"
-                  required
-                />
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-model="parameter.value"
+                  v-model="descriptor.default"
                   type="number"
                   variant="outlined"
-                  :label="$t('parameters.dialog.fields.default.label')"
-                  :hint="$t('parameters.dialog.fields.default.hint')"
-                  :min="parameter.constraints.minimum"
-                  :max="parameter.constraints.maximum"
+                  :label="$t('descriptors.dialog.fields.default.label')"
+                  :hint="$t('descriptors.dialog.fields.default.hint')"
+                  :min="descriptor.minimum"
+                  :max="descriptor.maximum"
                   @update:modelValue="debouncedClamp"
                 />
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12">
-                <div class="text-h5">{{ $t('parameters.dialog.steps.constraints') }}</div>
+                <div class="text-h5">{{ $t('descriptors.dialog.steps.constraints') }}</div>
               </v-col>
             </v-row>
             <v-row>
               <v-col xs="12" sm="6" md="3">
                 <v-text-field
                   variant="outlined"
-                  v-model.number="parameter.constraints.minimum"
-                  :label="$t('parameters.dialog.fields.minimum.label')"
+                  v-model.number="descriptor.minimum"
+                  :label="$t('descriptors.dialog.fields.minimum.label')"
                   type="number"
                   @update:modelValue="debouncedClamp"
-                  :max="parameter.constraints.maximum - parameter.constraints.step"
+                  :max="descriptor.maximum - descriptor.step"
                 />
               </v-col>
               <v-col xs="12" sm="6" md="3">
                 <v-text-field
                   variant="outlined"
-                  v-model="parameter.constraints.maximum"
-                  :label="$t('parameters.dialog.fields.maximum.label')"
+                  v-model="descriptor.maximum"
+                  :label="$t('descriptors.dialog.fields.maximum.label')"
                   type="number"
-                  :min="parameter.constraints.minimum + parameter.constraints.step"
+                  :min="descriptor.minimum + descriptor.step"
                   @update:modelValue="debouncedClamp"
                 />
               </v-col>
               <v-col xs="12" sm="6" md="3">
                 <v-text-field
                   variant="outlined"
-                  v-model="parameter.constraints.step"
-                  :label="$t('parameters.dialog.fields.step.label')"
+                  v-model="descriptor.step"
+                  :label="$t('descriptors.dialog.fields.step.label')"
                   type="number"
                 />
               </v-col>
               <v-col xs="12" sm="6" md="3">
                 <v-text-field
                   variant="outlined"
-                  :label="$t('parameters.dialog.fields.precision.label')"
-                  v-model="parameter.constraints.precision"
+                  :label="$t('descriptors.dialog.fields.precision.label')"
+                  v-model="descriptor.precision"
                   type="number"
                   min="0"
                 />
@@ -99,13 +90,13 @@
 <script lang="ts">                                                                                                     
 import ICategory from '~~/lib/interfaces/ICategory';
 import type { PropType } from 'vue'
-import IParameter from '~~/lib/interfaces/IParameter';
 import { clamp, cloneDeep, debounce } from 'lodash'
+import IDescriptor from '~~/lib/interfaces/tools/IDescriptor';
 
 export default {
   props: {
-    parameter: {
-      type: Object as PropType<IParameter>,
+    descriptor: {
+      type: Object as PropType<IDescriptor>,
       required: true,
     }
   },
@@ -116,30 +107,24 @@ export default {
   }),
   methods: {
     create() {
-      this.$refs.form.validate();
+      const form = this.$refs.form as any;
+      form.validate();
       if (this.validForm) {
-        this.$emit("created", cloneDeep(this.parameter));
-        this.$refs.form.reset();
-        this.$refs.form.resetValidation();
+        this.$emit("created", cloneDeep(this.descriptor));
+        form.reset();
+        form.resetValidation();
         this.creationDialog = false;
       }
     },
     nameRequired() {
-      return this.parameter.name !== "" || "parameters.name.required"
+      return this.descriptor.name !== "" || "parameters.name.required"
     },
-    fieldRequired() {
-      return this.parameter.field !== "" || "parameters.field.required"
+    debouncedClamp: () => {
+      debounce(() => {
+        const desc: IDescriptor = (this as any).descriptor;
+        desc.default = clamp(desc.default, desc.minimum, desc.maximum);
+      }, 250);
     },
-    debouncedClamp: debounce(function() {
-      if (this != undefined) {
-        // @ts-ignore
-        this.parameter.value = clamp(
-          this.parameter.value,
-          this.parameter.constraints.minimum,
-          this.parameter.constraints.maximum
-        )
-      }
-    }, 250)
   }
 }
 </script>

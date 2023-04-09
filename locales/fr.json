@@ -133,7 +133,7 @@
       "title": "Ajout de module"
     }
   },
-  "parameters": {
+  "descriptors": {
     "dialog": {
       "steps": {
         "constraints": "Contraintes",
@@ -162,11 +162,14 @@
       },
       "title": "Créer un nouveau paramètre"
     },
-    "field": {
-      "required": "Le champ ciblé est requis"
+    "list": {
+      "columns": {
+        "constraints": "Contraintes",
+        "default": "Valeur par défaut"
+      }
     },
     "name": {
-      "required": "Le nom est requis"
+      "required": "Vous devez entrer un nom pour ce modèle de paramètre."
     }
   },
   "ports": {
