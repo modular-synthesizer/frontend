@@ -11,23 +11,8 @@
       <v-row>
         <v-col cols="8" offset="2">
           <v-window v-model="tab">
-            <v-window-item value="groups">
-              <AdminGroups />
-            </v-window-item>
-            <v-window-item value="rights">
-              <AdminRights />
-            </v-window-item>
-            <v-window-item value="categories">
-              <Categories />
-            </v-window-item>
-            <v-window-item value="parameters">
-              <Parameters />
-            </v-window-item>
-            <v-window-item value="applications">
-              <Applications />
-            </v-window-item>
-            <v-window-item value="generators">
-              <Generators />
+            <v-window-item v-for="tab in items" :value="tab.name">
+              <component :is="tab.component" />
             </v-window-item>
           </v-window>
         </v-col>
@@ -42,18 +27,19 @@ import Parameters from '~~/components/admin/parameters.vue';
 import Applications from '~~/components/admin/applications.vue';
 import AdminRights from '~~/components/admin/rights.vue';
 import Generators from "~~/components/admin/generators.vue"
+import { resolveComponent } from 'vue';
 
 export default {
   components: { Applications, Categories, Generators, Parameters, AdminRights },
   data: () => ({
     tab: 'groups',
     items: [
-      {name: 'groups', icon: 'mdi-account-group'},
-      {name: 'rights', icon: 'mdi-account-group'},
-      {name: 'categories', icon: 'mdi-folder-outline'},
-      {name: 'parameters', icon: 'mdi-music-circle'},
-      {name: 'applications', icon: 'mdi-lock-outline'},
-      {name: "generators", icon: "mdi-factory"},
+      {name: 'groups', icon: 'mdi-account-group', component: resolveComponent('admin-groups')},
+      {name: 'rights', icon: 'mdi-account-group', component: resolveComponent('admin-rights')},
+      {name: 'categories', icon: 'mdi-folder-outline', component: resolveComponent('admin-categories')},
+      {name: 'parameters', icon: 'mdi-music-circle', component: resolveComponent('admin-parameters')},
+      {name: 'applications', icon: 'mdi-lock-outline', component: resolveComponent('admin-applications')},
+      {name: "generators", icon: "mdi-factory", component: resolveComponent('admin-generators')},
     ]
   }),
   methods: {
