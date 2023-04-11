@@ -1,27 +1,9 @@
 <template>
-  <div :style="{'--top': top, '--left': left}" class="editor-wrapper" v-if="displayDialog">
-    <v-card>
-      <v-card-text>{{ displayDialog }}</v-card-text>
-    </v-card>
-  </div>
+  <v-overlay v-model="store.overlay" />
 </template>
 
-<script type="ts">
-import { mapState } from 'pinia';
-import { useKnobEdition } from "@/stores/knobs/edition"
-
-export default {
-  data: function() {
-    return {
-      displayed: true,
-    }
-  },
-  computed: {
-    ...mapState(useKnobEdition, ["displayDialog", "coordinates"]),
-    top() { return this.coordinates.y + "px"; },
-    left() { return this.coordinates.x + "px"; },
-  },
-}
+<script lang="ts" setup>
+const store = useKnobEdition()
 </script>
 
 <style scoped>
