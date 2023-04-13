@@ -1,41 +1,28 @@
 <template>
-
-<v-container class="mt-2">
-    <v-row>
-      <v-col xs="12" sm="8" offset-sm="2" md="6" offset-md="3">
-        <form @submit.prevent="add">
-          <v-text-field
-            density="compact"
-            variant="outlined"
-            v-model="application.name"
-            :label="$t('applications.labels.name')"
-            append-inner-icon="mdi-plus"
-            @click:append-inner="add"
-            :hint="$t('applications.hints.name')"
-          />
-        </form>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <v-data-table v-if="applications" :headers="headers" :items="applications" item-value="id" />
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row class="hidden-xs">
+    <v-col xs="12" sm="8" offset-sm="2" md="6" offset-md="3">
+      <div class="text-h4 my-4">Applications</div>
+      <admin-creation-field @submitted="add" t="applications" />
+      <v-data-table class="hidden-xs" v-if="applications" :headers="headers" :items="applications" item-value="id" />
+    </v-col>
+  </v-row>
+  <div class="hidden-sm-and-up">
+    <admin-creation-field @submitted="add" t="applications" />
+    <v-card class="mx-auto" width="100%" elevation="5">
+      <v-list lines="one">
+        <v-list-item v-for="app in applications" :key="app.id" :title="app.name" :subtitle="app.id"></v-list-item>
+      </v-list>
+    </v-card>
+  </div>
 </template>
 
 <script lang="ts">
 import { api } from '~~/lib/api/Api';
-
-interface IApplication {
-  id: string;
-  name: string;
-}
+import IApplication from '~~/lib/interfaces/permissions/IApplication';
 
 export default {
   data: () => ({
     applications: [] as IApplication[],
-    application: { name: ""}
   }),
   async mounted() {
     this.applications = await api.auth_get("/applications")
@@ -49,10 +36,8 @@ export default {
     }
   },
   methods: {
-    add() {
-      api.auth_post("/applications", this.application).then((response: IApplication) => {
-        this.applications.push(response)
-      })
+    async add(name: string) {
+      this.applications.push(await api.auth_post("/applications", { name }));
     }
   }
 }

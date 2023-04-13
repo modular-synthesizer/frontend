@@ -1,5 +1,4 @@
 <template>
-  <h1 class="hidden-xs">test</h1>
   <v-navigation-drawer expand-on-hover rail color="secondary">
     <v-list density="compact" nav>
       <v-list-item v-for="item in items" :prepend-icon="item.icon" :value="item.name" @click="() => (tab = item.name)">
@@ -7,15 +6,11 @@
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
-  <v-row no-gutter>
-    <v-col sm="10" cols="12" offset-sm="1" offset="0" md="8" offset-md="2">
-      <v-window v-model="tab">
-        <v-window-item v-for="tab in items" :value="tab.name">
-          <component :is="tab.component" />
-        </v-window-item>
-      </v-window>
-    </v-col>
-  </v-row>
+    <v-window v-model="tab">
+      <v-window-item v-for="tab in items" :value="tab.name" class="pa-2">
+        <component :is="tab.component" />
+      </v-window-item>
+    </v-window>
 </template>
 
 <script lang="ts">
