@@ -6,9 +6,9 @@
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
-  <div class="bg-secondary pt-5 px-2">
+  <div class="bg-secondary pt-5 px-2 hidden-sm-and-up">
     <v-row>
-      <v-col cols="2">
+      <v-col cols="2" class="text-center">
         <v-btn flat icon color="secondary" @click="previousTab" v-if="tab !== 'groups'" size="small">
           <v-icon size="x-large">mdi-chevron-left</v-icon>
         </v-btn>
@@ -16,7 +16,7 @@
       <v-col cols="8">
         <v-select variant="outlined" density="compact" v-model="tab" :items="listItems"></v-select>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="2" class="text-center">
         <v-btn flat icon color="secondary" @click="nextTab" v-if="tab !=='generators'" size="small">
           <v-icon size="x-large">mdi-chevron-right</v-icon>
         </v-btn>
