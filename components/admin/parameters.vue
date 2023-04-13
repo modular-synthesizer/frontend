@@ -1,5 +1,16 @@
 <template>
-  <v-container>
+  <parameter-creator @created="add" :parameter="parameter" />
+  <div class="hidden-sm-and-up pt-1">
+    <v-card class="mx-auto mb-4" elevation="3" width="100%" v-for="param in parameters">
+      <template v-slot:title>{{ param.name }}</template>
+      <template v-slot:subtitle>{{ param.id }}</template>
+      <v-card-text>
+        <constraints :constraints="parameter.constraints" /><br />
+        valeur par défaut : {{ param.value }}
+      </v-card-text>
+    </v-card>
+  </div>
+  <!--v-container>
     <v-row no-gutters>
       <v-col cols="12">
         <parameter-creator @created="add" :parameter="parameter" />
@@ -29,7 +40,7 @@
         </v-table>
       </v-col>
     </v-row>
-  </v-container>
+  </v-container-->
 </template>
 
 <script lang="ts">
@@ -49,11 +60,17 @@ export default {
       constraints: {
         minimum: 0, maximum: 10, step: 1, precision: 0
       }
-    }
+    } as IParameter,
   }),
   computed: {
     ...mapState(useDescriptors, ['parameters']),
-    ...mapState(useAuthentication, ["session"])
+    ...mapState(useAuthentication, ["session"]),
+    displayedParameters() {
+      return this.parameters.map((p: IParameter) => {
+        const c = p.constraints;
+        return {...p, constraints: `[${c.minimum},${c.maximum}] +/- ${c.step} p${c.step}`}
+      });
+    }
   },
   mounted() {
     this.fetchDescriptors();

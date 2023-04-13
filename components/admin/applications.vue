@@ -8,11 +8,9 @@
   </v-row>
   <div class="hidden-sm-and-up pt-1">
     <admin-creation-field @submitted="add" t="applications" />
-    <v-card class="mx-auto" width="100%" elevation="5">
-      <v-list lines="one">
-        <v-list-item v-for="app in applications" :key="app.id" :title="app.name" :subtitle="app.id"></v-list-item>
-      </v-list>
-    </v-card>
+    <v-list lines="one">
+      <v-list-item v-for="app in applications" :key="app.id" :title="app.name" :subtitle="app.id"></v-list-item>
+    </v-list>
   </div>
 </template>
 
