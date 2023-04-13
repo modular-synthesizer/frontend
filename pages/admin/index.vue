@@ -1,12 +1,6 @@
 <template>
-  <v-navigation-drawer expand-on-hover rail color="secondary">
-    <v-list density="compact" nav>
-      <v-list-item v-for="item in items" :prepend-icon="item.icon" :value="item.name" @click="() => (tab = item.name)">
-        {{ item.name }}
-      </v-list-item>
-    </v-list>
-  </v-navigation-drawer>
-  <div class="bg-secondary pt-5 px-2 hidden-sm-and-up">
+  <!-- On the smallest devices, we use a list and left/right arrows to navigate the tabs.-->
+  <div class="bg-secondary pt-5 px-2 hidden-md-and-up">
     <v-row>
       <v-col cols="2" class="text-center">
         <v-btn flat icon color="secondary" @click="previousTab" v-if="tab !== 'groups'" size="small">
@@ -23,6 +17,18 @@
       </v-col>
     </v-row>
   </div>
+  <!-- For intermediate displays, we use a classic tabs system, centered on the view-->
+  <v-tabs class="hidden-lg-and-up hidden-sm-and-down" bg-color="secondary" v-model="tab" align-tabs="center">
+    <v-tab v-for="item in listItems" :value="item">{{ item }}</v-tab>
+  </v-tabs>
+  <!-- On the biggest definitions, we use the left side bar to display icons with an extendable panel on hover.-->
+  <v-navigation-drawer expand-on-hover rail color="secondary">
+    <v-list density="compact" nav>
+      <v-list-item v-for="item in items" :prepend-icon="item.icon" :value="item.name" @click="() => (tab = item.name)">
+        {{ item.name }}
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
   <v-window v-model="tab">
     <v-window-item v-for="tab in items" :value="tab.name" class="pa-2">
       <component :is="tab.component" />
