@@ -6,12 +6,23 @@
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
-  <v-tabs class="hidden-lg-and-up" bg-color="secondary" align-tabs="center" v-model="tab" stacked>
-    <v-tab v-for="item in items" :value="item.name">
-      <v-icon>{{ item.icon }}</v-icon>
-      {{ item.name }}
-    </v-tab>
-  </v-tabs>
+  <div class="bg-secondary pt-5 px-2">
+    <v-row>
+      <v-col cols="2">
+        <v-btn flat icon color="secondary" @click="previousTab" v-if="tab !== 'groups'" size="small">
+          <v-icon size="x-large">mdi-chevron-left</v-icon>
+        </v-btn>
+      </v-col>
+      <v-col cols="8">
+        <v-select variant="outlined" density="compact" v-model="tab" :items="listItems"></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-btn flat icon color="secondary" @click="nextTab" v-if="tab !=='generators'" size="small">
+          <v-icon size="x-large">mdi-chevron-right</v-icon>
+        </v-btn>
+      </v-col>
+    </v-row>
+  </div>
   <v-window v-model="tab">
     <v-window-item v-for="tab in items" :value="tab.name" class="pa-2">
       <component :is="tab.component" />
@@ -20,6 +31,7 @@
 </template>
 
 <script lang="ts">
+import { findIndex } from 'lodash';
 import { resolveComponent } from 'vue';
 
 export default {
@@ -34,5 +46,21 @@ export default {
       {name: "generators", icon: "mdi-factory", component: resolveComponent('admin-generators')},
     ]
   }),
+  computed: {
+    listItems(): String[] {
+      return this.items.map(i => i.name)
+    },
+    idx() {
+      return findIndex(this.items, i => i.name === this.tab);
+    }
+  },
+  methods: {
+    nextTab() {
+      this.tab = this.items[this.idx + 1].name
+    },
+    previousTab() {
+      this.tab = this.items[this.idx + -1].name
+    },
+  }
 };
 </script>
