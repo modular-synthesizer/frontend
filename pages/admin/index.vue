@@ -1,6 +1,6 @@
 <template>
   <!-- On the smallest devices, we use a list and left/right arrows to navigate the tabs.-->
-  <div class="bg-secondary pt-5 px-2 hidden-md-and-up">
+  <div class="bg-secondary pt-5 px-2 hidden-md-and-up flex-shrink-1">
     <v-row>
       <v-col cols="2" class="text-center">
         <v-btn flat icon color="secondary" @click="previousTab" v-if="tab !== 'groups'" size="small">
@@ -29,8 +29,8 @@
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
-  <v-window v-model="tab">
-    <v-window-item v-for="tab in items" :value="tab.name" class="pa-2">
+  <v-window v-model="tab" class="flex-grow-1 size-binded overflow-y-scroll">
+    <v-window-item v-for="tab in items" :value="tab.name" class="pa-2 overflow-y-auto">
       <component :is="tab.component" />
     </v-window-item>
   </v-window>
@@ -70,3 +70,10 @@ export default {
   }
 };
 </script>
+
+<style scope>
+.size-binded {
+  height: calc(100vh - 146px);
+  max-height: calc(100vh - 146px);
+}
+</style>

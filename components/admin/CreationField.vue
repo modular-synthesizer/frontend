@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="$emit('submitted', name)">
     <v-text-field
-      density="compact"
+      density="comfortable"
       variant="outlined"
       v-model="name"
       :label="$t(t + '.labels.name')"

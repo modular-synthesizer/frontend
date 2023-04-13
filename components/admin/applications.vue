@@ -6,7 +6,7 @@
       <v-data-table class="hidden-xs" v-if="applications" :headers="headers" :items="applications" item-value="id" />
     </v-col>
   </v-row>
-  <div class="hidden-sm-and-up">
+  <div class="hidden-sm-and-up pt-1">
     <admin-creation-field @submitted="add" t="applications" />
     <v-card class="mx-auto" width="100%" elevation="5">
       <v-list lines="one">
