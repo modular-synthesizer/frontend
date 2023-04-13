@@ -6,11 +6,17 @@
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
-    <v-window v-model="tab">
-      <v-window-item v-for="tab in items" :value="tab.name" class="pa-2">
-        <component :is="tab.component" />
-      </v-window-item>
-    </v-window>
+  <v-tabs class="hidden-lg-and-up" bg-color="secondary" align-tabs="center" v-model="tab" stacked>
+    <v-tab v-for="item in items" :value="item.name">
+      <v-icon>{{ item.icon }}</v-icon>
+      {{ item.name }}
+    </v-tab>
+  </v-tabs>
+  <v-window v-model="tab">
+    <v-window-item v-for="tab in items" :value="tab.name" class="pa-2">
+      <component :is="tab.component" />
+    </v-window-item>
+  </v-window>
 </template>
 
 <script lang="ts">
