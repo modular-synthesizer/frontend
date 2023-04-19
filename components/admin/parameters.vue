@@ -1,6 +1,6 @@
 <template>
   <parameter-creator @created="add" :parameter="parameter" />
-  <div class="hidden-sm-and-up pt-1">
+  <div class="hidden-md-and-up pt-1">
     <v-card class="mx-auto mb-4" elevation="3" width="100%" v-for="param in parameters">
       <template v-slot:title>{{ param.name }}</template>
       <template v-slot:subtitle>{{ param.id }}</template>
@@ -10,37 +10,11 @@
       </v-card-text>
     </v-card>
   </div>
-  <!--v-container>
-    <v-row no-gutters>
-      <v-col cols="12">
-        <parameter-creator @created="add" :parameter="parameter" />
-      </v-col>
-    </v-row>
-    <v-row no-gutters class="mt-2">
-      <v-col cols="12">
-        <v-table>
-          <thead>
-            <tr>
-              <th>{{ $t('common.uuid') }}</th>
-              <th>{{ $t('common.name') }}</th>
-              <th>Champ ciblé</th>
-              <th>Default</th>
-              <th>Constraints</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="parameter in parameters">
-              <td>{{ parameter.id }}</td>
-              <td>{{ parameter.name }}</td>
-              <td>{{ parameter.field }}</td>
-              <td>{{ parameter.value }}</td>
-              <td><constraints :constraints="parameter.constraints" /></td>
-            </tr>
-          </tbody>
-        </v-table>
-      </v-col>
-    </v-row>
-  </v-container-->
+  <v-data-table :items="parameters" class="hidden-sm-and-down" :headers="headers">
+    <template v-slot:item.constraints="{ item }">
+      <constraints :constraints="item.props.title.constraints" />
+    </template>
+  </v-data-table>
 </template>
 
 <script lang="ts">
@@ -70,7 +44,16 @@ export default {
         const c = p.constraints;
         return {...p, constraints: `[${c.minimum},${c.maximum}] +/- ${c.step} p${c.step}`}
       });
-    }
+    },
+    headers() {
+      return [
+        { 'title': this.$t('common.uuid'), key: 'id' },
+        { 'title': this.$t('common.name'), key: 'name' },
+        { 'title': 'field', key: 'field' },
+        { 'title': 'value', key: 'name' },
+        { 'title': 'constraints', key: 'constraints' },
+      ];
+    },
   },
   mounted() {
     this.fetchDescriptors();
