@@ -4,16 +4,16 @@ metadata:
   namespace: <NAMESPACE>
   name: frontend-deployment
   labels:
-    app: modusynth-gui
+    app: synple-gui
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: modusynth-gui
+      app: synple-gui
   template:
     metadata:
       labels:
-        app: modusynth-gui
+        app: synple-gui
     spec:
       dnsPolicy: Default
       containers:

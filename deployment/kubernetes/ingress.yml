@@ -4,10 +4,8 @@ metadata:
   namespace: <NAMESPACE>
   name: frontend-ingress
   labels:
-    app: modusynth-gui
+    app: synple-gui
 spec:
-  tls:
-    - secretName: synple-app
   rules:
     - http:
         paths:

@@ -9,7 +9,7 @@ commands:
     parameters:
       namespace:
         type: string
-        default: modusynth-dev
+        default: synple-dev
       prefix:
         type: string
         default: ""
@@ -75,7 +75,7 @@ jobs:
           password: $DOCKER_PASSWORD
     steps:
       - deploy-stack:
-          namespace: modusynth
+          namespace: synple
 workflows:
   build:
     jobs:
