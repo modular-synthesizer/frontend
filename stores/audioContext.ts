@@ -6,7 +6,8 @@ export const useAudioContext = defineStore('audioContext', {
   }),
   actions: {
     async initContext() {
-      this.context = await new AudioContext();
+      console.log(this.context);
+      if (this.context === null) this.context = await new AudioContext();
       await this.context.resume();
     }
   }

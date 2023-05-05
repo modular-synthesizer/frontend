@@ -3,7 +3,7 @@
     <synthesizer-initializer v-if="!loaded" :id="id" />
     <synthesizer-stage :id="id" />
     <v-toolbar collapse density="compact" color="primary">
-      <v-btn icon to="/synthesizers">
+      <v-btn @mousedown="leaving" icon to="/synthesizers">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
       <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
@@ -40,15 +40,22 @@ export default {
   methods: {
     ...mapActions(useToolsList, ['fetchTools']),
     insertModule(mod: Mod) {
-        this.modules.push(mod);
-        this.synthesizer.place(mod.rack, mod.slot, mod);
+      this.modules.push(mod);
+      this.synthesizer.place(mod.rack, mod.slot, mod);
     },
+    leaving() {
+      useAudioContext().context?.suspend();
+    }
   },
   async mounted() {
+    await useAudioContext().context?.suspend();
     this.fetchTools();
     await useGenerators().fetchGenerators();
     initKeyboardDevice();
     initGates();
+  },
+  beforeUnmount() {
+    useAudioContext().context?.suspend();
   }
 }
 </script>
