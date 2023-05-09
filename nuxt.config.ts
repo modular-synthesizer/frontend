@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['stores/**', 'composables/**'],
   },
-  ssr: false,
+  ssr: true,
   css: [
     'vuetify/lib/styles/main.sass',
     'mdi/css/materialdesignicons.min.css',

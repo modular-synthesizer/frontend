@@ -6,6 +6,8 @@ metadata:
   labels:
     app: synple-gui
 spec:
+  tls:
+    - secretName: synple-certificates
   rules:
     - http:
         paths:
