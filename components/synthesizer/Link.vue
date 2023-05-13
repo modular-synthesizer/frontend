@@ -11,28 +11,6 @@ export default {
       required: true
     }
   },
-  computed: {
-    r(): number {
-        return PORT_RADIUS - 3
-    },
-    path(): string {
-      const x1 = this.link.from.ax;
-      const y1 = this.link.from.ay;
-      const x2 = this.link.to.ax;
-      const y2 = this.link.to.ay;
-      return `M ${x2},${y2} Q ${this.cx},${this.cy} ${x1},${y1}`;
-    },
-    distance() {
-      return Math.sqrt((this.link.from.ax - this.link.to.ax) ** 2 + (this.link.from.ay - this.link.to.ay) ** 2);
-    },
-    cx(): number {
-      return Math.abs(this.link.to.ax + this.link.from.ax) / 2;
-    },
-    cy(): number {
-      const dangle: number = Math.min(this.distance, 125) + 0.5 * Math.abs(this.link.from.ay - this.link.to.ay)
-      return Math.abs(this.link.to.ay + this.link.from.ay) / 2 + dangle;
-    }
-  },
   methods: {
     ...mapActions(useLinksList, ['remove']),
     ...mapActions(useLinkDrag, ['magnetize', 'unmagnetize']),
@@ -45,38 +23,17 @@ export default {
 
 <template>
   <g>
-    <path
-      :d="path"
-      :stroke="link.color"
-      opacity="0.3"
-      stroke-width="8"
-      fill="none" 
-      @click.prevent="remove(link.id)"
-    />
-    <circle
-      :cx="link.from.ax"
-      :cy="link.from.ay"
-      :r="r"
-      :stroke="link.color"
-      stroke-width="6"
-      fill="white"
-      stroke-alignment="inner"
-      @click.prevent="remove(link.id)"
-      @mousedown.stop="dragstart(link.from, $event)"
-      @mouseenter="magnetize(link.from)"
-      @mouseout="unmagnetize()"
-    />
-    <circle
-      :cx="link.to.ax"
-      :cy="link.to.ay"
-      :r="r"
-      :stroke="link.color"
-      stroke-width="6"
-      fill="white"
-      stroke-alignment="inner"
-      @click.prevent="remove(link.id)"
-      @mousedown.stop="dragstart(link.to, $event)"
-      @mouseenter="magnetize(link.to)"
+    <Connection
+      :start-x="link.from.ax"
+      :start-y="link.from.ay"
+      :end-x="link.to.ax"
+      :end-y="link.to.ay"
+      :color="link.color"
+      @click="remove(link.id)"
+      @start-mousedown="dragstart(link.from, $event)"
+      @start-mouseenter="magnetize(link.from)"
+      @end-mousedown="dragstart(link.to, $event)"
+      @end-mouseenter="magnetize(link.to)"
       @mouseout="unmagnetize()"
     />
   </g>

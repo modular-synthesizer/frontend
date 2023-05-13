@@ -1,3 +1,9 @@
+<template>
+  <g v-if="start">
+    <Connection :start-x="start.ax" :start-y="start.ay" :end-x="endX" :end-y="endY" :color="color" :no-events="true" />
+  </g>
+</template>
+
 <script lang="ts">
 import { PORT_RADIUS } from '~~/lib/utils/constants';
 import { mapState } from 'pinia';
@@ -25,14 +31,6 @@ export default  {
   },
 }
 </script>
-
-<template>
-  <g v-if="start">
-    <line class="link-line" :x1="start.ax" :x2="endX" :y1="start.ay" :y2="endY" stroke-width="8" :stroke="color" opacity="0.5" />
-    <circle class="link-dot" :cx="start.ax" :cy="start.ay" :r="radius" fill="white" stroke-width="6" :stroke="color" />
-    <circle class="link-dot" :cx="endX" :cy="endY" :r="radius" fill="white" stroke-width="6" :stroke="color" />
-  </g>
-</template>
 
 <style scoped>
 .link-dot, .link-line {
