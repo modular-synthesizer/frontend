@@ -1,8 +1,8 @@
 <template>
   <g :transform="`translate(0 ${rackHeight * rack.index})`">
-    <g v-for="slot in rack.slots" :transform="`translate(${slotSize * (slot - 1)} 0)`">
-      <Fixation :y="0" />
-      <Fixation :y="rackHeight - slotSize" />
+    <Rail :slots="rack.slots" />
+    <g :transform="`translate(0 ${rackHeight - slotSize})`">
+      <Rail :slots="rack.slots" />
     </g>
     <ExpandersSlots :rack="rack" />
   </g>
@@ -11,7 +11,7 @@
 <script lang="ts">
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import Rack from '~~/lib/wrappers/Rack';
-import Fixation from './Fixation.vue';
+import Rail from '../Rail.vue'
 
 export default {
   props: {
@@ -24,6 +24,6 @@ export default {
     rackHeight() { return RACK_HEIGHT; },
     slotSize() { return SLOT_SIZE; }
   },
-  components: { Fixation }
+  components: { Rail }
 }
 </script>
