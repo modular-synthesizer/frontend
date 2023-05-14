@@ -40,7 +40,7 @@ export default class GatesManager {
     this.interval = window.setInterval(() => this.checkGates(), this._duration);
   }
 
-  private stop() {
+  public stop() {
     if (this.interval !== -1) window.clearInterval(this.interval);
     this.interval = -1;
   }

@@ -25,5 +25,11 @@ export default {
     ...mapState(useModulesList, ['modules']),
     ...mapState(useLinksList, ['links']),
   },
+  unmounted() {
+    gatesManager.stop();
+  },
+  mounted() {
+    gatesManager.reset();
+  }
 }
 </script>
