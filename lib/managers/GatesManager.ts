@@ -1,5 +1,6 @@
 import { remove } from "lodash";
 import Gate from "../signal/gate";
+import IManager from "../interfaces/IManager";
 
 /**
  * A gates manager provides methods to declares new gates, delete some, and
@@ -7,7 +8,7 @@ import Gate from "../signal/gate";
  * duration of the checking interval for performance purpose.
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
-export default class GatesManager {
+export default class GatesManager implements IManager {
   // The interval at which the gates are checked in milliseconds. Make it bigger for better performances.
   private _duration = 5;
   // The list of gates to check. A gate is made to check its input, and trigger an output accordingly.
@@ -25,7 +26,7 @@ export default class GatesManager {
 
   public set duration(duration: number) {
     this._duration = duration;
-    this.reset();
+    this.start();
   }
 
   private checkGates() {
@@ -35,7 +36,8 @@ export default class GatesManager {
   /**
    * Resets the internal clock checks with the new duration value.
    */
-  public reset() {
+  public start() {
+    console.log("Starting the gates manager");
     this.stop();
     this.interval = window.setInterval(() => this.checkGates(), this._duration);
   }

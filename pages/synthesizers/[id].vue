@@ -51,7 +51,6 @@ export default {
     await useAudioContext().context?.suspend();
     this.fetchTools();
     await useGenerators().fetchGenerators();
-    initKeyboardDevice();
   },
   beforeUnmount() {
     useAudioContext().context?.suspend();

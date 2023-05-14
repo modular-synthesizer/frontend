@@ -26,10 +26,10 @@ export default {
     ...mapState(useLinksList, ['links']),
   },
   unmounted() {
-    gatesManager.stop();
+    stopManagers();
   },
   mounted() {
-    gatesManager.reset();
+    startManagers();
   }
 }
 </script>

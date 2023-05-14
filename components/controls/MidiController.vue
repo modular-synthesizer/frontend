@@ -22,7 +22,7 @@ export default {
     }
   },
   mounted() {
-    onKeyDown((note: number, mapper: KeyMapper) => {
+    midiManager.onkeydown((note: number, mapper: KeyMapper) => {
       const voltage: number = (note - 69) / 12;
       const channel = this.mod.freeChannel();
       channel.used = true;
@@ -34,7 +34,7 @@ export default {
       pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
       gate.offset.setValueAtTime(1, this.ctx.currentTime);
     });
-    onKeyUp((note: number, mapper: KeyMapper) => {
+    midiManager.onkeyup((note: number, mapper: KeyMapper) => {
       const channel = this.mod.channels[mapper.channel];
       const gate: ConstantSourceNode = channel.getNode(this.envelope)?.node as ConstantSourceNode
       gate.offset.setValueAtTime(0, this.ctx.currentTime);
