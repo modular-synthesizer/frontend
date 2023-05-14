@@ -41,7 +41,7 @@ export default {
   methods: {
     ...mapActions(useGroups, ['add', 'remove']),
     create(group: IGroup) {
-      console.log(group);
+      // TODO
     }
   }
 }

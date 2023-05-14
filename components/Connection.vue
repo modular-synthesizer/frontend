@@ -69,27 +69,23 @@ export default {
     }
   },
   methods: {
-    emit(event: any) {
-      console.log(event);
-      this.$emit(event);
-    },
     click() {
-      this.emit('click');
+      this.$emit('click');
     },
     startMouseDown() {
-      this.emit('startMousedown');
+      this.$emit('startMousedown');
     },
     endMouseDown() {
-      this.emit('endMousedown');
+      this.$emit('endMousedown');
     },
     startMouseEnter() {
-      this.emit('startMouseenter');
+      this.$emit('startMouseenter');
     },
     endMouseEnter() {
-      this.emit('endMouseenter');
+      this.$emit('endMouseenter');
     },
     mouseOut() {
-      this.emit('mouseout');
+      this.$emit('mouseout');
     }
   }
 }
