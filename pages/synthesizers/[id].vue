@@ -52,7 +52,7 @@ export default {
     this.fetchTools();
     await useGenerators().fetchGenerators();
     initKeyboardDevice();
-    initGates();
+    gatesManager.reset();
   },
   beforeUnmount() {
     useAudioContext().context?.suspend();

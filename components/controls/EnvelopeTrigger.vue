@@ -48,7 +48,7 @@ export default {
       const envelope = new Envelope(channel, this.target);
       gate.onTrigger(() => envelope.trigger(this.a, this.d, this.s));
       gate.onRelease(() => envelope.release(this.r));
-      addGate(gate);
+      gatesManager.add(gate);
     });
   }
 }
