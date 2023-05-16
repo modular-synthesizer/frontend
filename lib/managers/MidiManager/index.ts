@@ -35,6 +35,10 @@ export default class MidiManager implements IManager {
 
   stop(): void {
     console.log("stopping midi listener");
+    this.listeners.noteOn = [];
+    this.listeners.noteOff = [];
+    window.onkeydown = null;
+    window.onkeyup = null;
   }
   onkeydown(callback: midiListenerCallback) {
     this.listeners.noteOn.push(callback);

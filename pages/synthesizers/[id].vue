@@ -44,6 +44,11 @@ export default {
       this.synthesizer.place(mod.rack, mod.slot, mod);
     },
     leaving() {
+      useSynthesizerDetails().reset();
+      usePorts().reset();
+      useModulesList().reset();
+      useLinksList().reset();
+      stopManagers();
       useAudioContext().context?.suspend();
     }
   },
@@ -53,7 +58,7 @@ export default {
     await useGenerators().fetchGenerators();
   },
   beforeUnmount() {
-    useAudioContext().context?.suspend();
+    this.leaving();
   }
 }
 </script>

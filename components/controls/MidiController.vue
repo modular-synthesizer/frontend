@@ -5,7 +5,6 @@
 <script lang="ts">
 import Mod from '~~/lib/wrappers/Mod';
 import Envelope from '~~/lib/signal/envelope';
-import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
 import KeyMapper from '~~/lib/interfaces/KeyMapper';
 
 export default {
@@ -21,7 +20,7 @@ export default {
       keysCount: 0,
     }
   },
-  mounted() {
+  created() {
     midiManager.onkeydown((note: number, mapper: KeyMapper) => {
       const voltage: number = (note - 69) / 12;
       const channel = this.mod.freeChannel();
@@ -35,7 +34,9 @@ export default {
       gate.offset.setValueAtTime(1, this.ctx.currentTime);
     });
     midiManager.onkeyup((note: number, mapper: KeyMapper) => {
+      console.log("passage dans un listener keyup")
       const channel = this.mod.channels[mapper.channel];
+      if (channel === undefined) return;
       const gate: ConstantSourceNode = channel.getNode(this.envelope)?.node as ConstantSourceNode
       gate.offset.setValueAtTime(0, this.ctx.currentTime);
       channel.used = false;

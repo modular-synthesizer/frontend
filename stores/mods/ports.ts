@@ -8,6 +8,9 @@ export const usePorts = defineStore('portsList', {
   actions: {
     addPorts(ports: Port[]) {
       ports.forEach(port => this.ports.push(port));
+    },
+    reset() {
+      this.ports = [];
     }
   }
 })

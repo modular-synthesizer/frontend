@@ -1,5 +1,5 @@
 <template>
-  <synthesizer-events-handler>
+  <synthesizer-events-handler :key="synthesizerKey">
     <g :transform="`translate(${synthesizer.x} ${synthesizer.y}) scale(${synthesizer.scale} ${synthesizer.scale})`" v-if="synthesizer">
       <synthesizer-rack v-for="rack in synthesizer.racks" :rack="rack" />
       <synthesizer-module v-for="mod in modules" :mod="mod" />
@@ -12,6 +12,7 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
+import { v4 as uuid } from 'uuid';
 
 export default {
   props: {
@@ -20,12 +21,21 @@ export default {
       required: true,
     },
   },
+  data: function() {
+    return {
+      key: uuid()
+    };
+  },
   computed: {
     ...mapState(useSynthesizerDetails, ['synthesizer']),
     ...mapState(useModulesList, ['modules']),
     ...mapState(useLinksList, ['links']),
+    synthesizerKey() {
+      return `${this.key}--${this.synthesizer.id}`
+    }
   },
   unmounted() {
+    useSynthesizerDetails().reset();
     stopManagers();
   },
   mounted() {

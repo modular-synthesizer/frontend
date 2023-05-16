@@ -68,7 +68,7 @@ export default class Synthesizer {
   }
 
   public toString(): string {
-    return this.racks.map(rack => rack.toString()).join("\n");
+    return "[" + this.id + " " + this.name + "]";
   }
 
   public get coordinates(): ICoordinates {

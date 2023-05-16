@@ -11,6 +11,10 @@ export const useSynthesizerDetails = defineStore('synthesizerDetail', {
     async fetch(id: string): Promise<void> {
       const results: ISynthesizer = await api.auth_get(`/synthesizers/${id}`);
       this.synthesizer = new Synthesizer(results);
+    },
+    reset() {
+      console.log("Resetting the synthesizer");
+      this.synthesizer = new Synthesizer(createEmptySynthesizer())
     }
   }
 })
