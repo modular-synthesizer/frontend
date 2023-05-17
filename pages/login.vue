@@ -18,7 +18,7 @@
             :hint="$t('register.hints.username')"
             :placeholder="$t('register.placeholders.username')"
             variant="outlined"
-            v-model="v$.account.username.$model"
+            v-model="account.username"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -29,7 +29,7 @@
             :hint="$t('register.hints.password')"
             type="password"
             variant="outlined"
-            v-model="v$.account.password.$model"
+            v-model="account.password"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -42,54 +42,30 @@
   </v-form>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import useVuelidate from '@vuelidate/core';
 import { minLength, required } from '@vuelidate/validators';
-import { mapActions } from 'pinia';
 import IApiError from '~~/lib/interfaces/IApiError';
 
-definePageMeta({
-  authenticated: false
-})
-export default {
-  setup() {
-    return {
-      v$: useVuelidate(),
-    };
-  },
-  data() {
-    return {
-      vuelidateExternalResults: {
-        account: {
-          username: [],
-          email: [],
-        },
-      },
-      account: {
-        username: "",
-        password: ""
-      },
-      error: ""
-    };
-  },
-  validations: {
-    account: {
-      username: { required, minsize: minLength(6) },
-      password: { required }
-    }
-  },
-  methods: {
-    ...mapActions(useAuthentication, ['login']),
-    submitLogin() {
-      this.v$.$validate();
-      this.login(this.account.username, this.account.password)
-        .catch((error: any) => {
-            const err: IApiError = error.response.data;
-            Object.assign(this.vuelidateExternalResults.account, {
-              [err.key]: [err.message],
-            });
-        })
-    },
-  }
+definePageMeta({ middleware: ['already-logged'], layout: 'anonymous' });
+
+const account = reactive({ username: '', password: '' });
+
+const $externalResults = ref({})
+
+const rules = computed(() => ({
+  username: { required, minsize: minLength(6) },
+  password: { required }
+}));
+
+const v$ = useVuelidate(rules, account, { $externalResults });
+
+async function submitLogin() {
+  await v$.value.$validate();
+  useAuthentication().login(account.username, account.password)
+    .catch((error: any) => {
+        const err: IApiError = error.response.data;
+        $externalResults.value = { [err.key]: err.message };
+    });
 }
 </script>

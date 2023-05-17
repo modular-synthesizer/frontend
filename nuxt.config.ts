@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['stores/**', 'composables/**'],
   },
-  ssr: true,
+  ssr: false,
   css: [
     'vuetify/lib/styles/main.sass',
     'mdi/css/materialdesignicons.min.css',
@@ -21,8 +21,6 @@ export default defineNuxtConfig({
       isCustomElement: tag => [
         'v-card-header',
         'v-card-header-text',
-        'v-app-bar',
-        'v-app-bar-title'
       ].includes(tag)
     }
   },

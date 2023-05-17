@@ -8,9 +8,9 @@
         </div>
       </v-overlay>
     </v-img>
-    <v-row class="mt-8">
-      <v-col :xs="12" :class="descriptionsClasses">
-        <v-card :width="descriptionsWidth" :class="itemClasses" color="grey-lighten-4" elevation="0" v-for="block in blocks">
+    <v-row class="mt-4">
+      <v-col :xs="12" class="d-flex flex-column flex-md-row">
+        <v-card :class="['text-center mb-4', {'ml-md-8': idx !== 0}]" color="grey-lighten-4" elevation="0" v-for="(block, idx) in blocks">
           <v-card-text>
             <div class="text-h4 text-purple-darken-4">{{ $t(`homepage.blocks.${block}.title`) }}</div>
             <div class="content-in-columns text-h5 mt-5 text-grey">{{ $t(`homepage.blocks.${block}.text`) }}</div>
@@ -21,42 +21,16 @@
   </v-container>
 </template>
 
-<script lang="ts">
-import Menu from '~~/components/structure/menu.vue'
-import { useDisplay } from 'vuetify'
 
-definePageMeta({
-  authenticated: false
-})
-export default {
-  components: { Menu },
-  data: () => ({
-    overlay: true,
-    mobile: useDisplay().mobile
-  }),
-  computed: {
-    blocks() {
-      return ['simple', 'powerful', 'customizable']
-    },
-    descriptionsClasses(): any {
-      return {
-        'd-flex': true,
-        'flex-row': !this.mobile,
-        'flex-column': this.mobile,
-        'justify-space-between': true
-      }
-    },
-    descriptionsWidth(): string {
-      return this.mobile ? '100%' : '30%'
-    },
-    itemClasses(): any {
-      return {
-        'text-center': true,
-        'mb-4': this.mobile,
-      }
-    }
-  }
-}
+
+<script lang="ts" setup>
+definePageMeta({ layout: 'anonymous' });
+
+if (useAuthentication().authenticated) setPageLayout('default');
+
+const blocks = ['simple', 'powerful', 'customizable'];
+
+const overlay = ref(true);
 </script>
 
 <style scoped>
