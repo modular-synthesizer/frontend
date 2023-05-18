@@ -1,6 +1,5 @@
 <script lang="ts">
 import { mapActions } from "pinia";
-import { PORT_RADIUS } from "~~/lib/utils/constants";
 import Link from "~~/lib/wrappers/Link";
 import Port from "~~/lib/wrappers/Port";
 

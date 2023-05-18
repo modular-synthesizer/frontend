@@ -3,7 +3,7 @@
     <g v-for="slot in slots" :transform="`translate(${slotSize * (slot - 1)} 0)`">
       <Fixation />
     </g>
-    <rect x="0" y="0" :width="slots * slotSize" :height="slotSize" fill="transparent" stroke="#555555" />
+    <rect x="0" y="0" :width="slots * slotSize" :height="slotSize" fill="transparent" stroke="#333333" />
   </g>
 </template>
 

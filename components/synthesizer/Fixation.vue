@@ -10,7 +10,7 @@ export default {
 
 <template>
   <g class="screws">
-    <circle :cx="slotSize / 2" :cy="slotSize / 2" :r="slotSize / 4" fill="#555555" />
+    <circle :cx="slotSize / 2" :cy="slotSize / 2" :r="slotSize / 4" fill="#333333" />
     <circle :cx="slotSize / 2" :cy="slotSize / 2" :r="slotSize / 4 - 2" fill="black" />
   </g>
 </template>

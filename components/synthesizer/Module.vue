@@ -3,7 +3,7 @@
     @mousedown.stop="dragstart"
     @click.right.stop.prevent="showMenu(mod, $event)"
   >
-    <rect :width="width" :height="height" stroke="black" fill="#A3A3A3" />
+    <rect :width="width" :height="height" stroke="black" fill="#777777" />
     <template v-if="mod.controls.length > 0" v-for="control in mod.controls">
       <ControlsWrapper :mod="mod" :control="control" />
     </template>

@@ -46,11 +46,14 @@ export default {
     startY: { type: Number, default: 0 },
     endX: { type: Number, default: 0 },
     endY: { type: Number, default: 0 },
-    color: { type: String, default: 'red' },
-    opacity: { type: Number, default: 0.3 },
+    // color: { type: String, default: '#B00020' },
+    opacity: { type: Number, default: 0.5 },
     noEvents: { type: Boolean },
   },
   computed: {
+    color() {
+      return '#5E35B1'
+    },
     r(): number {
         return PORT_RADIUS - 3
     },

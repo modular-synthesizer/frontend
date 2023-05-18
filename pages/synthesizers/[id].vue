@@ -68,7 +68,7 @@ export default {
 svg, .wrapper {
   width: 100vw;
   height: 100vh;
-  background-color: silver;
+  background-color: #555555;
   position: absolute;
   top: 0px;
   left: 0px;
