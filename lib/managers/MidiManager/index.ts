@@ -29,12 +29,10 @@ export default class MidiManager implements IManager {
   ];
 
   start(): void {
-    console.log("Starting the midi manager");
     this.initEvents();
   }
 
   stop(): void {
-    console.log("stopping midi listener");
     this.listeners.noteOn = [];
     this.listeners.noteOff = [];
     window.onkeydown = null;

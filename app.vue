@@ -19,5 +19,8 @@ export default {
       return useRoute().meta.menu !== false;
     }
   },
+  mounted() {
+    useAuthentication().refresh();
+  }
 }
 </script>

@@ -36,6 +36,9 @@
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
 
+definePageMeta({
+  middleware: ['check-authentication'],
+})
 export default {
   data: () => ({
     synthesizer: createEmptySynthesizer()

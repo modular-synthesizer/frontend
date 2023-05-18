@@ -47,7 +47,7 @@ export const useAuthentication = defineStore('authentication', {
       api.delete(`/sessions/${token}`, {auth_token: token})
       this.storage.remove("auth-token");
       this.session = emptySession();
-      navigateTo("/");
+      navigateTo('/')
     },
     /**
      * Refreshes the session by reading the token in the local storage and
@@ -58,8 +58,7 @@ export const useAuthentication = defineStore('authentication', {
       if (this.storage.has("auth-token")) {
         const token: string = this.storage.get("auth-token");
         api.get(`/sessions/${token}`, {auth_token: token})
-          .then((response: ISession) => this.session = response)
-          .catch(_error => this.logout());
+          .then((response: ISession) => this.session = response);
       }
     }
   }

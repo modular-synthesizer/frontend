@@ -30,7 +30,11 @@ export default {
     ...mapState(useAuthentication, ['admin']),
   },
   methods: {
-    ...mapActions(useAuthentication, ['logout'])
+    ...mapActions(useAuthentication, ['logout']),
+    logoutAndRedirect() {
+      this.logout();
+      window.location.reload();
+    }
   }
 }
 </script>

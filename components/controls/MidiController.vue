@@ -34,7 +34,6 @@ export default {
       gate.offset.setValueAtTime(1, this.ctx.currentTime);
     });
     midiManager.onkeyup((note: number, mapper: KeyMapper) => {
-      console.log("passage dans un listener keyup")
       const channel = this.mod.channels[mapper.channel];
       if (channel === undefined) return;
       const gate: ConstantSourceNode = channel.getNode(this.envelope)?.node as ConstantSourceNode

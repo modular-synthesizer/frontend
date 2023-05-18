@@ -13,7 +13,6 @@ export const useSynthesizerDetails = defineStore('synthesizerDetail', {
       this.synthesizer = new Synthesizer(results);
     },
     reset() {
-      console.log("Resetting the synthesizer");
       this.synthesizer = new Synthesizer(createEmptySynthesizer())
     }
   }

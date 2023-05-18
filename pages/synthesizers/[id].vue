@@ -17,7 +17,8 @@ import { mapActions, mapState } from 'pinia';
 import Mod from '~~/lib/wrappers/Mod';
 
 definePageMeta({
-  menu: false
+  menu: false,
+  middleware: ['check-authentication'],
 })
 export default {
   data() {

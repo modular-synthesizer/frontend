@@ -37,7 +37,6 @@ export default class GatesManager implements IManager {
    * Resets the internal clock checks with the new duration value.
    */
   public start() {
-    console.log("Starting the gates manager");
     this.stop();
     this.interval = window.setInterval(() => this.checkGates(), this._duration);
   }
