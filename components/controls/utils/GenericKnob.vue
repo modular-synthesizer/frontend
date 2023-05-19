@@ -1,5 +1,5 @@
 <template>
-  <g v-if="parameter !== undefined" @mousedown.stop="startParameterSetting($event, parameter)" @wheel.passive.stop="wheel">
+  <g v-if="parameter !== undefined" @mousedown.stop="startParameterSetting($event, parameter)">
     <text
       v-if="displayLabel"
       :transform="`translate(${x}, ${y - r - 6})`"
@@ -13,10 +13,10 @@
     </g>
     <circle :r="r" :cx="x" :cy="y" fill="white" stroke="black" stroke-width="3" /-->
     <circle :cx="x" :cy="y" :r="r" fill="black" />
-    <path :d="arcPath(x, y, r - 5, 30, 330)" stroke="#555555" stroke-width="2" fill="transparent"/>
-    <path :d="arcPath(x, y, r - 5, 30, angle)" :stroke="lightColor" stroke-width="2" fill="transparent"/>
+    <path :d="arcPath(x, y, r - 4, 30, 330)" stroke="#555555" stroke-width="2" fill="transparent"/>
+    <path :d="arcPath(x, y, r - 4, 30, angle)" :stroke="lightColor" stroke-width="2" fill="transparent"/>
     <circle :cx="lightCoords.x" :cy="lightCoords.y" :r="2" :fill="lightColor" />
-    <text class="value" :x="x" :y="y" text-anchor="middle" alignment-baseline="middle" fill="white" v-if="r >= 20">
+    <text :class="['value', {'small': r < 20}]" :x="x" :y="y" text-anchor="middle" alignment-baseline="middle">
       {{ value }}
     </text>
   </g>
@@ -61,7 +61,7 @@ export default {
       return this.label !== ""
     },
     lightCoords(): ICoordinates {
-      return polarToCartesian(this.x, this.y, this.r - 5, this.angle)
+      return polarToCartesian(this.x, this.y, this.r - 4, this.angle)
     },
     lightColor(): string {
       return '#2196F3'
@@ -69,29 +69,26 @@ export default {
   },
   methods: {
     ...mapActions(useParameters, ['startParameterSetting']),
-    wheel(event: WheelEvent) {
-      if (event.deltaY > 0) {
-        this.parameter.moveValue(-this.parameter.step)
-      }
-      else {
-        this.parameter.moveValue(this.parameter.step)
-      }
-    }
   },
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .value {
-    font-size: 10px;
+    font-size: 12px;
     user-select: none;
     paint-order: stroke;
-    stroke: white;
+    stroke: #A9A9A9;
+    fill: #B5B5B5;
     stroke-width: 1px;
     stroke-linecap: butt;
     stroke-linejoin: miter;
     stroke-opacity: .5;
     font-weight: 500;
+
+    &.small {
+      font-size: 7px;
+    }
 }
 .label-text {
   font-size: 10px;
