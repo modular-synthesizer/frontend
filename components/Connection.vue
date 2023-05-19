@@ -1,39 +1,41 @@
 <template>
-  <path
-    :d="path"
-    :stroke="color"
-    :opacity="opacity"
-    stroke-width="8"
-    fill="none"
-    :class="{ 'no-events': noEvents }"
-    @click.prevent="click"
-  />
-  <circle
-    :class="{ 'no-events': noEvents }"
-    :cx="startX"
-    :cy="startY"
-    :r="r"
-    fill="white"
-    stroke-width="6"
-    :stroke="color"
-    @click="click"
-    @mousedown.left.stop="startMouseDown"
-    @mouseenter="startMouseEnter"
-    @mouseout="mouseOut"
-  />
-  <circle
-    :class="{ 'no-events': noEvents }"
-    :cx="endX"
-    :cy="endY"
-    :r="r"
-    fill="white"
-    stroke-width="6"
-    :stroke="color"
-    @click.prevent="click"
-    @mousedown.left.stop="endMouseDown"
-    @mouseenter="endMouseEnter"
-    @mouseout="mouseOut"
-  />
+  <g @mouseenter="entered = true" @mouseout="entered = false">
+    <path
+      :d="path"
+      :stroke="color"
+      :opacity="entered ? 1 : opacity"
+      stroke-width="6"
+      fill="none"
+      :class="{ 'no-events': noEvents }"
+      @click.prevent="click"
+    />
+    <circle
+      :class="{ 'no-events': noEvents }"
+      :cx="startX"
+      :cy="startY"
+      :r="r"
+      fill="white"
+      stroke-width="6"
+      :stroke="color"
+      @click="click"
+      @mousedown.left.stop="startMouseDown"
+      @mouseenter="startMouseEnter"
+      @mouseout="mouseOut"
+    />
+    <circle
+      :class="{ 'no-events': noEvents }"
+      :cx="endX"
+      :cy="endY"
+      :r="r"
+      fill="white"
+      stroke-width="6"
+      :stroke="color"
+      @click.prevent="click"
+      @mousedown.left.stop="endMouseDown"
+      @mouseenter="endMouseEnter"
+      @mouseout="mouseOut"
+    />
+  </g>
 </template>
 
 <script lang="ts">
@@ -47,8 +49,13 @@ export default {
     endX: { type: Number, default: 0 },
     endY: { type: Number, default: 0 },
     color: { type: String, default: '#5E35B1' },
-    opacity: { type: Number, default: 0.5 },
+    opacity: { type: Number, default: 0.3 },
     noEvents: { type: Boolean },
+  },
+  data: function () {
+    return {
+      entered: false,
+    };
   },
   computed: {
     r(): number {
