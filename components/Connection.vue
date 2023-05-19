@@ -1,6 +1,16 @@
 <template>
   <g @mouseenter="entered = true" @mouseout="entered = false" @mousemove="moved = true">
     <path
+      v-if="entered"
+      :d="path"
+      stroke="black"
+      :opacity="1"
+      stroke-width="8"
+      fill="none"
+      :class="{ 'no-events': noEvents }"
+      @click.prevent="click(true)"
+    />
+    <path
       :d="path"
       :stroke="color"
       :opacity="entered ? 1 : opacity"
