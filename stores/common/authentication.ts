@@ -5,7 +5,7 @@ import { storage } from "./storage"
 
 export const useAuthentication = defineStore('authentication', {
   state: (): IAuthenticationState => ({
-    session: emptySession(),
+    session: emptySession() as ISession,
     storage: storage()
   }),
   getters: {
@@ -14,6 +14,10 @@ export const useAuthentication = defineStore('authentication', {
     },
     admin(): boolean {
       return !!this.session.admin;
+    },
+    token(): string {
+      if(this.session?.token !== '') return this.session.token;
+      return this.storage.get('auth-token');
     }
   },
   actions: {
@@ -42,24 +46,23 @@ export const useAuthentication = defineStore('authentication', {
      * from the database, but doesn't care if the requests succeeds as the session
      * will be considered deleted anyway.
      */
-    logout(): void {
-      const token: string = this.session.token;
-      api.delete(`/sessions/${token}`, {auth_token: token})
+    async logout(): Promise<void> {
+      if (!this.token) return;
+      api.delete(`/sessions/${this.token}`, {auth_token: this.token})
       this.storage.remove("auth-token");
       this.session = emptySession();
-      navigateTo('/')
+      window.location.href = '/';
     },
     /**
      * Refreshes the session by reading the token in the local storage and
      * recreating the session object in this storage so that the user does not
      * have to login again in the application when its session is still valid.
      */
-    refresh(): void {
-      if (this.storage.has("auth-token")) {
-        const token: string = this.storage.get("auth-token");
-        api.get(`/sessions/${token}`, {auth_token: token})
-          .then((response: ISession) => this.session = response);
-      }
+    async refresh(): Promise<void> {
+      if (!this.token) return;
+      return api.get(`/sessions/${this.token}`, {auth_token: this.token})
+        .then((session: ISession) => { this.session = session; })
+        .catch(this.logout);
     }
   }
 })

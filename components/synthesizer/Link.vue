@@ -27,7 +27,6 @@ export default {
       :start-y="link.from.ay"
       :end-x="link.to.ax"
       :end-y="link.to.ay"
-      :color="link.color"
       @click="remove(link.id)"
       @start-mousedown="dragstart(link.from, $event)"
       @start-mouseenter="magnetize(link.from)"

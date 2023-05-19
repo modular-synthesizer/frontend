@@ -14,7 +14,7 @@ export default { }
     @mouseup="dragend"
     @mouseleave="dragend"
     @touchend="dragend"
-    @wheel.prevent="wheel"
+    @wheel.passive="wheel"
   >
     <slot></slot>
   </svg>

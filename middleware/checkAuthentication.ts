@@ -4,8 +4,11 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
       return navigateTo('/');
     }
     else {
-      useAuthentication().refresh();
-      if (!useAuthentication().authenticated) useAuthentication().logout();
+      await useAuthentication().refresh();
+      if (!useAuthentication().authenticated) {
+        useAuthentication().logout();
+        return navigateTo('/');
+      }
     }
   }
 });
