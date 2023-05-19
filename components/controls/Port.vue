@@ -20,7 +20,7 @@
         :r="radius"
         @mouseenter="magnetize(port)"
         @mouseout="unmagnetize()"
-        @mousedown.stop="dragstart"
+        @mousedown.left.stop="dragstart"
       />
     </g>
   </g>

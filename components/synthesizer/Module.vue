@@ -1,6 +1,6 @@
 <template>
   <g :transform="`translate(${x} ${y})`"
-    @mousedown.stop="dragstart"
+    @mousedown.left.stop="dragstart"
     @click.right.stop.prevent="showMenu(mod, $event)"
   >
     <rect :width="width" :height="height" stroke="black" fill="#777777" />

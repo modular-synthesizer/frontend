@@ -17,7 +17,7 @@
     stroke-width="6"
     :stroke="color"
     @click="click"
-    @mousedown.stop="startMouseDown"
+    @mousedown.left.stop="startMouseDown"
     @mouseenter="startMouseEnter"
     @mouseout="mouseOut"
   />
@@ -30,7 +30,7 @@
     stroke-width="6"
     :stroke="color"
     @click.prevent="click"
-    @mousedown.stop="endMouseDown"
+    @mousedown.left.stop="endMouseDown"
     @mouseenter="endMouseEnter"
     @mouseout="mouseOut"
   />
@@ -46,14 +46,11 @@ export default {
     startY: { type: Number, default: 0 },
     endX: { type: Number, default: 0 },
     endY: { type: Number, default: 0 },
-    // color: { type: String, default: '#B00020' },
+    color: { type: String, default: '#5E35B1' },
     opacity: { type: Number, default: 0.5 },
     noEvents: { type: Boolean },
   },
   computed: {
-    color() {
-      return '#5E35B1'
-    },
     r(): number {
         return PORT_RADIUS - 3
     },
@@ -75,11 +72,11 @@ export default {
     click() {
       this.$emit('click');
     },
-    startMouseDown() {
-      this.$emit('startMousedown');
+    startMouseDown($event: MouseEvent) {
+      this.$emit('startMousedown', $event);
     },
-    endMouseDown() {
-      this.$emit('endMousedown');
+    endMouseDown($event: MouseEvent) {
+      this.$emit('endMousedown', $event);
     },
     startMouseEnter() {
       this.$emit('startMouseenter');

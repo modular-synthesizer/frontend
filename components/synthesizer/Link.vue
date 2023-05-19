@@ -1,7 +1,6 @@
 <script lang="ts">
 import { mapActions } from "pinia";
 import Link from "~~/lib/wrappers/Link";
-import Port from "~~/lib/wrappers/Port";
 
 export default {
   props: {
@@ -12,10 +11,7 @@ export default {
   },
   methods: {
     ...mapActions(useLinksList, ['remove']),
-    ...mapActions(useLinkDrag, ['magnetize', 'unmagnetize']),
-    dragstart(port: Port, $event: MouseEvent) {
-      useLinkDrag().dragstart(port, $event);
-    },
+    ...mapActions(useLinkDrag, ['magnetize', 'unmagnetize', 'dragstart']),
   }
 }
 </script>
@@ -28,9 +24,9 @@ export default {
       :end-x="link.to.ax"
       :end-y="link.to.ay"
       @click="remove(link.id)"
-      @start-mousedown="dragstart(link.from, $event)"
+      @start-mousedown="$event => dragstart(link.from, $event)"
       @start-mouseenter="magnetize(link.from)"
-      @end-mousedown="dragstart(link.to, $event)"
+      @end-mousedown="$event => dragstart(link.to, $event)"
       @end-mouseenter="magnetize(link.to)"
       @mouseout="unmagnetize()"
     />

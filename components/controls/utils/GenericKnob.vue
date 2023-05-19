@@ -1,5 +1,5 @@
 <template>
-  <g v-if="parameter !== undefined" @mousedown.stop="startParameterSetting($event, parameter)">
+  <g v-if="parameter !== undefined" @mousedown.stop="startParameterSetting($event, parameter)" @wheel.passive.stop="wheel">
     <text
       v-if="displayLabel"
       :transform="`translate(${x}, ${y - r - 6})`"
@@ -69,6 +69,14 @@ export default {
   },
   methods: {
     ...mapActions(useParameters, ['startParameterSetting']),
+    wheel(event: WheelEvent) {
+      if (event.deltaY > 0) {
+        this.parameter.moveValue(-this.parameter.step)
+      }
+      else {
+        this.parameter.moveValue(this.parameter.step)
+      }
+    }
   },
 }
 </script>
