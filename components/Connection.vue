@@ -1,5 +1,5 @@
 <template>
-  <g @mouseenter="entered = true" @mouseout="entered = false">
+  <g @mouseenter="entered = true" @mouseout="entered = false" @mousemove="moved = true">
     <path
       :d="path"
       :stroke="color"
@@ -7,7 +7,7 @@
       stroke-width="6"
       fill="none"
       :class="{ 'no-events': noEvents }"
-      @click.prevent="click"
+      @click.prevent="click(true)"
     />
     <circle
       :class="{ 'no-events': noEvents }"
@@ -17,7 +17,7 @@
       fill="white"
       stroke-width="6"
       :stroke="color"
-      @click="click"
+      @click="click()"
       @mousedown.left.stop="startMouseDown"
       @mouseenter="startMouseEnter"
       @mouseout="mouseOut"
@@ -30,7 +30,7 @@
       fill="white"
       stroke-width="6"
       :stroke="color"
-      @click.prevent="click"
+      @click.prevent="click()"
       @mousedown.left.stop="endMouseDown"
       @mouseenter="endMouseEnter"
       @mouseout="mouseOut"
@@ -55,6 +55,7 @@ export default {
   data: function () {
     return {
       entered: false,
+      moved: false,
     };
   },
   computed: {
@@ -76,13 +77,16 @@ export default {
     }
   },
   methods: {
-    click() {
+    click(force: boolean = false) {
+      if(this.moved && !force) return;
       this.$emit('click');
     },
     startMouseDown($event: MouseEvent) {
+      this.moved = false;
       this.$emit('startMousedown', $event);
     },
     endMouseDown($event: MouseEvent) {
+      this.moved = false;
       this.$emit('endMousedown', $event);
     },
     startMouseEnter() {
