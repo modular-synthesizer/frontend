@@ -1,4 +1,7 @@
 <template>
+  <Head>
+    <Title>Synple</Title>
+  </Head>
   <VApp>
     <VLayout>
       <NuxtLayout>
