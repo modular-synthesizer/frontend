@@ -23,13 +23,16 @@ export const useParameters = defineStore('parameters', {
     },
     endParameterSetting() {
       if (this.parameter === null) return;
+      this.saveParameter(this.parameter as Parameter);
+      this.parameter = null;
+    },
+    saveParameter(param: Parameter): Promise<any> {
       const auth_token: string = useAuthentication().session.token;
       const payload = {
         auth_token,
-        parameters: [{id: this.parameter.id, value: this.parameter.value}]
+        parameters: [{id: param.id, value: param.value}]
       }
-      api.put(`/modules/${this.parameter.mod.id}`, payload)
-      this.parameter = null;
+      return api.put(`/modules/${param.mod.id}`, payload)
     }
   }
 })

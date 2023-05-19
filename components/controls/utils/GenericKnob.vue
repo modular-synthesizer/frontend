@@ -1,5 +1,5 @@
 <template>
-  <g v-if="parameter !== undefined" @mousedown.stop="startParameterSetting($event, parameter)">
+  <g v-if="parameter !== undefined" @mousedown.stop="startParameterSetting($event, parameter)" @wheel.passive.stop="wheeled">
     <text
       v-if="displayLabel"
       :transform="`translate(${x}, ${y - r - 6})`"
@@ -49,6 +49,11 @@ export default {
       default: ""
     }
   },
+  data: function() {
+    return {
+      timeout: -1
+    }
+  },
   computed: {
     value(): Number {
         return round(this.parameter.value, this.parameter.precision);
@@ -65,10 +70,20 @@ export default {
     },
     lightColor(): string {
       return '#2196F3'
-    }
+    },
   },
   methods: {
     ...mapActions(useParameters, ['startParameterSetting']),
+    wheeled($e: WheelEvent) {
+      if (this.timeout !== -1) window.clearTimeout(this.timeout);
+      this.timeout = window.setTimeout(() => {
+        useParameters().saveParameter(this.parameter);
+        this.timeout = -1;
+      }, 500);
+
+      const sign = $e.deltaY / Math.abs($e.deltaY)
+      this.parameter.moveValue(sign * this.parameter.step);
+    }
   },
 }
 </script>
