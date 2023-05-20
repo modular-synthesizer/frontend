@@ -27,6 +27,7 @@ import { mapActions } from 'pinia';
 import Parameter from '~~/lib/wrappers/Parameter';
 import { round } from "lodash"
 import ICoordinates from '~~/lib/interfaces/ICoordinates';
+import { useKeyboard } from '~~/stores/common/keyboard';
 
 export default {
   props: {
@@ -81,8 +82,10 @@ export default {
         this.timeout = -1;
       }, 500);
 
+      const ratio = useKeyboard().shift ? 10 : 1;
+
       const sign = - $e.deltaY / Math.abs($e.deltaY)
-      this.parameter.moveValue(sign * this.parameter.step);
+      this.parameter.moveValue(sign * this.parameter.step * ratio);
     }
   },
 }

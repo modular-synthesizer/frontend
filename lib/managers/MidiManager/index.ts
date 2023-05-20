@@ -2,6 +2,7 @@ import { find, pull, some } from "lodash";
 import IManager from "~~/lib/interfaces/IManager";
 import KeyMapper from "~~/lib/interfaces/KeyMapper";
 import midiListenerCallback from "~~/lib/types/midiListenerCallback";
+import { useKeyboard } from "~~/stores/common/keyboard";
 
 interface ListenersList {
   noteOn: midiListenerCallback[];
@@ -48,6 +49,7 @@ export default class MidiManager implements IManager {
 
   private initEvents() {
     window.onkeydown = (event: KeyboardEvent) => {
+      if (event.key === 'Shift') return useKeyboard().shiftOn();
       if (!some(this.keyboardMap, {key: event.code})) return;
   
       const mapper = find(this.keyboardMap, {key: event.code}) as KeyMapper;
@@ -58,6 +60,8 @@ export default class MidiManager implements IManager {
     }
   
     window.onkeyup = (event: KeyboardEvent) => {
+      if (event.key === 'Shift') return useKeyboard().shiftOff();
+
       const mapper = find(this.keyboardMap, {key: event.code});
       if (mapper === undefined) return;
       const note = mapper.midicode;
