@@ -81,7 +81,7 @@ export default {
         this.timeout = -1;
       }, 500);
 
-      const sign = $e.deltaY / Math.abs($e.deltaY)
+      const sign = - $e.deltaY / Math.abs($e.deltaY)
       this.parameter.moveValue(sign * this.parameter.step);
     }
   },
