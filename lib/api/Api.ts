@@ -6,7 +6,7 @@ export default class Api implements IApi {
   private uri: string = "/proxy";
 
   public get token(): string {
-    return useAuthentication().session.token;
+    return useAuthentication().token;
   }
 
   public get(uri: string, payload: any = {}): Promise<any> {

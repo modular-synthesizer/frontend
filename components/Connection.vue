@@ -1,5 +1,10 @@
 <template>
-  <g @mouseenter="entered = true" @mouseout="entered = false" @mousemove="moved = true">
+  <g
+    @mouseenter="entered = true"
+    @mouseout="entered = false"
+    @mousemove="moved = true"
+    :class="{'no-events': useLinkDrag().start !== null}"
+  >
     <path
       v-if="entered"
       :d="path"
@@ -107,7 +112,7 @@ export default {
     },
     mouseOut() {
       this.$emit('mouseout');
-    }
+    },
   }
 }
 </script>
