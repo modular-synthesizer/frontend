@@ -1,8 +1,9 @@
-import { find, pull, some } from "lodash";
+import { cloneDeep, find, pull, some } from "lodash";
 import IManager from "~~/lib/interfaces/IManager";
 import KeyMapper from "~~/lib/interfaces/KeyMapper";
 import midiListenerCallback from "~~/lib/types/midiListenerCallback";
 import { useKeyboard } from "~~/stores/common/keyboard";
+import keyboard from './keyboard.json'
 
 interface ListenersList {
   noteOn: midiListenerCallback[];
@@ -14,20 +15,7 @@ export default class MidiManager implements IManager {
 
   private keyPressed: number[] = [];
 
-  private keyboardMap: KeyMapper[] = [
-    {key: "KeyQ", midicode: 69, channel: -1},
-    {key: "Digit2", midicode: 70, channel: -1},
-    {key: "KeyW", midicode: 71, channel: -1},
-    {key: "Digit3", midicode: 72, channel: -1},
-    {key: "KeyE", midicode: 73, channel: -1},
-    {key: "KeyR", midicode: 74, channel: -1},
-    {key: "Digit5", midicode: 75, channel: -1},
-    {key: "KeyT", midicode: 76, channel: -1},
-    {key: "Digit6", midicode: 77, channel: -1},
-    {key: "KeyY", midicode: 78, channel: -1},
-    {key: "Digit7", midicode: 79, channel: -1},
-    {key: "KeyU", midicode: 80, channel: -1}
-  ];
+  private keyboardMap: KeyMapper[] = cloneDeep(keyboard);
 
   start(): void {
     this.initEvents();
