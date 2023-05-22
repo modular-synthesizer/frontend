@@ -25,7 +25,7 @@ export default class EventFragment {
   }
 
   public removeCallback(callback: Function) {
-    remove(this.callbacks, callback);
+    this.callbacks = this.callbacks.filter(c => c !== callback);
   }
 
   public has(content: string): boolean {

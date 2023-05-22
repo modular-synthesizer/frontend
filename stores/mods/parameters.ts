@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "~~/lib/api/Api";
+import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import Parameter from "~~/lib/wrappers/Parameter";
 
 export const useParameters = defineStore('parameters', {
@@ -26,13 +27,14 @@ export const useParameters = defineStore('parameters', {
       this.saveParameter(this.parameter as Parameter);
       this.parameter = null;
     },
-    saveParameter(param: Parameter): Promise<any> {
+    async saveParameter(param: Parameter): Promise<any> {
       const auth_token: string = useAuthentication().session.token;
       const payload = {
         auth_token,
         parameters: [{id: param.id, value: param.value}]
       }
-      return api.put(`/modules/${param.mod.id}`, payload)
+      await api.put(`/modules/${param.mod.id}`, payload);
+      eventbus.emit(`parameters/update/${param.mod.id}/channel`, { value: param.value });
     }
   }
 })
