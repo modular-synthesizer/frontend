@@ -31,25 +31,20 @@ export default {
     });
   },
   methods: {
-    noteTrigger({ note, mapper }: any) {
+    noteTrigger({ note, channel }: any) {
       const voltage: number = (note - 69) / 12;
-      const channel = this.mod.freeChannel();
-      channel.used = true;
-      mapper.channel = channel.index;
+      const c = this.mod.channel(channel);
 
-      const pitch: ConstantSourceNode = channel.getNode(this.pitch)?.node as ConstantSourceNode
-      const gate: ConstantSourceNode = channel.getNode(this.envelope)?.node as ConstantSourceNode
+      const pitch: ConstantSourceNode = c.getNode(this.pitch)?.node as ConstantSourceNode
+      const gate: ConstantSourceNode = c.getNode(this.envelope)?.node as ConstantSourceNode
       pitch.offset.cancelScheduledValues(this.ctx.currentTime);
       pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
       gate.offset.setValueAtTime(1, this.ctx.currentTime);
     },
-    noteRelease({ mapper }: any) {
-      const channel = this.mod.channels[mapper.channel];
-      if (channel === undefined) return;
-      const gate: ConstantSourceNode = channel.getNode(this.envelope)?.node as ConstantSourceNode
+    noteRelease({ channel }: any) {
+      const c = this.mod.channel(channel);
+      const gate: ConstantSourceNode = c.getNode(this.envelope)?.node as ConstantSourceNode
       gate.offset.setValueAtTime(0, this.ctx.currentTime);
-      channel.used = false;
-      mapper.channel = -1
     },
     removeKeyEvents() {
       eventbus.unsubscribe(`midi/trigger/${this.midichannel}`, this.noteTrigger);

@@ -5,6 +5,7 @@ import midiListenerCallback from "~~/lib/types/midiListenerCallback";
 import { useKeyboard } from "~~/stores/common/keyboard";
 import keyboard from './keyboard.json'
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
+import MidiDevice from "~~/lib/midi/MidiDevice";
 
 interface ListenersList {
   noteOn: midiListenerCallback[];
@@ -17,6 +18,8 @@ export default class MidiManager implements IManager {
   private keyboardMap: KeyMapper[] = cloneDeep(keyboard);
 
   private pressed: string[] = []
+
+  private devices: MidiDevice[] = [];
 
   start(): void {
     this.initEvents();
@@ -39,44 +42,29 @@ export default class MidiManager implements IManager {
 
   private initEvents() {
     window.onkeydown = (event: KeyboardEvent) => {
-      if (includes(this.pressed, event.code)) return;
       if (event.key === 'Shift') return useKeyboard().shiftOn();
-      if (!some(this.keyboardMap, {key: event.code})) return;
-  
       const mapper = find(this.keyboardMap, {key: event.code}) as KeyMapper;
-      if (mapper.channel !== -1) return;
-      const note = mapper.midicode;
-      this.pressed.push(event.code);
-  
-      eventbus.emit('midi/trigger/-1', { note, mapper });
+      if (mapper !== undefined) {
+        const note = mapper.midicode;
+        this.getOrCreateDevice(-1).noteOn(note);
+      }
     }
   
     window.onkeyup = (event: KeyboardEvent) => {
-      this.pressed = this.pressed.filter(k => k !== event.code);
       if (event.key === 'Shift') return useKeyboard().shiftOff();
-
-      const mapper = find(this.keyboardMap, {key: event.code});
-      if (mapper === undefined) return;
-      const note = mapper.midicode;
-  
-      if (note === undefined) return;
-      eventbus.emit('midi/release/-1', { note, mapper });
+      const mapper = find(this.keyboardMap, {key: event.code}) as KeyMapper;
+      if (mapper !== undefined) {
+        const note = mapper.midicode;
+        this.getOrCreateDevice(-1).noteOff(note);
+      }
     }
 
     navigator.requestMIDIAccess().then((access: MIDIAccess) => {
       for (let input of access.inputs.values()) {
         input.onmidimessage = (message: any): any => {
-          const mapper = find(this.keyboardMap, {midicode: message.data[1]});
-          if (mapper === undefined) return;
-          const kind: number = message.data[0];
-          if (kind >= 144 && kind < 160) {
-            const channel = 159 - kind;
-            eventbus.emit(`midi/trigger/${channel}`, {note: message.data[1], mapper});
-          }
-          else if (kind >= 128 && kind < 144) {
-            const channel = 143 - kind;
-            eventbus.emit(`midi/release/${channel}`, {note: message.data[1], mapper})
-          }
+          const channel = message.data[0] % 16;
+          const device: MidiDevice = this.getOrCreateDevice(channel);
+          device.message(message.data[0] - channel, message.data[1]);
         }
       }
     })
@@ -86,5 +74,12 @@ export default class MidiManager implements IManager {
     list.forEach(function(listener: midiListenerCallback) {
       listener(pitch, mapper);
     })
+  }
+
+  private getOrCreateDevice(midichannel: number) {
+    if (this.devices[midichannel] === undefined) {
+      this.devices[midichannel] = new MidiDevice(midichannel);
+    }
+    return this.devices[midichannel];
   }
 }
