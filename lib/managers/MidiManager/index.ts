@@ -1,9 +1,10 @@
-import { cloneDeep, find, pull, some } from "lodash";
+import { cloneDeep, find, includes, pull, remove, some } from "lodash";
 import IManager from "~~/lib/interfaces/IManager";
 import KeyMapper from "~~/lib/interfaces/KeyMapper";
 import midiListenerCallback from "~~/lib/types/midiListenerCallback";
 import { useKeyboard } from "~~/stores/common/keyboard";
 import keyboard from './keyboard.json'
+import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 
 interface ListenersList {
   noteOn: midiListenerCallback[];
@@ -13,9 +14,9 @@ interface ListenersList {
 export default class MidiManager implements IManager {
   private listeners: ListenersList = { noteOn: [], noteOff: []};
 
-  private keyPressed: number[] = [];
-
   private keyboardMap: KeyMapper[] = cloneDeep(keyboard);
+
+  private pressed: string[] = []
 
   start(): void {
     this.initEvents();
@@ -27,27 +28,31 @@ export default class MidiManager implements IManager {
     window.onkeydown = null;
     window.onkeyup = null;
   }
+
   onkeydown(callback: midiListenerCallback) {
-    this.listeners.noteOn.push(callback);
+    eventbus.subscribe('midi/trigger/[channel]', callback);
   }
   
   onkeyup(callback: midiListenerCallback) {
-    this.listeners.noteOff.push(callback);
+    eventbus.subscribe('midi/release/[channel]', callback);
   }
 
   private initEvents() {
     window.onkeydown = (event: KeyboardEvent) => {
+      if (includes(this.pressed, event.code)) return;
       if (event.key === 'Shift') return useKeyboard().shiftOn();
       if (!some(this.keyboardMap, {key: event.code})) return;
   
       const mapper = find(this.keyboardMap, {key: event.code}) as KeyMapper;
       if (mapper.channel !== -1) return;
       const note = mapper.midicode;
+      this.pressed.push(event.code);
   
-      this.triggerListeners(this.listeners.noteOn, note, mapper);
+      eventbus.emit('midi/trigger/-1', { note, mapper });
     }
   
     window.onkeyup = (event: KeyboardEvent) => {
+      this.pressed = this.pressed.filter(k => k !== event.code);
       if (event.key === 'Shift') return useKeyboard().shiftOff();
 
       const mapper = find(this.keyboardMap, {key: event.code});
@@ -55,8 +60,7 @@ export default class MidiManager implements IManager {
       const note = mapper.midicode;
   
       if (note === undefined) return;
-      pull(this.keyPressed, note);
-      this.triggerListeners(this.listeners.noteOff, note, mapper);
+      eventbus.emit('midi/release/-1', { note, mapper });
     }
 
     navigator.requestMIDIAccess().then((access: MIDIAccess) => {
@@ -64,11 +68,14 @@ export default class MidiManager implements IManager {
         input.onmidimessage = (message: any): any => {
           const mapper = find(this.keyboardMap, {midicode: message.data[1]});
           if (mapper === undefined) return;
-          if (message.data[0] >= 144) {
-            this.triggerListeners(this.listeners.noteOn, message.data[1], mapper);
+          const kind: number = message.data[0];
+          if (kind >= 144 && kind < 160) {
+            const channel = 159 - kind;
+            eventbus.emit(`midi/trigger/${channel}`, {note: message.data[1], mapper});
           }
-          else if (message.data[0] >= 128) {
-            this.triggerListeners(this.listeners.noteOff, message.data[1], mapper);
+          else if (kind >= 128 && kind < 144) {
+            const channel = 143 - kind;
+            eventbus.emit(`midi/release/${channel}`, {note: message.data[1], mapper})
           }
         }
       }

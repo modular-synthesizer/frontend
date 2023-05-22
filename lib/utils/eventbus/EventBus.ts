@@ -15,11 +15,19 @@ export default class EventBus {
    * @param callback the function to call when the path is compatible with an emitted message.
    */
   public subscribe(path: string, callback: Function) {
+    this.getOrCreate(path).addCallback(callback);
+  }
+
+  public unsubscribe(path: string, callback: Function) {
+    this.getOrCreate(path).removeCallback(callback);
+  }
+
+  public getOrCreate(path: string): EventFragment {
     let fragment: EventFragment = this.root;
     path.split("/").forEach((part: string) => {
-      fragment = fragment.getOrCreate(part);
+      fragment = fragment.getOrCreate(part, fragment);
     });
-    fragment.addCallback(callback);
+    return fragment;
   }
 
   /**
@@ -30,6 +38,7 @@ export default class EventBus {
    * @param payload the additional payload sent with the event, sent to the callback function chen matched.
    */
   public emit(path: string, payload: Object = {}): boolean {
+    console.log(path);
     const parts: string[] = path.split('/');
     let fragments: EventFragment[] = [ this.root ]
     for (let part of parts) {
@@ -45,7 +54,7 @@ export default class EventBus {
       ]);
     }
     fragments.forEach((fragment: EventFragment) => {
-      fragment.trigger(payload);
+      fragment.trigger(path, payload);
     })
     return true
   }
