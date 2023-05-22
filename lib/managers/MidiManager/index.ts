@@ -64,10 +64,10 @@ export default class MidiManager implements IManager {
         input.onmidimessage = (message: any): any => {
           const mapper = find(this.keyboardMap, {midicode: message.data[1]});
           if (mapper === undefined) return;
-          if (message.data[0] === 153) {
+          if (message.data[0] >= 144) {
             this.triggerListeners(this.listeners.noteOn, message.data[1], mapper);
           }
-          else if (message.data[0] === 137) {
+          else if (message.data[0] >= 128) {
             this.triggerListeners(this.listeners.noteOff, message.data[1], mapper);
           }
         }
