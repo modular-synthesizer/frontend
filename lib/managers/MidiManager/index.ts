@@ -17,8 +17,6 @@ export default class MidiManager implements IManager {
 
   private keyboardMap: KeyMapper[] = cloneDeep(keyboard);
 
-  private pressed: string[] = []
-
   private devices: MidiDevice[] = [];
 
   start(): void {
@@ -28,6 +26,8 @@ export default class MidiManager implements IManager {
   stop(): void {
     this.listeners.noteOn = [];
     this.listeners.noteOff = [];
+    this.devices = [];
+    eventbus.destroy('midi');
     window.onkeydown = null;
     window.onkeyup = null;
   }
@@ -64,15 +64,9 @@ export default class MidiManager implements IManager {
         input.onmidimessage = (message: any): any => {
           const channel = message.data[0] % 16;
           const device: MidiDevice = this.getOrCreateDevice(channel);
-          device.message(message.data[0] - channel, message.data[1]);
+          device.message(message.data[0] - channel, message.data);
         }
       }
-    })
-  }
-
-  public triggerListeners(list: midiListenerCallback[], pitch: number, mapper: KeyMapper) {
-    list.forEach(function(listener: midiListenerCallback) {
-      listener(pitch, mapper);
     })
   }
 

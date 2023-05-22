@@ -54,4 +54,10 @@ export default class EventFragment {
     if (this.parent === undefined) return this.content;
     return [this.parent.path, this.content].join('/');
   }
+
+  public remove(fragment: string) {
+    this.children = this.children.filter((child: EventFragment) => {
+      return child.content !== fragment;
+    })
+  }
 }

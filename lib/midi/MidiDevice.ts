@@ -15,13 +15,16 @@ export default class MidiDevice {
     this.midichannel = midichannel;
   }
 
-  public message(kind: number, payload: number) {
+  public message(kind: number, payload: Uint32Array) {
     switch (kind) {
       case 144:
-        this.noteOn(payload);
+        this.noteOn(payload[1]);
         break;
       case 128:
-        this.noteOff(payload);
+        this.noteOff(payload[1]);
+        break;
+      case 176:
+        this.controlChange(payload);
         break;
     }
   }
@@ -40,6 +43,19 @@ export default class MidiDevice {
     this.channels[channel] = -1;
     this.pressed = this.pressed.filter(k => k !== note);
     eventbus.emit(`midi/release/${this.midichannel}`, { note, channel });
+  }
+
+  public controlChange(payload: Uint32Array) {
+    const type: number = payload[1];
+    switch(type) {
+      case 1:
+        this.modWheel(payload[2] / 12.7);
+        break;
+    }
+  }
+
+  public modWheel(amount: number) {
+    eventbus.emit(`midi/modwheel/${this.midichannel}`, { amount });
   }
 
   private getFreePolyphonyChannel(): number {

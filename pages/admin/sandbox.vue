@@ -82,15 +82,6 @@ export default {
       localStorage.setItem("sandbox-code", highlighter.modelValue);
     }
   },
-  mounted() {
-    eventbus.subscribe('test/[variable]/bidule', () => {
-      console.log('pouet');
-    });
-    eventbus.subscribe('test/foo/bidule', () => {
-      console.log('bidule');
-    });
-    eventbus.emit('test/foo/bidule');
-  },
 }
 </script>
 

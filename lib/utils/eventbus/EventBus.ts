@@ -57,6 +57,10 @@ export default class EventBus {
     })
     return true
   }
+
+  public destroy(fragment: string) {
+    this.root.remove(fragment);
+  }
 }
 
 export const eventbus = new EventBus();
