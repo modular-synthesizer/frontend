@@ -1,4 +1,4 @@
-import { filter, find, remove } from "lodash";
+import { filter, find } from "lodash";
 
 export default class EventFragment {
   private content: string;

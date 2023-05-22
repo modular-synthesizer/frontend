@@ -38,7 +38,6 @@ export default class EventBus {
    * @param payload the additional payload sent with the event, sent to the callback function chen matched.
    */
   public emit(path: string, payload: Object = {}): boolean {
-    console.log(path);
     const parts: string[] = path.split('/');
     let fragments: EventFragment[] = [ this.root ]
     for (let part of parts) {
