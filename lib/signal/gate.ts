@@ -1,4 +1,6 @@
+import { eventbus } from "../utils/eventbus/EventBus";
 import Channel from "../wrappers/Channel";
+import Mod from "../wrappers/Mod";
 
 /**
  * A gate holds its last seen value, and compare it to a new value to determine if it should be triggered,
@@ -7,19 +9,20 @@ import Channel from "../wrappers/Channel";
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
 export default class Gate {
-  // The value is initialized as "no tension", so 0V.
-  private value: number = 0;
+  private mod: Mod;
   // The channel is used to get the analyser to get the value for the last sample.
   private analyser: AnalyserNode;
   // The buffer used to contain the last read value for the analyser datas.
   private buffer: Float32Array = new Float32Array(1);
-  // The functions used when the gate is triggered.
-  private triggerCallbacks: Function[] = [];
-  // The functions called when the gate is released.
-  private releaseCallbacks: Function[] = [];
+  // Current state of the gate, TRUE if gate is opened, FALSE otherwise.
+  private triggered: boolean = false;
 
-  constructor(channel: Channel, nodekey: string) {
+  private channel: Channel;
+
+  constructor(mod: Mod, channel: Channel, nodekey: string) {
     this.analyser = channel.getNode(nodekey)?.node as AnalyserNode;
+    this.mod = mod;
+    this.channel = channel;
   }
 
   /**
@@ -29,25 +32,21 @@ export default class Gate {
    */
   public check() {
     this.analyser.getFloatTimeDomainData(this.buffer);
-    const newValue = this.buffer[0]
-    if (newValue > this.value) {
-      this.triggerCallbacks.forEach(callback => callback());
+    if (!this.triggered && this.buffer[0] >= 1) {
+      eventbus.emit(`gates/trigger/${this.mod.id}/${this.channel.index}`);
+      this.triggered = true;
     }
-    else if (newValue < this.value) {
-      this.releaseCallbacks.forEach(callback => callback());
+    else if (this.buffer[0] < 1 && this.triggered) {
+      eventbus.emit(`gates/release/${this.mod.id}/${this.channel.index}`);
+      this.triggered = false;
     }
-    this.value = newValue;
   }
 
   public onTrigger(callback: Function) {
-    this.triggerCallbacks.push(callback);
+    eventbus.subscribe(`gates/trigger/${this.mod.id}/${this.channel.index}`, callback);
   }
 
   public onRelease(callback: Function) {
-    this.releaseCallbacks.push(callback);
-  }
-
-  public setValue(value: number) {
-    this.value = value;
+    eventbus.subscribe(`gates/release/${this.mod.id}/${this.channel.index}`, callback);
   }
 }

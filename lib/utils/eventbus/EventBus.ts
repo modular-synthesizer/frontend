@@ -29,7 +29,7 @@ export default class EventBus {
    * @param path the path of the emitted message used to route it to the desired clients.
    * @param payload the additional payload sent with the event, sent to the callback function chen matched.
    */
-  public emit(path: string): boolean {
+  public emit(path: string, payload: Object = {}): boolean {
     const parts: string[] = path.split('/');
     let fragments: EventFragment[] = [ this.root ]
     for (let part of parts) {
@@ -45,7 +45,7 @@ export default class EventBus {
       ]);
     }
     fragments.forEach((fragment: EventFragment) => {
-      fragment.trigger();
+      fragment.trigger(payload);
     })
     return true
   }
