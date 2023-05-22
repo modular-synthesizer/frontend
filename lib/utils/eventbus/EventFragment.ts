@@ -38,9 +38,9 @@ export default class EventFragment {
     return /^\[[a-z]+\]$/.test(this.content) || this.content === content;
   }
 
-  public trigger() {
+  public trigger(payload: Object) {
     this.callbacks.forEach((callback: Function) => {
-      callback();
+      callback(payload);
     })
   }
 }

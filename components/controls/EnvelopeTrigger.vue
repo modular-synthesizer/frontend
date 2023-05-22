@@ -44,8 +44,9 @@ export default {
   },
   mounted() {
     this.mod.channels.forEach((channel: Channel) => {
-      const gate = new Gate(channel, this.analyser);
+      const gate = new Gate(this.mod, channel, this.analyser);
       const envelope = new Envelope(channel, this.target);
+
       gate.onTrigger(() => envelope.trigger(this.a, this.d, this.s));
       gate.onRelease(() => envelope.release(this.r));
       gatesManager.add(gate);
