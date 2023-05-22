@@ -58,6 +58,21 @@ export default class MidiManager implements IManager {
       pull(this.keyPressed, note);
       this.triggerListeners(this.listeners.noteOff, note, mapper);
     }
+
+    navigator.requestMIDIAccess().then((access: MIDIAccess) => {
+      for (let input of access.inputs.values()) {
+        input.onmidimessage = (message: any): any => {
+          const mapper = find(this.keyboardMap, {midicode: message.data[1]});
+          if (mapper === undefined) return;
+          if (message.data[0] === 153) {
+            this.triggerListeners(this.listeners.noteOn, message.data[1], mapper);
+          }
+          else if (message.data[0] === 137) {
+            this.triggerListeners(this.listeners.noteOff, message.data[1], mapper);
+          }
+        }
+      }
+    })
   }
 
   public triggerListeners(list: midiListenerCallback[], pitch: number, mapper: KeyMapper) {
