@@ -43,6 +43,7 @@
 <script lang="ts">
 import { HighCode } from 'vue-highlight-code';
 import 'vue-highlight-code/dist/style.css';
+import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 
 export default {
   components: { HighCode },
@@ -80,6 +81,15 @@ export default {
       this.code = highlighter.modelValue;
       localStorage.setItem("sandbox-code", highlighter.modelValue);
     }
+  },
+  mounted() {
+    eventbus.subscribe('test/[variable]/bidule', () => {
+      console.log('pouet');
+    });
+    eventbus.subscribe('test/foo/bidule', () => {
+      console.log('bidule');
+    });
+    eventbus.emit('test/foo/bidule');
   },
 }
 </script>
