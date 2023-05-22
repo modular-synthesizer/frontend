@@ -58,6 +58,13 @@ export default class MidiDevice {
     eventbus.emit(`midi/modwheel/${this.midichannel}`, { amount });
   }
 
+  public terminate() {
+    this.pressed.forEach((p: number) => {
+      this.noteOff(p);
+    })
+    this.pressed = []
+  }
+
   private getFreePolyphonyChannel(): number {
     return findIndex(this.channels, ch => ch === -1);
   }

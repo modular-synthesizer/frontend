@@ -3,7 +3,7 @@
     <synthesizer-initializer v-if="!loaded" :id="id" />
     <synthesizer-stage :id="id" />
     <v-toolbar collapse density="compact" color="primary">
-      <v-btn @mousedown="leaving" icon to="/synthesizers">
+      <v-btn icon to="/synthesizers">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
       <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
@@ -14,6 +14,7 @@
 
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
+import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 import Mod from '~~/lib/wrappers/Mod';
 
 definePageMeta({
@@ -45,14 +46,6 @@ export default {
       this.modules.push(mod);
       this.synthesizer.place(mod.rack, mod.slot, mod);
     },
-    leaving() {
-      useSynthesizerDetails().reset();
-      usePorts().reset();
-      useModulesList().reset();
-      useLinksList().reset();
-      stopManagers();
-      useAudioContext().context?.suspend();
-    }
   },
   async mounted() {
     await useAudioContext().context?.suspend();
@@ -60,7 +53,13 @@ export default {
     await useGenerators().fetchGenerators();
   },
   beforeUnmount() {
-    this.leaving();
+    eventbus.emit('synthesizers/quit')
+    useSynthesizerDetails().reset();
+    usePorts().reset();
+    useModulesList().reset();
+    useLinksList().reset();
+    stopManagers();
+    useAudioContext().context?.suspend();
   }
 }
 </script>

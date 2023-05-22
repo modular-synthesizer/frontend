@@ -26,18 +26,11 @@ export default class MidiManager implements IManager {
   stop(): void {
     this.listeners.noteOn = [];
     this.listeners.noteOff = [];
+    this.devices.forEach((d: MidiDevice) => d.terminate());
     this.devices = [];
     eventbus.destroy('midi');
     window.onkeydown = null;
     window.onkeyup = null;
-  }
-
-  onkeydown(callback: midiListenerCallback) {
-    eventbus.subscribe('midi/trigger/[channel]', callback);
-  }
-  
-  onkeyup(callback: midiListenerCallback) {
-    eventbus.subscribe('midi/release/[channel]', callback);
   }
 
   private initEvents() {

@@ -32,6 +32,9 @@ export default {
       this.removeKeyEvents();
       this.declareKeyEvents(value);
     });
+    eventbus.subscribe('synthesizers/quit', () => {
+      this.removeKeyEvents();
+    })
   },
   methods: {
     noteTrigger({ note, channel }: any) {
@@ -58,7 +61,7 @@ export default {
     removeKeyEvents() {
       eventbus.unsubscribe(`midi/trigger/${this.midichannel}`, this.noteTrigger);
       eventbus.unsubscribe(`midi/release/${this.midichannel}`, this.noteRelease);
-      eventbus.unsubscribe(`midi/modwheel/${midichannel}`, this.modWheel);
+      eventbus.unsubscribe(`midi/modwheel/${this.midichannel}`, this.modWheel);
       for (let i = 0; i < POLYPHONY_CHANNELS; ++i) {
         const c = this.mod.channel(i);
         const gate: ConstantSourceNode = c.getNode(this.envelope)?.node as ConstantSourceNode;
