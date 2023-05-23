@@ -7,6 +7,7 @@ import { IControl } from "../interfaces/IControl";
 import IPort from "../interfaces/IPort";
 import Channel from "./Channel";
 import IParameter from "../interfaces/IParameter";
+import InnerAudioNode from "./InnerAudioNode";
 
 export default class Mod {
   public readonly id: string;
@@ -71,5 +72,15 @@ export default class Mod {
       return find(this.channels, {used: false}) as Channel;
     }
     return this.channels[0];
+  }
+
+  public stop() {
+    this.channels.forEach((ch: Channel) => {
+      ch.nodes
+        .filter((nd: InnerAudioNode) => (nd.node instanceof OscillatorNode))
+        .forEach((nd: InnerAudioNode) => {
+          (nd.node as OscillatorNode).stop();
+        })
+    })
   }
 }

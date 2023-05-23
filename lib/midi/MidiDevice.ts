@@ -63,6 +63,7 @@ export default class MidiDevice {
       this.noteOff(p);
     })
     this.pressed = []
+    this.channels = Array.from(Array(POLYPHONY_CHANNELS)).map(i => -1);
   }
 
   private getFreePolyphonyChannel(): number {

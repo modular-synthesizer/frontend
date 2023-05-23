@@ -42,6 +42,7 @@ export const useModulesList = defineStore('modulesList', {
       })
     },
     reset() {
+      (this.modules as Mod[]).forEach((m: Mod) => m.stop());
       this.modules = [];
     }
   },
