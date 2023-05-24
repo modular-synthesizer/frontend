@@ -27,7 +27,7 @@ export default class Envelope {
    * @param s the level of sustain in percents of the maximum volume.
    */
   trigger(a: number, d: number, s: number) {
-    this.param.cancelAndHoldAtTime(this.t);
+    this.cancelValues(this.t);
     this.param.setTargetAtTime(1, this.t, a / 1000)
     this.timeout = window.setTimeout(() => {
       this.param.setTargetAtTime(s / 100, this.t,  d / 1000)
@@ -40,8 +40,17 @@ export default class Envelope {
    */
   release(r: number) {
     window.clearTimeout(this.timeout);
-    this.param.cancelAndHoldAtTime(this.t);
+    this.cancelValues(this.t);
     this.param.setTargetAtTime(0, this.t, r / 1000)
+  }
+
+  private cancelValues(time: number) {
+    if (typeof this.param.cancelAndHoldAtTime === 'function') {
+      return this.param.cancelAndHoldAtTime(time);
+    }
+    else {
+      return this.param.cancelScheduledValues(time)
+    }
   }
 
   private get param(): AudioParam {
