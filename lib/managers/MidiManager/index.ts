@@ -54,13 +54,26 @@ export default class MidiManager implements IManager {
 
     navigator.requestMIDIAccess().then((access: MIDIAccess) => {
       for (let input of access.inputs.values()) {
-        input.onmidimessage = (message: any): any => {
-          const channel = message.data[0] % 16;
-          const device: MidiDevice = this.getOrCreateDevice(channel);
-          device.message(message.data[0] - channel, message.data);
+         this.bindEvents(input);
+      }
+      // This allows the dynamic plugging of MIDI keyboards
+      access.onstatechange = (event: Event) => {
+        if (event instanceof MIDIConnectionEvent) {
+          if (event.port instanceof MIDIInput && event.port.state === 'connected') {
+            this.bindEvents(event.port);
+          }
         }
       }
     })
+  }
+
+  public bindEvents(input: MIDIInput) {
+    input.onmidimessage = (message: any): any => {
+      const channel = message.data[0] % 16;
+      const device: MidiDevice = this.getOrCreateDevice(channel);
+      device.message(message.data[0] - channel, message.data);
+    }
+    return input;
   }
 
   private getOrCreateDevice(midichannel: number) {
