@@ -3,11 +3,6 @@
     <v-form @submit.prevent="create(synthesizer)">
       <v-container>
         <v-row>
-          <v-col cols="12">
-            <div class="text-h2">Mes synthétiseurs</div>
-          </v-col>
-        </v-row>
-        <v-row>
           <v-col cols="4">
             <v-text-field v-model="synthesizer.name" variant="outlined" density="compact" label="Name" />
           </v-col>
@@ -24,8 +19,19 @@
       </v-container>
     </v-form>
     <v-container>
-      <v-row>
-        <v-col cols="12" sm="6" md="4" lg="3" v-for="synth in synthesizers">
+      <v-row v-if="owned">
+        <v-col cols="12">
+          <div class="text-h5">Mes synthétiseurs</div>
+        </v-col>
+        <v-col cols="12" sm="6" md="4" lg="3" v-for="synth in owned">
+          <synthesizer-card :synthesizer="synth" />
+        </v-col>
+      </v-row>
+      <v-row v-if="others">
+        <v-col cols="12">
+          <div class="text-h5">Autres synthétiseurs</div>
+        </v-col>
+        <v-col cols="12" sm="6" md="4" lg="3" v-for="synth in others">
           <synthesizer-card :synthesizer="synth" />
         </v-col>
       </v-row>
@@ -35,6 +41,7 @@
 
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
+import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
 
 definePageMeta({
   middleware: ['check-authentication'],
@@ -44,7 +51,17 @@ export default {
     synthesizer: createEmptySynthesizer()
   }),
   computed: {
-    ...mapState(useSynthesizersList, ['synthesizers'])
+    ...mapState(useSynthesizersList, ['synthesizers']),
+    owned() {
+      return this.synthesizers.filter((synth: ISynthesizer) => {
+        return synth.creator?.username === useAuthentication().session.username
+      })
+    },
+    others() {
+      return this.synthesizers.filter((synth: ISynthesizer) => {
+        return synth.creator?.username !== useAuthentication().session.username
+      })
+    }
   },
   methods: {
     ...mapActions(useSynthesizersList, ['create', 'fetch'])
