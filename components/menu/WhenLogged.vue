@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="primary" v-if="useDisplay().smAndDown.value">
+  <v-app-bar color="deep-purple darken-2" v-if="useDisplay().smAndDown.value">
       <v-btn icon to="/">
         <v-icon>mdi-home</v-icon>
       </v-btn>
@@ -10,13 +10,13 @@
       <menu-burger :items="items" />
     </template>
   </v-app-bar>
-  <v-app-bar color="primary" v-else>
+  <v-app-bar color="deep-purple darken-2" v-else>
     <template v-slot:prepend>
       <v-app-bar-title class="mr-2">Synple</v-app-bar-title>
       <v-btn icon to="/">
         <v-icon>mdi-home</v-icon>
       </v-btn>
-      <v-btn variant="text" to="/synthesizers">Synthétiseurs</v-btn>
+      <v-btn variant="text" to="/synthesizers" class="ml-2">Synthétiseurs</v-btn>
     </template>
     <template v-slot:append>
       <template v-if="useAuthentication().admin">
