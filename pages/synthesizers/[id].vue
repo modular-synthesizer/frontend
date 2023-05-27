@@ -2,7 +2,7 @@
   <div class="wrapper">
     <synthesizer-initializer v-if="!loaded" :id="id" />
     <synthesizer-stage :id="id" />
-    <v-toolbar collapse density="compact" color="primary">
+    <v-toolbar collapse density="compact" color="deep-purple darken-2">
       <v-btn icon to="/synthesizers">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
