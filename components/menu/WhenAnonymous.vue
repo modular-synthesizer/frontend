@@ -1,32 +1,10 @@
 <template>
-  <v-app-bar color="primary" v-if="mobile">
+  <v-app-bar color="primary" v-if="useDisplay().smAndDown.value">
     <template v-slot:prepend>
       <v-app-bar-title class="mr-2 ml-2">Synple</v-app-bar-title>
     </template>
     <template v-slot:append>
-      <v-dialog fullscreen height="100%" v-model="menuModel">
-        <template v-slot:activator="{ props }">
-          <v-btn icon v-bind="props"><v-icon>mdi-menu</v-icon></v-btn>
-        </template>
-        <v-list height="100%">
-          <v-list-item>
-            <template v-slot:append>
-              <v-list-item-action>
-                <v-btn variant="text" icon @click="menuModel = false"><v-icon>mdi-close</v-icon></v-btn>
-              </v-list-item-action>
-            </template>
-          </v-list-item>
-          <v-divider></v-divider>
-          <v-list-item href="/register">
-            <v-list-item-title class="pl-2">{{ $t('common.register') }}</v-list-item-title>
-          </v-list-item>
-          <v-divider></v-divider>
-          <v-list-item href="/login">
-            <v-list-item-title class="pl-2">{{ $t('common.login') }}</v-list-item-title>
-          </v-list-item>
-          <v-divider></v-divider>
-        </v-list>
-      </v-dialog>
+      <menu-burger :items="items" />
     </template>
   </v-app-bar>
   <v-app-bar color="primary" v-else>
@@ -42,8 +20,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useDisplay } from 'vuetify/lib/framework.mjs';
+import { useDisplay } from 'vuetify';
 
-const mobile = computed(() => useDisplay().smAndDown.value);
-const menuModel = ref(false);
+const items = [
+  { url: '/register', label: 'common.register' },
+  { url: '/login', label: 'common.login' },
+];
 </script>

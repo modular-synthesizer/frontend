@@ -1,40 +1,43 @@
 <template>
-  <VAppBar color="primary">
+  <v-app-bar color="primary" v-if="useDisplay().smAndDown.value">
+      <v-btn icon to="/">
+        <v-icon>mdi-home</v-icon>
+      </v-btn>
+      <v-btn icon to="/synthesizers" class="ml-2">
+        <v-icon>mdi-piano</v-icon>
+      </v-btn>
+    <template v-slot:append>
+      <menu-burger :items="items" />
+    </template>
+  </v-app-bar>
+  <v-app-bar color="primary" v-else>
     <template v-slot:prepend>
-      <VAppBarTitle class="mr-2">Synple</VAppBarTitle>
-      <VBtn icon to="/">
-        <VIcon>mdi-home</VIcon>
-      </VBtn>
-      <VBtn icon to="/synthesizers">
-        <VIcon>mdi-piano</VIcon>
-      </VBtn>
+      <v-app-bar-title class="mr-2">Synple</v-app-bar-title>
+      <v-btn icon to="/">
+        <v-icon>mdi-home</v-icon>
+      </v-btn>
+      <v-btn variant="text" to="/synthesizers">Synthétiseurs</v-btn>
     </template>
     <template v-slot:append>
-      <template v-if="admin">
+      <template v-if="useAuthentication().admin">
         <v-btn to="/admin/sandbox">Sandbox</v-btn>
         <v-btn to="/tools" >Outils</v-btn>
         <v-btn to="/admin">{{ $t('common.admin') }}</v-btn>
       </template>
-      <VBtn @click="logout">{{ $t('common.logout') }}</VBtn>
+      <v-btn @click="useAuthentication().logout">{{ $t('common.logout') }}</v-btn>
     </template>
-  </VAppBar>
+  </v-app-bar>
 </template>
 
-<script lang="ts">
-import { mapActions, mapState } from 'pinia';
-import { VAppBar, VAppBarTitle } from 'vuetify/components'
+<script lang="ts" setup>
+import { useDisplay } from 'vuetify';
 
-export default {
-  component: { VAppBar, VAppBarTitle, },
-  computed: {
-    ...mapState(useAuthentication, ['admin']),
-  },
-  methods: {
-    ...mapActions(useAuthentication, ['logout']),
-    logoutAndRedirect() {
-      this.logout();
-      window.location.reload();
-    }
-  }
-}
+const items = [
+  ...(!useAuthentication().admin ? [] : [
+    { label: 'menus.sandbox', url: '/admin/sandbox' },
+    { label: 'menus.tools', url: '/tools' },
+    { label: 'common.admin', url: '/admin' },
+  ]),
+  { click: useAuthentication().logout, label: 'common.logout' },
+];
 </script>
