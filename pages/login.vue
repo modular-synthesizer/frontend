@@ -1,18 +1,12 @@
 <template>
-  <v-form @submit.prevent="submitLogin">
-    <v-container>
-      <v-row>
-        <v-col cols="6" offset="3">
-          <div class="text-h2 mb-2">{{ $t('login.title') }}</div>
-        </v-col>
-      </v-row>
-      <v-row class="mb-2">
-        <v-col cols="6" offset="3">
-          <vuelidate-errors v-if="v$.$error" :errors="v$.$errors" />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="6" offset="3">
+  <v-container>
+    <v-row no-gutters>
+      <v-col cols="12" sm="8" offset-sm="2">
+        <div class="text-h2 mb-5">{{ $t('login.title') }}</div>
+        <v-form @submit.prevent="submitLogin">
+          <div class="mb-5">
+            <vuelidate-errors v-if="v$.$error" :errors="v$.$errors" />
+          </div>
           <v-text-field
             :label="$t('register.labels.username')"
             :hint="$t('register.hints.username')"
@@ -20,10 +14,6 @@
             variant="outlined"
             v-model="account.username"
           ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="6" offset="3">
           <v-text-field
             :label="$t('register.labels.password')"
             :hint="$t('register.hints.password')"
@@ -31,15 +21,11 @@
             variant="outlined"
             v-model="account.password"
           ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="6" offset="3">
           <v-btn color="primary" type="submit">{{ $t('login.button') }}</v-btn>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-form>
+        </v-form>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts" setup>
@@ -62,6 +48,7 @@ const v$ = useVuelidate(rules, account, { $externalResults });
 
 async function submitLogin() {
   await v$.value.$validate();
+  if (account.username === '' || account.password === '') return;
   useAuthentication().login(account.username, account.password)
     .catch((error: any) => {
         const err: IApiError = error.response.data;

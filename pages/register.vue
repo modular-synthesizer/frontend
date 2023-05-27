@@ -1,73 +1,61 @@
 <template>
   <v-container>
     <v-row no-gutters>
-      <v-col xs="16" sm="10" md="8" offset-sm="1" offset-md="2">
+      <v-col cols="12" sm="8" offset-sm="2">
         <template v-if="registered">
-          <v-row>
-            <v-col cols="12">
-              <v-alert type="success">
-                {{ $t('register.messages.success') }}
-              </v-alert>
-            </v-col>
-          </v-row>
+          <v-alert type="success">
+            {{ $t('register.messages.success') }}
+          </v-alert>
         </template>
         <template v-else>
-          <v-row>
-            <v-col cols="12">
-              <div class="text-h3 mb-4">{{ $t('register.title') }}</div>
-            </v-col>
-          </v-row>
-          <v-row class="mb-2">
-            <v-col cols="12">
+          <div class="text-h3 mb-5">{{ $t('register.title') }}</div>
+          <v-form @submit.prevent="register">
+            <div class="mb-5">
               <vuelidate-errors v-if="v$.$error" :errors="v$.$errors" />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col :cols="12" :md="6">
-              <v-text-field
-                :label="$t('register.labels.username')"
-                :hint="$t('register.hints.username')"
-                :placeholder="$t('register.placeholders.username')"
-                variant="outlined"
-                v-model="account.username"
-              ></v-text-field>
-            </v-col>
-            <v-col :cols="12" :md="6">
-              <v-text-field
-                :label="$t('register.labels.email')"
-                :hint="$t('register.hints.email')"
-                :placeholder="$t('register.placeholders.email')"
-                type="email"
-                v-model="account.email"
-                variant="outlined"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col :cols="12" :md="6">
-              <v-text-field
-                :label="$t('register.labels.password')"
-                :hint="$t('register.hints.password')"
-                type="password"
-                variant="outlined"
-                v-model="account.password"
-              ></v-text-field>
-            </v-col>
-            <v-col :cols="12" :md="6">
-              <v-text-field
-                :label="$t('register.labels.password')"
-                :hint="$t('register.hints.password')"
-                type="password"
-                variant="outlined"
-                v-model="account.password_confirmation"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row no-gutters>
-            <v-col cols="12">
-              <v-btn class="mt-4" color="primary" @click="register">S'inscrire</v-btn>
-            </v-col>
-          </v-row>
+            </div>
+            <v-row no-gutters>
+              <v-col :cols="12" :md="6">
+                <v-text-field
+                  :label="$t('register.labels.username')"
+                  :hint="$t('register.hints.username')"
+                  :placeholder="$t('register.placeholders.username')"
+                  variant="outlined"
+                  v-model="account.username"
+                ></v-text-field>
+              </v-col>
+              <v-col :cols="12" :md="6">
+                <v-text-field
+                  :label="$t('register.labels.email')"
+                  :hint="$t('register.hints.email')"
+                  :placeholder="$t('register.placeholders.email')"
+                  type="email"
+                  v-model="account.email"
+                  variant="outlined"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row no-gutters>
+              <v-col :cols="12" :md="6">
+                <v-text-field
+                  :label="$t('register.labels.password')"
+                  :hint="$t('register.hints.password')"
+                  type="password"
+                  variant="outlined"
+                  v-model="account.password"
+                ></v-text-field>
+              </v-col>
+              <v-col :cols="12" :md="6">
+                <v-text-field
+                  :label="$t('register.labels.password')"
+                  :hint="$t('register.hints.password')"
+                  type="password"
+                  variant="outlined"
+                  v-model="account.password_confirmation"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-btn color="primary" type="submit">S'inscrire</v-btn>
+          </v-form>
         </template>
       </v-col>
     </v-row>
@@ -102,8 +90,16 @@ const v$ = useVuelidate(rules, account, { $externalResults });
 
 const registered = ref(false);
 
+function hasEmptyFields() {
+  return account.username === '' ||
+    account.password === '' ||
+    account.password_confirmation === '' ||
+    account.email === ''
+}
+
 async function register(_$event: Event) {
   await v$.value.$validate();
+  if (hasEmptyFields()) return;
   api.post('/accounts', account)
     .then(_response => registered.value = true)
     .catch(error => {
