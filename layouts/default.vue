@@ -1,5 +1,5 @@
 <template>
-  <structure-logged-menu />
+  <menu-when-logged />
   <!-- This makes the application wait for the token to be refreshed before display-->
   <v-main class="d-flex flex-column">
     <slot></slot>
