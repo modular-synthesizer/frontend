@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row no-gutters>
-      <v-col cols="12" sm="8" offset-sm="2">
+      <v-col cols="12" sm="8" lg="4" offset-sm="2" offset-lg="4">
         <div class="text-h2 mb-5">{{ $t('login.title') }}</div>
         <v-form @submit.prevent="submitLogin">
           <div class="mb-5">
@@ -13,14 +13,14 @@
             :placeholder="$t('register.placeholders.username')"
             variant="outlined"
             v-model="account.username"
-          ></v-text-field>
+          />
           <v-text-field
             :label="$t('register.labels.password')"
             :hint="$t('register.hints.password')"
             type="password"
             variant="outlined"
             v-model="account.password"
-          ></v-text-field>
+          />
           <v-btn color="primary" type="submit">{{ $t('login.button') }}</v-btn>
         </v-form>
       </v-col>

@@ -14,16 +14,16 @@
               <vuelidate-errors v-if="v$.$error" :errors="v$.$errors" />
             </div>
             <v-row no-gutters>
-              <v-col :cols="12" :md="6">
+              <v-col :cols="12" :md="6" class="pr-md-2">
                 <v-text-field
                   :label="$t('register.labels.username')"
                   :hint="$t('register.hints.username')"
                   :placeholder="$t('register.placeholders.username')"
                   variant="outlined"
                   v-model="account.username"
-                ></v-text-field>
+                />
               </v-col>
-              <v-col :cols="12" :md="6">
+              <v-col :cols="12" :md="6" class="pl-md-2">
                 <v-text-field
                   :label="$t('register.labels.email')"
                   :hint="$t('register.hints.email')"
@@ -31,27 +31,27 @@
                   type="email"
                   v-model="account.email"
                   variant="outlined"
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
             <v-row no-gutters>
-              <v-col :cols="12" :md="6">
+              <v-col :cols="12" :md="6" class="pr-md-2">
                 <v-text-field
                   :label="$t('register.labels.password')"
                   :hint="$t('register.hints.password')"
                   type="password"
                   variant="outlined"
                   v-model="account.password"
-                ></v-text-field>
+                />
               </v-col>
-              <v-col :cols="12" :md="6">
+              <v-col :cols="12" :md="6" class="pl-md-2">
                 <v-text-field
                   :label="$t('register.labels.password')"
                   :hint="$t('register.hints.password')"
                   type="password"
                   variant="outlined"
                   v-model="account.password_confirmation"
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
             <v-btn color="primary" type="submit">S'inscrire</v-btn>
