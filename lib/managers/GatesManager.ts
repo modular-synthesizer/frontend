@@ -13,7 +13,7 @@ export default class GatesManager implements IManager {
   private _duration = 5;
   // The list of gates to check. A gate is made to check its input, and trigger an output accordingly.
   private gates: Gate[] = [];
-
+  // Holds the result of the setInterval method for when we want to stop checking the gates.
   private interval: number = -1;
 
   add(gate: Gate) {
@@ -24,6 +24,10 @@ export default class GatesManager implements IManager {
     remove(this.gates, gate);
   }
 
+  /**
+   * When setting the duration, we make sure we restart the interval with the new one for it to be used properly.
+   * @param duration the duration between each check in milliseconds.
+   */
   public set duration(duration: number) {
     this._duration = duration;
     this.start();

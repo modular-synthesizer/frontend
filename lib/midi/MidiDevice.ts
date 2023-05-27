@@ -15,7 +15,7 @@ export default class MidiDevice {
     this.midichannel = midichannel;
   }
 
-  public message(kind: number, payload: Uint32Array) {
+  public message(kind: number, payload: Uint8Array) {
     switch (kind) {
       case 144:
         this.noteOn(payload[1]);
@@ -45,7 +45,7 @@ export default class MidiDevice {
     eventbus.emit(`midi/release/${this.midichannel}`, { note, channel });
   }
 
-  public controlChange(payload: Uint32Array) {
+  public controlChange(payload: Uint8Array) {
     const type: number = payload[1];
     switch(type) {
       case 1:

@@ -1,15 +1,11 @@
-import GatesManager from "~~/lib/managers/GatesManager";
-import MidiManager from "~~/lib/managers/MidiManager";
-
-export const midiManager: MidiManager = new MidiManager();
-export const gatesManager: GatesManager = new GatesManager();
+import { values } from "lodash";
+import IManager from "~~/lib/interfaces/IManager";
+import { managers } from "~~/lib/managers";
 
 export function startManagers() {
-  midiManager.start();
-  gatesManager.start();
+  values(managers).forEach((m: IManager) => m.start());
 }
 
 export function stopManagers() {
-  midiManager.stop();
-  gatesManager.stop();
+  values(managers).forEach((m: IManager) => m.stop());
 }

@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts">
+import { managers } from '~~/lib/managers';
 import Envelope from '~~/lib/signal/envelope';
 import Gate from '~~/lib/signal/gate';
 import Channel from '~~/lib/wrappers/Channel';
@@ -49,7 +50,7 @@ export default {
 
       gate.onTrigger(() => envelope.trigger(this.a, this.d, this.s));
       gate.onRelease(() => envelope.release(this.r));
-      gatesManager.add(gate);
+      managers.gates.add(gate);
     });
   }
 }
