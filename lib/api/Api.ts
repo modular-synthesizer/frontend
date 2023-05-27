@@ -1,7 +1,6 @@
-import IApi from "./IApi";
 import axios from "axios";
 
-export default class Api implements IApi {
+export default class Api {
 
   private uri: string = "/proxy";
 
