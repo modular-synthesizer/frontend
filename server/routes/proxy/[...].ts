@@ -37,6 +37,7 @@ export default defineEventHandler(async (event) => {
   const results = (await instance(config) as any);
 
   setResponseStatus(event, results.status);
+  setHeader(event, 'Content-Type', results.headers['content-type'])
 
   return results.data
 })

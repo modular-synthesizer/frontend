@@ -38,7 +38,7 @@ export default {
     useSynthesizerDetails().reset();
     stopManagers();
   },
-  mounted() {
+  async mounted() {
     startManagers();
   }
 }

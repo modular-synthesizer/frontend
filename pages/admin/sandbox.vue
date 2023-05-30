@@ -43,7 +43,7 @@
 <script lang="ts">
 import { HighCode } from 'vue-highlight-code';
 import 'vue-highlight-code/dist/style.css';
-import { eventbus } from '~~/lib/utils/eventbus/EventBus';
+import { loadProcessors } from '~~/composables/processors'
 
 export default {
   components: { HighCode },
@@ -58,8 +58,9 @@ export default {
     cols: 8,
   }),
   methods: {
-    init() {
+    async init() {
       this.context = new AudioContext();
+      await loadProcessors(this.context);
       this.destination = this.context.createGain();
       this.destination.connect(this.context.destination);
     },
@@ -67,7 +68,7 @@ export default {
       if (this.context !== null) {
         this.context.close();
       }
-      this.init();
+      await this.init();
       const fct = new Function('context', 'destination', this.code);
       fct(this.context, this.destination);
       if (this.muted) this.context.suspend();
