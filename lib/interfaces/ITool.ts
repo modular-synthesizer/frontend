@@ -31,6 +31,8 @@ export interface InnerNode {
   id?: string;
   name: string;
   generator: string;
+  x: number;
+  y: number;
 }
 
 export interface InnerLink {

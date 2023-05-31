@@ -7,6 +7,7 @@
             <th v-if="!hideUuids">UUID</th>
             <th>Nom</th>
             <th>Générateur</th>
+            <th>Coordinates</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -15,6 +16,7 @@
             <td v-if="!hideUuids">{{ node.id }}</td>
             <td>{{ node.name }}</td>
             <td>{{ node.generator }}</td>
+            <td>[{{ node.x }} ; {{ node.y }}]</td>
             <td>
               <v-btn icon="mdi-delete" variant="plain" size="small" @click="removeNode(idx)" />
             </td>

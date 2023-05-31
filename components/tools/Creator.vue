@@ -22,7 +22,7 @@
             <tools-informations v-model="tool" />
           </v-window-item>
           <v-window-item value="nodes">
-            <tools-nodes :nodes="tool.nodes" :creation-mode="creationMode" />
+            <tools-nodes :tool="tool" :creation-mode="creationMode" />
           </v-window-item>
           <v-window-item value="links">
             <tools-links v-model="tool.links" :creation-mode="creationMode" />
