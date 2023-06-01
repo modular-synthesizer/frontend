@@ -1,7 +1,6 @@
 <template>
   <tools-nodes-form @created="addNode" />
-  <tools-nodes-list :nodes="nodes" :hide-uuids="creationMode" />
-  <tools-nodes-graph :nodes="nodes" :links="tool.links" />
+  <tools-nodes-graph :tool="tool" />
 </template>
 
 <script lang="ts">
