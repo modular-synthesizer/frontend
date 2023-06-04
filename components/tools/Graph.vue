@@ -6,8 +6,8 @@
       </g>
       <g v-for="n in graph.nodes">
         <rect :x="n.x" :y="n.y" width="200" height="50" fill="#555555" stroke="white" />
-        <text :x="n.x + 10" :y="n.y + 15" dominant-baseline="middle" fill="white">{{ n.label }}</text>
-        <text :x="n.x + 10" :y="n.y + 35" dominant-baseline="middle" fill="#BBBBBB">{{ n.subtitle }}</text>
+        <text :x="n.x + 25" :y="n.y + 15" dominant-baseline="middle" fill="white">{{ n.label }}</text>
+        <text :x="n.x + 25" :y="n.y + 35" dominant-baseline="middle" fill="#BBBBBB">{{ n.subtitle }}</text>
         <g v-for="param in n.parameters">
           <rect :x="param.x" :y="param.y" height="30" width="180" stroke="white" />
           <text :x="param.x + 10" :y="param.y + 20" fill="white">{{ param.label }}</text>
@@ -15,6 +15,9 @@
       </g>
       <g v-for="link in graph.links">
         <circle :cx="link.x2" :cy="link.y2" fill="black" r="6" stroke="white" stroke-width="3" />
+      </g>
+      <g v-for="port in graph.ports">
+        <circle :cx="port.x" :cy="port.y" r="15" :fill="port.type === 'input' ? '#BB0000' : '#0000BB'" stroke="white" stroke-width="5" />
       </g>
     </g>
   </svg>
