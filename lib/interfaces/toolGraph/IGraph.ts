@@ -1,5 +1,6 @@
 import IGraphLink from "./IGraphLink";
 import IGraphNode from "./IGraphNode";
+import IGraphPort from "./IGraphPort";
 
 /**
  * Represents the whole graph structure to display. It contains the nodes, links, parameters and ports of the tool,
@@ -9,4 +10,5 @@ import IGraphNode from "./IGraphNode";
 export default interface IGraph {
   nodes: IGraphNode[];
   links: IGraphLink[];
+  ports: IGraphPort[];
 }

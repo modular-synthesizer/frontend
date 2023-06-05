@@ -2,18 +2,22 @@ import IGraphParameter from "~~/lib/interfaces/toolGraph/IGraphParameter";
 import ITool, { InnerNode } from "../interfaces/ITool";
 import IGraph from "../interfaces/toolGraph/IGraph";
 import IGraphNode from "../interfaces/toolGraph/IGraphNode";
-import { IToolParameter, InnerLink } from "~~/lib/interfaces/ITool";
+import { IToolParameter, IToolPort, InnerLink } from "~~/lib/interfaces/ITool";
 import IParameter from "~~/lib/interfaces/IParameter";
 import { findIndex } from "lodash";
 import IGraphLink from "~~/lib/interfaces/toolGraph/IGraphLink";
+import IGraphPort from "~~/lib/interfaces/toolGraph/IGraphPort";
+import { IControl } from "~~/lib/interfaces/IControl";
 
 export default async function createGraph(tool: ITool): IGraph {
   await useDescriptors().fetchDescriptors();
   const graph: IGraph = {
     nodes: createNodes(tool),
-    links: []
+    links: [],
+    ports: [],
   };
   graph.links = createLinks(tool, graph.nodes);
+  graph.ports = createPorts(tool, graph.nodes);
   return graph;
 }
 
@@ -64,6 +68,20 @@ function createLinks(tool: ITool, nodes: IGraphNode[]): IGraphLink[] {
         return p.label === param;
       }) as IGraphParameter;
       return { x1: from.x + 200, x2: paramDest.x, y1: from.y + 25, y2: paramDest.y + 15 }
+    }
+  });
+}
+
+function createPorts(tool: ITool, nodes: IGraphNode): IGraphPort[] {
+  return tool.ports.map((p: IToolPort) => {
+    const node: IGraphNode = nodes.find((n: IGraphNode) => n.label === p.target);
+    const control: IControl = tool.controls.find((c: IControl) => {
+      return c.payload['target'] === node.label
+    });
+    return {
+      x: node.x + (p.kind === 'input' ? 0 : 200),
+      y: node.y + 25,
+      type: p.kind
     }
   });
 }
