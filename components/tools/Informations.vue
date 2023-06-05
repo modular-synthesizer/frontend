@@ -14,6 +14,11 @@
       <v-select :items="selectableCategories" variant="outlined" density="comfortable" label="Catégorie" v-model="tool.categoryId" />
     </v-col>
   </v-row>
+  <v-row>
+    <v-col cols="12">
+      <v-checkbox label="Experimental" v-model="tool.experimental" />
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">

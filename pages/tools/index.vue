@@ -16,6 +16,7 @@
           <thead>
             <tr>
               <th>UUID</th>
+              <th>&nbsp;</th>
               <th>Nom</th>
               <th>Largeur</th>
               <th>Noeuds</th>
@@ -29,6 +30,7 @@
           <tbody>
             <tr v-for="tool in tools">
               <td>{{ tool.id }}</td>
+              <td><v-icon v-if=tool.experimental color="red">mdi-alert</v-icon></td>
               <td>{{ tool.name }}</td>
               <td>{{ tool.slots }}</td>
               <td>{{ tool.nodes.length }}</td>

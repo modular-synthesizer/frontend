@@ -12,6 +12,7 @@ export default interface ITool {
   parameters: IToolParameter[];
   slots: number;
   controls: IControl[]
+  experimental: boolean;
 }
 
 export interface IToolParameter {
