@@ -75,9 +75,6 @@ function createLinks(tool: ITool, nodes: IGraphNode[]): IGraphLink[] {
 function createPorts(tool: ITool, nodes: IGraphNode): IGraphPort[] {
   return tool.ports.map((p: IToolPort) => {
     const node: IGraphNode = nodes.find((n: IGraphNode) => n.label === p.target);
-    const control: IControl = tool.controls.find((c: IControl) => {
-      return c.payload['target'] === node.label
-    });
     return {
       x: node.x + (p.kind === 'input' ? 0 : 200),
       y: node.y + 25,
