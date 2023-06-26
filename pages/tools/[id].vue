@@ -17,9 +17,7 @@ export default {
   },
   methods: {
     save() {
-      api.auth_put(`/tools/${this.tool.id}`, this.tool).then(_response => {
-        this.$router.push('/tools');
-      });
+      api.auth_put(`/tools/${this.tool.id}`, this.tool);
     }
   }
 }

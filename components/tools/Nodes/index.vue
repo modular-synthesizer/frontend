@@ -1,10 +1,11 @@
 <template>
-  <tools-nodes-form @created="addNode" />
-  <tools-nodes-list :nodes="nodes" :hide-uuids="creationMode" />
+  <tools-nodes-form @created="addNode" @updated="updateNode" />
+  <tools-nodes-list :tool="tool" :nodes="nodes" :hide-uuids="creationMode" />
 </template>
 
 <script lang="ts">
 import ITool, { InnerNode } from '~~/lib/interfaces/ITool';
+import { api } from '~~/lib/api/Api'
 
 export default {
   props: {
@@ -18,8 +19,12 @@ export default {
     }
   },
   methods: {
-    addNode(node: InnerNode) {
-      this.nodes.push(node);
+    async addNode(node: InnerNode) {
+      const response: InnerNode = await api.auth_post('/tools/nodes', { ...node, tool_id: this.tool.id });
+      this.nodes.push(response);
+    },
+    updateNode(node: InnerNode) {
+
     }
   },
   computed: {
