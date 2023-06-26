@@ -35,7 +35,7 @@
             <tools-parameters v-model="tool.parameters" :creation-mode="creationMode" />
           </v-window-item>
           <v-window-item value="controls">
-            <tools-controls v-model="tool.controls" :creation-mode="creationMode" />
+            <tools-controls v-model="tool.controls" :tool="tool" :creation-mode="creationMode" />
           </v-window-item>
           <v-window-item value="structure">
             <tools-graph :tool="tool" />
