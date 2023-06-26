@@ -26,7 +26,9 @@
 </template>
 
 <script lang="ts">
-import { InnerLink } from '~~/lib/interfaces/ITool';
+import { PropType } from 'nuxt/dist/app/compat/capi';
+import { api } from '~~/lib/api/Api';
+import ITool, { InnerLink } from '~~/lib/interfaces/ITool';
 
 export default {
   props: {
@@ -37,11 +39,16 @@ export default {
     creationMode: {
       type: Boolean,
       default: () => false,
+    },
+    tool: {
+      type: Object as PropType<ITool>,
+      required: true
     }
   },
   methods: {
-    removeLink(index: number) {
-      this.links.splice(index, 1)
+    async removeLink(index: number) {
+      await api.auth_delete(`/tools/links/${this.links[index].id}`, { tool_id: this.tool.id });
+      this.links.splice(index, 1);
     }
   }
 }

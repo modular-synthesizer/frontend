@@ -6,6 +6,7 @@
 <script lang="ts">
 import { cloneDeep, map } from 'lodash';
 import { PropType } from 'vue';
+import { api } from '~~/lib/api/Api';
 import ITool, { IToolPort } from '~~/lib/interfaces/ITool';
 
 function emptyPort(): IToolPort {
@@ -21,7 +22,7 @@ export default {
     creationMode: {
       type: Boolean,
       default: () => false
-    }
+    },
   },
   data: () => ({
     port: emptyPort(),
@@ -37,16 +38,19 @@ export default {
   },
   methods: {
     startEdit(index: number) {
-      const port = this.tool.ports[index];
       this.index = index;
-      this.port = cloneDeep(port);
+      this.port = cloneDeep(this.tool.ports[index]);
     },
-    updatePort(index: number, port: IToolPort) {
-      this.tool.ports[index] = port;
+    async updatePort(index: number, port: IToolPort) {
+      const response = await api.auth_put(`/tools/ports/${port.id}`, port)
+      this.tool.ports[index] = response;
       this.reset();
     },
-    addPort(port: IToolPort) {
-      this.tool.ports.push(port);
+    async addPort(port: IToolPort) {
+      const response = await api.auth_post(`/tools/ports/${port.id}`, {
+        ...port, tool_id: this.tool.id
+      });
+      this.tool.ports.push(response);
       this.reset();
     },
     reset() {

@@ -26,13 +26,13 @@
             <tools-nodes :tool="tool" :creation-mode="creationMode" />
           </v-window-item>
           <v-window-item value="links">
-            <tools-links v-model="tool.links" :creation-mode="creationMode" />
+            <tools-links v-model="tool.links" :tool="tool" :creation-mode="creationMode" />
           </v-window-item>
           <v-window-item value="ports">
             <tools-ports v-model="tool" :creation-mode="creationMode" />
           </v-window-item>
           <v-window-item value="parameters">
-            <tools-parameters v-model="tool.parameters" :creation-mode="creationMode" />
+            <tools-parameters v-model="tool.parameters" :tool="tool" :creation-mode="creationMode" />
           </v-window-item>
           <v-window-item value="controls">
             <tools-controls v-model="tool.controls" :tool="tool" :creation-mode="creationMode" />

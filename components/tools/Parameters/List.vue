@@ -33,6 +33,7 @@
 </template>
 
 <script lang="ts">
+import { api } from '~~/lib/api/Api';
 import { IToolParameter } from '~~/lib/interfaces/ITool';
 
 export default {
@@ -47,7 +48,8 @@ export default {
     },
   },
   methods: {
-    removeParameter(index: number) {
+    async removeParameter(index: number) {
+      await api.auth_delete(`/tools/parameters/${this.parameters[index].id}`)
       this.parameters.splice(index, 1);
     },
     startEditing(index: number) {

@@ -5,7 +5,8 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
-import { IToolParameter } from '~~/lib/interfaces/ITool';
+import { api } from '~~/lib/api/Api';
+import ITool, { IToolParameter } from '~~/lib/interfaces/ITool';
 
 function emptyParameter() {
   return {id: "", name: "", targets: [] as string[], descriptorId: ""}
@@ -20,6 +21,10 @@ export default {
     creationMode: {
       type: Boolean,
       default: () => false
+    },
+    tool: {
+      type: Object as PropType<ITool>,
+      required: true,
     }
   },
   data: () => ({
@@ -34,12 +39,18 @@ export default {
     }
   },
   methods: {
-    addParameter(result: IToolParameter) {
-      this.parameters.push(result);
+    async addParameter(result: IToolParameter) {
+      console.log(result);
+      const response = await api.auth_post('/tools/parameters', {
+        ...result,
+        tool_id: this.tool.id,
+      });
+      this.parameters.push(response);
       this.reset();
     },
-    updateParameter(result: IToolParameter) {
-      this.parameters[this.index] = result;
+    async updateParameter(result: IToolParameter) {
+      const response = await api.auth_put(`/tools/parameters/${result.id}`, result)
+      this.parameters[this.index] = response;
       this.reset();
     },
     reset() {
