@@ -1,6 +1,7 @@
 <template>
   <Head>
     <Title>Synple</Title>
+    <Meta name="description" content="A modular synthesizer edition engine" />
   </Head>
   <VApp>
     <VLayout>
