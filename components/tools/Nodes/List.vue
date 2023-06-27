@@ -18,7 +18,7 @@
             <td>{{ node.generator }}</td>
             <td>[{{ node.x }} ; {{ node.y }}]</td>
             <td>
-              <v-btn icon="mdi-delete" variant="plain" size="small" @click="removeNode(idx)" />
+              <v-btn icon="mdi-delete" variant="plain" size="small" @click="removeNode(node, idx)" />
             </td>
           </tr>
         </tbody>
@@ -28,7 +28,8 @@
 </template>
 
 <script lang="ts">
-import { InnerNode } from '~~/lib/interfaces/ITool';
+import { api } from '~~/lib/api/Api';
+import ITool, { InnerNode } from '~~/lib/interfaces/ITool';
 
 export default {
   props: {
@@ -39,10 +40,15 @@ export default {
     hideUuids: {
       type: Boolean,
       default: () => false
+    },
+    tool: {
+      type: Object as PropType<ITool>,
+      required: true,
     }
   },
   methods: {
-    removeNode(index: number) {
+    async removeNode(node: InnerNode, index: number) {
+      await api.auth_delete(`/tools/nodes/${node.id}`, { tool_id: this.tool.id })
       this.nodes.splice(index, 1);
     }
   }

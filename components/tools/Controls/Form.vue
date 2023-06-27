@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { cloneDeep, flatten } from 'lodash';
+import { flatten } from 'lodash';
 import { PropType } from 'vue';
 import { IControl } from '~~/lib/interfaces/IControl';
 
@@ -82,14 +82,7 @@ export default {
       this.control.payload = Object.fromEntries(parsedValues);
     },
     validate() {
-      const result: IControl = cloneDeep(this.control);
-      if (this.index < 0) {
-        this.$emit("created", result);
-      }
-      else {
-        this.$emit("updated", result);
-      }
-      this.reset();
+      this.$emit(!this.control.id ? "created" : "updated", this.control);
     },
     reset() {
       this.$emit("reset");

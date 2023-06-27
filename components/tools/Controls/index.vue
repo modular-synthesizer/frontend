@@ -7,8 +7,10 @@
 
 <script lang="ts">
 import { cloneDeep } from 'lodash';
+import { api } from '~~/lib/api/Api';
 import ToolsFactory from '~~/lib/factories/ToolsFactory';
 import { IControl } from '~~/lib/interfaces/IControl';
+import ITool from '~~/lib/interfaces/ITool';
 
 export default {
   props: {
@@ -19,6 +21,10 @@ export default {
     creationMode: {
       type: Boolean,
       default: () => false
+    },
+    tool: {
+      type: Object as PropType<ITool>,
+      required: true,
     }
   },
   data: () => ({
@@ -30,18 +36,22 @@ export default {
     controls() { return this.modelValue; }
   },
   methods: {
-    created(result: IControl) {
-      this.controls.push(result);
+    async created(result: IControl) {
+      const response: IControl = await api.auth_post('/tools/controls', { ...result, tool_id: this.tool.id });
+      this.controls.push(response);
+      this.reset();
     },
-    updated(result: IControl) {
-      this.controls[this.index] = result
+    async updated(result: IControl) {
+      const response: IControl = await api.auth_put(`/tools/controls/${result.id}`, result);
+      this.controls[this.index] = response;
+      this.reset();
     },
-    startEdit(index: number) {
-      this.control = cloneDeep(this.controls[index]);
+    startEdit({ control, index}: any) {
       this.index = index;
+      console.log(this.index);
+      this.control = cloneDeep(control);
     },
     reset() {
-      this.index = -1;
       this.control = ToolsFactory.emptyControl();
     }
   }

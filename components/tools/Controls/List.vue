@@ -20,13 +20,13 @@
             <v-btn
               size="small"
               variant="plain"
-              @click="startEdit(idx)"
+              @click="startEdit(control, idx)"
               icon="mdi-pencil"
             />
             <v-btn
               size="small"
               variant="plain"
-              @click="remove(idx)"
+              @click="remove(control, idx)"
               icon="mdi-delete"
             />
             <v-btn
@@ -52,6 +52,7 @@
 
 <script lang="ts">
 import { omit, remove } from 'lodash';
+import { api } from '~~/lib/api/Api';
 import { IControl } from '~~/lib/interfaces/IControl';
 
 export default {
@@ -70,11 +71,12 @@ export default {
       const item: IControl = this.controls.splice(index, 1)[0];
       this.controls.splice(index + difference, 0, item);
     },
-    remove(index: number) {
+    async remove(control: IControl, index: number) {
+      await api.auth_delete(`/tools/controls/${control.id}`)
       remove(this.controls, this.controls[index]);
     },
-    startEdit(index: number) {
-      this.$emit("edition", index);
+    startEdit(control: IControl, index: number) {
+      this.$emit("edition", { control, index });
     },
     removePayloadValue(control: IControl, value: string) {
       control.payload = omit(control.payload, value);

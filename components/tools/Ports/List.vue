@@ -31,6 +31,7 @@
 </template>
 
 <script lang="ts">
+import { api } from '~~/lib/api/Api';
 import { IToolPort } from '~~/lib/interfaces/ITool';
 
 export default {
@@ -45,7 +46,8 @@ export default {
     },
   },
   methods: {
-    removePort(index: number) {
+    async removePort(index: number) {
+      await api.auth_delete(`/tools/ports/${this.ports[index].id}`);
       this.ports.splice(index, 1);
     },
     startEdit(index: number) {

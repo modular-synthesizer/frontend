@@ -5,8 +5,9 @@
 </template>
 
 <script lang="ts">
-import {api} from "~~/lib/api/Api"
+import { api } from "~~/lib/api/Api"
 import ITool from "~~/lib/interfaces/ITool";
+import { pick } from 'lodash';
 
 export default {
   data: () => ({
@@ -17,9 +18,8 @@ export default {
   },
   methods: {
     save() {
-      api.auth_put(`/tools/${this.tool.id}`, this.tool).then(_response => {
-        this.$router.push('/tools');
-      });
+      const fields: string[] = ['name', 'slots', 'categoryId', 'experimental'];
+      api.auth_put(`/tools/${this.tool.id}`, pick(this.tool, fields));
     }
   }
 }
