@@ -1,6 +1,8 @@
 import { findIndex, indexOf } from "lodash";
 import { POLYPHONY_CHANNELS } from "../utils/constants";
 import { eventbus } from "../utils/eventbus/EventBus";
+import ISynthesizer from "../interfaces/ISynthesizer";
+import Synthesizer from "../wrappers/Synthesizer";
 
 export default class MidiDevice {
 
@@ -9,10 +11,14 @@ export default class MidiDevice {
   private pressed: number[] = []
 
   // All polyphony channels are marked as empty at first, signaled by -1
-  private channels = Array.from(Array(POLYPHONY_CHANNELS)).map(i => -1);
+  private channels = Array.from(Array(POLYPHONY_CHANNELS)).map(_ => -1);
 
   constructor(midichannel: number) {
     this.midichannel = midichannel;
+  }
+
+  public setSynthesizer(synthesizer: Synthesizer|ISynthesizer) {
+    this.channels = Array.from(Array(synthesizer.voices)).map(_ => -1);
   }
 
   public message(kind: number, payload: Uint8Array) {
@@ -67,6 +73,7 @@ export default class MidiDevice {
   }
 
   private getFreePolyphonyChannel(): number {
+    if (this.channels.length === 1) return 0;
     return findIndex(this.channels, ch => ch === -1);
   }
 

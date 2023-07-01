@@ -25,6 +25,8 @@ export default class Synthesizer {
 
   public slots: number;
 
+  public voices: number = 1;
+
   public modules: Mod[] = [];
 
   public constructor(infos: ISynthesizer) {
@@ -34,6 +36,7 @@ export default class Synthesizer {
     this.y = infos.y;
     this.scale = infos.scale;
     this.slots = infos.slots;
+    this.voices = infos.voices;
 
     times(infos.racks, (index: number) => {
       this.racks.push(new Rack(index, infos.slots));

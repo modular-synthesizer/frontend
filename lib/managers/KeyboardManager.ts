@@ -3,6 +3,8 @@ import IManager from "~~/lib/interfaces/IManager";
 import { useKeyboard } from "~~/stores/common/keyboard";
 import keyboard from './keyboard.json'
 import MidiDevice from "~~/lib/midi/MidiDevice";
+import Synthesizer from "../wrappers/Synthesizer";
+import ISynthesizer from "../interfaces/ISynthesizer";
 
 /**
  * This class helps us trate the keyboard as a separated MIDI device. The difference with a classical MIDI device is
@@ -36,6 +38,10 @@ export default class KeyboardManager implements IManager {
       const mapper = find(this.mapping, {key: event.code});
       if (!!mapper) this.device.noteOff(mapper.midicode);
     }
+  }
+
+  public setSynthesizer(synth: Synthesizer|ISynthesizer) {
+    this.device.setSynthesizer(synth);
   }
 
   /**

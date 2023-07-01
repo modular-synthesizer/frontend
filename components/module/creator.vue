@@ -88,7 +88,7 @@ export default {
       }
       else {
         api.post('/modules', payload).then((response: IModule) => {
-          ModulesFactory.build(response).then((mod: Mod) => {
+          ModulesFactory.build(response, this.synthesizer).then((mod: Mod) => {
             this.$emit('selected', mod);
             this.close();
           })
