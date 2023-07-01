@@ -3,8 +3,6 @@ import { IGenerator } from "../interfaces/IGenerator";
 import { InnerNode } from "../interfaces/ITool";
 import InnerAudioNode from "../wrappers/InnerAudioNode";
 
-const AsyncFunction = async function () {}.constructor;
-
 class InnerNodesFactory {
     /**
      * Instanciates a set of inner nodes from the API to transform them in audio
@@ -21,16 +19,21 @@ class InnerNodesFactory {
         for(let innerNode of list) {
             const gen: IGenerator = find(gens, {name: innerNode.generator}) as IGenerator;
 
-            const executor = {func: async function(name: string, ctx: AudioContext) {}};
-            const fullcode: string = "executor.func = async function(name, context) { " + gen.code + " };"
-            eval(fullcode);
-
-            const audioNodes: InnerAudioNode[] = await executor.func(innerNode.name, ctx) as unknown as InnerAudioNode[];
-
-            audioNodes.forEach((a: InnerAudioNode) => {
-                if (a.node instanceof AudioScheduledSourceNode) a.node.start()
-                results.push(a);
-            })
+            if (gen !== undefined) {
+                const executor = {func: async function(name: string, ctx: AudioContext) {}};
+                const fullcode: string = "executor.func = async function(name, context) { " + gen.code + " };"
+                eval(fullcode);
+    
+                const audioNodes: InnerAudioNode[] = await executor.func(innerNode.name, ctx) as unknown as InnerAudioNode[];
+    
+                audioNodes.forEach((a: InnerAudioNode) => {
+                    if (a.node instanceof AudioScheduledSourceNode) a.node.start()
+                    results.push(a);
+                })
+            }
+            else {
+                console.warn(`Impossible to find generator ${innerNode.generator}`)
+            }
         }
 
         return results;
