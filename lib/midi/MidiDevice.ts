@@ -1,6 +1,8 @@
-import { findIndex, indexOf } from "lodash";
+import { cloneDeep, difference, find, findIndex, indexOf, intersection, last } from "lodash";
 import { POLYPHONY_CHANNELS } from "../utils/constants";
 import { eventbus } from "../utils/eventbus/EventBus";
+import ISynthesizer from "../interfaces/ISynthesizer";
+import Synthesizer from "../wrappers/Synthesizer";
 
 export default class MidiDevice {
 
@@ -9,10 +11,14 @@ export default class MidiDevice {
   private pressed: number[] = []
 
   // All polyphony channels are marked as empty at first, signaled by -1
-  private channels = Array.from(Array(POLYPHONY_CHANNELS)).map(i => -1);
+  private channels = Array.from(Array(POLYPHONY_CHANNELS)).map(_ => -1);
 
   constructor(midichannel: number) {
     this.midichannel = midichannel;
+  }
+
+  public setSynthesizer(synthesizer: Synthesizer|ISynthesizer) {
+    this.channels = Array.from(Array(synthesizer.voices)).map(_ => -1);
   }
 
   public message(kind: number, payload: Uint8Array) {
@@ -32,17 +38,35 @@ export default class MidiDevice {
   public noteOn(note: number) {
     // The key is already being pressed, nothing more to do.
     if (indexOf(this.pressed, note) >= 0) return;
-    const channel = this.getFreePolyphonyChannel();
-    this.channels[channel] = note;
     this.pressed.push(note);
-    eventbus.emit(`midi/trigger/${this.midichannel}`, { note, channel });
+    let channel = this.getFreePolyphonyChannel();
+    if (channel === -1) {
+      channel = this.channels.length - 1;
+      eventbus.emit(`midi/note-change/${this.midichannel}`, { note, channel })
+    }
+    else {
+      eventbus.emit(`midi/trigger/${this.midichannel}`, { note, channel });
+    }
+    this.channels[channel] = note;
   }
 
   public noteOff(note: number) {
-    const channel = this.getChannelForNote(note);
-    this.channels[channel] = -1;
     this.pressed = this.pressed.filter(k => k !== note);
-    eventbus.emit(`midi/release/${this.midichannel}`, { note, channel });
+    const channel = this.getChannelForNote(note);
+    if (channel === -1) return;
+
+    const diff = difference(this.pressed, this.channels);
+    this.channels[channel] = (diff.length ? last(diff) : -1) || -1;
+
+    if (this.channels[channel] === -1) {
+      eventbus.emit(`midi/release/${this.midichannel}`, { note, channel });
+    }
+    else {
+      eventbus.emit(`midi/note-change/${this.midichannel}`, {
+        note: this.channels[channel], channel
+      })
+    }
+    
   }
 
   public controlChange(payload: Uint8Array) {
@@ -67,6 +91,7 @@ export default class MidiDevice {
   }
 
   private getFreePolyphonyChannel(): number {
+    if (this.channels.length === 1) return 0;
     return findIndex(this.channels, ch => ch === -1);
   }
 

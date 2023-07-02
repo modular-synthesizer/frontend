@@ -1,6 +1,8 @@
 import IManager from "~~/lib/interfaces/IManager";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import MidiDevice from "~~/lib/midi/MidiDevice";
+import ISynthesizer from "../interfaces/ISynthesizer";
+import Synthesizer from "../wrappers/Synthesizer";
 
 /**
  * This class manages the connection of MIDI devices to the event bus and the emission of "noteOn" and "noteOff"
@@ -27,6 +29,12 @@ export default class MidiManager implements IManager {
         this.handleNewDevice(event);
       }
     })
+  }
+
+  public setSynthesizer(synth: Synthesizer|ISynthesizer) {
+    this.devices.forEach((device: MidiDevice) => {
+      device.setSynthesizer(synth);
+    });
   }
 
   /**

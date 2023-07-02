@@ -5,14 +5,15 @@ import Mod from "~~/lib/wrappers/Mod";
 import { find, remove } from 'lodash'
 import Link from "~~/lib/wrappers/Link";
 import ModulesFactory from "~~/lib/factories/ModulesFactory";
+import Synthesizer from "~~/lib/wrappers/Synthesizer";
 
 export const useModulesList = defineStore('modulesList', {
   state: () => ({
     modules: [] as Mod[],
   }),
   getters: {
-    synth() {
-      return useSynthesizerDetails().synthesizer
+    synth(): Synthesizer {
+      return useSynthesizerDetails().synthesizer as Synthesizer
     }
   },
   actions: {
@@ -24,7 +25,7 @@ export const useModulesList = defineStore('modulesList', {
       this.modules = [];
       const response: IModule[] = await api.auth_get('/modules', { synthesizer_id });
       for (let imod of response) {
-        const mod: Mod = await ModulesFactory.build(imod as unknown as IModule);
+        const mod: Mod = await ModulesFactory.build(imod as unknown as IModule, this.synth);
         this.synth.place(mod.rack, mod.slot, mod)
         this.modules.push(mod);
       }

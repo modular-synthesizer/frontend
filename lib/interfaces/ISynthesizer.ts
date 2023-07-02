@@ -10,4 +10,5 @@ export default interface ISynthesizer {
   x: number;
   y: number;
   scale: number;
+  voices: number;
 }

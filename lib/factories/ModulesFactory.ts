@@ -1,10 +1,11 @@
 import IModule from "../interfaces/IModule";
 import { POLYPHONY_CHANNELS } from "../utils/constants";
 import Channel from "../wrappers/Channel";
-import InnerAudioNode from "../wrappers/InnerAudioNode";
 import Mod from "../wrappers/Mod";
 import InnerNodesFactory from "./InnerNodes"
 import InnerLinksFactory from "./InnerLinks"
+import ISynthesizer from "../interfaces/ISynthesizer";
+import Synthesizer from "../wrappers/Synthesizer";
 
 export class ModulesFactory {
   public empty(): IModule {
@@ -23,10 +24,10 @@ export class ModulesFactory {
     }
   }
 
-  public async build(details: IModule) {
-
+  public async build(details: IModule, synthesizer: ISynthesizer|Synthesizer) {
+    console.log(synthesizer.voices);
     const channels: Channel[] = [];
-    for (let i = 0 ; i < POLYPHONY_CHANNELS ; ++i) {
+    for (let i = 0 ; i < synthesizer.voices ; ++i) {
       const channel = new Channel(i);
       channel.nodes = await InnerNodesFactory.create(details.nodes);
       channel.links = InnerLinksFactory.link(channel.nodes, details.links);
