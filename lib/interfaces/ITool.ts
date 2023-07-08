@@ -19,12 +19,11 @@ export interface IToolParameter {
   targets: string[];
   name: string;
   descriptorId?: string,
-  constraints: {
-    maximum: number,
-    minimum: number,
-    step: number,
-    precision: number
-  }
+  default: number,
+  maximum: number,
+  minimum: number,
+  step: number,
+  precision: number
 }
 
 export interface InnerNode {
