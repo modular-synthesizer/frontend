@@ -4,12 +4,13 @@
 </template>
 
 <script lang="ts">
+import { cloneDeep } from 'lodash';
 import { mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
 import ITool, { IToolParameter } from '~~/lib/interfaces/ITool';
 
 function emptyParameter() {
-  return {id: "", name: "", targets: [] as string[], descriptorId: ""}
+  return {id: "", name: "", targets: [] as string[], default: 50, minimum: 0, maximum: 100, step: 1, precision: 0}
 }
 
 export default {
@@ -56,20 +57,10 @@ export default {
     reset() {
       this.parameter = emptyParameter();
       this.index = -1;
-      this.resetDescriptor()
-    },
-    resetDescriptor() {
-      this.parameter.descriptorId = this.descriptors[0].id;
     },
     startEdit(index: number) {
       this.index = index;
-      const parameter = this.parameters[index];
-      this.parameter = {
-        id: parameter.id,
-        name: parameter.name,
-        targets: parameter.targets,
-        descriptorId: `${parameter.descriptorId}`
-      }
+      this.parameter = cloneDeep(this.parameters[index])
     }
   },
   mounted() {

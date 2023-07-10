@@ -1,18 +1,24 @@
 <template>
   <v-row class="mt-5" no-gutters>
-    <v-col cols="3">
-      <v-select
-        variant="outlined"
-        v-model="parameter.descriptorId"
-        :items="descriptorsList"
-        density="comfortable"
-        label="Descripteur"
-      />
-    </v-col>
-    <v-col cols="3" class="pl-2">
+    <v-col cols="2" class="pl-2">
       <v-text-field variant="outlined" label="Nom" density="comfortable" v-model="parameter.name" />
     </v-col>
-    <v-col cols="4" class="pl-2">
+    <v-col cols="1" class="pl-2">
+      <v-text-field type="number" variant="outlined" label="Min" density="comfortable" v-model="parameter.minimum" />
+    </v-col>
+    <v-col cols="1" class="pl-2">
+      <v-text-field type="number" variant="outlined" label="Max" density="comfortable" v-model="parameter.maximum" />
+    </v-col>
+    <v-col cols="1" class="pl-2">
+      <v-text-field type="number" variant="outlined" label="Value" density="comfortable" v-model="parameter.default" />
+    </v-col>
+    <v-col cols="1" class="pl-2">
+      <v-text-field type="number" variant="outlined" label="Step" density="comfortable" v-model="parameter.step" />
+    </v-col>
+    <v-col cols="1" class="pl-2">
+      <v-text-field type="number" variant="outlined" label="Precision" density="comfortable" v-model="parameter.precision" />
+    </v-col>
+    <v-col cols="3" class="pl-2">
       <v-combobox
         chips
         closable-chips
@@ -54,27 +60,15 @@ export default {
       return this.modelValue;
     },
     ...mapState(useDescriptors, {descriptors: 'parameters'}),
-    descriptorsList() {
-      return this.descriptors.map(d => {
-        const c = d.constraints;
-        return {
-          title: `${d.name} [${c.minimum};${c.maximum}] +/- ${c.step}p${c.precision}`,
-          value: d.id
-        }
-      })
-    }
   },
   methods: {
     validate() {
-      const constraints = find(this.descriptors, {id: this.parameter.descriptorId})?.constraints
-      if (constraints !== undefined) {
-        const result = {...cloneDeep(this.parameter), constraints}
-        if (this.index < 0) {
-          this.$emit("created", result);
-        }
-        else {
-          this.$emit("updated", result);
-        }
+      const result = cloneDeep(this.parameter)
+      if (this.index < 0) {
+        this.$emit("created", result);
+      }
+      else {
+        this.$emit("updated", result);
       }
     },
     reset() {
