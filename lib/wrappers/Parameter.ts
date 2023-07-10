@@ -21,10 +21,10 @@ export default class Parameter {
     this.id = details.id;
     this.name = details.name;
     this.value = details.value;
-    this.minimum = details.constraints.minimum;
-    this.maximum = details.constraints.maximum;
-    this.step = details.constraints.step;
-    this.precision = details.constraints.precision;
+    this.minimum = details.minimum;
+    this.maximum = details.maximum;
+    this.step = details.step;
+    this.precision = details.precision;
     this.targets = details.targets;
     this.mod = mod;
     this.ctx = useAudioContext().context;

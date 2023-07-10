@@ -38,14 +38,18 @@ export default {
   },
   methods: {
     noteTrigger({ note, channel }: any) {
+      const c = this.mod.channel(channel);
+      const gate: ConstantSourceNode = c.getNode(this.envelope)?.node as ConstantSourceNode
+      gate.offset.setValueAtTime(1, this.ctx.currentTime);
+      this.noteChange({ note, channel })
+    },
+    noteChange({ note, channel }: any) {
       const voltage: number = (note - 69) / 12;
       const c = this.mod.channel(channel);
-
+      if (!c) return;
       const pitch: ConstantSourceNode = c.getNode(this.pitch)?.node as ConstantSourceNode
-      const gate: ConstantSourceNode = c.getNode(this.envelope)?.node as ConstantSourceNode
       pitch.offset.cancelScheduledValues(this.ctx.currentTime);
       pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
-      gate.offset.setValueAtTime(1, this.ctx.currentTime);
     },
     noteRelease({ channel }: any) {
       const c = this.mod.channel(channel);
@@ -60,6 +64,7 @@ export default {
     },
     removeKeyEvents() {
       eventbus.unsubscribe(`midi/trigger/${this.midichannel}`, this.noteTrigger);
+      eventbus.unsubscribe(`midi/note-change/${this.midichannel}`, this.noteChange);
       eventbus.unsubscribe(`midi/release/${this.midichannel}`, this.noteRelease);
       eventbus.unsubscribe(`midi/modwheel/${this.midichannel}`, this.modWheel);
       for (let i = 0; i < POLYPHONY_CHANNELS; ++i) {
@@ -70,6 +75,7 @@ export default {
     },
     declareKeyEvents(midichannel: number) {
       eventbus.subscribe(`midi/trigger/${midichannel}`, this.noteTrigger);
+      eventbus.subscribe(`midi/note-change/${midichannel}`, this.noteChange);
       eventbus.subscribe(`midi/release/${midichannel}`, this.noteRelease);
       eventbus.subscribe(`midi/modwheel/${midichannel}`, this.modWheel);
       this.midichannel = midichannel;
