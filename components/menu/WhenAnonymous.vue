@@ -10,11 +10,11 @@
   <v-app-bar color="deep-purple darken-2" v-else>
     <template v-slot:prepend>
       <v-app-bar-title class="mr-2">Synple</v-app-bar-title>
-      <v-btn icon to="/"><v-icon>mdi-home</v-icon></v-btn>
+      <v-btn icon to="/" aria-label="home link"><v-icon>mdi-home</v-icon></v-btn>
     </template>
     <template v-slot:append>
-      <v-btn to="/register">{{ $t('common.register') }}</v-btn>
-      <v-btn to="/login">{{ $t('common.login') }}</v-btn>
+      <v-btn to="/register" aria-label="registration link">{{ $t('common.register') }}</v-btn>
+      <v-btn to="/login" aria-label="login link">{{ $t('common.login') }}</v-btn>
     </template>
   </v-app-bar>
 </template>
