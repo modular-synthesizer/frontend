@@ -32,5 +32,11 @@ export default defineNuxtConfig({
       api_uri: process.env.API_URL || 'https://synple.app/api',
       dev_mode: process.env.DEV_MODE == 'true'
     }
-  }
+  },
+  nitro: {
+    compressPublicAssets: {
+      gzip: true,
+      brotli: true,
+    },
+  },
 })

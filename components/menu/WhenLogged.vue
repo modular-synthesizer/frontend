@@ -1,9 +1,9 @@
 <template>
   <v-app-bar color="deep-purple darken-2" v-if="useDisplay().smAndDown.value">
-      <v-btn icon to="/">
+      <v-btn icon to="/" aria-label="home link">
         <v-icon>mdi-home</v-icon>
       </v-btn>
-      <v-btn icon to="/synthesizers" class="ml-2">
+      <v-btn icon to="/synthesizers" class="ml-2" aria-label="synthesizers list">
         <v-icon>mdi-piano</v-icon>
       </v-btn>
     <template v-slot:append>
@@ -13,16 +13,16 @@
   <v-app-bar color="deep-purple darken-2" v-else>
     <template v-slot:prepend>
       <v-app-bar-title class="mr-2">Synple</v-app-bar-title>
-      <v-btn icon to="/">
+      <v-btn icon to="/" aria-label="home link">
         <v-icon>mdi-home</v-icon>
       </v-btn>
       <v-btn variant="text" to="/synthesizers" class="ml-2">Synthétiseurs</v-btn>
     </template>
     <template v-slot:append>
       <template v-if="useAuthentication().admin">
-        <v-btn to="/admin/sandbox">Sandbox</v-btn>
-        <v-btn to="/tools" >Outils</v-btn>
-        <v-btn to="/admin">{{ $t('common.admin') }}</v-btn>
+        <v-btn to="/admin/sandbox" aria-label="sandbox link">Sandbox</v-btn>
+        <v-btn to="/tools" aria-label="tools link">Outils</v-btn>
+        <v-btn to="/admin" aria-label="administration panel">{{ $t('common.admin') }}</v-btn>
       </template>
       <v-btn @click="useAuthentication().logout">{{ $t('common.logout') }}</v-btn>
     </template>

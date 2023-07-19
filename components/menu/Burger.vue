@@ -1,7 +1,7 @@
 <template>
   <v-dialog fullscreen height="100%" v-model="menuModel">
     <template v-slot:activator="{ props }">
-      <v-btn icon v-bind="props"><v-icon>mdi-menu</v-icon></v-btn>
+      <v-btn icon v-bind="props" aria-label="main menu"><v-icon>mdi-menu</v-icon></v-btn>
     </template>
     <v-list height="100%">
       <v-list-item>
