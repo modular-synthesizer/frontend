@@ -12,18 +12,12 @@
   </VApp>
 </template>
 
-<script lang="ts">
-import { VLayout, VMain, VApp } from 'vuetify/components'
+<script lang="ts" setup>
+import { VLayout, VApp } from 'vuetify/components'
 
-export default {
-  components: { VApp, VLayout, VMain },
-  computed: {
-    displayMenu() {
-      return useRoute().meta.menu !== false;
-    }
-  },
-  mounted() {
-    useAuthentication().refresh();
-  }
-}
+useHead({
+  htmlAttrs: { lang: 'fr' }
+});
+
+useAuthentication().refresh();
 </script>
