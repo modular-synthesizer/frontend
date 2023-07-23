@@ -12,8 +12,8 @@
       <v-col :xs="12" class="d-flex flex-column flex-md-row">
         <v-card :class="['text-center mb-4', {'ml-md-8': idx !== 0}]" elevation="0" v-for="(block, idx) in blocks">
           <v-card-text>
-            <div class="text-h4 text-purple">{{ $t(`homepage.blocks.${block}.title`) }}</div>
-            <div class="content-in-columns text-h5 mt-5 text-grey">{{ $t(`homepage.blocks.${block}.text`) }}</div>
+            <div class="text-h4 text-purple-lighten-2">{{ $t(`homepage.blocks.${block}.title`) }}</div>
+            <div class="content-in-columns text-h5 mt-5 text-grey-lighten-1">{{ $t(`homepage.blocks.${block}.text`) }}</div>
           </v-card-text>
         </v-card>
       </v-col>
