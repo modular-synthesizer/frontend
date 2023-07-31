@@ -1,3 +1,5 @@
+import { useAccounts } from "~~/stores/common/accounts";
+
 export default defineNuxtRouteMiddleware(async (_to, _from) => {
   if (process.client) {
     if (localStorage.getItem('auth-token') === null) {
@@ -9,6 +11,7 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
         useAuthentication().logout();
         return navigateTo('/');
       }
+      useAccounts().fetchOwn()
     }
   }
 });
