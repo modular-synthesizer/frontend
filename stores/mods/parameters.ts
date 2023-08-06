@@ -12,6 +12,11 @@ export const useParameters = defineStore('parameters', {
     startParameterSetting($event: MouseEvent, parameter: Parameter) {
       this.parameter = parameter;
       this.yOrigin = $event.clientY;
+      useWebsockets().send(JSON.stringify({
+        resource: 'synthesizer',
+        operation: 'startEdit',
+        synthesizer_id: useSynthesizerDetails().synthesizer.id
+      } as any));
     },
     moveParameterSetting(_x: number, y: number) {
       if (this.parameter === null) return;

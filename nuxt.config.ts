@@ -30,7 +30,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       api_uri: process.env.API_URL || 'https://synple.app/api',
-      dev_mode: process.env.DEV_MODE == 'true'
+      dev_mode: process.env.DEV_MODE == 'true',
+      ws_url:process.env.WS_URL,
     }
   },
   nitro: {
