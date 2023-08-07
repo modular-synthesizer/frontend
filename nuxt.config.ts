@@ -31,7 +31,7 @@ export default defineNuxtConfig({
     public: {
       api_uri: process.env.API_URL || 'https://synple.app/api',
       dev_mode: process.env.DEV_MODE == 'true',
-      ws_url:process.env.WS_URL,
+      ws_url:process.env.WS_URL || 'wss://synple.app/ws',
     }
   },
   nitro: {
