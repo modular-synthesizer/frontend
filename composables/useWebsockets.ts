@@ -1,11 +1,14 @@
 let ws: WebSocket;
 
 function init(): WebSocket {
+
+    console.log("INITIALIZING THE WEBSOCKET");
+    console.log(`url : ${useRuntimeConfig().public.ws_url}`);
+    console.log(useRuntimeConfig().public);
+
     const uri = useRuntimeConfig().public.ws_url;
     const token = localStorage.getItem('auth-token');
     const websocket = new WebSocket(`${uri}?auth_token=${token}`);
-
-    console.log("INITIALIZING THE WEBSOCKET");
 
     websocket.onclose = event => {
         console.log("CLOSE EVENT");
@@ -22,15 +25,5 @@ function init(): WebSocket {
 
 export function useWebsockets() {
     if (!ws) ws = init();
-
-        // setTimeout(() => {
-        //     const body = {
-        //         resource: 'synthesizer',
-        //         synthesizer_id: '6470dc06bf8c72000625bedf',
-        //         operation: 'startEdit'
-        //     }
-        //     console.log(body);
-        //     ws.send(JSON.stringify(body));
-        // }, 1000)
     return ws;
 }
