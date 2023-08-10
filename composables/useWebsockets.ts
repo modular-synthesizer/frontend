@@ -22,6 +22,7 @@ function handleMessage(event: MessageEvent) {
 
     const data: any = JSON.parse(event.data)
     const command: string = `${data.resource}.${data.operation}`;
+    console.log(command);
 
     switch(command) {
         case 'synthesizer.startEdit':

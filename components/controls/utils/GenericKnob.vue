@@ -2,7 +2,7 @@
   <g
     v-if="parameter !== undefined"
     @mousedown.stop="!control.editing && startParameterSetting($event, parameter)"
-    @wheel.passive.stop="!control.editing && wheeled"
+    @wheel.passive.stop="!control.editing && wheeled($event)"
   >
     <text
       v-if="displayLabel"
@@ -30,6 +30,7 @@ import { round } from "lodash"
 import ICoordinates from '~~/lib/interfaces/ICoordinates';
 import { useKeyboard } from '~~/stores/common/keyboard';
 import { IControl } from '~~/lib/interfaces/IControl';
+import sendParamEvent from '~~/lib/commands/events/sendParamEvent';
 
 export default {
   props: {
@@ -86,8 +87,12 @@ export default {
     ...mapActions(useParameters, ['startParameterSetting']),
     wheeled($e: WheelEvent) {
       if (this.timeout !== -1) window.clearTimeout(this.timeout);
+
+      sendParamEvent('startEdit', this.parameter);
+
       this.timeout = window.setTimeout(() => {
         useParameters().saveParameter(this.parameter);
+        sendParamEvent('endEdit', this.parameter);
         this.timeout = -1;
       }, 500);
 

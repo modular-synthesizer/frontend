@@ -3,6 +3,8 @@ import { api } from "~~/lib/api/Api";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import Parameter from "~~/lib/wrappers/Parameter";
 
+import sendParamEvent from '~~/lib/commands/events/sendParamEvent'
+
 export const useParameters = defineStore('parameters', {
   state: () => ({
     parameter: null as Parameter,
@@ -12,16 +14,7 @@ export const useParameters = defineStore('parameters', {
     startParameterSetting($event: MouseEvent, parameter: Parameter) {
       this.parameter = parameter;
       this.yOrigin = $event.clientY;
-      parameter.controls.forEach(c => {
-        const payload: string = {
-          resource: 'synthesizer',
-          operation: 'startEdit',
-          synthesizer_id: useSynthesizerDetails().synthesizer.id,
-          control_id: c.id,
-          module_id: parameter.mod.id,
-        } as any;
-        useWebsockets().send(JSON.stringify(payload));
-      });
+      sendParamEvent('startEdit', parameter);
     },
     moveParameterSetting(_x: number, y: number) {
       if (this.parameter === null) return;
@@ -35,16 +28,7 @@ export const useParameters = defineStore('parameters', {
     endParameterSetting() {
       if (this.parameter === null) return;
       this.saveParameter(this.parameter as Parameter);
-      this.parameter.controls.forEach(c => {
-        const payload: string = {
-          resource: 'synthesizer',
-          operation: 'endEdit',
-          synthesizer_id: useSynthesizerDetails().synthesizer.id,
-          control_id: c.id,
-          module_id: this.parameter.mod.id,
-        } as any;
-        useWebsockets().send(JSON.stringify(payload));
-      });
+      sendParamEvent('endEdit', this.parameter as Parameter);
       this.parameter = null;
     },
     async saveParameter(param: Parameter): Promise<any> {
