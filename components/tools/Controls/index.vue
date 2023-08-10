@@ -48,7 +48,6 @@ export default {
     },
     startEdit({ control, index}: any) {
       this.index = index;
-      console.log(this.index);
       this.control = cloneDeep(control);
     },
     reset() {

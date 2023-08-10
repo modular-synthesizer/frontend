@@ -1,5 +1,5 @@
 <template>
-  <component :is="'Controls' + control.component" :mod="mod" v-bind="control.payload"/>
+  <component :is="'Controls' + control.component" :control="control" :mod="mod" v-bind="control.payload"/>
 </template>
 
 <script lang="ts">

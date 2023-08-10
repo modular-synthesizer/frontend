@@ -1,26 +1,36 @@
+import { ControlEditPayload } from '@/lib/commands/synthesizers/SynthesizerCommand';
+import SynthesizerStartEdit from '~~/lib/commands/synthesizers/StartEdit'
+import SynthesizerEndEdit from '~~/lib/commands/synthesizers/endEdit';
+
 let ws: WebSocket;
 
 function init(): WebSocket {
-
-    console.log("INITIALIZING THE WEBSOCKET");
-    console.log(`url : ${useRuntimeConfig().public.ws_url}`);
-    console.log(useRuntimeConfig().public);
-
     const uri = useRuntimeConfig().public.ws_url;
     const token = localStorage.getItem('auth-token');
     const websocket = new WebSocket(`${uri}?auth_token=${token}`);
 
     websocket.onclose = event => {
-        console.log("CLOSE EVENT");
         ws = init();
     }
 
-    websocket.onmessage = event => {
-        console.log("MESSAGE EVENT");
-        console.log(event);
-    }
+    websocket.onmessage = handleMessage
 
     return websocket;
+}
+
+function handleMessage(event: MessageEvent) {
+
+    const data: any = JSON.parse(event.data)
+    const command: string = `${data.resource}.${data.operation}`;
+
+    switch(command) {
+        case 'synthesizer.startEdit':
+            (new SynthesizerStartEdit(data as unknown as ControlEditPayload)).doRun();
+            break;
+        case 'synthesizer.endEdit':
+            (new SynthesizerEndEdit(data as unknown as ControlEditPayload)).doRun();
+            break;
+    }
 }
 
 export function useWebsockets() {

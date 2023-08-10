@@ -12,11 +12,16 @@ export const useParameters = defineStore('parameters', {
     startParameterSetting($event: MouseEvent, parameter: Parameter) {
       this.parameter = parameter;
       this.yOrigin = $event.clientY;
-      useWebsockets().send(JSON.stringify({
-        resource: 'synthesizer',
-        operation: 'startEdit',
-        synthesizer_id: useSynthesizerDetails().synthesizer.id
-      } as any));
+      parameter.controls.forEach(c => {
+        const payload: string = {
+          resource: 'synthesizer',
+          operation: 'startEdit',
+          synthesizer_id: useSynthesizerDetails().synthesizer.id,
+          control_id: c.id,
+          module_id: parameter.mod.id,
+        } as any;
+        useWebsockets().send(JSON.stringify(payload));
+      });
     },
     moveParameterSetting(_x: number, y: number) {
       if (this.parameter === null) return;
@@ -30,6 +35,16 @@ export const useParameters = defineStore('parameters', {
     endParameterSetting() {
       if (this.parameter === null) return;
       this.saveParameter(this.parameter as Parameter);
+      this.parameter.controls.forEach(c => {
+        const payload: string = {
+          resource: 'synthesizer',
+          operation: 'endEdit',
+          synthesizer_id: useSynthesizerDetails().synthesizer.id,
+          control_id: c.id,
+          module_id: this.parameter.mod.id,
+        } as any;
+        useWebsockets().send(JSON.stringify(payload));
+      });
       this.parameter = null;
     },
     async saveParameter(param: Parameter): Promise<any> {

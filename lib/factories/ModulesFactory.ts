@@ -25,7 +25,6 @@ export class ModulesFactory {
   }
 
   public async build(details: IModule, synthesizer: ISynthesizer|Synthesizer) {
-    console.log(synthesizer.voices);
     const channels: Channel[] = [];
     for (let i = 0 ; i < synthesizer.voices ; ++i) {
       const channel = new Channel(i);

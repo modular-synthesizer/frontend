@@ -2,6 +2,7 @@ import IParameter from "~~/lib/interfaces/IParameter"
 import Mod from "./Mod";
 import { clamp } from "lodash"
 import Channel from "./Channel";
+import { IControl } from "../interfaces/IControl";
 
 export default class Parameter {
   
@@ -44,5 +45,11 @@ export default class Parameter {
 
   public moveValue(diff: number) {
     this.setValue(this.value + diff);
+  }
+
+  public get controls(): IControl[] {
+    return this.mod.controls.filter((control: IControl) => {
+      return control.payload.target === this.name;
+    });
   }
 }

@@ -41,7 +41,6 @@ export default {
   },
   methods: {
     async addParameter(result: IToolParameter) {
-      console.log(result);
       const response = await api.auth_post('/tools/parameters', {
         ...result,
         tool_id: this.tool.id,

@@ -1,5 +1,9 @@
 <template>
-  <g v-if="parameter !== undefined" @mousedown.stop="startParameterSetting($event, parameter)" @wheel.passive.stop="wheeled">
+  <g
+    v-if="parameter !== undefined"
+    @mousedown.stop="!control.editing && startParameterSetting($event, parameter)"
+    @wheel.passive.stop="!control.editing && wheeled"
+  >
     <text
       v-if="displayLabel"
       :transform="`translate(${x}, ${y - r - 6})`"
@@ -8,10 +12,6 @@
     >
       {{ label }}
     </text>
-    <!--g :transform="`translate(${x} ${y}) rotate(${angle},0,0)`">
-      <polygon :points="`-10,${r-cursorSize} 0,${r+cursorSize} 10,${r-cursorSize}`" fill="black" stroke="black" />
-    </g>
-    <circle :r="r" :cx="x" :cy="y" fill="white" stroke="black" stroke-width="3" /-->
     <circle :cx="x" :cy="y" :r="r" fill="black" />
     <path :d="arcPath(x, y, r - 4, 30, 330)" stroke="#555555" stroke-width="2" fill="transparent"/>
     <path :d="arcPath(x, y, r - 4, 30, angle)" :stroke="lightColor" stroke-width="2" fill="transparent"/>
@@ -20,6 +20,7 @@
       {{ value }}
     </text>
   </g>
+  <circle :cx="x" :cy="y" :r="r" fill="white" v-if="control.editing" fill-opacity="0.5" stroke="#BB0000" stroke-width="3" />
 </template>
 
 <script lang="ts">
@@ -28,6 +29,7 @@ import Parameter from '~~/lib/wrappers/Parameter';
 import { round } from "lodash"
 import ICoordinates from '~~/lib/interfaces/ICoordinates';
 import { useKeyboard } from '~~/stores/common/keyboard';
+import { IControl } from '~~/lib/interfaces/IControl';
 
 export default {
   props: {
@@ -48,6 +50,10 @@ export default {
     label: {
       type: String,
       default: ""
+    },
+    control: {
+      type: Object as PropType<IControl>,
+      required: true,
     }
   },
   data: function() {
@@ -56,6 +62,9 @@ export default {
     }
   },
   computed: {
+    fill(): string {
+      return this.control.editing ? 'red' : 'black';
+    },
     value(): Number {
         return round(this.parameter.value, this.parameter.precision);
     },
