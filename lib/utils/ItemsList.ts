@@ -14,7 +14,7 @@ const defaults = {
  * - if items have been passed in the options to initialize the list it appends them
  * @param options an option object used by the items list itself.
  */
-export async function buildList<T extends { id: string; }>(options = {}): Promise<ItemsList<T>> {
+export async function buildList<T extends { id?: string; }>(options = {}): Promise<ItemsList<T>> {
   const list: ItemsList<T> = new ItemsList<T>(options);
   if (list.options.autofetch) await list.refresh();
   list.options.items.forEach((i: T) => list.append(i));
@@ -26,7 +26,7 @@ export async function buildList<T extends { id: string; }>(options = {}): Promis
  * Describes a list of item and provides methods to add/remove/edit them with or without calls to the API.
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
-export default class ItemsList<T extends { id: string }> {
+export default class ItemsList<T extends { id?: string }> {
   protected items: T[] = [];
 
   protected options: { [key: string]: any };
@@ -85,5 +85,13 @@ export default class ItemsList<T extends { id: string }> {
 
   public all() {
     return this.items;
+  }
+
+  public get populated(): boolean {
+    return !this.empty
+  }
+
+  public get empty(): boolean {
+    return this.items.length <= 0;
   }
 }

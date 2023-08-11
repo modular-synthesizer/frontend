@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <GroupCreator @submitted="create" />
+        <GroupCreator @submitted="groups.create(group)" />
       </v-col>
     </v-row>
     <v-row>
@@ -26,14 +26,14 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
+import { useI18n } from 'vue-i18n'
+import GroupCreator from "./dialogs/GroupCreator.vue"
 
 const groups = ref(await useLists().groups);
 
-const { t } = useI18n();
-const headers = [
-  { 'title': t('common.uuid'), key: 'id' },
-  { 'title': t('common.label'), key: 'slug' },
-  { 'title': t('common.actions') },
-];
+const headers = useHeaders(useI18n, [
+  { 'title': 'common.uuid', key: 'id' },
+  { 'title': 'common.label', key: 'slug' },
+  { 'title': 'common.actions' },
+]);
 </script>

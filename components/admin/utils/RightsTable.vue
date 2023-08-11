@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="rights" :density="density">
+  <v-data-table v-if="rights" :headers="headers" :items="rights" :density="density">
     <template v-slot:item="{ item }">
       <tr>
         <td>{{ item.columns.id }}</td>
@@ -13,6 +13,7 @@
 </template>
 
 <script lang="ts">
+import IRight from '~~/lib/interfaces/permissions/IRight';
 import { useRights } from '~~/stores/permissions/rights';
 
 export default {
@@ -23,7 +24,7 @@ export default {
       default: '',
     },
     rights: {
-      type: Array<Object>,
+      type: Array<IRight>,
       default: () => [],
     },
   },
