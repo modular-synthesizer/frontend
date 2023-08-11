@@ -7,6 +7,7 @@ const defaults = {
   prepend: false,
   url: "",
   api: api,
+  useClass: false,
 }
 
 /**
@@ -74,18 +75,28 @@ export default class ItemsList<T extends { id?: string }> {
     this.remove(id);
   }
 
-  public async refresh(): Promise<void> {
+  public async refresh(criterias: { [key: string]: any }): Promise<void> {
     this.items = [];
-    await this.fetch();
+    await this.fetch(criterias);
   }
 
-  public async fetch(): Promise<void> {
-    const items: T[] = await this.options.api.auth_get(this.options.url);
-    items?.forEach((item: T) => this.append(item));
+  public async fetch(criterias: { [key: string]: any }): Promise<void> {
+    const items: T[] = await this.options.api.auth_get(this.options.url, criterias);
+    items?.forEach((item: T) => {
+      this.append(this.options.useClass ? new this.options.useClass(item) : item);
+    });
   }
 
   public all() {
     return this.items;
+  }
+
+  public filter(comparator: (item: T) => boolean) {
+    return this.items.filter(comparator)
+  }
+
+  public exclude(comparator: (item: T) => boolean) {
+    return this.items.filter((item: T) => !comparator(item));
   }
 
   public get populated(): boolean {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="create(synthesizer)">
+    <v-form @submit.prevent="synthesizers.create(synthesizer)">
       <v-container>
         <v-row>
           <v-col cols="4">
@@ -39,35 +39,19 @@
   </div>
 </template>
 
-<script lang="ts">
-import { mapActions, mapState } from 'pinia';
-import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
+<script lang="ts" setup>
+import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
-definePageMeta({
-  middleware: ['check-authentication'],
-})
-export default {
-  data: () => ({
-    synthesizer: createEmptySynthesizer()
-  }),
-  computed: {
-    ...mapState(useSynthesizersList, ['synthesizers']),
-    owned() {
-      return this.synthesizers.filter((synth: ISynthesizer) => {
-        return synth.creator?.username === useAuthentication().session.username
-      })
-    },
-    others() {
-      return this.synthesizers.filter((synth: ISynthesizer) => {
-        return synth.creator?.username !== useAuthentication().session.username
-      })
-    }
-  },
-  methods: {
-    ...mapActions(useSynthesizersList, ['create', 'fetch'])
-  },
-  mounted() {
-    this.fetch();
-  },
-};
+// This middleware is declared because this page does not use layout.
+definePageMeta({ middleware: ['check-authentication', 'websockets'] });
+
+const synthesizers = ref(await useLists().synthesizers);
+
+function isOwned(s: Synthesizer) {
+  return s.creator?.username === useAuthentication().session.username
+}
+
+const owned = ref(synthesizers.value.filter(isOwned))
+const others = ref(synthesizers.value.exclude(isOwned))
+const synthesizer = new Synthesizer(createEmptySynthesizer());
 </script>

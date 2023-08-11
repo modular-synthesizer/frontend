@@ -3,6 +3,7 @@ import { times } from "lodash";
 import Rack from "./Rack";
 import Mod from "./Mod";
 import ICoordinates from "../interfaces/ICoordinates";
+import IMembership from "../interfaces/IMembership";
 
 /**
  * A synthesizer is the main object of the application. It is materialized
@@ -29,6 +30,8 @@ export default class Synthesizer {
 
   public modules: Mod[] = [];
 
+  public members: IMembership[] = [];
+
   public constructor(infos: ISynthesizer) {
     this.id = infos.id;
     this.name = infos.name;
@@ -37,6 +40,7 @@ export default class Synthesizer {
     this.scale = infos.scale;
     this.slots = infos.slots;
     this.voices = infos.voices;
+    this.members = infos.members;
 
     times(infos.racks, (index: number) => {
       this.racks.push(new Rack(index, infos.slots));
@@ -76,5 +80,9 @@ export default class Synthesizer {
 
   public get coordinates(): ICoordinates {
     return { x: this.x, y: this.y };
+  }
+
+  public get creator(): IMembership {
+    return this.members.find((m: IMembership) => m.type === 'creator') as IMembership;
   }
 }
