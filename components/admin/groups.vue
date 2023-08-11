@@ -7,13 +7,13 @@
     </v-row>
     <v-row>
       <v-col xs="12">
-        <v-data-table :headers="headers" :items="groups">
+        <v-data-table :headers="headers" :items="groups.all()">
           <template v-slot:item="{ item }">
             <tr>
               <td>{{ item.columns.id }}</td>
               <td>{{ item.columns.label }}</td>
               <td>
-                <v-btn icon small variant="plain" @click="remove(item.raw)">
+                <v-btn icon small variant="plain" @click="groups.remove(item.raw)">
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </td>
@@ -25,31 +25,16 @@
   </v-container>
 </template>
 
-<script lang="ts">
-export default {
-  components: { GroupCreator },
-  computed: {
-    ...mapState(useGroups, ['groups']),
-    headers(): any {
-      return [
-        { 'title': this.$t('common.uuid'), key: 'id' },
-        { 'title': this.$t('common.label'), key: 'label' },
-        { 'title': this.$t('common.actions') },
-      ]
-    },
-  },
-  methods: {
-    ...mapActions(useGroups, ['add', 'remove']),
-    create(group: IGroup) {
-      // TODO
-    }
-  }
-}
-</script>
-
 <script setup lang="ts">
-import { mapActions, mapState } from 'pinia';
-import IGroup from '~~/lib/interfaces/permissions/IGroup';
-import GroupCreator from './dialogs/GroupCreator.vue';
-useGroups().init();
+import { useI18n } from 'vue-i18n';
+import { groupsList } from '~~/composables/groups/groupsList';
+
+const groups = groupsList();
+
+const { t } = useI18n();
+const headers = [
+  { 'title': t('common.uuid'), key: 'id' },
+  { 'title': t('common.label'), key: 'label' },
+  { 'title': t('common.actions') },
+];
 </script>

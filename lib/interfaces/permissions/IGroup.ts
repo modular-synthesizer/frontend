@@ -6,7 +6,7 @@ import IRight from "./IRight";
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
 export default interface IGroup {
-  id?: string;
+  id: string;
   slug: string;
   rights: IRight[];
   is_default: boolean;

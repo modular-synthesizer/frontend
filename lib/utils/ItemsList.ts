@@ -1,13 +1,31 @@
 import { api } from "../api/Api";
 
+const defaults = {
+  items: [],
+  autofetch: true,
+  url: "",
+}
+
 export default class ItemsList<T extends { id: string }> {
   protected items: T[] = [];
 
-  // URL used to make requests to create or delete elements.
-  protected url: string;
+  protected options: { [key: string]: any };
 
-  public constructor(url = "") {
-    this.url = url;
+  /**
+   * This method builds the item and parses the options to call appropriate methods depending on provided values :
+   * - if autofetch set to TRUE then it triggers a fetch of the data
+   * - if items have been passed in the options to initialize the list it appends them
+   * @param options an option object used by the items list itself.
+   */
+  public static async build<T extends { id: string; }>(options = {}): Promise<ItemsList<T>> {
+    const list: ItemsList<T> = new ItemsList<T>(options);
+    if (list.options.autofetch) await list.refresh();
+    list.options.items.forEach((i: T) => list.append(i));
+    return list;
+  }
+
+  public constructor(options = {}) {
+    this.options = { ...defaults, ...options }
   }
 
   public append(item: T): void {
@@ -38,9 +56,28 @@ export default class ItemsList<T extends { id: string }> {
   }
 
   public async create(payload: T): Promise<T> {
-    const response = await api.auth_post(`${this.url}`, payload);
-    const item: T = response.data as T;
+    const item: T = (await api.auth_post(this.options.url, payload)).data;
     this.append(item);
     return item;
+  }
+
+  public async delete(id: string): Promise<void> {
+    await api.auth_delete(`${this.options.url}/${id}`)
+    this.remove(id);
+  }
+
+  public async refresh(): Promise<void> {
+    this.items = [];
+    await this.fetch();
+  }
+
+  public async fetch(): Promise<void> {
+    const items: T[] = await api.auth_get(this.options.url);
+    items?.forEach((item: T) => this.append(item));
+    console.log(this);
+  }
+
+  public all() {
+    return this.items;
   }
 }
