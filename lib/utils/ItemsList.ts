@@ -38,11 +38,13 @@ export default class ItemsList<T extends { id?: string }> {
   }
 
   public append(item: T): void {
-    this.items.push(item);
+    const instanced: any = this.options.useClass ? new this.options.useClass(item) : item
+    this.items.push(instanced);
   }
 
   public prepend(item: T): void {
-    this.items = [item, ...this.items];
+    const instanced: any = this.options.useClass ? new this.options.useClass(item) : item
+    this.items = [instanced, ...this.items];
   }
 
   public find(id: string): T {
@@ -75,16 +77,14 @@ export default class ItemsList<T extends { id?: string }> {
     this.remove(id);
   }
 
-  public async refresh(criterias: { [key: string]: any }): Promise<void> {
+  public async refresh(criterias: { [key: string]: any } = {}): Promise<void> {
     this.items = [];
     await this.fetch(criterias);
   }
 
-  public async fetch(criterias: { [key: string]: any }): Promise<void> {
+  public async fetch(criterias: { [key: string]: any } = {}): Promise<void> {
     const items: T[] = await this.options.api.auth_get(this.options.url, criterias);
-    items?.forEach((item: T) => {
-      this.append(this.options.useClass ? new this.options.useClass(item) : item);
-    });
+    items?.forEach((item: T) => this.append(item));
   }
 
   public all() {
