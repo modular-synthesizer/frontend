@@ -1,14 +1,11 @@
 import ICategory from "~~/lib/interfaces/ICategory";
-import ItemsList from "~~/lib/utils/ItemsList";
+import { buildList } from "~~/lib/utils/ItemsList";
 
 const lists = {
-  categories: new ItemsList<ICategory>({ url: "/categories" })
+  categories: buildList<ICategory>({ url: "/categories" }),
+  groups: buildList<IGroup>({ url: "/groups" }),
 }
 
 export function useLists() {
   return lists;
-}
-
-export async function useCategoriesList() {
-  return await ItemsList.build<ICategory>({ url: "/categories" })
 }

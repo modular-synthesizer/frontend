@@ -11,9 +11,9 @@
           <template v-slot:item="{ item }">
             <tr>
               <td>{{ item.columns.id }}</td>
-              <td>{{ item.columns.label }}</td>
+              <td>{{ item.columns.slug }}</td>
               <td>
-                <v-btn icon small variant="plain" @click="groups.remove(item.raw)">
+                <v-btn icon small variant="plain" @click="groups.delete(item.raw)">
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </td>
@@ -27,14 +27,13 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { groupsList } from '~~/composables/groups/groupsList';
 
-const groups = groupsList();
+const groups = ref(await useLists().groups);
 
 const { t } = useI18n();
 const headers = [
   { 'title': t('common.uuid'), key: 'id' },
-  { 'title': t('common.label'), key: 'label' },
+  { 'title': t('common.label'), key: 'slug' },
   { 'title': t('common.actions') },
 ];
 </script>

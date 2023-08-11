@@ -5,7 +5,7 @@ export default class Api {
   private uri: string = "/proxy";
 
   public get token(): string {
-    return useAuthentication().token;
+    return localStorage.getItem("auth-token") || "";
   }
 
   public get(uri: string, payload: any = {}): Promise<any> {

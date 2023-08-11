@@ -45,42 +45,6 @@
 <script lang="ts" setup>
 import ICategory from '~~/lib/interfaces/ICategory';
 
-const categories = await useCategoriesList();
+const categories = ref(await useLists().categories);
 const category: Ref<ICategory> = ref({ id: "", name: "" });
 </script>
-
-<!--script lang="ts">
-import { mapActions, mapState } from 'pinia';
-import { api } from '~~/lib/api/Api';
-import { remove } from "lodash"
-
-export default {
-  data: () => ({
-    category: {
-      name: ""
-    }
-  }),
-  computed: {
-    ...mapState(useAuthentication, ['session']),
-    ...mapState(useCategories, ['categories']),
-  },
-  mounted() {
-    this.fetchCategories();
-  },
-  methods: {
-    ...mapActions(useCategories, ['fetchCategories']),
-    remove(id: string) {
-      api.delete(`/categories/${id}`, {auth_token: this.session.token})
-        .then(() => remove(this.categories, { id }))
-    },
-    add() {
-      const payload = {
-        auth_token: this.session.token,
-        name: this.category.name
-      }
-      api.post("/categories", payload)
-        .then(response => this.categories.push(response));
-    }
-  }
-}
-</script-->

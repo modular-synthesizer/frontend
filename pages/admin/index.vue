@@ -12,7 +12,7 @@
         <v-col cols="8" offset="2">
           <v-window v-model="tab">
             <v-window-item value="groups">
-              <!--AdminGroups /-->
+              <AdminGroups />
             </v-window-item>
             <v-window-item value="rights">
               <AdminRights />
