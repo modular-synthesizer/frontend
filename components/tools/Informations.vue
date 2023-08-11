@@ -22,7 +22,6 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
 import { PropType } from 'vue';
 import ICategory from '~~/lib/interfaces/ICategory';
 import ITool from '~~/lib/interfaces/ITool';
@@ -35,16 +34,15 @@ export default {
     }
   },
   computed: {
+    async categories() {
+      return await useLists().categories
+    },
     tool() { return this.modelValue },
-    ...mapState(useCategories, ['categories']),
-    selectableCategories() {
-      return this.categories.map((category: ICategory) => {
+    async selectableCategories() {
+      return (await this.categories).all().map((category: ICategory) => {
         return {title: category.name, value: category.id}
       })
     }
-  },
-  mounted() {
-    useCategories().fetchCategories();
   }
 }
 </script>

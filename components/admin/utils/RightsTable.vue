@@ -12,34 +12,18 @@
   </v-data-table>
 </template>
 
-<script lang="ts">
-import IRight from '~~/lib/interfaces/permissions/IRight';
-import { useRights } from '~~/stores/permissions/rights';
-
-export default {
-  name: "RightsTable",
-  props: {
-    density: {
-      type: String,
-      default: '',
-    },
-    rights: {
-      type: Array<IRight>,
-      default: () => [],
-    },
-  },
-  computed: {
-    headers() {
-      return [
-        { 'title': this.$t('common.uuid'), key: 'id' },
-        { 'title': this.$t('common.label'), key: 'label' },
-        { 'title': this.$t('common.actions') },
-      ]
-    },
-  },
-}
-</script>
-
 <script lang="ts" setup>
-useRights().init();
+import { useI18n } from 'vue-i18n';
+import IRight from '~~/lib/interfaces/permissions/IRight';
+
+defineProps({
+  density: { type: String, default: 'comfortable' },
+  rights: { type: Array<IRight>, default: () => [] },
+});
+
+const headers = useHeaders(useI18n, [
+  { 'title': 'common.uuid', key: 'id' },
+  { 'title': 'common.label', key: 'label' },
+  { 'title': 'common.actions' },
+]);
 </script>

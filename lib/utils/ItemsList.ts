@@ -6,6 +6,7 @@ const defaults = {
   autofetch: true,
   prepend: false,
   url: "",
+  api: api,
 }
 
 /**
@@ -29,7 +30,7 @@ export async function buildList<T extends { id?: string; }>(options = {}): Promi
 export default class ItemsList<T extends { id?: string }> {
   protected items: T[] = [];
 
-  protected options: { [key: string]: any };
+  public options: { [key: string]: any };
 
   public constructor(options = {}) {
     this.options = { ...defaults, ...options }
@@ -63,7 +64,7 @@ export default class ItemsList<T extends { id?: string }> {
   }
 
   public async create(payload: T): Promise<T> {
-    const item: T = await api.auth_post(this.options.url, payload);
+    const item: T = await this.options.api.auth_post(this.options.url, payload);
     this.options.prepend ? this.prepend(item) : this.append(item);
     return item;
   }
@@ -79,7 +80,7 @@ export default class ItemsList<T extends { id?: string }> {
   }
 
   public async fetch(): Promise<void> {
-    const items: T[] = await api.auth_get(this.options.url);
+    const items: T[] = await this.options.api.auth_get(this.options.url);
     items?.forEach((item: T) => this.append(item));
   }
 
