@@ -16,7 +16,6 @@
           <v-tab value="ports">Ports</v-tab>
           <v-tab value="parameters">Paramètres</v-tab>
           <v-tab value="controls">Contrôles</v-tab>
-          <v-tab value="structure">Structure</v-tab>
         </v-tabs>
         <v-window v-model="currentTab">
           <v-window-item value="informations">
@@ -36,9 +35,6 @@
           </v-window-item>
           <v-window-item value="controls">
             <tools-controls v-model="tool.controls" :tool="tool" :creation-mode="creationMode" />
-          </v-window-item>
-          <v-window-item value="structure">
-            <tools-graph :tool="tool" />
           </v-window-item>
         </v-window>
       </div>
