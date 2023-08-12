@@ -21,8 +21,11 @@ export default class Synthesizer {
   public y: number;
   // The scale of zoom the synthesizer is currently displayed at.
   public scale: number;
+
+  public racks: number;
+
   // The list of racks available in the synthesizer.
-  public racks: Rack[] = [];
+  public created_racks: Rack[] = [];
 
   public slots: number;
 
@@ -39,27 +42,28 @@ export default class Synthesizer {
     this.y = infos.y;
     this.scale = infos.scale;
     this.slots = infos.slots;
+    this.racks = infos.racks;
     this.voices = infos.voices;
     this.members = infos.members;
 
     times(infos.racks, (index: number) => {
-      this.racks.push(new Rack(index, infos.slots));
+      this.created_racks.push(new Rack(index, infos.slots));
     })
   }
 
   public hasRoom(rack: number, slot: number, slots: number): boolean {
-    const results = this.racks[rack].toString().substring(slot, slot + slots);
+    const results = this.created_racks[rack].toString().substring(slot, slot + slots);
     return results === '0'.repeat(slots);
   }
 
   public place(rack: number, slot: number, mod: Mod) {
-    this.racks[rack].add(mod);
+    this.created_racks[rack].add(mod);
     mod.rack = rack;
     mod.slot = slot;
   }
 
   public remove(mod: Mod) {
-    this.racks[mod.rack].remove(mod);
+    this.created_racks[mod.rack].remove(mod);
   }
 
   public get maxSlot(): number {
@@ -67,7 +71,7 @@ export default class Synthesizer {
   }
 
   public firstFreeSlot(size: number): {rack: number, slot: number} {
-    for (let rack of this.racks) {
+    for (let rack of this.created_racks) {
       const results: number = rack.freeSpace(size);
       if (results > -1) return {rack: rack.index, slot: results};
     }

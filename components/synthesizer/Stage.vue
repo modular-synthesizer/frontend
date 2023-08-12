@@ -1,7 +1,7 @@
 <template>
   <synthesizer-events-handler :key="synthesizerKey">
     <g :transform="`translate(${synthesizer.x} ${synthesizer.y}) scale(${synthesizer.scale} ${synthesizer.scale})`" v-if="synthesizer">
-      <synthesizer-rack v-for="rack in synthesizer.racks" :rack="rack" />
+      <synthesizer-rack v-for="rack in synthesizer.created_racks" :rack="rack" />
       <synthesizer-module v-for="mod in modules" :mod="mod" />
       <synthesizer-link v-for="link in links" :link="link" />
       <LinkCreator />

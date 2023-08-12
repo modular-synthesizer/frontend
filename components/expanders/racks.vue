@@ -1,5 +1,5 @@
 <template>
-  <g :transform="`translate(${synthesizer.slots * slotSize / 2 - 25}, ${synthesizer.racks.length * rackHeight + slotSize})`">
+  <g :transform="`translate(${synthesizer.slots * slotSize / 2 - 25}, ${synthesizer.racks * rackHeight + slotSize})`">
     <polygon class="expander" points="0,0 50,0 25,25" fill="#666666" stroke="white" stroke-width="3" @click="expand" />
   </g>
 </template>
@@ -23,8 +23,8 @@ export default {
   },
   methods: {
     async expand() {
-      await api.auth_put(`/synthesizers/${this.synthesizer.id}`, {racks: this.synthesizer.racks.length + 1});
-      this.synthesizer.racks.push(new Rack(this.synthesizer.racks.length, this.synthesizer.slots));
+      await api.auth_put(`/synthesizers/${this.synthesizer.id}`, {racks: this.synthesizer.racks + 1});
+      this.synthesizer.racks.push(new Rack(this.synthesizer.racks, this.synthesizer.slots));
     }
   }
 }

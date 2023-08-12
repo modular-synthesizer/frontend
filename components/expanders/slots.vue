@@ -26,7 +26,7 @@ export default {
     async expand() {
       await api.auth_put(`/synthesizers/${this.synthesizer.id}`, {slots: this.synthesizer.slots + 20});
       this.synthesizer.slots = this.synthesizer.slots + 20;
-      this.synthesizer.racks.forEach(rack => {
+      this.synthesizer.created_racks.forEach(rack => {
         rack.slots = rack.slots + 20;
       });
     }
