@@ -72,10 +72,14 @@ export const useModDrag = defineStore("moduleDrag", {
         rack: this.mod.rack,
       }
       api.auth_put(`/modules/${this.mod.id}`, payload);
+      sendModuleEvent('endDrag', this.mod as Mod);
       this.mod = null;
     },
     blockDrag() {
       this.blocked = true;
+    },
+    unblockDrag() {
+      this.blocked = false;
     }
   }
 });
