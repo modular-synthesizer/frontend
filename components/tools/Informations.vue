@@ -33,16 +33,21 @@ export default {
         required: true
     }
   },
+  data() {
+    return {
+      selectableCategories: [] as any[],
+    };
+  },
+  async mounted() {
+    this.selectableCategories = (await this.categories).all().map((category: ICategory) => {
+        return {title: category.name, value: category.id}
+      })
+  },
   computed: {
     async categories() {
       return await useLists().categories
     },
-    tool() { return this.modelValue },
-    async selectableCategories() {
-      return (await this.categories).all().map((category: ICategory) => {
-        return {title: category.name, value: category.id}
-      })
-    }
+    tool() { return this.modelValue }
   }
 }
 </script>

@@ -35,9 +35,6 @@ export default {
   computed: {
     parameters() { return this.modelValue; },
     ...mapState(useDescriptors, {descriptors: 'parameters'}),
-    descriptorsList() {
-      return this.descriptors.map(d => ({title: d.name, value: d.id}))
-    }
   },
   methods: {
     async addParameter(result: IToolParameter) {
@@ -61,11 +58,6 @@ export default {
       this.index = index;
       this.parameter = cloneDeep(this.parameters[index])
     }
-  },
-  mounted() {
-    useDescriptors().fetchDescriptors().then(() => {
-      this.resetDescriptor();
-    })
   }
 }
 </script>
