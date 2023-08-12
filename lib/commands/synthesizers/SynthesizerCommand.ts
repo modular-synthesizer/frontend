@@ -12,10 +12,15 @@ export interface ControlEditPayload {
 }
 
 export default abstract class SynthesizerCommand extends Command<ControlEditPayload> {
-  protected extractParameter(): Parameter|undefined {
+
+  protected extractModule(): Mod|undefined {
     const synth: Synthesizer = useSynthesizerDetails().synthesizer as Synthesizer;
     if (!synth || synth?.id !== this.payload.synthesizer_id) return;
-    const mod: Mod|undefined = useModulesList().modules.find(m => m.id === this.payload.module_id) as Mod;
+    return useModulesList().modules.find(m => m.id === this.payload.module_id) as Mod;
+  }
+
+  protected extractParameter(): Parameter|undefined {
+    const mod: Mod|undefined = this.extractModule();
     if (!mod) return;
     return mod.parameters.find(p => p.id === this.payload.parameter_id);
   }
@@ -35,5 +40,5 @@ export default abstract class SynthesizerCommand extends Command<ControlEditPayl
     return this.extractParameter();
   }
 
-  public abstract runOnControl(control: IControl): void;
+  public runOnControl(control: IControl): void {}
 }

@@ -4,6 +4,7 @@ import { getRack, getSlot } from "~~/lib/utils/coordinates";
 import { clamp } from 'lodash'
 import { api } from "~~/lib/api/Api";
 import Mod from "~~/lib/wrappers/Mod";
+import sendModuleEvent from "~~/lib/commands/events/sendModuleEvent";
 
 interface Payload {
   mod: Mod|null;
@@ -15,6 +16,8 @@ interface Payload {
     mod: number;
   };
   rack: number;
+  // TRUE if someone else is currently moving a mod, FALSE otherwise
+  blocked: boolean;
 }
 
 export const useModDrag = defineStore("moduleDrag", {
@@ -23,6 +26,7 @@ export const useModDrag = defineStore("moduleDrag", {
     coords: {x: 0, y: 0},
     slots: {click: 0, mod: 0},
     rack: 0,
+    blocked: false,
   }),
   getters: {
     synth() {
@@ -31,11 +35,13 @@ export const useModDrag = defineStore("moduleDrag", {
   },
   actions: {
     dragstart(mod: Mod, $event: MouseEvent) {
-      useContextMenus().hide()
+      useContextMenus().hide();
+      if (this.blocked) return;
       this.mod = mod;
       this.slots.click = getSlot($event.clientX, $event.clientY);
       this.slots.mod = this.mod.slot;
       this.rack = mod.rack;
+      sendModuleEvent('startDrag', mod);
     },
     dragmove(x: number, y: number) {
       if (this.mod === null) return;
@@ -67,6 +73,9 @@ export const useModDrag = defineStore("moduleDrag", {
       }
       api.auth_put(`/modules/${this.mod.id}`, payload);
       this.mod = null;
+    },
+    blockDrag() {
+      this.blocked = true;
     }
   }
 });
