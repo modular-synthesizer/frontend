@@ -50,6 +50,7 @@ export const useAuthentication = defineStore('authentication', {
       if (!this.token) return;
       api.delete(`/sessions/${this.token}`, {auth_token: this.token})
       this.storage.remove("auth-token");
+      closeWebsocket();
       this.session = emptySession();
       window.location.href = '/';
     },

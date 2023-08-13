@@ -20,4 +20,6 @@ useHead({
 });
 
 useAuthentication().refresh();
+
+window.addEventListener("beforeunload", () => closeWebsocket());
 </script>

@@ -12,15 +12,14 @@ const commands: { [key: string]: any } = {
     'synthesizer.endDrag': SynthesizerEndDrag,
 }
 
-function init(): WebSocket {
+function init(): void {
+    if (ws !== undefined) return;
     const uri = useRuntimeConfig().public.ws_url;
     const token = localStorage.getItem('auth-token');
-    const websocket = new WebSocket(`${uri}?auth_token=${token}`);
+    ws = new WebSocket(`${uri}?auth_token=${token}`);
 
-    websocket.onclose = event => { ws = init(); }
-    websocket.onmessage = handleMessage
-
-    return websocket;
+    ws.onmessage = handleMessage;
+    ws.onclose = init;
 }
 
 function handleMessage(event: MessageEvent) {
@@ -34,6 +33,10 @@ function handleMessage(event: MessageEvent) {
 }
 
 export function useWebsockets() {
-    if (!ws) ws = init();
+    init();
     return ws;
+}
+
+export function closeWebsocket() {
+    if (ws !== undefined) ws.close(1005, 'page.close');
 }
