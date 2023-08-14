@@ -3,16 +3,13 @@
     <template v-slot:title>{{ synthesizer.name }}</template>
     <template v-slot:subtitle>{{ synthesizer.id }}</template>
     <v-card-actions>
-      <v-btn :to="`/synthesizers/${synthesizer.id}`">Editer</v-btn>
-      <deletion-dialog
-        :url="`/synthesizers/${synthesizer.id}`"
-        :text="`'${synthesizer.name}''`"
-        @removed="synthesizers.delete(synthesizer.id)"
-      >
-        Supprimer
-      </deletion-dialog>
+      <v-btn :to="`/synthesizers/${synthesizer.id}`" icon>
+        <v-icon>mdi-music</v-icon>
+        <v-tooltip activator="parent" location="bottom">Play</v-tooltip>
+      </v-btn>
       <v-btn icon>
         <v-icon>mdi-account-multiple-plus</v-icon>
+        <v-tooltip activator="parent" location="bottom">Add members</v-tooltip>
         <v-dialog v-model="showMembers" activator="parent" width="50%">
           <v-card class="overflow-hidden">
             <v-card-title>Members</v-card-title>
@@ -77,6 +74,14 @@
           </v-card>
         </v-dialog>
       </v-btn>
+      <deletion-dialog
+        :url="`/synthesizers/${synthesizer.id}`"
+        :text="`'${synthesizer.name}''`"
+        @confirmed="synthesizers.delete(synthesizer.id)"
+        icon
+      >
+        Supprimer
+      </deletion-dialog>
     </v-card-actions>
   </v-card>
 </template>

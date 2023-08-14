@@ -73,8 +73,8 @@ export default class ItemsList<T extends { id?: string }> {
   }
 
   public async delete(id: string): Promise<void> {
-    await api.auth_delete(`${this.options.url}/${id}`)
     this.remove(id);
+    await api.auth_delete(`${this.options.url}/${id}`);
   }
 
   public async refresh(criterias: { [key: string]: any } = {}): Promise<void> {
