@@ -70,9 +70,9 @@ export default {
         return round(this.parameter.value, this.parameter.precision);
     },
     angle(): number {
-      if (!this.parameter.maximum || !this.parameter.minimum) return 20;
-      const delta = this.parameter.maximum / this.parameter.value
-      return 30 + (300 / delta)
+      const { maximum, minimum, value } = this.parameter;
+      if (maximum === undefined || minimum === undefined) return 30;
+      return 30 + (300 / maximum * value)
     },
     displayLabel(): boolean {
       return this.label !== ""
