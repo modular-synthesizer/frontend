@@ -2,8 +2,16 @@
   <g :transform="`translate(${x} ${y})`"
     @mousedown.left.stop="dragstart"
     @click.right.stop.prevent="showMenu(mod, $event)"
+    @mouseenter="mouseenter(mod)"
+    @mouseleave="mouseleave"
   >
-    <rect :width="width" :height="height" stroke="black" fill="#777777" />
+    <rect
+      :width="width"
+      :height="height"
+      stroke="black"
+      fill="#777777"
+      :class="{ hovered }"
+    />
     <template v-if="mod.controls.length > 0" v-for="control in mod.controls">
       <ControlsWrapper :mod="mod" :control="control" />
     </template>
@@ -16,12 +24,17 @@ import { PropType } from 'vue';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { mapActions } from 'pinia';
 import Mod from '~~/lib/wrappers/Mod';
+import { useModHover } from '~~/stores/mods/hover';
 export default {
   name: "module-body",
   props: {
     mod: {
       type: Object as PropType<Mod>,
       required: true
+    },
+    hovered: {
+      type: Boolean,
+      default: false,
     }
   },
   computed: {
@@ -32,9 +45,18 @@ export default {
   },
   methods: {
     ...mapActions(useModuleMenu, {showMenu: 'show'}),
+    ...mapActions(useModHover, ['mouseenter', 'mouseleave']),
     dragstart($event: MouseEvent) {
       useModDrag().dragstart(this.mod, $event);
     },
   },
 }
 </script>
+
+<style scoped>
+.hovered {
+  z-index: 100;
+  stroke: white;
+  stroke-width: 4;
+}
+</style>
