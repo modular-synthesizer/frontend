@@ -69,7 +69,9 @@ export default {
       eventbus.unsubscribe(`midi/modwheel/${this.midichannel}`, this.modWheel);
       for (let i = 0; i < POLYPHONY_CHANNELS; ++i) {
         const c = this.mod.channel(i);
+        if (c === undefined) continue;
         const gate: ConstantSourceNode = c.getNode(this.envelope)?.node as ConstantSourceNode;
+        if (gate === undefined) continue;
         gate.offset.setValueAtTime(0, this.ctx.currentTime);
       }
     },
