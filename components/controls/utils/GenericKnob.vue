@@ -2,7 +2,7 @@
   <g
     v-if="parameter !== undefined"
     @mousedown.stop="!control.editing && startParameterSetting($event, parameter)"
-    @wheel.passive.stop="!control.editing && wheeled($event)"
+    @wheel.passive="wheelEvent"
   >
     <text
       v-if="displayLabel"
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import Parameter from '~~/lib/wrappers/Parameter';
 import { round } from "lodash"
 import ICoordinates from '~~/lib/interfaces/ICoordinates';
@@ -63,6 +63,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(useZoomStore, ['zooming']),
     fill(): string {
       return this.control.editing ? 'red' : 'black';
     },
@@ -101,6 +102,11 @@ export default {
 
       const sign = - $e.deltaY / Math.abs($e.deltaY)
       this.parameter.moveValue(sign * this.parameter.step * ratio);
+    },
+    wheelEvent($event: WheelEvent): void {
+      if (this.control.editing || this.zooming) return;
+      $event.stopPropagation();
+      this.wheeled($event)
     }
   },
 }
