@@ -6,22 +6,12 @@
     :class="{'no-events': useLinkDrag().start !== null}"
   >
     <path
-      v-if="entered"
-      :d="path"
-      stroke="black"
-      :opacity="1"
-      stroke-width="8"
-      fill="none"
-      :class="{ 'no-events': noEvents }"
-      @click.prevent="click(true)"
-    />
-    <path
       :d="path"
       :stroke="color"
       :opacity="entered ? 1 : opacity"
-      stroke-width="6"
+      stroke-width="7"
       fill="none"
-      :class="{ 'no-events': noEvents }"
+      :class="{ 'no-events': noEvents, path: true, entered }"
       @click.prevent="click(true)"
     />
     <circle
@@ -75,7 +65,7 @@ export default {
   },
   computed: {
     r(): number {
-        return PORT_RADIUS - 3
+        return PORT_RADIUS - 2
     },
     path(): string {
       return `M ${this.endX},${this.endY} Q ${this.cx},${this.cy} ${this.startX},${this.startY}`;
@@ -120,5 +110,13 @@ export default {
 <style scoped>
 .no-events {
   pointer-events: none;
+}
+
+.path {
+  opacity: 0.35;
+}
+
+.path.entered {
+  opacity: 1;
 }
 </style>
