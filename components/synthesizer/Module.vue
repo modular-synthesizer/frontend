@@ -76,5 +76,8 @@ export default {
   border: 3px solid white;
   padding: 3px 6px;
   box-sizing: border-box;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 </style>
