@@ -101,40 +101,64 @@
   "modules": {
     "common": {
       "delay": {
+        "short": "Délai",
         "title": "Délai",
         "description": "Permet de retarder un signal d'un montant exprimé en secondes."
       },
+      "delayEffect": {
+        "short": "Délai analogique",
+        "title": "Délai analogique",
+        "description": "Un effet de délai analogique pour donner du corps et du volume à vos compositions."
+      },
       "Envelope": {
+        "short": "ADSR",
         "title": "Enveloppe (ADSR)",
-        "description": "Un noeud de contrôle du volume pour des montées et descentes plus maîtrisées"
+        "description": "Un noeud de contrôle du volume pour des montées et descentes plus maîtrisées."
       },
       "LFO": {
+        "short": "LFO",
         "title": "Oscillateur basse fréquence (LFO)",
         "description": "Un oscillateur basse fréquence principalement utilisé pour orchestrer les paramètres d'autres noeuds dans le temps."
       },
-      "microphone": {
+      "standardInput": {
+        "short": "microphone",
         "title": "Entrée standard",
         "description": "L'entrée audio par défaut de votre ordinateur. Ce peut êtyre un micro, un instrument, etc."
       },
       "MidiKeyboard": {
+        "short": "MIDI",
         "title": "Périphériques d'entrée MIDI",
         "description": "Permet d'utiliser tout périphérique MIDI connecté à votre ordinateur, ou le clavier de ce dernier."
       },
+      "noises": {
+        "short": "Bruits",
+        "title": "Bruits colorés",
+        "description": "Plusieurs bruits colorés permettant de générer de l'aléatoire dans vos patchs."
+      },
       "output": {
+        "short": "Sortie",
         "title": "Sortie audio",
         "description": "Une sortie audio simple envoyant le patch sur votre sortie audio par défaut."
       },
       "VCA": {
+        "short": "VCA",
         "title": "Amplificateur contrôlé par le voltage (VCA)",
         "description": "Permet d'augmenter ou de diminuer l'intensité d'un signal."
       },
       "VCF": {
+        "short": "VCF",
         "title": "Filtre contrôlé par le voltage (VCF)",
         "description": "Passe-haut, passe-bas, notch, peaking, etc. Ce filtre polyvalent permet de sculpter le son."
       },
       "VCO": {
+        "short": "VCO",
         "title": "Oscillateur contrôlé par le voltage (VCO)",
         "description": "Un oscillateur avec quatre types d'ondes disponibles, dont tous les paramètres peuvent être contrôlés par le voltage."
+      },
+      "wavefolder": {
+        "short": "wavefolder",
+        "title": "Wave folder",
+        "description": "Replie une onde sur elle-même afin d'y ajouter des harmoniques."
       }
     },
     "creator": {

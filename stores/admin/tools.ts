@@ -7,10 +7,8 @@ export const useToolsList = defineStore('toolsList', {
     tools: [] as ITool[],
   }),
   actions: {
-    fetchTools() {
-      const auth = useAuthentication();
-      return api.get("/tools", {auth_token: auth.session.token})
-        .then(response => this.tools = response);
+    async fetchTools() {
+      this.tools = await api.auth_get("/tools")
     },
     addTool(tool: ITool) {
       this.tools.push(tool)
