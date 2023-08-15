@@ -5,6 +5,7 @@ import { clamp } from 'lodash'
 import { api } from "~~/lib/api/Api";
 import Mod from "~~/lib/wrappers/Mod";
 import sendModuleEvent from "~~/lib/commands/events/sendModuleEvent";
+import { SynthState, useStates } from "../synthesizers/states";
 
 interface Payload {
   mod: Mod|null;
@@ -16,8 +17,6 @@ interface Payload {
     mod: number;
   };
   rack: number;
-  // TRUE if someone else is currently moving a mod, FALSE otherwise
-  blocked: boolean;
 }
 
 export const useModDrag = defineStore("moduleDrag", {
@@ -26,7 +25,6 @@ export const useModDrag = defineStore("moduleDrag", {
     coords: {x: 0, y: 0},
     slots: {click: 0, mod: 0},
     rack: 0,
-    blocked: false,
   }),
   getters: {
     synth() {
@@ -36,16 +34,15 @@ export const useModDrag = defineStore("moduleDrag", {
   actions: {
     dragstart(mod: Mod, $event: MouseEvent) {
       useContextMenus().hide();
-      if (this.blocked) return;
       this.mod = mod;
       this.slots.click = getSlot($event.clientX, $event.clientY);
       this.slots.mod = this.mod.slot;
       this.rack = mod.rack;
-      useModHover().blockHover();
+      useStates().setState(SynthState.DRAGGING_MODULE);
       sendModuleEvent('startDrag', mod);
     },
     dragmove(x: number, y: number) {
-      if (this.mod === null) return;
+      if (!useStates().is(SynthState.DRAGGING_MODULE) || this.mod === null) return;
 
       const rack = getRack(x, y);
       const slot = clamp(getSlot(x, y), 0, this.synth.maxSlot);
@@ -54,15 +51,15 @@ export const useModDrag = defineStore("moduleDrag", {
 
       const newPlace = clamp(this.slots.mod + delta, 0, this.synth.maxSlot - this.mod.slots);
 
-      if (newPlace === this.mod.slot && rack === this.mod.rack) return;
+      if (newPlace === this.mod?.slot && rack === this.mod?.rack) return;
 
       this.synth.remove(this.mod as Mod);
 
-      if (this.synth.hasRoom(rack, newPlace, this.mod.slots)) {
+      if (this.synth.hasRoom(rack, newPlace, this.mod?.slots || 0)) {
         this.synth.place(rack, newPlace, this.mod as Mod);
       }
       else {
-        this.synth.place(this.mod.rack, this.mod.slot, this.mod as Mod);
+        this.synth.place(this.mod?.rack || 0, this.mod?.slot || 0, this.mod as Mod);
       }
     },
     dragend() {
@@ -73,15 +70,9 @@ export const useModDrag = defineStore("moduleDrag", {
         rack: this.mod.rack,
       }
       api.auth_put(`/modules/${this.mod.id}`, payload);
-      useModHover().syncFlags();
+      useStates().unblock()
       sendModuleEvent('endDrag', this.mod as Mod);
       this.mod = null;
     },
-    blockDrag() {
-      this.blocked = true;
-    },
-    unblockDrag() {
-      this.blocked = false;
-    }
   }
 });

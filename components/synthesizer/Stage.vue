@@ -13,9 +13,10 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
+import { mapState, mapActions } from 'pinia';
 import { v4 as uuid } from 'uuid';
 import { useModHover } from '~~/stores/mods/hover';
+import { useStates } from '~~/stores/synthesizers/states';
 
 export default {
   props: {
@@ -37,6 +38,9 @@ export default {
     synthesizerKey() {
       return `${this.key}--${this.synthesizer.id}`
     }
+  },
+  methods: {
+    ...mapActions(useStates, ['is']),
   },
   unmounted() {
     useSynthesizerDetails().reset();

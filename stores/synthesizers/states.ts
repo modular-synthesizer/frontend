@@ -35,7 +35,7 @@ type BlockMapping = {
  * This constant indicates which states are blocking. A blocking state forbids the application
  * from being able to pass to another state before the store has been manually unblocked.
  */
-const isBlocking: BlockMapping = {
+export const isBlocking: BlockMapping = {
   [SynthState.CREATING_LINK]: true,
   [SynthState.DRAGGING_MODULE]: true,
   [SynthState.EDITING_PARAMETER]: true,
@@ -65,12 +65,21 @@ export const useStates = defineStore("states", {
       this.next = state;
       if (!this.blocked) this.processNext();
     },
-    unclock(): void {
+    unblock(): void {
       if (this.next !== SynthState.NONE) this.processNext();
       this.blocked = false;
     },
     is(state: SynthState): Boolean {
       return this.current === state;
+    },
+    isNot(state: SynthState): Boolean {
+      return !this.is(state);
+    },
+    among(...states: SynthState[]): Boolean {
+      return states.indexOf(this.current) > 0;
+    },
+    notAmong(...states: SynthState[]) {
+      return !this.among(...states);
     },
     processNext(): void {
       this.current = this.next;
