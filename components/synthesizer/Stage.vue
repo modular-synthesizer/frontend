@@ -7,6 +7,7 @@
       <synthesizer-link v-for="link in links" :link="link" />
       <LinkCreator />
       <ExpandersRacks :synthesizer="synthesizer" />
+      <module-tooltip v-if="hovered" :mod="hovered" />
     </g>
   </synthesizer-events-handler>
 </template>

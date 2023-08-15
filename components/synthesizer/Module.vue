@@ -3,14 +3,8 @@
     @mousedown.left.stop="dragstart"
     @click.right.stop.prevent="showMenu(mod, $event)"
     @mouseenter="mouseenter(mod)"
-    @mouseleave="mouseleave"
+    @mouseleave="mouseleave()"
   >
-    <g v-if="hovered" transform="translate(10 -40)">
-      <foreignObject x="1" y="1" class="label-container">
-          <span class="label-wrapper">{{ $t(`modules.${mod.category}.${mod.type}.short`) }}</span>
-      </foreignObject>
-      <line x1="10" y1="40" x2="10" y2="25" stroke="white" stroke-width="3" />
-    </g>
     <rect
       :width="width"
       :height="height"
@@ -64,20 +58,5 @@ export default {
   z-index: 100;
   stroke: white;
   stroke-width: 3;
-}
-
-.label-container {
-  overflow: visible;
-}
-
-.label-wrapper {
-  font-size: 12px;
-  white-space: nowrap;
-  border: 3px solid white;
-  padding: 3px 6px;
-  box-sizing: border-box;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 </style>

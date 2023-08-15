@@ -41,6 +41,7 @@ export const useModDrag = defineStore("moduleDrag", {
       this.slots.click = getSlot($event.clientX, $event.clientY);
       this.slots.mod = this.mod.slot;
       this.rack = mod.rack;
+      useModHover().blockHover();
       sendModuleEvent('startDrag', mod);
     },
     dragmove(x: number, y: number) {
@@ -72,6 +73,7 @@ export const useModDrag = defineStore("moduleDrag", {
         rack: this.mod.rack,
       }
       api.auth_put(`/modules/${this.mod.id}`, payload);
+      useModHover().syncFlags();
       sendModuleEvent('endDrag', this.mod as Mod);
       this.mod = null;
     },
