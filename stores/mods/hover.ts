@@ -1,41 +1,30 @@
 import { defineStore } from "pinia";
 import Mod from "~~/lib/wrappers/Mod";
+import { SynthState as S, useStates } from "../synthesizers/states";
 
 interface Payload {
-  hovered: Mod | null;
-  blocked: Boolean;
-  shouldBeReleased: Boolean;
+  current: Mod | null;
+  next: Mod | null;
 }
 
 export const useModHover = defineStore("moduleHover", {
   state(): Payload {
-    return {
-      hovered: null,
-      blocked: false,
-      // Indicates that after the drag end, the hover highlight should be removed.
-      shouldBeReleased: false,
-    };
+    return { current: null, next: null };
   },
   actions: {
     mouseenter(mod: Mod) {
-      this.shouldBeReleased = mod.id !== useModDrag().mod?.id;
-      if (this.blocked) return;
-      this.hovered = mod;
+      useStates().setState(S.HOVERING_MODULE);
+      this.next = mod;
+      this.update();
     },
     mouseleave() {
-      this.shouldBeReleased = this.hovered?.id === useModDrag().mod?.id;
-      if (this.blocked) return;
-      this.hovered = null;
+      this.update();
     },
-    blockHover() {
-      this.blocked = true;
+    update() {
+      if (useStates().among(S.HOVERING_MODULE, S.NONE)) {
+        this.current = this.next;
+        this.next = null;
+      }
     },
-    unblockHover() {
-      this.blocked = false;
-    },
-    syncFlags() {
-      if (this.shouldBeReleased) this.hovered = null;
-      this.unblockHover();
-    }
   }
 });

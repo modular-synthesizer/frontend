@@ -12,7 +12,8 @@ export function dragend() {
   useSynthesizerDrag().dragend();
   useModDrag().dragend()
   useLinkDrag().dragend()
-  useParameters().endParameterSetting()
+  useParameters().endParameterSetting();
+  useModHover().update();
 }
 
 export function wheel($event: WheelEvent) {
