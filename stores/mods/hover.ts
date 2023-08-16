@@ -1,27 +1,33 @@
-import { Store, defineStore } from "pinia";
+import { defineStore } from "pinia";
 import Mod from "~~/lib/wrappers/Mod";
 import { SynthState, useStates } from "../synthesizers/states";
 
 interface Payload {
-  hovered: Mod | null;
+  current: Mod | null;
+  next: Mod | null;
 }
 
 const { NONE, HOVERING_MODULE } = SynthState;
 
 export const useModHover = defineStore("moduleHover", {
   state(): Payload {
-    return { hovered: null };
+    return { current: null, next: null };
   },
   actions: {
     mouseenter(mod: Mod) {
-      if (useStates().isNot(NONE)) return;
       useStates().setState(HOVERING_MODULE);
-      this.hovered = mod;
+      this.next = mod;
+      this.update();
     },
     mouseleave() {
-      if (useStates().notAmong(NONE, HOVERING_MODULE)) return;
       useStates().setState(NONE);
-      this.hovered = null;
+      this.update();
+    },
+    update() {
+      if (useStates().among(HOVERING_MODULE, NONE)) {
+        this.current = this.next;
+        this.next = null;
+      }
     },
   }
 });

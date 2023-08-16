@@ -22,15 +22,15 @@ export const useZoomStore = defineStore('zoom', {
   },
   actions: {
     setScale(delta: number) {
-      this.zooming = true;
+      useStates().setState(SynthState.ZOOMING);
       let scale: number = Math.abs(this.synth.scale + delta * -ZOOM_RATIO);
       this.synth.scale = Math.min(Math.max(MAX_ZOOM_OUT, scale), MAX_ZOOM_IN);
 
       if (this.timeout !== null) {
         clearTimeout(this.timeout);
       }
+      useStates().unblock();
       this.timeout = setTimeout(() => {
-        this.zooming = false;
         api.auth_put(`/synthesizers/${this.synth.id}`, { scale });
       }, 500);
     }

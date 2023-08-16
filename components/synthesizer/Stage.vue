@@ -31,7 +31,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(useModHover, ['hovered']),
+    ...mapState(useModHover, { hovered: 'current' }),
     ...mapState(useSynthesizerDetails, ['synthesizer']),
     ...mapState(useModulesList, ['modules']),
     ...mapState(useLinksList, ['links']),

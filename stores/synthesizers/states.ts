@@ -66,8 +66,10 @@ export const useStates = defineStore("states", {
       if (!this.blocked) this.processNext();
     },
     unblock(): void {
-      if (this.next !== SynthState.NONE) this.processNext();
+      this.processNext();
       this.blocked = false;
+
+      useModHover().update();
     },
     is(state: SynthState): Boolean {
       return this.current === state;
@@ -76,7 +78,7 @@ export const useStates = defineStore("states", {
       return !this.is(state);
     },
     among(...states: SynthState[]): Boolean {
-      return states.indexOf(this.current) > 0;
+      return states.indexOf(this.current) >= 0;
     },
     notAmong(...states: SynthState[]) {
       return !this.among(...states);
