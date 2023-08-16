@@ -1,22 +1,12 @@
 import { defineStore } from "pinia";
 
 export enum SynthState {
-  // The user is currently creating a link
-  CREATING_LINK = 'CREATING_LINK',
   // The user is currently dragging a node
   DRAGGING_MODULE = 'DRAGGING_MODULE',
-  // The user is currently editing a parameter
-  EDITING_PARAMETER = 'EDITING_PARAMETER',
-  // When creating a link, a user is magnetizing it to the end port
-  MAGNETIZING = 'MAGNETIZING',
   // The synthesizer actually does nothing
   NONE = 'NONE',
-  // The user is currently hovering an already created link
-  HOVERING_LINK = 'HOVERING_LINK',
   // The user is currently hovering a module
   HOVERING_MODULE = 'HOVERING_MODULE',
-  // The user is currently moving the whole synthesizer
-  PANNING = 'PANNING',
   // The user is zooming in or out on the synthesizer
   ZOOMING = 'ZOOMING',
 }
@@ -36,14 +26,9 @@ type BlockMapping = {
  * from being able to pass to another state before the store has been manually unblocked.
  */
 export const isBlocking: BlockMapping = {
-  [SynthState.CREATING_LINK]: true,
   [SynthState.DRAGGING_MODULE]: true,
-  [SynthState.EDITING_PARAMETER]: true,
-  [SynthState.MAGNETIZING]: false,
   [SynthState.NONE]: false,
-  [SynthState.HOVERING_LINK]: false,
   [SynthState.HOVERING_MODULE]: false,
-  [SynthState.PANNING]: true,
   [SynthState.ZOOMING]: true
 }
 
