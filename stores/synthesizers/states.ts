@@ -3,6 +3,8 @@ import { defineStore } from "pinia";
 export enum SynthState {
   // The user is currently dragging a node
   DRAGGING_MODULE = 'DRAGGING_MODULE',
+  // The user is currently editing a parameter
+  EDITING_PARAMETER = 'EDITING_PARAMETER',
   // The synthesizer actually does nothing
   NONE = 'NONE',
   // The user is currently hovering a module
@@ -26,10 +28,11 @@ type BlockMapping = {
  * from being able to pass to another state before the store has been manually unblocked.
  */
 export const isBlocking: BlockMapping = {
-  [SynthState.DRAGGING_MODULE]: true,
-  [SynthState.NONE]: false,
-  [SynthState.HOVERING_MODULE]: false,
-  [SynthState.ZOOMING]: true
+[SynthState.DRAGGING_MODULE]: true,
+[SynthState.NONE]: false,
+[SynthState.HOVERING_MODULE]: false,
+[SynthState.ZOOMING]: true,
+[SynthState.EDITING_PARAMETER]: true
 }
 
 /**
@@ -51,10 +54,9 @@ export const useStates = defineStore("states", {
       if (!this.blocked) this.processNext();
     },
     unblock(): void {
+      useModHover().update();
       this.processNext();
       this.blocked = false;
-
-      useModHover().update();
     },
     is(state: SynthState): Boolean {
       return this.current === state;

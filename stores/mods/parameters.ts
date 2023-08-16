@@ -2,18 +2,26 @@ import { defineStore } from "pinia";
 import { api } from "~~/lib/api/Api";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import Parameter from "~~/lib/wrappers/Parameter";
-
 import sendParamEvent from '~~/lib/commands/events/sendParamEvent'
+import { SynthState } from "../synthesizers/states";
+
+const { EDITING_PARAMETER } = SynthState;
+
+interface Payload {
+  parameter: null | Parameter;
+  yOrigin: number;
+}
 
 export const useParameters = defineStore('parameters', {
-  state: () => ({
-    parameter: null as Parameter,
+  state: (): Payload => ({
+    parameter: null,
     yOrigin: 0
   }),
   actions: {
     startParameterSetting($event: MouseEvent, parameter: Parameter) {
       this.parameter = parameter;
       this.yOrigin = $event.clientY;
+      useStates().setState(EDITING_PARAMETER);
       sendParamEvent('startEdit', parameter);
     },
     moveParameterSetting(_x: number, y: number) {
@@ -27,6 +35,7 @@ export const useParameters = defineStore('parameters', {
     },
     endParameterSetting() {
       if (this.parameter === null) return;
+      useStates().unblock();
       this.saveParameter(this.parameter as Parameter);
       sendParamEvent('endEdit', this.parameter as Parameter);
       this.parameter = null;
