@@ -56,8 +56,15 @@ export default class EventFragment {
   }
 
   public remove(fragment: string) {
-    this.children = this.children.filter((child: EventFragment) => {
-      return child.content !== fragment;
-    })
+    if (fragment === "") {
+      this.callbacks = [];
+      return;
+    }
+    const splitted: string[] = fragment.split("/");
+    if (this.has(splitted[0])) {
+      this.get(splitted[0]).forEach((f: EventFragment) => {
+        f.remove(splitted.slice(1).join("/"))
+      });
+    }
   }
 }
