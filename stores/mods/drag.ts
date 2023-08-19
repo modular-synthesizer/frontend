@@ -18,6 +18,8 @@ interface Payload {
     mod: number;
   };
   rack: number;
+  // The drag and drop has been blocked by another user dragging a mod
+  blocked: boolean;
 }
 
 export const useModDrag = defineStore("moduleDrag", {
@@ -26,6 +28,7 @@ export const useModDrag = defineStore("moduleDrag", {
     coords: {x: 0, y: 0},
     slots: {click: 0, mod: 0},
     rack: 0,
+    blocked: false,
   }),
   getters: {
     synth(): Synthesizer {
@@ -38,6 +41,7 @@ export const useModDrag = defineStore("moduleDrag", {
   actions: {
     dragstart(mod: Mod, $event: MouseEvent) {
       useContextMenus().hide();
+      if (this.blocked) return;
       if (this.synth.isReadonly(this.username)) return;
       this.mod = mod;
       this.slots.click = getSlot($event.clientX, $event.clientY);
@@ -47,6 +51,7 @@ export const useModDrag = defineStore("moduleDrag", {
       sendModuleEvent('startDrag', mod);
     },
     dragmove(x: number, y: number) {
+      if (this.blocked) return;
       if (!useStates().is(SynthState.DRAGGING_MODULE) || this.mod === null) return;
 
       const rack = getRack(x, y);
@@ -79,5 +84,11 @@ export const useModDrag = defineStore("moduleDrag", {
       sendModuleEvent('endDrag', this.mod as Mod);
       this.mod = null;
     },
+    blockDrag() {
+      this.blocked = true;
+    },
+    unblockDrag() {
+      this.blocked = false;
+    }
   }
 });
