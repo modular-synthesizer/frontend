@@ -132,7 +132,9 @@ export default {
         const gap: number = this.parameter.maximum - this.parameter.minimum;
         
         const value: number = this.parameter.minimum + (gap * ratio);
-        this.parameter.setValue(value);
+        const step: number = this.parameter.step * 10
+        const flooredValue: number = Math.floor(value / step) * step
+        this.parameter.setValue(flooredValue);
         
         this.timeout = window.setTimeout(() => {
           useParameters().saveParameter(this.parameter);
