@@ -64,7 +64,7 @@
 
 <script lang="ts" setup>
 import useVuelidate from '@vuelidate/core';
-import { email, required, sameAs } from '@vuelidate/validators';
+import { email, minLength, required, sameAs } from '@vuelidate/validators';
 import { api } from '~~/lib/api/Api';
 import IApiError from '~~/lib/interfaces/IApiError';
 
@@ -80,9 +80,9 @@ const account = reactive({
 const $externalResults = ref({});
 
 const rules = computed(() => ({
-  username: { required },
+  username: { required, length: minLength(6) },
   password: { required },
-  password_confirmation: { required, confirmation: sameAs('password') },
+  password_confirmation: { required, confirmation: (v: string) => v === account.password },
   email: { required, format: email }
 }));
 
@@ -100,11 +100,14 @@ function hasEmptyFields() {
 async function register(_$event: Event) {
   await v$.value.$validate();
   if (hasEmptyFields()) return;
-  api.post('/accounts', account)
-    .then(_response => registered.value = true)
-    .catch(error => {
-      const err: IApiError = error.response.data;
-      $externalResults.value = {[err.key]: err.message};
-    });
+  console.log(v$.value)
+  if (!v$.value.$error) {
+    api.post('/accounts', account)
+      .then(_response => registered.value = true)
+      .catch(error => {
+        const err: IApiError = error.response.data;
+        $externalResults.value = {[err.key]: err.message};
+      });
+  }
 }
 </script>

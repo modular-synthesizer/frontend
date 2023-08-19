@@ -55,7 +55,7 @@
     },
     "username": {
       "forbidden": "Les identifiants fournis sont incorrects",
-      "minsize": "Votre nom d'utilisateur doit faire six caractères ou plus",
+      "length": "Votre nom d'utilisateur doit faire six caractères ou plus",
       "required": "Vous devez donner un nom d'utilisateur",
       "uniq": "Ce nom d'utilisateur est déjà utilisé",
       "unknown": "Ce nom d'utilisateur est inconnu"

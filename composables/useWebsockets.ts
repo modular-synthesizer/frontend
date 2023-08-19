@@ -38,5 +38,5 @@ export function useWebsockets() {
 }
 
 export function closeWebsocket() {
-    if (ws !== undefined) ws.close(1005, 'page.close');
+    if (ws !== undefined) ws.close(3005, 'page.close');
 }
