@@ -18,6 +18,14 @@ export const useAuthentication = defineStore('authentication', {
     token(): string {
       if(this.session?.token !== '') return this.session.token;
       return this.storage.get('auth-token');
+    },
+    storedSession(): ISession {
+      try {
+        return JSON.parse(this.storage.get("session"));
+      }
+      catch(exception) {
+        return emptySession();
+      }
     }
   },
   actions: {
@@ -36,6 +44,7 @@ export const useAuthentication = defineStore('authentication', {
       return api.post("/sessions", { username, password })
         .then((session: ISession) => {
           this.storage.set("auth-token", session.token);
+          this.storage.set("session", JSON.stringify(session));
           this.session = session;
           navigateTo("/");
         })

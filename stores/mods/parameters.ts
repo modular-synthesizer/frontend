@@ -4,6 +4,7 @@ import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import Parameter from "~~/lib/wrappers/Parameter";
 import sendParamEvent from '~~/lib/commands/events/sendParamEvent'
 import { SynthState } from "../synthesizers/states";
+import Synthesizer from "~~/lib/wrappers/Synthesizer";
 
 const { EDITING_PARAMETER } = SynthState;
 
@@ -17,8 +18,17 @@ export const useParameters = defineStore('parameters', {
     parameter: null,
     yOrigin: 0
   }),
+  getters: {
+    synth(): Synthesizer {
+      return useSynthesizerDetails().synthesizer as Synthesizer
+    },
+    username(): string {
+      return useAuthentication().storedSession.username;
+    }
+  },
   actions: {
     startParameterSetting($event: MouseEvent, parameter: Parameter) {
+      if (this.synth.isReadonly(this.username)) return;
       this.parameter = parameter;
       this.yOrigin = $event.clientY;
       useStates().setState(EDITING_PARAMETER);

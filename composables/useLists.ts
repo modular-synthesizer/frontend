@@ -11,11 +11,11 @@ import ISynthesizer from "~~/lib/interfaces/ISynthesizer";
 
 const lists = {
   accounts: buildList<IAccount>({ url: "/accounts/search" }),
-  applications: buildList<IApplication>({ url: '/applications' }),
+  applications: buildList<IApplication>({ url: '/applications', autofetch: false, }),
   categories: buildList<ICategory>({ url: "/categories" }),
   generators: buildList<IGenerator>({ url: "/generators" }),
   groups: buildList<IGroup>({ url: "/groups" }),
-  rights: buildList<IRight>({ url: "/rights"}),
+  rights: buildList<IRight>({ url: "/rights", autofetch: false, }),
   synthesizers: buildList<Synthesizer>({ url: "/synthesizers", useClass: Synthesizer }),
 }
 

@@ -13,6 +13,7 @@
             :placeholder="$t('register.placeholders.username')"
             variant="outlined"
             v-model="account.username"
+            autocomplete="username"
           />
           <v-text-field
             :label="$t('register.labels.password')"
@@ -20,6 +21,7 @@
             type="password"
             variant="outlined"
             v-model="account.password"
+            autocomplete="current-password"
           />
           <v-btn color="primary" type="submit">{{ $t('login.button') }}</v-btn>
         </v-form>

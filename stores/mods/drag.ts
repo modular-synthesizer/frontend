@@ -6,6 +6,7 @@ import { api } from "~~/lib/api/Api";
 import Mod from "~~/lib/wrappers/Mod";
 import sendModuleEvent from "~~/lib/commands/events/sendModuleEvent";
 import { SynthState, useStates } from "../synthesizers/states";
+import Synthesizer from "~~/lib/wrappers/Synthesizer";
 
 interface Payload {
   mod: Mod|null;
@@ -27,13 +28,17 @@ export const useModDrag = defineStore("moduleDrag", {
     rack: 0,
   }),
   getters: {
-    synth() {
-      return useSynthesizerDetails().synthesizer
+    synth(): Synthesizer {
+      return useSynthesizerDetails().synthesizer as Synthesizer
+    },
+    username(): string {
+      return useAuthentication().storedSession.username;
     }
   },
   actions: {
     dragstart(mod: Mod, $event: MouseEvent) {
       useContextMenus().hide();
+      if (this.synth.isReadonly(this.username)) return;
       this.mod = mod;
       this.slots.click = getSlot($event.clientX, $event.clientY);
       this.slots.mod = this.mod.slot;

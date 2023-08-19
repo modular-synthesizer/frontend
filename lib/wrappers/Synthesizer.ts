@@ -89,4 +89,20 @@ export default class Synthesizer {
   public get creator(): IMembership {
     return this.members.find((m: IMembership) => m.type === 'creator') as IMembership;
   }
+
+  public membershipType(username: string) {
+    return this.members.find((m: IMembership) => m.username === username)?.type || "read";
+  }
+
+  public isReadonly(username: string) {
+    return this.membershipType(username) === "read";
+  }
+
+  public isEditor(username: string) {
+    return this.membershipType(username) === "write";
+  }
+
+  public isCreator(username: string) {
+    return this.membershipType(username) === "creator";
+  }
 }

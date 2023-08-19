@@ -100,7 +100,6 @@ function hasEmptyFields() {
 async function register(_$event: Event) {
   await v$.value.$validate();
   if (hasEmptyFields()) return;
-  console.log(v$.value)
   if (!v$.value.$error) {
     api.post('/accounts', account)
       .then(_response => registered.value = true)
