@@ -2,6 +2,9 @@
   <v-card>
     <template v-slot:title>{{ synthesizer.name }}</template>
     <template v-slot:subtitle>{{ synthesizer.id }}</template>
+    <template v-slot:text v-if="isReadOnly">
+      <v-chip color="red" text-color="white" v-if="isReadOnly">Read-only</v-chip>
+    </template>
     <v-card-actions>
       <v-btn :to="`/synthesizers/${synthesizer.id}`" icon>
         <v-icon>mdi-music</v-icon>
@@ -89,10 +92,10 @@
 <script lang="ts" setup>
 import { api } from '~~/lib/api/Api';
 import IMembership from '~~/lib/interfaces/IMembership';
-import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
+import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 const props = defineProps({
-  synthesizer: { type: Object as PropType<ISynthesizer>, required: true }
+  synthesizer: { type: Synthesizer, required: true }
 });
 
 const showMembers = ref(false);
@@ -111,4 +114,8 @@ async function addMember(account_id: string, username: string) {
   const membership: any = await api.auth_post('/memberships', params);
   members.value.append({ ...membership, account_id, username } as IMembership);
 }
+
+const isReadOnly = computed(() => {
+  return props.synthesizer?.isReadonly(useAuthentication()?.storedSession.username);
+});
 </script>
