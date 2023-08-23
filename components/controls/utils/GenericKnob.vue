@@ -1,9 +1,10 @@
 <template>
   <g
     v-if="parameter !== undefined"
-    @mousedown.stop="!control.editing && startParameterSetting($event, parameter)"
+    @mousedown.left.stop="!control.editing && startParameterSetting($event, parameter)"
     @wheel.passive="wheelEvent"
   >
+  <!-- @click.right.stop.prevent="showMenu(parameter, $event)" -->
     <text
       v-if="displayLabel"
       :transform="`translate(${x}, ${y - r - 6})`"
@@ -31,6 +32,7 @@ import ICoordinates from '~~/lib/interfaces/ICoordinates';
 import { useKeyboard } from '~~/stores/common/keyboard';
 import { IControl } from '~~/lib/interfaces/IControl';
 import sendParamEvent from '~~/lib/commands/events/sendParamEvent';
+import { useParameterMenu } from '~~/stores/parameters/context';
 
 export default {
   props: {
@@ -86,6 +88,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(useParameterMenu, {showMenu: 'show'}),
     ...mapActions(useParameters, ['startParameterSetting']),
     wheeled($e: WheelEvent) {
       if (this.timeout !== -1) window.clearTimeout(this.timeout);
