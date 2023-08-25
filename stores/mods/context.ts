@@ -1,4 +1,6 @@
+import { map, uniqBy } from "lodash";
 import { defineStore } from "pinia";
+import Link from "~~/lib/wrappers/Link";
 import Mod from "~~/lib/wrappers/Mod";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 
@@ -22,12 +24,10 @@ export const useModuleMenu = defineStore('moduleMenu', {
     },
     disconnectLinks() {
       if (this.mod === null) return;
-
-      for(let channel of this.mod.channels) {
-        for (let link of channel.links) {
-          useLinksList().delete(link.id as string);
-        }
-      }
+      
+      const allLinks: Link[] = map(this.mod.ports, "links").flat() as Link[];
+      const uniqLinks: Link[] = uniqBy(allLinks, 'id');
+      uniqLinks.forEach((link: Link) => useLinksList().remove(link.id));
       useContextMenus().hide();
     },
     deleteModule() {
