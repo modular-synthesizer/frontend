@@ -20,6 +20,7 @@ export interface IToolParameter {
   targets: string[];
   name: string;
   descriptorId?: string,
+  field: string;
   default: number,
   maximum: number,
   minimum: number,

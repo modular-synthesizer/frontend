@@ -38,6 +38,11 @@
         </v-btn>
     </v-col>
   </v-row>
+  <v-row no-gutters>
+    <v-col cols="3" offset="7" class="pl-2">
+      <v-text-field variant="outlined" label="Champ visé" density="comfortable" v-model="parameter.field" />
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
