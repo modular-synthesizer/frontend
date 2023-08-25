@@ -1,7 +1,7 @@
 import IPort from "../interfaces/IPort";
 import Link from "./Link";
 import Mod from "./Mod";
-import { find, remove } from 'lodash';
+import { remove } from 'lodash';
 import { IControl } from "../interfaces/IControl";
 import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 import Channel from "./Channel";
@@ -45,9 +45,7 @@ export default abstract class Port implements IPort {
       const fromNode: InnerAudioNode = origin.mod.channel(channel.index).getNode(origin.target) as InnerAudioNode
       const toNode: InnerAudioNode = channel.getNode(this.target) as InnerAudioNode;
       fromNode.node.connect(toNode.node, origin.index, this.index);
-    })
-
-    // origin.audioNode.connect(this.audioNode, origin.index, this.index)
+    });
   }
 
   public disconnect(origin: Port, via: Link) {
@@ -61,12 +59,6 @@ export default abstract class Port implements IPort {
 
       fromNode.disconnect(toNode);
     });
-
-    // origin.audioNode.disconnect(this.audioNode);
-  }
-
-  public get audioNode(): AudioNode {
-    return this.mod.audioNodes.find(n => n.name === this.target)?.node as AudioNode;
   }
 
   public get control(): IControl {
