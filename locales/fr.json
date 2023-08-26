@@ -127,11 +127,6 @@
         "short": "VCF",
         "title": "Filtre contrôlé par le voltage (VCF)",
         "description": "Passe-haut, passe-bas, notch, peaking, etc. Ce filtre polyvalent permet de sculpter le son."
-      },
-      "VCO": {
-        "short": "VCO",
-        "title": "Oscillateur contrôlé par le voltage (VCO)",
-        "description": "Un oscillateur avec quatre types d'ondes disponibles, dont tous les paramètres peuvent être contrôlés par le voltage."
       }
     },
     "inputs": {
@@ -149,6 +144,11 @@
         "short": "Bruits",
         "title": "Bruits colorés",
         "description": "Plusieurs bruits colorés permettant de générer de l'aléatoire dans vos patchs."
+      },
+      "VCO": {
+        "short": "VCO",
+        "title": "Oscillateur contrôlé par le voltage (VCO)",
+        "description": "Un oscillateur avec quatre types d'ondes disponibles, dont tous les paramètres peuvent être contrôlés par le voltage."
       }
     },
     "outputs": {
