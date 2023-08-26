@@ -23,7 +23,10 @@
       "name": "Ajouter une catégorie"
     },
     "names": {
-      "common": "Modules génériques"
+      "common": "Modules génériques",
+      "filters": "Noeuds de traitement du signal",
+      "inputs": "Noeuds de génération de signaux",
+      "outputs": "Noeuds de sortie"
     }
   },
   "common": {
@@ -99,7 +102,7 @@
     "tools": "Outils"
   },
   "modules": {
-    "common": {
+    "filters": {
       "delay": {
         "short": "Délai",
         "title": "Délai",
@@ -115,31 +118,6 @@
         "title": "Enveloppe (ADSR)",
         "description": "Un noeud de contrôle du volume pour des montées et descentes plus maîtrisées."
       },
-      "LFO": {
-        "short": "LFO",
-        "title": "Oscillateur basse fréquence (LFO)",
-        "description": "Un oscillateur basse fréquence principalement utilisé pour orchestrer les paramètres d'autres noeuds dans le temps."
-      },
-      "standardInput": {
-        "short": "microphone",
-        "title": "Entrée standard",
-        "description": "L'entrée audio par défaut de votre ordinateur. Ce peut êtyre un micro, un instrument, etc."
-      },
-      "MidiKeyboard": {
-        "short": "MIDI",
-        "title": "Périphériques d'entrée MIDI",
-        "description": "Permet d'utiliser tout périphérique MIDI connecté à votre ordinateur, ou le clavier de ce dernier."
-      },
-      "noises": {
-        "short": "Bruits",
-        "title": "Bruits colorés",
-        "description": "Plusieurs bruits colorés permettant de générer de l'aléatoire dans vos patchs."
-      },
-      "output": {
-        "short": "Sortie",
-        "title": "Sortie audio",
-        "description": "Une sortie audio simple envoyant le patch sur votre sortie audio par défaut."
-      },
       "VCA": {
         "short": "VCA",
         "title": "Amplificateur contrôlé par le voltage (VCA)",
@@ -154,6 +132,37 @@
         "short": "VCO",
         "title": "Oscillateur contrôlé par le voltage (VCO)",
         "description": "Un oscillateur avec quatre types d'ondes disponibles, dont tous les paramètres peuvent être contrôlés par le voltage."
+      }
+    },
+    "inputs": {
+      "LFO": {
+        "short": "LFO",
+        "title": "Oscillateur basse fréquence (LFO)",
+        "description": "Un oscillateur basse fréquence principalement utilisé pour orchestrer les paramètres d'autres noeuds dans le temps."
+      },
+      "MidiKeyboard": {
+        "short": "MIDI",
+        "title": "Périphériques d'entrée MIDI",
+        "description": "Permet d'utiliser tout périphérique MIDI connecté à votre ordinateur, ou le clavier de ce dernier."
+      },
+      "noises": {
+        "short": "Bruits",
+        "title": "Bruits colorés",
+        "description": "Plusieurs bruits colorés permettant de générer de l'aléatoire dans vos patchs."
+      }
+    },
+    "outputs": {
+      "output": {
+        "short": "Sortie",
+        "title": "Sortie audio",
+        "description": "Une sortie audio simple envoyant le patch sur votre sortie audio par défaut."
+      }
+    },
+    "common": {
+      "standardInput": {
+        "short": "microphone",
+        "title": "Entrée standard",
+        "description": "L'entrée audio par défaut de votre ordinateur. Ce peut êtyre un micro, un instrument, etc."
       },
       "wavefolder": {
         "short": "wavefolder",
