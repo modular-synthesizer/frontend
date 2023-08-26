@@ -10,7 +10,7 @@
         <v-icon>mdi-music</v-icon>
         <v-tooltip activator="parent" location="bottom">Play</v-tooltip>
       </v-btn>
-      <v-btn icon>
+      <v-btn icon v-if="isCreator">
         <v-icon>mdi-account-multiple-plus</v-icon>
         <v-tooltip activator="parent" location="bottom">Add members</v-tooltip>
         <v-dialog v-model="showMembers" activator="parent" width="50%">
@@ -78,6 +78,7 @@
         </v-dialog>
       </v-btn>
       <deletion-dialog
+        v-if="isCreator"
         :url="`/synthesizers/${synthesizer.id}`"
         :text="`'${synthesizer.name}''`"
         @confirmed="synthesizers.delete(synthesizer.id)"
@@ -115,7 +116,13 @@ async function addMember(account_id: string, username: string) {
   members.value.append({ ...membership, account_id, username } as IMembership);
 }
 
+console.log(props.synthesizer);
+
 const isReadOnly = computed(() => {
   return props.synthesizer?.isReadonly(useAuthentication()?.storedSession.username);
+});
+
+const isCreator = computed(() => {
+  return props.synthesizer?.isCreator(useAuthentication()?.storedSession.username);
 });
 </script>

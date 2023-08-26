@@ -88,7 +88,7 @@ export default class ItemsList<T extends { id?: string }> {
   }
 
   public all() {
-    if (!this.options.autofetch) this.fetch();
+    if (!!this.options.autofetch) this.fetch();
     return this.items;
   }
 
