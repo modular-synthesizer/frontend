@@ -74,7 +74,7 @@
                       >
                         <template v-slot:append>
                           <v-list-item-action>
-                            <v-btn icon variant="text" @click="synthesizers.delete(synthesizer.id)">
+                            <v-btn icon variant="text" @click="members.delete(member.id)">
                               <v-icon>mdi-delete</v-icon>
                             </v-btn>
                           </v-list-item-action>
