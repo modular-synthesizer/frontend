@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="submit">
+    <v-form @submit.prevent="submit" class="mt-5">
       <v-container>
         <v-row>
           <v-col cols="3">
@@ -22,7 +22,7 @@
       </v-container>
     </v-form>
     <v-container>
-      <v-row v-if="owned">
+      <v-row v-if="owned.length">
         <v-col cols="12">
           <div class="text-h5">Mes synthétiseurs</div>
         </v-col>
@@ -30,7 +30,7 @@
           <synthesizer-card :synthesizer="synth" />
         </v-col>
       </v-row>
-      <v-row v-if="others">
+      <v-row v-if="others.length">
         <v-col cols="12">
           <div class="text-h5">Autres synthétiseurs</div>
         </v-col>

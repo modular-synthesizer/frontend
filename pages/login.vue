@@ -9,19 +9,22 @@
           </div>
           <v-text-field
             :label="$t('register.labels.username')"
-            :hint="$t('register.hints.username')"
+            :hint="$t('login.hints.username')"
             :placeholder="$t('register.placeholders.username')"
             variant="outlined"
             v-model="account.username"
             autocomplete="username"
+            class="mb-3"
           />
           <v-text-field
             :label="$t('register.labels.password')"
-            :hint="$t('register.hints.password')"
+            :hint="$t('login.hints.password')"
+            :placeholder="$t('register.placeholders.password')"
             type="password"
             variant="outlined"
             v-model="account.password"
             autocomplete="current-password"
+            class="mb-3"
           />
           <v-btn color="primary" type="submit">{{ $t('login.button') }}</v-btn>
         </v-form>

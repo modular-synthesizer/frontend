@@ -21,6 +21,7 @@
                   :placeholder="$t('register.placeholders.username')"
                   variant="outlined"
                   v-model="account.username"
+                  class="mb-3"
                 />
               </v-col>
               <v-col :cols="12" :md="6" class="pl-md-2">
@@ -31,6 +32,7 @@
                   type="email"
                   v-model="account.email"
                   variant="outlined"
+                  class="mb-3"
                 />
               </v-col>
             </v-row>
@@ -42,6 +44,7 @@
                   type="password"
                   variant="outlined"
                   v-model="account.password"
+                  class="mb-3"
                 />
               </v-col>
               <v-col :cols="12" :md="6" class="pl-md-2">
@@ -51,6 +54,7 @@
                   type="password"
                   variant="outlined"
                   v-model="account.password_confirmation"
+                  class="mb-3"
                 />
               </v-col>
             </v-row>

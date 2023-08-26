@@ -8,10 +8,7 @@
           <div class="mb-2">{{ $t('init.paragraphs.instructions') }}</div>
           <div class="pl-5">
             <ul>
-              <li class="mb-1">{{ $t('init.paragraphs.modules') }}</li>
-              <li class="mb-1">{{ $t('init.paragraphs.links') }}</li>
-              <li class="mb-1">{{ $t('init.paragraphs.parameters') }}</li>
-              <li class="mb-1">{{ $t('init.paragraphs.output') }}</li>
+              <li class="mb-1" v-for="item in $tm('init.list')">{{ item }}</li>
             </ul>
           </div>
         </v-card-text>
