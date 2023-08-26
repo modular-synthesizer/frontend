@@ -1,8 +1,9 @@
-import { cloneDeep, difference, find, findIndex, indexOf, intersection, last } from "lodash";
+import { difference, findIndex, indexOf, last } from "lodash";
 import { POLYPHONY_CHANNELS } from "../utils/constants";
 import { eventbus } from "../utils/eventbus/EventBus";
 import ISynthesizer from "../interfaces/ISynthesizer";
 import Synthesizer from "../wrappers/Synthesizer";
+import { v4 as uuid } from "uuid";
 
 export default class MidiDevice {
 
@@ -10,15 +11,24 @@ export default class MidiDevice {
 
   private pressed: number[] = []
 
+  private id: string;
+
   // All polyphony channels are marked as empty at first, signaled by -1
   private channels = Array.from(Array(POLYPHONY_CHANNELS)).map(_ => -1);
 
   constructor(midichannel: number) {
     this.midichannel = midichannel;
+    this.id = uuid();
   }
 
   public setSynthesizer(synthesizer: Synthesizer|ISynthesizer) {
-    this.channels = Array.from(Array(synthesizer.voices)).map(_ => -1);
+    if (synthesizer.voices > this.channels.length) {
+      const newArray = Array.from(Array(synthesizer.voices - this.channels.length)).map(_ => -1);
+      this.channels = [...this.channels, ...newArray];
+    }
+    else if (synthesizer.voices < this.channels.length) {
+      this.channels = this.channels.slice(0, synthesizer.voices);
+    }
   }
 
   public message(kind: number, payload: Uint8Array) {
@@ -40,6 +50,7 @@ export default class MidiDevice {
     if (indexOf(this.pressed, note) >= 0) return;
     this.pressed.push(note);
     let channel = this.getFreePolyphonyChannel();
+
     if (channel === -1) {
       channel = this.channels.length - 1;
       eventbus.emit(`midi/note-change/${this.midichannel}`, { note, channel })

@@ -15,6 +15,8 @@ export default class MidiManager implements IManager {
   // The list of MIDI devices currently connected to the application. This is updated when a new device is plugged.
   private devices: MidiDevice[] = [];
 
+  private synthesizer!: Synthesizer;
+
   /**
    * This is called when displaying a new synthesizer as this manager is started just like the others. This iterates
    * through the MIDI inputs and creates the callback sent when a message is received on it. It furthermore listens
@@ -32,6 +34,7 @@ export default class MidiManager implements IManager {
   }
 
   public setSynthesizer(synth: Synthesizer|ISynthesizer) {
+    this.synthesizer = synth as Synthesizer;
     this.devices.forEach((device: MidiDevice) => {
       device.setSynthesizer(synth);
     });
@@ -69,6 +72,7 @@ export default class MidiManager implements IManager {
     if (this.devices[midichannel] === undefined) {
       this.devices[midichannel] = new MidiDevice(midichannel);
     }
+    this.devices[midichannel].setSynthesizer(this.synthesizer);
     return this.devices[midichannel];
   }
 

@@ -39,6 +39,7 @@ export default {
   methods: {
     noteTrigger({ note, channel }: any) {
       const c = this.mod.channel(channel);
+      if (c === undefined) return;
       const gate: ConstantSourceNode = c.getNode(this.envelope)?.node as ConstantSourceNode
       gate.offset.setValueAtTime(1, this.ctx.currentTime);
       this.noteChange({ note, channel })
@@ -53,6 +54,7 @@ export default {
     },
     noteRelease({ channel }: any) {
       const c = this.mod.channel(channel);
+      if (c === undefined) return;
       const gate: ConstantSourceNode = c.getNode(this.envelope)?.node as ConstantSourceNode
       gate.offset.setValueAtTime(0, this.ctx.currentTime);
     },

@@ -47,7 +47,7 @@ export default class EventFragment {
   public trigger(_path: string, payload: Object) {
     this.callbacks.forEach((callback: Function) => {
       callback(payload);
-    })
+    });
   }
 
   public get path(): string {
