@@ -41,9 +41,20 @@
                       >
                         <template v-slot:append>
                           <v-list-item-action>
-                            <v-btn icon variant="text" @click="addMember(`${account.id}`, account.username)">
-                              <v-icon>mdi-plus</v-icon>
-                            </v-btn>
+                            <v-tooltip text="Ajouter en lecture seule" location="bottom">
+                              <template v-slot:activator="{ props }">
+                                <v-btn v-bind="props" icon variant="text" @click="addMember(`${account.id}`, account.username, 'read')">
+                                  <v-icon>mdi-plus</v-icon>
+                                </v-btn>
+                              </template>
+                            </v-tooltip>
+                            <v-tooltip text="Ajouter un éditeur" location="bottom">
+                              <template v-slot:activator="{ props }">
+                                <v-btn v-bind="props" icon variant="text" @click="addMember(`${account.id}`, account.username, 'write')">
+                                  <v-icon>mdi-plus-box-outline</v-icon>
+                                </v-btn>
+                              </template>
+                            </v-tooltip>
                           </v-list-item-action>
                         </template>
                       </v-list-item>
@@ -110,8 +121,8 @@ const usernames = computed(() => {
   return members.value.all().map((m: IMembership) => m.username)
 });
 
-async function addMember(account_id: string, username: string) {
-  const params = { account_id, synthesizer_id: props.synthesizer.id };
+async function addMember(account_id: string, username: string, type: string) {
+  const params = { account_id, synthesizer_id: props.synthesizer.id, type };
   const membership: any = await api.auth_post('/memberships', params);
   members.value.append({ ...membership, account_id, username } as IMembership);
 }
