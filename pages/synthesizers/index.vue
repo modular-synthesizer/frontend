@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="synthesizers.create(new Synthesizer(synthesizer))">
+    <v-form @submit.prevent="submit">
       <v-container>
         <v-row>
           <v-col cols="3">
@@ -43,6 +43,7 @@
 </template>
 
 <script lang="ts" setup>
+import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 // This middleware is declared because this page does not use layout.
@@ -57,4 +58,9 @@ function isOwned(s: Synthesizer) {
 const owned = computed(() => synthesizers.value.filter(isOwned))
 const others = computed(() => synthesizers.value.exclude(isOwned))
 const synthesizer = ref(createEmptySynthesizer());
+
+function submit() {
+  const creation: Synthesizer = new Synthesizer(synthesizer.value);
+  synthesizers.value.create(creation);
+}
 </script>
