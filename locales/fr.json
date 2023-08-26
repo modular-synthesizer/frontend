@@ -248,6 +248,20 @@
     },
     "title": "Inscription"
   },
+  "synthesizers": {
+    "create": {
+      "labels": {
+        "name": "Nom du synthétiseur",
+        "racks": "Nombre de rails 3U de hauteur",
+        "slots": "Nombre d'emplacements de 1HP de large",
+        "voices": "Nombre de voix de polyphonie"
+      }
+    },
+    "list": {
+      "others": "Autres synthétiseurs",
+      "owned": "Mes synthétiseurs"
+    }
+  },
   "tools": {
     "dialog": {
       "headers": {

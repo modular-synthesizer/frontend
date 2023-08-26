@@ -4,19 +4,45 @@
       <v-container>
         <v-row>
           <v-col cols="3">
-            <v-text-field v-model="synthesizer.name" variant="outlined" density="compact" label="Name" />
+            <v-text-field
+              v-model="synthesizer.name"
+              variant="outlined"
+              density="comfortable"
+              :label="$t('synthesizers.create.labels.name')"
+            />
           </v-col>
           <v-col cols="2">
-            <v-text-field v-model="synthesizer.racks" type="number" variant="outlined" density="compact" label="Racks" :min="1" />
+            <v-text-field
+              v-model="synthesizer.racks"
+              type="number"
+              variant="outlined"
+              density="comfortable"
+              :label="$t('synthesizers.create.labels.racks')"
+              :min="1"
+            />
           </v-col>
           <v-col cols="2">
-            <v-text-field v-model="synthesizer.slots" type="number" variant="outlined" density="compact" label="Slots" :min=20 />
+            <v-text-field
+              v-model="synthesizer.slots"
+              type="number"
+              variant="outlined"
+              density="comfortable"
+              :label="$t('synthesizers.create.labels.slots')"
+              :min=20
+            />
           </v-col>
           <v-col cols="2">
-            <v-text-field v-model="synthesizer.voices" type="number" variant="outlined" density="compact" label="Voices" :min=1 />
+            <v-text-field
+              v-model="synthesizer.voices"
+              type="number"
+              variant="outlined"
+              density="comfortable"
+              :label="$t('synthesizers.create.labels.voices')"
+              :min=1
+            />
           </v-col>
           <v-col cols="2">
-            <v-btn type="submit">Créer</v-btn>
+            <v-btn type="submit" size="large">{{ $t('common.create') }}</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -24,7 +50,7 @@
     <v-container>
       <v-row v-if="owned.length">
         <v-col cols="12">
-          <div class="text-h5">Mes synthétiseurs</div>
+          <div class="text-h5">{{ $t('synthesizers.list.owned') }}</div>
         </v-col>
         <v-col cols="12" sm="6" md="4" lg="3" v-for="synth in owned">
           <synthesizer-card :synthesizer="synth" />
@@ -32,7 +58,7 @@
       </v-row>
       <v-row v-if="others.length">
         <v-col cols="12">
-          <div class="text-h5">Autres synthétiseurs</div>
+          <div class="text-h5">{{ $t('synthesizers.list.others') }}</div>
         </v-col>
         <v-col cols="12" sm="6" md="4" lg="3" v-for="synth in others">
           <synthesizer-card :synthesizer="synth" />
