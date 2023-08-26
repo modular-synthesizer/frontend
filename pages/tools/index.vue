@@ -43,7 +43,7 @@
                   :url="`/tools/${tool.id}`"
                   size="small"
                   icon
-                  @removed="fetchTools"
+                  @confirmed="deleteTool(tool.id)"
                   :text="`l'outil '${tool.name}'`"
                 >
                   <v-icon>mdi-delete</v-icon>
@@ -65,6 +65,7 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
+import { api } from '~~/lib/api/Api';
 import ITool from '~~/lib/interfaces/ITool';
 
 export default {
@@ -94,6 +95,10 @@ export default {
         this.$router.push("/tools/new");
       }
       reader.readAsText(($event.target as any).files[0]);
+    },
+    async deleteTool(id: string) {
+      await api.auth_delete(`/tools/${id}`);
+      this.fetchTools();
     },
     fetchTools() {
       useToolsList().fetchTools();

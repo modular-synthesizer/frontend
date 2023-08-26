@@ -43,7 +43,6 @@
 </template>
 
 <script lang="ts" setup>
-import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 // This middleware is declared because this page does not use layout.
