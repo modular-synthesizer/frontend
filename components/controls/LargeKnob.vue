@@ -15,8 +15,8 @@ export default {
     target: { type: String, required: true },
     label: { type: String, default: "" },
     mod: { type: Mod, required: true },
-    control: { type: Object as PropType<IControl>, required: true }
+    control: { type: Object as PropType<IControl>, required: true },
   },
-  components: { GenericKnob }
+  components: { GenericKnob },
 }
 </script>

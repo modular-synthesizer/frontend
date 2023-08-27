@@ -18,7 +18,9 @@
     <path :d="arcPath(x, y, r - 4, 30, angle)" :stroke="lightColor" stroke-width="2" fill="transparent"/>
     <circle :cx="lightCoords.x" :cy="lightCoords.y" :r="2" :fill="lightColor" />
     <text :class="['value', {'small': r < 20}]" :x="x" :y="y" text-anchor="middle" alignment-baseline="middle">
-      {{ value }}
+      <slot :value="value">
+        {{ value }}
+      </slot>
     </text>
   </g>
   <circle :cx="x" :cy="y" :r="r" fill="white" v-if="control.editing" fill-opacity="0.5" stroke="#BB0000" stroke-width="3" />
