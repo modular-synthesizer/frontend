@@ -56,6 +56,7 @@ export default {
       const c = this.mod.channel(channel);
       if (c === undefined) return;
       const gate: ConstantSourceNode = c.getNode(this.envelope)?.node as ConstantSourceNode
+      gate.offset.cancelScheduledValues(this.ctx.currentTime);
       gate.offset.setValueAtTime(0, this.ctx.currentTime);
     },
     modWheel({ amount }: any) {
