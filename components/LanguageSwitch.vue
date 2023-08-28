@@ -11,7 +11,7 @@
 import CountryFlag from 'vue3-country-flag-icon'
 import 'vue3-country-flag-icon/dist/CountryFlag.css'
 
-let language = ref(localStorage.getItem("lang"));
+let language = ref(localStorage.getItem("lang") || 'fr');
 
 function storeLocale(locale: string) {
   localStorage.setItem("lang", locale);
