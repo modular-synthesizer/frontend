@@ -32,14 +32,14 @@ export default class MidiDevice {
   }
 
   public message(kind: number, payload: Uint8Array) {
-    switch (kind) {
-      case 144:
+    switch (true) {
+      case (kind === 144):
         this.noteOn(payload[1]);
         break;
-      case 128:
+      case (kind === 128):
         this.noteOff(payload[1]);
         break;
-      case 176:
+      case (kind >= 176 && kind <= 191):
         this.controlChange(payload);
         break;
     }
@@ -82,15 +82,25 @@ export default class MidiDevice {
 
   public controlChange(payload: Uint8Array) {
     const type: number = payload[1];
-    switch(type) {
-      case 1:
+    switch(true) {
+      case (type === 1):
         this.modWheel(payload[2] / 12.7);
+        break;
+      default:
+        this.generalPurpose(payload);
         break;
     }
   }
 
   public modWheel(amount: number) {
     eventbus.emit(`midi/modwheel/${this.midichannel}`, { amount });
+  }
+
+  public generalPurpose(payload: Uint8Array) {
+    eventbus.emit(`midi/generalpurpose/${payload[1]}`, {
+      knob: payload[1],
+      amount: payload[2],
+    });
   }
 
   public terminate() {

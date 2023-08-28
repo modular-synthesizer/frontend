@@ -3,6 +3,7 @@
     v-if="parameter !== undefined"
     @mousedown.left.stop="!control.editing && startParameterSetting($event, parameter)"
     @wheel.passive="wheelEvent"
+    @click.right.stop.prevent="showMenu(parameter, $event)"
   >
   <!-- @click.right.stop.prevent="showMenu(parameter, $event)" -->
     <text
@@ -112,7 +113,7 @@ export default {
       if (this.control.editing || this.zooming) return;
       $event.stopPropagation();
       this.wheeled($event)
-    }
+    },
   },
 }
 </script>
