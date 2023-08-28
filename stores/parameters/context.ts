@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
-import IParameter from "~~/lib/interfaces/IParameter"
+import Parameter from "~~/lib/wrappers/Parameter";
 
 interface Payload {
-  parameter: null|IParameter;
+  parameter: null|Parameter;
 }
 
 export const useParameterMenu = defineStore('parameterMenu', {
@@ -12,7 +12,7 @@ export const useParameterMenu = defineStore('parameterMenu', {
     }
   },
   actions: {
-    show(parameter: IParameter, $event: MouseEvent) {
+    show(parameter: Parameter, $event: MouseEvent) {
       useContextMenus().display("parameters", $event);
       this.parameter = parameter;
     },

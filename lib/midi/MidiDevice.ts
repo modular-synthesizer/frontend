@@ -97,7 +97,7 @@ export default class MidiDevice {
   }
 
   public generalPurpose(payload: Uint8Array) {
-    eventbus.emit(`midi/generalpurpose/${this.midichannel}`, {
+    eventbus.emit(`midi/generalpurpose/${payload[1]}`, {
       knob: payload[1],
       amount: payload[2],
     });

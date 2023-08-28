@@ -3,6 +3,7 @@
     v-if="parameter !== undefined"
     @mousedown.left.stop="!control.editing && startParameterSetting($event, parameter)"
     @wheel.passive="wheelEvent"
+    @click.right.stop.prevent="showMenu(parameter, $event)"
   >
   <!-- @click.right.stop.prevent="showMenu(parameter, $event)" -->
     <text
@@ -35,7 +36,6 @@ import { useKeyboard } from '~~/stores/common/keyboard';
 import { IControl } from '~~/lib/interfaces/IControl';
 import sendParamEvent from '~~/lib/commands/events/sendParamEvent';
 import { useParameterMenu } from '~~/stores/parameters/context';
-import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 
 export default {
   props: {
@@ -114,35 +114,6 @@ export default {
       $event.stopPropagation();
       this.wheeled($event)
     },
-    click($event: MouseEvent) {
-      const fct = ({ knob }: any) => {
-        console.log("pouet");
-        this.bindMidiLearn(knob)
-        eventbus.unsubscribe("midi/generalpurpose", fct);
-      }
-      eventbus.subscribe("midi/generalpurpose", fct)
-    },
-    bindMidiLearn(k: number) {
-      console.log("Binding event")
-      eventbus.subscribe("midi/generalpurpose", ({ knob, amount }: any) => {
-        if (knob !== k) return;
-        
-        if (this.timeout !== -1) window.clearTimeout(this.timeout);
-        const ratio: number = amount / 127;
-        const gap: number = this.parameter.maximum - this.parameter.minimum;
-        
-        const value: number = this.parameter.minimum + (gap * ratio);
-        const step: number = this.parameter.step * 10
-        const flooredValue: number = Math.floor(value / step) * step
-        this.parameter.setValue(flooredValue);
-        
-        this.timeout = window.setTimeout(() => {
-          useParameters().saveParameter(this.parameter);
-          sendParamEvent('endEdit', this.parameter);
-          this.timeout = -1;
-        }, 500);
-      });
-    }
   },
 }
 </script>
