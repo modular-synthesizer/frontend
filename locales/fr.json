@@ -35,10 +35,14 @@
     "admin": "Administration",
     "close": "Fermer",
     "create": "Créer",
+    "delete": "Supprimer",
     "index": "Index",
     "login": "Se connecter",
     "logout": "Se déconnecter",
+    "members": "Participants",
     "name": "Nom",
+    "play": "Jouer",
+    "readonly": "Lecture seule",
     "register": "S'inscrire",
     "uuid": "Identifiant",
     "validate": "Valider"
@@ -103,8 +107,14 @@
     },
     "title": "Connexion"
   },
+  "memberships": {
+    "add": "Ajouter des participants",
+    "existing": "Participants",
+    "results": "Résultats de la recherche"
+  },
   "menus": {
     "sandbox": "Bac à sable",
+    "synthesizers": "Synthétiseurs",
     "tools": "Outils"
   },
   "modules": {
@@ -214,6 +224,7 @@
     }
   },
   "register": {
+    "button": "S'inscrire",
     "hints": {
       "email": "Entrez une adresse email valide",
       "password": "Entrez un mot de passe, plus vous entrerez un nombre et une variété importante de caractère, plus il sera sécurisé",

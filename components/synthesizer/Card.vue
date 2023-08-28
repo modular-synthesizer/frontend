@@ -3,19 +3,19 @@
     <template v-slot:title>{{ synthesizer.name }}</template>
     <template v-slot:subtitle>{{ synthesizer.id }}</template>
     <template v-slot:text v-if="isReadOnly">
-      <v-chip color="red" text-color="white" v-if="isReadOnly">Read-only</v-chip>
+      <v-chip color="red" text-color="white" v-if="isReadOnly">{{ $t('common.readonly') }}</v-chip>
     </template>
     <v-card-actions>
       <v-btn :to="`/synthesizers/${synthesizer.id}`" icon>
         <v-icon>mdi-music</v-icon>
-        <v-tooltip activator="parent" location="bottom">Play</v-tooltip>
+        <v-tooltip activator="parent" location="bottom">{{ $t('common.play') }}</v-tooltip>
       </v-btn>
       <v-btn icon v-if="isCreator">
         <v-icon>mdi-account-multiple-plus</v-icon>
-        <v-tooltip activator="parent" location="bottom">Add members</v-tooltip>
+        <v-tooltip activator="parent" location="bottom">{{ $t('memberships.add') }}</v-tooltip>
         <v-dialog v-model="showMembers" activator="parent" width="50%">
           <v-card class="overflow-hidden">
-            <v-card-title>Members</v-card-title>
+            <v-card-title>{{ $t('common.members') }}</v-card-title>
             <v-card-text>
               <v-row>
                 <v-col cols="12">
@@ -31,7 +31,7 @@
               </v-row>
               <v-row v-if="accounts.populated">
                 <v-col cols="12">
-                  <div class="text-h6">Searched users</div>
+                  <div class="text-h6">{{ $t('memberships.results') }}</div>
                   <v-list>
                     <template v-for="account in accounts.all()">
                       <v-list-item
@@ -64,7 +64,7 @@
               </v-row>
               <v-row v-if="members.populated">
                 <v-col cols="12">
-                  <div class="text-h6">Existing users</div>
+                  <div class="text-h6">{{ $t('memberships.existing') }}</div>
                   <v-list>
                     <template v-for="member in members.all()">
                       <v-list-item
@@ -95,7 +95,7 @@
         @confirmed="synthesizers.delete(synthesizer.id)"
         icon
       >
-        Supprimer
+        {{ $t('common.delete') }}
       </deletion-dialog>
     </v-card-actions>
   </v-card>

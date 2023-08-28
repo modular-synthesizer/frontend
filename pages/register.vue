@@ -58,7 +58,7 @@
                 />
               </v-col>
             </v-row>
-            <v-btn color="primary" type="submit">S'inscrire</v-btn>
+            <v-btn color="primary" type="submit">{{ $t('register.button') }}</v-btn>
           </v-form>
         </template>
       </v-col>

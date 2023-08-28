@@ -16,12 +16,12 @@
       <v-btn icon to="/" aria-label="home link">
         <v-icon>mdi-home</v-icon>
       </v-btn>
-      <v-btn variant="text" to="/synthesizers" class="ml-2">Synthétiseurs</v-btn>
+      <v-btn variant="text" to="/synthesizers" class="ml-2">{{ $t('menus.synthesizers') }}</v-btn>
     </template>
     <template v-slot:append>
       <template v-if="useAuthentication().admin">
-        <v-btn to="/admin/sandbox" aria-label="sandbox link">Sandbox</v-btn>
-        <v-btn to="/tools" aria-label="tools link">Outils</v-btn>
+        <v-btn to="/admin/sandbox" aria-label="sandbox link">{{ $t('menus.sandbox') }}</v-btn>
+        <v-btn to="/tools" aria-label="tools link">{{ $t('menus.tools') }}</v-btn>
         <v-btn to="/admin" aria-label="administration panel">{{ $t('common.admin') }}</v-btn>
       </template>
       <v-btn @click="useAuthentication().logout">{{ $t('common.logout') }}</v-btn>

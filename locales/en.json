@@ -35,10 +35,14 @@
     "admin": "Administration",
     "close": "Close",
     "create": "Create",
+    "delete": "Delete",
     "index": "Index",
     "login": "Log in",
     "logout": "Log out",
+    "members": "Members",
     "name": "Name",
+    "play": "Play",
+    "readonly": "Read-only",
     "register": "Register",
     "uuid": "UUID",
     "validate": "Validate"
@@ -103,8 +107,14 @@
     },
     "title": "Log in"
   },
+  "memberships": {
+    "add": "Add members",
+    "existing": "Members",
+    "results": "Search results"
+  },
   "menus": {
     "sandbox": "Sandbox",
+    "synthesizers": "Synthesizers",
     "tools": "Toolbox"
   },
   "modules": {
@@ -214,6 +224,7 @@
     }
   },
   "register": {
+    "button": "Register",
     "hints": {
       "email": "Enter a valid email address",
       "password": "Enter a password. The more characters, and the more different ones you put, the most secure it will be",
