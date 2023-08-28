@@ -25,6 +25,7 @@
         <v-btn to="/admin" aria-label="administration panel">{{ $t('common.admin') }}</v-btn>
       </template>
       <v-btn @click="useAuthentication().logout">{{ $t('common.logout') }}</v-btn>
+      <language-switch />
     </template>
   </v-app-bar>
 </template>

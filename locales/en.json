@@ -1,10 +1,323 @@
 {
-  "register": {
+  "admin": {
+    "tabs": {
+      "applications": "Applications",
+      "categories": "Categories",
+      "parameters": "Parameters",
+      "tools": "Tools"
+    }
+  },
+  "applications": {
     "hints": {
-      "username": "Enter a username with at least 6 characters"
+      "name": "Enter an application name"
     },
     "labels": {
+      "name": "Name of the application"
+    }
+  },
+  "categories": {
+    "hints": {
+      "name": "Enter a name for this category and press Enter"
+    },
+    "labels": {
+      "name": "Add a category"
+    },
+    "names": {
+      "common": "Common modules",
+      "filters": "Filtering modules",
+      "inputs": "Generating modules",
+      "outputs": "Outputing modules"
+    }
+  },
+  "common": {
+    "actions": "Actions",
+    "add": "Add",
+    "admin": "Administration",
+    "close": "Close",
+    "create": "Create",
+    "index": "Index",
+    "login": "Log in",
+    "logout": "Log out",
+    "name": "Name",
+    "register": "Register",
+    "uuid": "UUID",
+    "validate": "Validate"
+  },
+  "errors": {
+    "email": {
+      "format": "Your email address is in a wrong format",
+      "required": "You must give a valid email address",
+      "uniq": "This email address is already used"
+    },
+    "password": {
+      "required": "The password is mandatory"
+    },
+    "password_confirmation": {
+      "required": "The password confirmation is mandatory",
+      "confirmation": "The confirmation doesn't match the password"
+    },
+    "username": {
+      "forbidden": "The given credentials are incorrect",
+      "length": "Your username must be at least six characters",
+      "required": "You must give a username",
+      "uniq": "This username is already used",
+      "unknown": "This username is unknown"
+    }
+  },
+  "homepage": {
+    "blocks": {
+      "simple": {
+        "title": "Simple",
+        "text": "We're doing our best so that your experience is the most fluid possible. You know how to drag and drop ? It's enough to use the application !"
+      },
+      "powerful": {
+        "title": "Powerful",
+        "text": "We provide you with a complete set of tools so that you can let your imagination run free and create music !"
+      },
+      "customizable": {
+        "title": "Customizable",
+        "text": "Despite all our efforts, you don't find suitable tools ? No problem, you can create your own ones with the provided editor !"
+      }
+    },
+    "subtitle": "Modular synthesis, simple and accessible"
+  },
+  "init": {
+    "paragraphs": {
+      "welcome": "Welcome to synple, the modular synthesis... Simpler !",
+      "goal": "Here you will find an interface allowing you to edit your own synthesier, with existing modules or, when you'll be more familiar with the system, by creating your own ones !",
+      "instructions": "Some instructions before letting you experiment :"
+    },
+    "list": [
+      "To add new modules, click on the \"+\" button on the top left.",
+      "To create links, drag and drop from an input port (black) to an output port (blue) or the other way around",
+      "To modifyy a parameter, you can either click and drag from a knob, or place your cursor on it and use the mouse wheel",
+      "You can zoom in or out with the mouse wheel too, and drag and drop the whole synthesier to move inside it"
+    ],
+    "title": "Synple"
+  },
+  "login": {
+    "button": "Log in",
+    "hints": {
+      "password": "Enter your password",
+      "username": "Enter your username (case-sensitive)"
+    },
+    "title": "Log in"
+  },
+  "menus": {
+    "sandbox": "Sandbox",
+    "tools": "Toolbox"
+  },
+  "modules": {
+    "filters": {
+      "delay": {
+        "short": "Delay",
+        "title": "Delay",
+        "description": "Delays a signal from a given amount (in seconds)"
+      },
+      "delayEffect": {
+        "short": "Analog delay",
+        "title": "Analog delay",
+        "description": "An analog delay effect to give some space to your sound."
+      },
+      "Envelope": {
+        "short": "ADSR",
+        "title": "Envelope (ADSR)",
+        "description": "A volume control node for it to go up and down mort smoothly when playing."
+      },
+      "VCA": {
+        "short": "VCA",
+        "title": "Voltage-controlled Amplifier (VCA)",
+        "description": "Enhances or diminishes the amplitude of a signal."
+      },
+      "VCF": {
+        "short": "VCF",
+        "title": "Voltage-controlled Filter (VCF)",
+        "description": "High-pass, Low-pass, notch, peaking, etc. This filter allows the edition of the freqsuencies of a signal."
+      }
+    },
+    "inputs": {
+      "LFO": {
+        "short": "LFO",
+        "title": "Low-frequency Oscillator (LFO)",
+        "description": "A simple modulation oscillator piloting and automating other parameters."
+      },
+      "MidiKeyboard": {
+        "short": "MIDI",
+        "title": "MIDI keyboard input",
+        "description": "Allows you to use any MIDI keyboard emitting on a channel, or the computer keyboard itself."
+      },
+      "noises": {
+        "short": "Noises",
+        "title": "Colored noises",
+        "description": "Colored noises allowing you to include some randomness into your patches."
+      },
+      "VCO": {
+        "short": "VCO",
+        "title": "Voltage-controlled Oscillator (VCO)",
+        "description": "An oscillator with four available wave forms."
+      }
+    },
+    "outputs": {
+      "output": {
+        "short": "Output",
+        "title": "Audio output",
+        "description": "A simple audio output routing the signal to the speakers."
+      }
+    },
+    "creator": {
+      "title": "Add module"
+    }
+  },
+  "parameters": {
+    "dialog": {
+      "steps": {
+        "constraints": "Constraints",
+        "informations": "Informations"
+      },
+      "fields": {
+        "default": {
+          "hint": "This value will be set on the parameter when instanciating this tool",
+          "label": "Défault value"
+        },
+        "field": {
+          "label": "Target field"
+        },
+        "maximum": {
+          "label": "Maximum"
+        },
+        "minimum": {
+          "label": "Minimum"
+        },
+        "precision": {
+          "label": "Precision"
+        },
+        "step": {
+          "label": "Step"
+        }
+      },
+      "title": "Create a new parameter"
+    },
+    "field": {
+      "required": "The target field is required"
+    },
+    "name": {
+      "required": "The name is required"
+    }
+  },
+  "ports": {
+    "name": {
+      "required": "Mandatory field"
+    },
+    "target": {
+      "required": "Mandatory field",
+      "unknown": "Invalid target"
+    }
+  },
+  "register": {
+    "hints": {
+      "email": "Enter a valid email address",
+      "password": "Enter a password. The more characters, and the more different ones you put, the most secure it will be",
+      "password_confirmation": "Enter your password anew",
+      "username": "Enter a username with at least six characters"
+    },
+    "labels": {
+      "email": "Email address",
+      "password": "Password",
+      "password_confirmation": "Password confirmation",
       "username": "Username"
+    },
+    "messages": {
+      "success": "Your account has been successfully created, you can now log in"
+    },
+    "placeholders": {
+      "email": "my.email[at]provider.com",
+      "password": "Password",
+      "username": "Username"
+    },
+    "title": "Registration"
+  },
+  "synthesizers": {
+    "create": {
+      "labels": {
+        "name": "Synthesizer name",
+        "racks": "Number of racks for the height",
+        "slots": "Number of slots for the width",
+        "voices": "Number of polyphony voices"
+      }
+    },
+    "list": {
+      "others": "Other synthesizers",
+      "owned": "My synthesizers"
+    }
+  },
+  "tools": {
+    "dialog": {
+      "headers": {
+        "descriptor": "Descriptor",
+        "from": "From",
+        "generator": "Generator",
+        "index": "Index",
+        "name": "Name",
+        "target": "Target",
+        "targets": "Targets",
+        "to": "To",
+        "type": "Type"
+      },
+      "fields": {
+        "category": {
+          "label": "Category"
+        },
+        "descriptor": {
+          "label": "Descriptor"
+        },
+        "errors": {
+          "name": {
+            "required": "The name is required"
+          }
+        },
+        "from": {
+          "label": "From"
+        },
+        "generator": {
+          "hint": "The generator for the node",
+          "label": "Generator"
+        },
+        "name": {
+          "hint": "Six characters or more",
+          "label": "Name of the tool"
+        },
+        "node": {
+          "label": "Node"
+        },
+        "node_name": {
+          "hint": "Name uniq among nodes"
+        },
+        "slots": {
+          "label": "Slots"
+        },
+        "targets": {
+          "label": "Targets"
+        },
+        "to": {
+          "hint": "A node or an audio parameter",
+          "label": "To"
+        },
+        "type": {
+          "label": "Type"
+        }
+      },
+      "steps": {
+        "informations": "Informations",
+        "inner_links": "Inner links",
+        "inner_nodes": "Inner nodes",
+        "parameters": "Parameters",
+        "ports": "Ports"
+      },
+      "title": "Create new tool"
+    },
+    "headers": {
+      "category": "Category",
+      "slots": "Slots"
     }
   }
 }

@@ -21,6 +21,7 @@
         </v-list-item>
         <v-divider></v-divider>
       </template>
+      <language-switch />
     </v-list>
   </v-dialog>
 </template>

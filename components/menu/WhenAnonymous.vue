@@ -15,6 +15,7 @@
     <template v-slot:append>
       <v-btn to="/register" aria-label="registration link">{{ $t('common.register') }}</v-btn>
       <v-btn to="/login" aria-label="login link">{{ $t('common.login') }}</v-btn>
+      <language-switch />
     </template>
   </v-app-bar>
 </template>

@@ -164,18 +164,6 @@
         "description": "Une sortie audio simple envoyant le patch sur votre sortie audio par défaut."
       }
     },
-    "common": {
-      "standardInput": {
-        "short": "microphone",
-        "title": "Entrée standard",
-        "description": "L'entrée audio par défaut de votre ordinateur. Ce peut êtyre un micro, un instrument, etc."
-      },
-      "wavefolder": {
-        "short": "wavefolder",
-        "title": "Wave folder",
-        "description": "Replie une onde sur elle-même afin d'y ajouter des harmoniques."
-      }
-    },
     "creator": {
       "title": "Ajout de module"
     }
@@ -188,7 +176,7 @@
       },
       "fields": {
         "default": {
-          "hint": "Cette valeur sera affectée au paramètre à l'instaniation d'un module",
+          "hint": "Cette valeur sera affectée au paramètre à l'instanciation d'un module",
           "label": "Valeur par défaut"
         },
         "field": {

@@ -13,6 +13,7 @@
     "vue-i18n": "^9.2.2"
   },
   "dependencies": {
+    "@growthbunker/vueflags": "^0.1.14",
     "@nuxtjs/robots": "^3.0.0",
     "@types/lodash": "^4.14.191",
     "@vuelidate/core": "^2.0.0",
@@ -26,6 +27,7 @@
     "uuid": "^9.0.0",
     "vue-class-component": "^7.2.6",
     "vue-highlight-code": "^0.1.16",
+    "vue3-country-flag-icon": "^0.1.2",
     "vuetify": "3.1.5"
   }
 }
