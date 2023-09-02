@@ -127,8 +127,6 @@ async function addMember(account_id: string, username: string, type: string) {
   members.value.append({ ...membership, account_id, username } as IMembership);
 }
 
-console.log(props.synthesizer);
-
 const isReadOnly = computed(() => {
   return props.synthesizer?.isReadonly(useAuthentication()?.storedSession.username);
 });

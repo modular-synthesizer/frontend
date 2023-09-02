@@ -20,16 +20,14 @@ class InnerNodesFactory {
             const gen: IGenerator = find(gens, {name: innerNode.generator}) as IGenerator;
 
             if (gen !== undefined) {
-                const executor = {func: async function(name: string, ctx: AudioContext) {}};
-                const fullcode: string = "executor.func = async function(name, context) { " + gen.code + " };"
+                const executor = {func: async function(_ctx: AudioContext, _payload: any) {}};
+                const fullcode: string = "executor.func = async function(context, payload) { " + gen.code + " };"
                 eval(fullcode);
     
-                const audioNodes: InnerAudioNode[] = await executor.func(innerNode.name, ctx) as unknown as InnerAudioNode[];
+                const audioNode: AudioNode = await executor.func(ctx, {}) as unknown as AudioNode;
     
-                audioNodes.forEach((a: InnerAudioNode) => {
-                    if (a.node instanceof AudioScheduledSourceNode) a.node.start()
-                    results.push(a);
-                })
+                if (audioNode instanceof AudioScheduledSourceNode) audioNode.start();
+                results.push({name: innerNode.name, node: audioNode});
             }
             else {
                 console.warn(`Impossible to find generator ${innerNode.generator}`)
