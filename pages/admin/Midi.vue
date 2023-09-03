@@ -11,7 +11,6 @@ let accesses = ref([]);
 let messages = ref([]);
 
 function onMIDISuccess(midiAccess) {
-  console.log("MIDI ready!");
   midi = midiAccess;
   for (let access of listInputsAndOutputs(midi)) {
     accesses.value.push(access)
