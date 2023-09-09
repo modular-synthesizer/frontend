@@ -11,7 +11,9 @@
 
     <rect x="0" y="0" :width="width" :height="height + 20" fill="transparent" stroke="white" />
 
-    <text x="5" y="8" class="info">{{ indexesNeeded }} | {{ paths.length }} | ppa : {{ pixelsPerArray }}</text>
+    <text x="5" y="8" class="info">R {{ refreshFrequency }}ms | PPP {{ pixelsPerArray }} | IDX {{ indexesNeeded }}</text>
+
+    <text x="5" :y="18 + height" class="info">PPL {{ ppl }}</text>
   </g>
 </template>
 
@@ -20,12 +22,12 @@ import { times } from 'lodash';
 import { mapState } from 'pinia';
 import Mod from '~~/lib/wrappers/Mod';
 
-const WIDTH = 140;
-const HEIGHT = 150;
+const WIDTH = 280;
+const HEIGHT = 180;
 // The sample rate, number of samples made per second
 const SAMPLE_RATE = 44100;
 // The number of milliseconds between two graphical updates of the oscilloscope.
-const INTERVAL = 100;
+const INTERVAL = 10;
 
 export default {
   props: {
@@ -64,12 +66,14 @@ export default {
     },
     pixelsPerArray(): number {
       return WIDTH / this.indexesNeeded;
+    },
+    refreshFrequency() {
+      return INTERVAL;
     }
   },
   methods: {
     yVal(value: number): number {
-      const signed: number = value - 127;
-      return HEIGHT / 2 - (signed / 128 * this.ppl);
+      return Math.round(HEIGHT / 2 - ((value - 127) / 128 * this.ppl));
     },
     // Main function triggered every interval of time to draw the path.
     handleInterval() {
@@ -78,16 +82,20 @@ export default {
       this.node.getByteTimeDomainData(this.buffer);
       this.appendPath();
     },
-    appendPath(): void { 
+    appendPath(): void {
+      // We first associate a number to exery pixel (as index of this array) for this portion.
+      const resultArray: number[] = []
 
-      let result = '';
-      times(this.pixelsPerArray, (value: number) => {
-        const x = (value / this.bufferSize + this.index) * this.pixelsPerArray;
-        const y = this.yVal(this.buffer[value]);
-        
-        result += ` L ${x} ${y}`;
-      });
-      this.paths[this.index] = result
+      const base: number = this.index * this.pixelsPerArray;
+
+      let i = 0
+      for (; i < this.framesperUpdate; ++i) {
+        // The X coordinate made to be in the portion we're currently updating.
+        const x = base + Math.floor(i / this.framesperUpdate * this.pixelsPerArray);
+        resultArray[x] = this.yVal(this.buffer[i]);
+      }
+      console.log("Stopping after adding " + i + " values from a buffer of " + this.bufferSize + " values");
+      this.paths[this.index] = Object.entries(resultArray).map(e => "L " + e.join(" ")).join(" ");
       this.path = `M 0 100 ${this.paths.join()}`;
     },
     /**
@@ -101,6 +109,12 @@ export default {
       this.node.fftSize = fftsize;
       this.bufferSize = this.node.frequencyBinCount;
       this.buffer = new Uint8Array(this.bufferSize);
+    },
+    initializeData() {
+      this.path = 'M 0 100 L 128 100';
+      this.paths = [];
+      this.index = 0;
+      this.initializeBuffer();
     }
   },
   data() {
@@ -122,6 +136,8 @@ export default {
 
     // These lines mean that at each interval, 8192 frames are taken to be put in the buffer
     this.initializeBuffer();
+
+    this.mod.watch("time", () => this.initializeData());
 
     this.interval = window.setInterval(this.handleInterval, INTERVAL)
   }

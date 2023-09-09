@@ -83,4 +83,8 @@ export default class Mod {
         })
     })
   }
+
+  public watch(name: string, callback: (v: number) => void) {
+    this.param(name).watch(callback);
+  }
 }

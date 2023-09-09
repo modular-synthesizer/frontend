@@ -17,6 +17,7 @@ export default class Parameter {
   public readonly mod: Mod;
   private ctx: AudioContext;
   public readonly field: string;
+  public callbacks: ((v: number) => void)[] = [];
 
   constructor(details: IParameter, mod: Mod) {
     this.id = details.id;
@@ -28,9 +29,13 @@ export default class Parameter {
     this.precision = details.precision;
     this.targets = details.targets;
     this.mod = mod;
-    this.ctx = useAudioContext().context;
+    this.ctx = useAudioContext().context as AudioContext;
     this.field = details.field;
     this.setValue(this.value);
+  }
+
+  public watch(callback: (val: number) => void) {
+    this.callbacks.push(callback);
   }
 
   public setValue(val: number) {
@@ -41,6 +46,9 @@ export default class Parameter {
         if (param !== undefined) param.setValueAtTime(this.value, this.ctx.currentTime);
       })
     });
+    this.callbacks.forEach((callback: (v: number) => void) => {
+      callback(this.value);
+    })
   }
 
   public moveValue(diff: number) {
