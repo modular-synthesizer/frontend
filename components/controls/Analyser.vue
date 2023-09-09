@@ -26,7 +26,7 @@ const HEIGHT = 150;
 // The sample rate, number of samples made per second
 const SAMPLE_RATE = 44100;
 // The number of milliseconds between two graphical updates of the oscilloscope.
-const INTERVAL = 20;
+const INTERVAL = 100;
 
 export default {
   props: {
@@ -98,7 +98,9 @@ export default {
      * audio input. That is why the interval is set to 180ms to not lose too much of data each interval.
      */
     initializeBuffer(): void {
-      this.node.fftSize = 2048;
+      let fftsize: number = 2
+      do { fftsize = fftsize * 2 } while (fftsize < 2 * this.framesperUpdate);
+      this.node.fftSize = fftsize;
       this.bufferSize = this.node.frequencyBinCount;
       this.buffer = new Uint8Array(this.bufferSize);
     }
