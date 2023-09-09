@@ -25,7 +25,7 @@ const HEIGHT = 150;
 // The sample rate, number of samples made per second
 const SAMPLE_RATE = 44100;
 // The number of milliseconds between two graphical updates of the oscilloscope.
-const INTERVAL = 10;
+const INTERVAL = 100;
 
 export default {
   props: {
@@ -84,7 +84,7 @@ export default {
       times(this.pixelsPerArray, (value: number) => {
         const x = (value / this.bufferSize + this.index) * this.pixelsPerArray;
         const y = this.yVal(this.buffer[value]);
-
+        
         result += ` L ${x} ${y}`;
       });
       this.paths[this.index] = result
@@ -97,7 +97,7 @@ export default {
      */
     initializeBuffer(): void {
       let fftsize: number = 2
-      do { fftsize = fftsize * 2 } while (fftsize < 2 * this.framesperUpdate);
+      do { fftsize = fftsize * 2 } while (fftsize < 2 * this.framesperUpdate || fftsize >= 65536);
       this.node.fftSize = fftsize;
       this.bufferSize = this.node.frequencyBinCount;
       this.buffer = new Uint8Array(this.bufferSize);
