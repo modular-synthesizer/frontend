@@ -34,11 +34,8 @@ class EnvelopeProcessor extends AudioWorkletProcessor {
   process(_inputs, outputs, { attack, decay, sustain, release, curve, trigger, thresholdUp, thresholdDown }) {
     const trig = trigger[0];
 
-    console.log(trig);
-
     // The ADSR was at rest, and is triggered by a high-enough voltage.
     if (!this.triggered && trig > thresholdUp.value) {
-      console.log("TRIGGERED");
       curve.cancelScheduledValues(currentTime);
       curve.exponentialRampToValueAtTime(10, currentTime + attack[0]);
       curve.exponentialRampToValueAtTime(sustain.value, currentTime + decay[0]);
@@ -46,7 +43,6 @@ class EnvelopeProcessor extends AudioWorkletProcessor {
     }
     // The ADSR was triggered, but is not triggered anymore as voltage went down.
     if (this.triggered && trig < thresholdDown.value) {
-      console.log("RELEASED");
       curve.cancelScheduledValues(currentTime);
       curve.exponentialRampToValueAtTime(0, currentTime + release[0]);
       this.triggered = false;

@@ -36,8 +36,6 @@ class InnerLinksFactory {
         const [nodeName, paramName] = link.to.node.split(".")
         const from = find(nodes, {name: link.from.node});
         const to = find(nodes, {name: nodeName});
-
-        console.log(from, to);
     
         if (from !== undefined && to !== undefined) {
             if (to.node instanceof AudioWorkletNode) {

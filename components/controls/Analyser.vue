@@ -6,7 +6,6 @@
     <g transform="translate(0 10)">
       <rect x="0" y="0" :width="width" :height="height" fill="black" />
       <line v-for="l in lines" x1="0" :x2="width" :y1="l.y" :y2="l.y" stroke="grey" />
-      <line v-for="i in (indexesNeeded - 1)" :x1="i * pixelsPerArray" :y1="0" :x2="i * pixelsPerArray" :y2="height" stroke="grey" />
       <path :d="path" stroke="white" fill="transparent" stroke-width="2" />
     </g>
 
@@ -26,7 +25,7 @@ const HEIGHT = 150;
 // The sample rate, number of samples made per second
 const SAMPLE_RATE = 44100;
 // The number of milliseconds between two graphical updates of the oscilloscope.
-const INTERVAL = 100;
+const INTERVAL = 10;
 
 export default {
   props: {
@@ -82,7 +81,6 @@ export default {
     appendPath(): void { 
 
       let result = '';
-      console.log("Executing the append " + this.buffer.length + " times")
       times(this.pixelsPerArray, (value: number) => {
         const x = (value / this.bufferSize + this.index) * this.pixelsPerArray;
         const y = this.yVal(this.buffer[value]);
