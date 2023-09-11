@@ -38,7 +38,13 @@ class InnerLinksFactory {
         const to = find(nodes, {name: nodeName});
     
         if (from !== undefined && to !== undefined) {
-            from.node.connect(to.node[paramName as keyof AudioNode] as unknown as AudioParam)
+            if (to.node instanceof AudioWorkletNode) {
+                const n = to.node as AudioWorkletNode;
+                from.node.connect(n.parameters.get(paramName) as unknown as AudioParam);
+            }
+            else {
+                from.node.connect(to.node[paramName as keyof AudioNode] as unknown as AudioParam)
+            }
         }
         return link;
     }

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { defineStore } from "pinia";
 import { api } from "~~/lib/api/Api";
 import { IGenerator } from "~~/lib/interfaces/IGenerator";
