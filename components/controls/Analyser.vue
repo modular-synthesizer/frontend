@@ -13,7 +13,7 @@
 
     <text x="5" y="8" class="info">R {{ refreshFrequency }}ms | PPP {{ pixelsPerArray }} | IDX {{ indexesNeeded }}</text>
 
-    <text x="5" :y="18 + height" class="info">PPL {{ ppl }}</text>
+    <text x="5" :y="18 + height" class="info">PPL {{ ppl }} | BF {{ bufferSize }} (FPU {{ framesperUpdate }})</text>
   </g>
 </template>
 
@@ -26,8 +26,6 @@ const WIDTH = 280;
 const HEIGHT = 180;
 // The sample rate, number of samples made per second
 const SAMPLE_RATE = 44100;
-// The number of milliseconds between two graphical updates of the oscilloscope.
-const INTERVAL = 10;
 
 export default {
   props: {
@@ -56,7 +54,7 @@ export default {
       return SAMPLE_RATE / 1000 * this.time
     },
     framesperUpdate(): number {
-      return SAMPLE_RATE / 1000 * INTERVAL;
+      return SAMPLE_RATE / 1000 * this.refreshFrequency;
     },
     indexesNeeded(): number {
       return Math.ceil(this.neededFrames / this.framesperUpdate)
@@ -68,7 +66,12 @@ export default {
       return WIDTH / this.indexesNeeded;
     },
     refreshFrequency() {
-      return INTERVAL;
+      const val: number = this.mod.param("refresh").value || 0
+      switch(val) {
+        case 0: return 10;
+        case 1: return 20;
+        default: return 100;
+      }
     }
   },
   methods: {
@@ -115,6 +118,10 @@ export default {
       this.paths = [];
       this.index = 0;
       this.initializeBuffer();
+    },
+    resetInterval() {
+      clearInterval(this.interval)
+      this.interval = window.setInterval(this.handleInterval, this.refreshFrequency)
     }
   },
   data() {
@@ -138,8 +145,12 @@ export default {
     this.initializeBuffer();
 
     this.mod.watch("time", () => this.initializeData());
+    this.mod.watch("refresh", () => {
+      this.resetInterval();
+      this.initializeData();
+    });
 
-    this.interval = window.setInterval(this.handleInterval, INTERVAL)
+    this.resetInterval();
   }
 }
 </script>
