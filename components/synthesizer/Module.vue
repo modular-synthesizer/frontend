@@ -1,11 +1,10 @@
 <template>
   <g :transform="`translate(${x} ${y})`"
     @mousedown.left.stop="dragstart"
+    @click.right.stop.prevent="showMenu(mod, $event)"
     @mouseenter="mouseenter(mod)"
     @mouseleave="mouseleave()"
   >
-  <!-- 
-    @click.right.stop.prevent="showMenu(mod, $event)"-->
     <rect
       :width="width"
       :height="height"
