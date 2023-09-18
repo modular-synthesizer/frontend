@@ -1,6 +1,6 @@
 <template>
 <g :transform="`translate(${x} ${y})`">
-  <foreignObject x="1" y="1" class="label-container">
+  <foreignObject width="1" height="1" class="label-container">
     <span class="label-wrapper">{{ $t(`modules.${props.mod.category}.${props.mod.type}.short`) }}</span>
   </foreignObject>
   <line x1="10" y1="40" x2="10" y2="25" stroke="white" stroke-width="3" />
