@@ -117,6 +117,12 @@
     "synthesizers": "Synthesizers",
     "tools": "Toolbox"
   },
+  "midi": {
+    "bind": "Bind MIDI knob",
+    "hint": "Turn to visualize",
+    "unbindAll": "Unbind MIDI (all)",
+    "unbindSome": "Unbind MIDI {knob}"
+  },
   "modules": {
     "filters": {
       "delay": {

@@ -28,7 +28,7 @@ export default class Parameter {
     this.precision = details.precision;
     this.targets = details.targets;
     this.mod = mod;
-    this.ctx = useAudioContext().context;
+    this.ctx = useAudioContext().context as AudioContext;
     this.field = details.field;
     this.setValue(this.value);
   }
