@@ -77,7 +77,6 @@ export default class MidiDevice {
         note: this.channels[channel], channel
       })
     }
-    
   }
 
   public controlChange(payload: Uint8Array) {
