@@ -10,6 +10,7 @@
     </v-toolbar>
     <module-context />
     <module-parameter-context />
+    <context-handler />
   </div>
 </template>
 
