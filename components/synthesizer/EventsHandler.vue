@@ -11,6 +11,9 @@ export default {
         {label: "First item"},
         {label: "Second item"}
       ])
+    },
+    hideContext() {
+      useContexts().hide();
     }
   }
 }
@@ -18,7 +21,9 @@ export default {
 
 <template>
   <svg
-    @mousedown.left.stop="dragstart"
+    @mousedown.left.stop="hideContext(); dragstart($event)"
+    @mousedown.right.stop="hideContext"
+
     @mousemove="dragmove"
     @mouseup.left.stop="dragend"
     @mouseleave="dragend"

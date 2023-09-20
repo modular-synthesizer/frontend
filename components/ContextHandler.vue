@@ -1,5 +1,5 @@
 <template>
-  <div class="main-menu-wrapper" :style="style" ref="mainWrapper">
+  <div class="main-menu-wrapper" :style="style" ref="mainWrapper" v-if="visible">
     <div v-for="item in items" class="item-wrapper">
       {{ item.label }}
     </div>
