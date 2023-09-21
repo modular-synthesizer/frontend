@@ -34,6 +34,13 @@ export const useSynthesizerDrag = defineStore('synthesizerDrag', {
       if (!this.dragging) return;
       api.auth_put(`/synthesizers/${this.synth.id}`, this.synth.coordinates);
       this.dragging = false;
+    },
+    reset() {
+      useContexts().hide();
+      this.dragging = true;
+      this.synth.x = 0;
+      this.synth.y = 0;
+      this.dragend();
     }
   }
 })

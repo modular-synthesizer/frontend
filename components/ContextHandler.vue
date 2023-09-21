@@ -1,13 +1,16 @@
 <template>
   <div class="main-menu-wrapper" :style="style" ref="mainWrapper" v-if="visible">
-    <div v-for="item in items" class="item-wrapper">
-      {{ item.label }}
-    </div>
+    <template v-for="item in items">
+      <a @click="item.action()" v-if="item.action" class="item-wrapper">{{ item.label }}</a>
+      <a :href="item.url" v-else-if="item.url" class="item-wrapper" target="_blank">{{ item.label }}</a>
+      <div v-else class="item-wrapper">{{ item.label }}</div>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
-import { mapActions, mapState } from 'pinia';
+import { mapState } from 'pinia';
+import { ContextItem } from '~~/stores/common/contexts';
 
 
 export default {
@@ -33,6 +36,10 @@ export default {
   },
   computed: {
     ...mapState(useContexts, ['x', 'y', 'visible', 'items']),
+    triggerAction(item: ContextItem) {
+      if (!item.action) return;
+      item.action(useContexts().payload);
+    },
     widthVariable(): string {
       return `${this.width}px`;
     },
@@ -82,7 +89,17 @@ export default {
     padding: 2px 5px;
   }
   .item-wrapper {
+    display: block;
     height: 20px;
     line-height: 20px;
+  }
+  a.item-wrapper {
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+  }
+
+  a.item-wrapper:hover {
+    background-color: #DDDDDD;
   }
 </style>
