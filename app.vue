@@ -7,6 +7,7 @@
     <VLayout>
       <NuxtLayout>
         <NuxtPage />
+        <context-handler />
       </NuxtLayout>
     </VLayout>
   </VApp>

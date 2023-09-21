@@ -1,7 +1,7 @@
 <template>
   <div class="main-menu-wrapper" :style="style" ref="mainWrapper" v-if="visible">
     <template v-for="item in items">
-      <a @click="item.action()" v-if="item.action" class="item-wrapper">{{ item.label }}</a>
+      <a @click="triggerAction(item)" v-if="item.action" class="item-wrapper">{{ item.label }}</a>
       <a :href="item.url" v-else-if="item.url" class="item-wrapper" target="_blank">{{ item.label }}</a>
       <div v-else class="item-wrapper">{{ item.label }}</div>
     </template>
@@ -34,12 +34,15 @@ export default {
       mainWrapper: ref(null)
     }
   },
-  computed: {
-    ...mapState(useContexts, ['x', 'y', 'visible', 'items']),
+  methods: {
     triggerAction(item: ContextItem) {
+      useContexts().hide();
       if (!item.action) return;
       item.action(useContexts().payload);
     },
+  },
+  computed: {
+    ...mapState(useContexts, ['x', 'y', 'visible', 'items']),
     widthVariable(): string {
       return `${this.width}px`;
     },

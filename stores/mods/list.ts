@@ -6,6 +6,7 @@ import { find, remove } from 'lodash'
 import Link from "~~/lib/wrappers/Link";
 import ModulesFactory from "~~/lib/factories/ModulesFactory";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
+import { useModulesLinks } from "./links";
 
 export const useModulesList = defineStore('modulesList', {
   state: () => ({
@@ -30,12 +31,12 @@ export const useModulesList = defineStore('modulesList', {
         this.modules.push(mod);
       }
     },
-    async remove(id: string) {
-      await api.auth_delete(`/modules/${id}`);
-      const mod: Mod = find(this.modules, { id }) as Mod;
+    async remove(mod: Mod) {
+      await api.auth_delete(`/modules/${mod.id}`);
+      useModulesLinks().disconnect(mod);
       useSynthesizerDetails().synthesizer.remove(mod)
       this.disconnect(mod);
-      remove(this.modules, { id });
+      remove(this.modules, { id: mod.id });
     },
     disconnect(mod: Mod) {
       mod.connections.forEach((link: Link) => {
