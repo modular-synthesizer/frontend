@@ -1,5 +1,5 @@
 <template>
-  <div class="main-menu-wrapper" :style="style" ref="mainWrapper" v-if="visible">
+  <div class="main-menu-wrapper" :style="coordinates" ref="mainWrapper" v-if="visible">
     <template v-for="item in items">
       <a @click="triggerAction(item)" v-if="item.action" class="item-wrapper">{{ item.label }}</a>
       <a :href="item.url" v-else-if="item.url" class="item-wrapper" target="_blank">{{ item.label }}</a>
@@ -11,7 +11,6 @@
 <script lang="ts">
 import { mapState } from 'pinia';
 import { ContextItem } from '~~/stores/common/contexts';
-
 
 export default {
   name: 'ContextHandler',
@@ -43,44 +42,28 @@ export default {
   },
   computed: {
     ...mapState(useContexts, ['x', 'y', 'visible', 'items']),
-    widthVariable(): string {
-      return `${this.width}px`;
-    },
     height(): number {
       return 25 * this.items.length;
     },
-    xCoord(): {[key: string]: string} {
+    xCoord(): string {
       if (this.x + this.width > window.innerWidth) {
-        return { left: `${Math.min(this.x, window.innerWidth) - this.width}px` }
+        return `${Math.min(this.x, window.innerWidth) - this.width}px`
       }
       else {
-        return { left: `${this.x}px` }
+        return `${this.x}px`
       }
     },
-    yCoord(): {[key: string]: string} {
+    yCoord(): string {
       if (this.y + this.height > window.innerHeight) {
-        return { top: `${Math.min(this.y, window.innerHeight) - this.height}px` }
+        return `${Math.min(this.y, window.innerHeight) - this.height}px`
       }
       else {
-        return { top: `${this.y}px` }
+        return `${this.y}px`
       }
     },
-    coordinates(): {[key: string]: string} {
-      return {
-        ...this.yCoord,
-        ...this.xCoord
-      }
+    coordinates(): Styles {
+      return { top: this.yCoord, left: this.xCoord }
     },
-    style(): {[key: string]: any} {
-      return {
-        width:
-        this.widthVariable,
-        backgroundColor: this.backgroundColor,
-        position: "absolute",
-        color: this.textColor,
-        ...this.coordinates,
-      }
-    }
   }
 }
 </script>
@@ -89,6 +72,8 @@ export default {
   .main-menu-wrapper {
     position: absolute;
     font-size: 13px;
+    width: 200px;
+    background-color: white;
   }
   .item-wrapper {
     padding: 0px 5px;
