@@ -36,6 +36,7 @@ import { useKeyboard } from '~~/stores/common/keyboard';
 import { IControl } from '~~/lib/interfaces/IControl';
 import sendParamEvent from '~~/lib/commands/events/sendParamEvent';
 import { useParameterMenu } from '~~/stores/parameters/context';
+import { useMidiLearn } from '~~/stores/parameters/midi_learn';
 
 export default {
   props: {
@@ -91,7 +92,16 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useParameterMenu, {showMenu: 'show'}),
+    // ...mapActions(useParameterMenu, {showMenu: 'show'}),
+    showMenu(parameter: Parameter, $event: MouseEvent) {
+      useContexts().display($event, {
+        items: [
+          {label: 'bind', action: useMidiLearn().learn},
+          {label: 'unbind', action: useMidiLearn().unlearn}
+        ],
+        payload: parameter,
+      })
+    },
     ...mapActions(useParameters, ['startParameterSetting']),
     wheeled($e: WheelEvent) {
       if (this.timeout !== -1) window.clearTimeout(this.timeout);

@@ -47,7 +47,7 @@ export default {
       return `${this.width}px`;
     },
     height(): number {
-      return 20 * this.items.length;
+      return 25 * this.items.length;
     },
     xCoord(): {[key: string]: string} {
       if (this.x + this.width > window.innerWidth) {
@@ -89,12 +89,12 @@ export default {
   .main-menu-wrapper {
     position: absolute;
     font-size: 13px;
-    padding: 2px 5px;
   }
   .item-wrapper {
+    padding: 0px 5px;
     display: block;
-    height: 20px;
-    line-height: 20px;
+    height: 25px;
+    line-height: 25px;
   }
   a.item-wrapper {
     cursor: pointer;
