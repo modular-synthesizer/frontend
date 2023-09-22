@@ -1,10 +1,13 @@
 <template>
-  <div class="main-menu-wrapper" :style="coordinates" ref="mainWrapper" v-if="visible">
-    <template v-for="item in items">
-      <a @click="triggerAction(item)" v-if="item.action" class="item-wrapper">{{ item.label }}</a>
-      <a :href="item.url" v-else-if="item.url" class="item-wrapper" target="_blank">{{ item.label }}</a>
-      <div v-else class="item-wrapper">{{ item.label }}</div>
-    </template>
+  <div class="main-menu-wrapper" :style="coordinates" v-if="visible">
+    <div class="background-shadow" />
+    <div class="items-wrapper">
+      <template v-for="item in items">
+        <a @click="triggerAction(item)" v-if="item.action" class="item-wrapper">{{ item.label }}</a>
+        <a :href="item.url" v-else-if="item.url" class="item-wrapper" target="_blank">{{ item.label }}</a>
+        <div v-else class="item-wrapper">{{ item.label }}</div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -12,27 +15,9 @@
 import { mapState } from 'pinia';
 import { ContextItem } from '~~/stores/common/contexts';
 
+const WIDTH = 200;
+
 export default {
-  name: 'ContextHandler',
-  props: {
-    width: {
-      type: Number,
-      default: 200
-    },
-    backgroundColor: {
-      type: String,
-      default: "white"
-    },
-    textColor: {
-      type: String,
-      default: "black",
-    },
-  },
-  setup() {
-    return {
-      mainWrapper: ref(null)
-    }
-  },
   methods: {
     triggerAction(item: ContextItem) {
       useContexts().hide();
@@ -45,23 +30,21 @@ export default {
     height(): number {
       return 25 * this.items.length;
     },
+    invertedX() {
+      return this.x + WIDTH > window.innerWidth
+    },
+    invertedY(): boolean {
+      return this.y + this.height > window.innerHeight
+    },
     xCoord(): string {
-      if (this.x + this.width > window.innerWidth) {
-        return `${Math.min(this.x, window.innerWidth) - this.width}px`
-      }
-      else {
-        return `${this.x}px`
-      }
+      if (this.invertedX) return `${Math.min(this.x, window.innerWidth) - WIDTH}px`;
+      return `${this.x}px`;
     },
     yCoord(): string {
-      if (this.y + this.height > window.innerHeight) {
-        return `${Math.min(this.y, window.innerHeight) - this.height}px`
-      }
-      else {
-        return `${this.y}px`
-      }
+      if (this.invertedY) return `${Math.min(this.y, window.innerHeight) - this.height}px`;
+      return `${this.y}px`;
     },
-    coordinates(): Styles {
+    coordinates(): { [key: string]: string } {
       return { top: this.yCoord, left: this.xCoord }
     },
   }
@@ -74,7 +57,7 @@ export default {
     font-size: 13px;
     width: 200px;
     background-color: white;
-    border: 1px solid #DDDDDD;
+    border: 1px solid silver;
   }
   .item-wrapper {
     padding: 0px 5px;
@@ -90,5 +73,19 @@ export default {
 
   a.item-wrapper:hover {
     background-color: #DDDDDD;
+  }
+  .background-shadow {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: silver;
+    z-index: 0;
+  }
+  .items-wrapper {
+    z-index: 1;
+    position: relative;
+    background-color: white;
   }
 </style>
