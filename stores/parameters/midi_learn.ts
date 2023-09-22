@@ -14,7 +14,7 @@ export const useMidiLearn = defineStore('midiLearn', {
         eventbus.unsubscribe("midi/generalpurpose", fct);
         this.bindMidiLearn(knob, parameter)
       }
-      useContextMenus().hide();
+      useContexts().hide();
       eventbus.subscribe("midi/generalpurpose", fct)
     },
     bindMidiLearn(k: number, parameter: Parameter) {

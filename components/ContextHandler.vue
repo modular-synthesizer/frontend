@@ -74,6 +74,7 @@ export default {
     font-size: 13px;
     width: 200px;
     background-color: white;
+    border: 1px solid #DDDDDD;
   }
   .item-wrapper {
     padding: 0px 5px;

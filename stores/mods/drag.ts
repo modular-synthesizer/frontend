@@ -40,7 +40,7 @@ export const useModDrag = defineStore("moduleDrag", {
   },
   actions: {
     dragstart(mod: Mod, $event: MouseEvent) {
-      useContextMenus().hide();
+      useContexts().hide();
       if (this.blocked) return;
       if (this.synth.isReadonly(this.username)) return;
       this.mod = mod;
