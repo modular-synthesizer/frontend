@@ -35,7 +35,6 @@ import ICoordinates from '~~/lib/interfaces/ICoordinates';
 import { useKeyboard } from '~~/stores/common/keyboard';
 import { IControl } from '~~/lib/interfaces/IControl';
 import sendParamEvent from '~~/lib/commands/events/sendParamEvent';
-import { useParameterMenu } from '~~/stores/parameters/context';
 import { useMidiLearn } from '~~/stores/parameters/midi_learn';
 
 export default {

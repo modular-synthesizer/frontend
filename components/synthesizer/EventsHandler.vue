@@ -11,8 +11,8 @@ export default {
     displayContext($event: MouseEvent) {
       useContexts().display($event, {
         items: [
-          {label: "Reset position", action: useSynthesizerDrag().reset},
-          {label: "Reset zoom level", action: useZoomStore().reset },
+          {label: "resetPosition", action: useSynthesizerDrag().reset},
+          {label: "resetZoom", action: useZoomStore().reset },
         ]
       })
     },

@@ -53,8 +53,8 @@ export default {
     showMenu(mod: Mod, $event: MouseEvent) {
       useContexts().display($event, {
         items: [
-          {label: "disconnect", action: useModulesLinks().disconnect},
-          {label: "delete", action: useModulesList().remove}
+          {label: "unlink", action: useModulesLinks().disconnect},
+          {label: "remove", action: useModulesList().remove}
         ],
         payload: mod
       });

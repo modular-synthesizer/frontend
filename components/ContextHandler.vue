@@ -3,9 +3,9 @@
     <div class="background-shadow" />
     <div class="items-wrapper">
       <template v-for="item in items">
-        <a @click="triggerAction(item)" v-if="item.action" class="item-wrapper">{{ item.label }}</a>
-        <a :href="item.url" v-else-if="item.url" class="item-wrapper" target="_blank">{{ item.label }}</a>
-        <div v-else class="item-wrapper">{{ item.label }}</div>
+        <a @click="triggerAction(item)" v-if="item.action" class="item-wrapper">{{ t(item) }}</a>
+        <a :href="item.url" v-else-if="item.url" class="item-wrapper" target="_blank">{{ t(item) }}</a>
+        <div v-else class="item-wrapper">{{ t(item) }}</div>
       </template>
     </div>
   </div>
@@ -23,6 +23,9 @@ export default {
       useContexts().hide();
       if (!item.action) return;
       item.action(useContexts().payload);
+    },
+    t(item: any): string {
+      return this.$t(`contexts.${item.label}`);
     },
   },
   computed: {
