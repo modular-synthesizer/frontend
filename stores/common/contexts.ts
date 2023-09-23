@@ -28,8 +28,8 @@ export const useContexts = defineStore('contexts', {
       this.payload = options.payload;
       this.visible = true;
     },
-    hide() {
-      useStates().unblock();
+    hide(unblock = false) {
+      if (unblock) useStates().unblock();
       this.visible = false;
     }
   }

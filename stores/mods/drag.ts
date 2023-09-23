@@ -40,13 +40,14 @@ export const useModDrag = defineStore("moduleDrag", {
   },
   actions: {
     dragstart(mod: Mod, $event: MouseEvent) {
-      useContexts().hide();
+      useContexts().hide(useStates().current === SynthState.DISPLAYING_CONTEXT);
       if (this.blocked) return;
       if (this.synth.isReadonly(this.username)) return;
       this.mod = mod;
       this.slots.click = getSlot($event.clientX, $event.clientY);
       this.slots.mod = this.mod.slot;
       this.rack = mod.rack;
+      useModHover().block();
       useStates().setState(SynthState.DRAGGING_MODULE);
       sendModuleEvent('startDrag', mod);
     },
@@ -80,6 +81,7 @@ export const useModDrag = defineStore("moduleDrag", {
         rack: this.mod.rack,
       }
       api.auth_put(`/modules/${this.mod.id}`, payload);
+      useModHover().unblock();
       useStates().unblock()
       sendModuleEvent('endDrag', this.mod as Mod);
       this.mod = null;
