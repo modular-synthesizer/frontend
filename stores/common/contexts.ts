@@ -21,6 +21,7 @@ export const useContexts = defineStore('contexts', {
   }),
   actions: {
     display($event: MouseEvent, options: ContextOptions) {
+      useStates().setState(SynthState.DISPLAYING_CONTEXT);
       this.x = $event.clientX;
       this.y = $event.clientY;
       this.items = options.items;
@@ -28,6 +29,7 @@ export const useContexts = defineStore('contexts', {
       this.visible = true;
     },
     hide() {
+      useStates().unblock();
       this.visible = false;
     }
   }

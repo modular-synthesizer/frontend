@@ -11,6 +11,8 @@ export enum SynthState {
   HOVERING_MODULE = 'HOVERING_MODULE',
   // The user is zooming in or out on the synthesizer
   ZOOMING = 'ZOOMING',
+  // The user is displaying a context menu anywhere (synth or module or parameter)
+  DISPLAYING_CONTEXT = 'DISPLAYING_CONTEXT'
 }
 
 interface Payload {
@@ -32,7 +34,8 @@ export const isBlocking: BlockMapping = {
 [SynthState.NONE]: false,
 [SynthState.HOVERING_MODULE]: false,
 [SynthState.ZOOMING]: true,
-[SynthState.EDITING_PARAMETER]: true
+[SynthState.EDITING_PARAMETER]: true,
+[SynthState.DISPLAYING_CONTEXT]: true
 }
 
 /**
