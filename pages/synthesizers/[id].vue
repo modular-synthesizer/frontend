@@ -49,7 +49,6 @@ export default {
   async mounted() {
     await useAudioContext().context?.suspend();
     this.fetchTools();
-    await useGenerators().fetchGenerators();
   },
   beforeUnmount() {
     eventbus.emit('synthesizers/quit')

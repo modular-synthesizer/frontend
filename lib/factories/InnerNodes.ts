@@ -13,7 +13,7 @@ class InnerNodesFactory {
      */
     public async create(list: InnerNode[]): Promise<InnerAudioNode[]> {
         const ctx: AudioContext = useAudioContext().context as AudioContext;
-        const gens: IGenerator[] = useGenerators().generators;
+        const gens: IGenerator[] = (await useLists().generators).all();
         const results: InnerAudioNode[] = [];
 
         for(let innerNode of list) {
