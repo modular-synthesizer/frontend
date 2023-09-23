@@ -28,7 +28,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="tool in tools">
+            <tr v-if="tools" v-for="tool in tools">
               <td>{{ tool.id }}</td>
               <td><v-icon v-if=tool.experimental color="red">mdi-alert</v-icon></td>
               <td>{{ tool.name }}</td>
@@ -64,16 +64,17 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
 import ITool from '~~/lib/interfaces/ITool';
 
 export default {
-  computed: {
-    ...mapState(useToolsList, ['tools'])
+  data() {
+    return {
+      tools: [] as ITool[],
+    };
   },
-  mounted() {
-    useToolsList().fetchTools();
+  async mounted() {
+    this.tools = (await useLists().tools).all();
   },
   methods: {
     exportTool(tool: ITool) {
@@ -98,10 +99,6 @@ export default {
     },
     async deleteTool(id: string) {
       await api.auth_delete(`/tools/${id}`);
-      this.fetchTools();
-    },
-    fetchTools() {
-      useToolsList().fetchTools();
     }
   }
 }

@@ -12,7 +12,8 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapState } from 'pinia';
+import { mapState } from 'pinia';
+import ITool from '~~/lib/interfaces/ITool';
 import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 import Mod from '~~/lib/wrappers/Mod';
 
@@ -29,18 +30,17 @@ export default {
       displayInitModal: true,
       loading: false,
       loaded: false,
+      tools: [] as ITool[],
     };
   },
   computed: {
     id(): string {
       return this.$route.params.id as string;
     },
-    ...mapState(useToolsList, ['tools']),
     ...mapState(useSynthesizerDetails, ['synthesizer']),
     ...mapState(useModulesList, ['modules']),
   },
   methods: {
-    ...mapActions(useToolsList, ['fetchTools']),
     insertModule(mod: Mod) {
       this.modules.push(mod);
       this.synthesizer.place(mod.rack, mod.slot, mod);
@@ -48,7 +48,7 @@ export default {
   },
   async mounted() {
     await useAudioContext().context?.suspend();
-    this.fetchTools();
+    this.tools = (await useLists().tools).all();
   },
   beforeUnmount() {
     eventbus.emit('synthesizers/quit')

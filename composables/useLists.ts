@@ -8,6 +8,7 @@ import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import IAccount from "~~/lib/interfaces/IAccount";
 import IMembership from "~~/lib/interfaces/IMembership";
 import ISynthesizer from "~~/lib/interfaces/ISynthesizer";
+import ITool from "~~/lib/interfaces/ITool";
 
 const lists = {
   accounts: buildList<IAccount>({ url: "/accounts/search" }),
@@ -17,6 +18,7 @@ const lists = {
   groups: buildList<IGroup>({ url: "/groups" }),
   rights: buildList<IRight>({ url: "/rights", autofetch: false, }),
   synthesizers: buildList<Synthesizer>({ url: "/synthesizers", useClass: Synthesizer }),
+  tools: buildList<ITool>({ url: '/tools' }),
 }
 
 export function useLists() {
