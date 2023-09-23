@@ -33,6 +33,11 @@ export const useZoomStore = defineStore('zoom', {
       this.timeout = setTimeout(() => {
         api.auth_put(`/synthesizers/${this.synth.id}`, { scale });
       }, 500);
+    },
+    reset() {
+      useContexts().hide();
+      this.synth.scale = 1;
+      this.setScale(1);
     }
   }
 })

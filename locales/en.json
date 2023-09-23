@@ -47,6 +47,14 @@
     "uuid": "UUID",
     "validate": "Validate"
   },
+  "contexts": {
+    "bind": "MIDI learn",
+    "remove": "Delete",
+    "resetPosition": "Reset position",
+    "resetZoom": "Reset zoom",
+    "unbind": "Unbind all MIDI knobs",
+    "unlink": "Delete all links"
+  },
   "errors": {
     "email": {
       "format": "Your email address is in a wrong format",
@@ -116,12 +124,6 @@
     "sandbox": "Sandbox",
     "synthesizers": "Synthesizers",
     "tools": "Toolbox"
-  },
-  "midi": {
-    "bind": "Bind MIDI knob",
-    "hint": "Turn to visualize",
-    "unbindAll": "Unbind MIDI (all)",
-    "unbindSome": "Unbind MIDI {knob}"
   },
   "modules": {
     "filters": {

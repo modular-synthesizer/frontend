@@ -8,8 +8,6 @@
       </v-btn>
       <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
     </v-toolbar>
-    <module-context />
-    <module-parameter-context />
   </div>
 </template>
 

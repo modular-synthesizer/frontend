@@ -16,7 +16,7 @@ export const useLinkDrag = defineStore('linkDrag', {
   },
   actions: {
     dragstart(port: Port, $event: MouseEvent) {
-      useContextMenus().hide()
+      useContexts().hide()
       this.start = port;
       this.dragmove($event.clientX, $event.clientY);
     },

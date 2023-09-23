@@ -47,6 +47,14 @@
     "uuid": "Identifiant",
     "validate": "Valider"
   },
+  "contexts": {
+    "bind": "Lier un bouton MIDI",
+    "remove": "Supprimer",
+    "resetPosition": "Réinitialiser la position",
+    "resetZoom": "Réinitialiser le niveau de zoom",
+    "unbind": "Délier tous les boutons",
+    "unlink": "Supprimer tous les liens"
+  },
   "errors": {
     "email": {
       "format": "Votre adresse email n'est pas dans un format correct",
@@ -116,12 +124,6 @@
     "sandbox": "Bac à sable",
     "synthesizers": "Synthétiseurs",
     "tools": "Outils"
-  },
-  "midi": {
-    "bind": "Lier bouton MIDI",
-    "hint": "Tourner pour visualiser",
-    "unbindAll": "Délier MIDI (tous)",
-    "unbindSome": "Délier MIDI {knob}"
   },
   "modules": {
     "filters": {

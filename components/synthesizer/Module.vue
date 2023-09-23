@@ -25,6 +25,8 @@ import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { mapActions } from 'pinia';
 import Mod from '~~/lib/wrappers/Mod';
 import { useModHover } from '~~/stores/mods/hover';
+import { useModulesLinks } from '~~/stores/mods/links';
+
 export default {
   name: "module-body",
   props: {
@@ -44,11 +46,19 @@ export default {
     height() { return RACK_HEIGHT }
   },
   methods: {
-    ...mapActions(useModuleMenu, {showMenu: 'show'}),
     ...mapActions(useModHover, ['mouseenter', 'mouseleave']),
     dragstart($event: MouseEvent) {
       useModDrag().dragstart(this.mod, $event);
     },
+    showMenu(mod: Mod, $event: MouseEvent) {
+      useContexts().display($event, {
+        items: [
+          {label: "unlink", action: useModulesLinks().disconnect},
+          {label: "remove", action: useModulesList().remove}
+        ],
+        payload: mod
+      });
+    }
   },
 }
 </script>
