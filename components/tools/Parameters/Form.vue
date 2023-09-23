@@ -47,7 +47,6 @@
 
 <script lang="ts">
 import { cloneDeep, find } from 'lodash';
-import { mapState } from 'pinia';
 
 export default {
   props: {
@@ -64,7 +63,6 @@ export default {
     parameter() {
       return this.modelValue;
     },
-    ...mapState(useDescriptors, {descriptors: 'parameters'}),
   },
   methods: {
     validate() {

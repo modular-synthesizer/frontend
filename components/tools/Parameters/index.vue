@@ -5,7 +5,6 @@
 
 <script lang="ts">
 import { cloneDeep } from 'lodash';
-import { mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
 import ITool, { IToolParameter } from '~~/lib/interfaces/ITool';
 
@@ -34,7 +33,6 @@ export default {
   }),
   computed: {
     parameters() { return this.modelValue; },
-    ...mapState(useDescriptors, {descriptors: 'parameters'}),
   },
   methods: {
     async addParameter(result: IToolParameter) {
