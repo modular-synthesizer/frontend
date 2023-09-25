@@ -13,7 +13,7 @@ class InnerLinksFactory {
      */
     public link(nodes: InnerAudioNode[], links: InnerLink[]): InnerLink[] {
         return links.map(link => {
-            if (/^[a-z]+\.[a-z]+$/.test(link.to.node)) {
+            if (/^[a-zA-Z]+\.[a-zA-Z]+$/.test(link.to.node)) {
                 return this.linkToParameter(nodes, link)
             }
             else {

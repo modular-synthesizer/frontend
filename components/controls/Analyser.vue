@@ -97,7 +97,6 @@ export default {
         const x = base + Math.floor(i / this.framesperUpdate * this.pixelsPerArray);
         resultArray[x] = this.yVal(this.buffer[i]);
       }
-      console.log("Stopping after adding " + i + " values from a buffer of " + this.bufferSize + " values");
       this.paths[this.index] = Object.entries(resultArray).map(e => "L " + e.join(" ")).join(" ");
       this.path = `M 0 100 ${this.paths.join()}`;
     },
