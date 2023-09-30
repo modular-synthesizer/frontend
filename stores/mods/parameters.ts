@@ -28,6 +28,8 @@ export const useParameters = defineStore('parameters', {
   },
   actions: {
     startParameterSetting($event: MouseEvent, parameter: Parameter) {
+      useContexts().hide();
+      useStates().unblock();
       if (this.synth.isReadonly(this.username)) return;
       this.parameter = parameter;
       this.yOrigin = $event.clientY;
