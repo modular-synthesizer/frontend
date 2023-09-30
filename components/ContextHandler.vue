@@ -20,7 +20,7 @@ const WIDTH = 200;
 export default {
   methods: {
     triggerAction(item: ContextItem) {
-      useContexts().hide();
+      useContexts().hide(true);
       if (!item.action) return;
       item.action(useContexts().payload);
     },
