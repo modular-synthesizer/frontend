@@ -14,7 +14,8 @@ export default abstract class Port implements IPort {
   target: string;
   mod: Mod;
   kind: string;
-  public readonly links: Link[] = [];
+
+  public link: Link|null = null;
 
   constructor({id, index, name, target, kind}: IPort, mod: Mod) {
     this.id = id;
@@ -38,8 +39,8 @@ export default abstract class Port implements IPort {
    * @param inputPort 
    */
   public connect(origin: Port, via: Link) {
-    this.links.push(via);
-    origin.links.push(via);
+    this.link = via;
+    origin.link = via;
 
     this.mod.channels.forEach((channel: Channel) => {
       const fromNode: InnerAudioNode = origin.mod.channel(channel.index).getNode(origin.target) as InnerAudioNode
@@ -48,10 +49,13 @@ export default abstract class Port implements IPort {
     });
   }
 
-  public disconnect(origin: Port, via: Link) {
-    remove(this.links, {id: via.id});
-    remove(origin.links, {id: via.id});
+  public get free(): boolean {
+    return this.link === null;
+  }
 
+  public disconnect(origin: Port) {
+    this.link = null;
+    origin.link = null;
 
     this.mod.channels.forEach((channel: Channel) => {
       const fromNode: AudioNode = origin.mod.channel(channel.index).getNode(origin.target)?.node as AudioNode;
