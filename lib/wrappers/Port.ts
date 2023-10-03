@@ -1,7 +1,6 @@
 import IPort from "../interfaces/IPort";
 import Link from "./Link";
 import Mod from "./Mod";
-import { remove } from 'lodash';
 import { IControl } from "../interfaces/IControl";
 import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 import Channel from "./Channel";
@@ -74,6 +73,10 @@ export default abstract class Port implements IPort {
   }
   public get ay() {
     return this.control.payload.y + this.mod.rack * RACK_HEIGHT;
+  }
+
+  public get links(): Link[] {
+    return !this.link ? [] : [this.link];
   }
 }
 
