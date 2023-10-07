@@ -11,7 +11,8 @@ import {
   ControlsPort,
   ControlsSmallKnob,
   ControlsEnvelopeTrigger,
-  ControlsAnalyser
+  ControlsAnalyser,
+  ControlsFader,
 } from "#components"
 
 import { IControl } from "~~/lib/interfaces/IControl";
@@ -27,6 +28,7 @@ export default {
     ControlsSmallKnob,
     ControlsEnvelopeTrigger,
     ControlsAnalyser,
+    ControlsFader,
   },
   props: {
     control: {
