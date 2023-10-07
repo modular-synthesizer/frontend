@@ -1,10 +1,5 @@
 <template>
-  <g
-    @mouseenter="entered = true"
-    @mouseout="entered = false"
-    @mousemove="moved = true"
-    :class="{'no-events': useLinkDrag().start !== null}"
-  >
+  <g :class="{'no-events': useLinkDrag().start !== null}">
     <path
       :d="path"
       :stroke="color"
@@ -23,9 +18,7 @@
       stroke-width="6"
       :stroke="color"
       @click="click()"
-      @mousedown.left.stop="startMouseDown"
-      @mouseenter="startMouseEnter"
-      @mouseout="mouseOut"
+      @mouseenter.stop
     />
     <circle
       :class="{ 'no-events': noEvents }"
@@ -36,9 +29,7 @@
       stroke-width="6"
       :stroke="color"
       @click.prevent="click()"
-      @mousedown.left.stop="endMouseDown"
-      @mouseenter="endMouseEnter"
-      @mouseout="mouseOut"
+      @mouseenter.stop
     />
   </g>
 </template>

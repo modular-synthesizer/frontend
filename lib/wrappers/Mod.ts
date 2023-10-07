@@ -1,4 +1,3 @@
-import { InnerLink } from "../interfaces/ITool";
 import Port, { InputPort, OutputPort } from "./Port";
 import Parameter from "./Parameter";
 import { find, flatten, some } from 'lodash';
@@ -11,13 +10,11 @@ import InnerAudioNode from "./InnerAudioNode";
 
 export default class Mod {
   public readonly id: string;
-  // public readonly links: InnerLink[]
   public rack: number;
   public slot: number;
   public readonly slots: number;
   public readonly type: string;
   public readonly ports: Port[] = [];
-  // public audioNodes: InnerAudioNode[] = []
   public readonly parameters: Parameter[];
   public readonly category: string;
   public readonly controls: IControl[] = [];
@@ -37,7 +34,6 @@ export default class Mod {
       return iport.kind === "input" ? new InputPort(iport, this) : new OutputPort(iport, this);
     });
 
-    // this.links = InnerLinksFactory.link(this.audioNodes, links);
     this.parameters = parameters.map((p: IParameter) => new Parameter(p, this));
 
     usePorts().addPorts(this.ports);
@@ -50,10 +46,6 @@ export default class Mod {
   public get outputs(): IPort[] {
     return this.ports.filter((p: Port) => p.kind === "output");
   }
-
-  // public node(name: string) {
-  //   return this.audioNodes.find((a: InnerAudioNode) => a.name === name);
-  // }
 
   public param(name: string): Parameter {
     return this.parameters.find((p: Parameter) => p.name === name) as Parameter;
