@@ -9,21 +9,21 @@
     stroke-width="2"
   />
   <line
-    v-for="i in 11"
+    v-for="i in 21"
     :x1="x + 6"
     :x2="x + 10"
-    :y1="y + ((height-6) / 10 * (i-1))"
-    :y2="y + ((height-6) / 10 * (i-1))"
+    :y1="y + ((height-6) / 20 * (i-1))"
+    :y2="y + ((height-6) / 20 * (i-1))"
     stroke="#BBBBBB"
   />
   <line
     v-for="i in 3"
     :x1="x + 6"
-    :x2="x + 12"
+    :x2="x + 13"
     :y1="y + ((height-6) / 2 * (i-1))"
     :y2="y + ((height-6) / 2 * (i-1))"
     stroke="#DDDDDD"
-    stroke-width="2"
+    stroke-width="1.5"
   />
   <rect
     :x="x - (knobSize / 2)"
