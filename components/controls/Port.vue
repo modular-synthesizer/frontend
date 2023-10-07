@@ -16,7 +16,7 @@
       <circle :r="radius - 7" stroke-width="2" stroke="white" />
       <circle :r="radius - 8" />
       <circle
-        v-if="port.free"
+        v-if="port?.free"
         opacity="0"
         :r="radius"
         @mouseenter="magnetize(port)"
