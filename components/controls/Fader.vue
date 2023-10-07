@@ -25,22 +25,29 @@
     stroke="#DDDDDD"
     stroke-width="1.5"
   />
-  <rect
-    :x="x - (knobSize / 2)"
-    :width="knobSize"
-    :y="yFader"
-    :height="knobSize"
-    rx="5"
-    ry="5"
-    @mousedown.left.stop="!control.editing && startParameterSetting($event, parameter)"
-    fill="black"
-    stroke="#555555"
-    stroke-width="2"
-    class="knob"
-  />
+  <g @mousedown.left.stop="!control.editing && startParameterSetting($event, parameter)">
+    <rect
+      :x="x - (knobSize / 2)"
+      :width="knobSize"
+      :y="yFader"
+      :height="knobSize"
+      rx="5"
+      ry="5"
+      fill="black"
+      stroke="#555555"
+      stroke-width="2"
+      class="knob"
+    />
+    <text :x="x" :y="yFader + (knobSize / 2)" text-anchor="middle" alignment-baseline="middle" fill="white" class="value">
+      <slot :value="value">
+        {{ value }}
+      </slot>
+    </text>
+  </g>
 </template>
 
 <script lang="ts">
+import { round } from 'lodash';
 import { mapActions } from 'pinia';
 import { IControl } from '~~/lib/interfaces/IControl';
 import Mod from '~~/lib/wrappers/Mod';
@@ -74,7 +81,10 @@ export default {
     },
     parameter(): Parameter {
       return this.mod.param(this.target);
-    }
+    },
+    value(): Number {
+        return round(this.parameter.value, this.parameter.precision);
+    },
   },
   methods: {
     ...mapActions(useParameters, ['startParameterSetting']),
@@ -85,5 +95,17 @@ export default {
 <style scoped>
 .knob {
   border-radius: 5px;
+}
+.value {
+    font-size: 10px;
+    user-select: none;
+    paint-order: stroke;
+    stroke: #A9A9A9;
+    fill: #B5B5B5;
+    stroke-width: 1px;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+    stroke-opacity: .5;
+    font-weight: 500;
 }
 </style>
