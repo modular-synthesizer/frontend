@@ -126,6 +126,9 @@
     "tools": "Toolbox"
   },
   "modules": {
+    "creator": {
+      "title": "Add module"
+    },
     "filters": {
       "delay": {
         "short": "Delay",
@@ -182,8 +185,22 @@
         "description": "A simple audio output routing the signal to the speakers."
       }
     },
-    "creator": {
-      "title": "Add module"
+    "utilities": {
+      "analyser": {
+        "short": "Oscilloscope",
+        "title": "Oscilloscope",
+        "description": "A tool to visualize the form of a signal input into it."
+      },
+      "mixer": {
+        "short": "Mixer",
+        "title": "Mixer",
+        "description": "A simple module mixing several signal and outputing the result."
+      },
+      "multiple": {
+        "Short": "Multiple",
+        "title": "Multiple",
+        "description": "One input, multiple outputs duplicating the signal."
+      }
     }
   },
   "parameters": {

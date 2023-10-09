@@ -184,6 +184,23 @@
     },
     "creator": {
       "title": "Ajout de module"
+    },
+    "utilities": {
+      "analyser": {
+        "short": "Oscilloscope",
+        "title": "Oscilloscope",
+        "description": "Un oscilloscope permettant de voir la forme d'un signal en entrée."
+      },
+      "mixer": {
+        "short": "Mixeur",
+        "title": "Mixeur",
+        "description": "Un module capable de combiner plusieurs signaux en les pondérant."
+      },
+      "multiple": {
+        "Short": "Multiple",
+        "title": "Multiple",
+        "description": "Une prise multiple permettant de dupliquer les signaux à l'identique."
+      }
     }
   },
   "parameters": {
