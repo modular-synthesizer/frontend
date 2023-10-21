@@ -8,19 +8,19 @@ export type EditionStrategies = {
 };
 
 export const EDITION_STRATEGIES: EditionStrategies = {
-  "linear": editAsLinear,
-  "decorrelated": editAsDecorrelated,
+  [Strategies.LINEAR]: editAsLinear,
+  [Strategies.DECORRELATED]: editAsDecorrelated,
 }
 
-function editAsLinear() {
+function editAsLinear({ clientY: y, clientX: x }: MouseEvent) {
 
 }
 
-function editAsDecorrelated(y: number) {
+function editAsDecorrelated({ clientY: y, clientX: x }: MouseEvent) {
   if (selectedParameter === null) return;
-  const delta = y - yOrigin.value;
+  const delta = y - parameterOrigin.y;
   if (Math.abs(delta) >= 5) {
     selectedParameter.moveValue(- (delta / 5) * selectedParameter.step);
-    resetOrigin(y)
+    resetOrigin({ x, y });
   }
 }

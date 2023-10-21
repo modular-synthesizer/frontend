@@ -14,14 +14,14 @@ export function startParameterSetting($event: MouseEvent, parameter: Parameter, 
   useContexts().hide();
   useStates().unblock();
   if (useSynthesizerDetails().synthesizer.isReadonly(useAuthentication().storedSession.username)) return;
-  selectParameter(parameter, $event.clientY);
+  selectParameter(parameter, { x: $event.clientX, y: $event.clientY });
   strategy.value = mode;
   useStates().setState(EDITING_PARAMETER);
   sendParamEvent('startEdit', parameter);
 }
 
-export function moveParameterSetting(_: number, y: number) {
-  EDITION_STRATEGIES[strategy.value](y)
+export function moveParameterSetting($event: MouseEvent) {
+  EDITION_STRATEGIES[strategy.value]($event)
 }
 
 export function endParameterSetting() {

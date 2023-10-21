@@ -1,3 +1,5 @@
+import { IControl } from '~~/lib/interfaces/IControl';
+import ICoordinates from '~~/lib/interfaces/ICoordinates';
 import Parameter from '~~/lib/wrappers/Parameter';
 
 // This composable holds the logic to know which parameter is currently being edited.
@@ -5,18 +7,22 @@ import Parameter from '~~/lib/wrappers/Parameter';
 
 export let selectedParameter: Parameter|null = null;
 
-export const yOrigin: Ref<number> = ref(0);
+export let selectedControl: IControl|null = null;
 
-export function selectParameter(parameter: Parameter, origin: number = 0) {
+export const parameterOrigin: ICoordinates = { x: 0, y: 0 };
+
+export function selectParameter(parameter: Parameter, control: IControl, coords: ICoordinates) {
   selectedParameter = parameter;
-  yOrigin.value = origin;
+  selectedControl = control;
+  resetOrigin(coords);
 }
 
-export function resetOrigin(y: number) {
-  yOrigin.value = y;
+export function resetOrigin({ x, y }: ICoordinates) {
+  parameterOrigin.x = x;
+  parameterOrigin.y = y;
 }
 
 export function unselectParameter() {
   selectedParameter = null;
-  yOrigin.value = 0;
+  selectedControl = null;
 }

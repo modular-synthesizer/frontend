@@ -5,7 +5,7 @@ export function dragmove($event: MouseEvent) {
   useSynthesizerDrag().dragmove(x, y);
   useModDrag().dragmove(x, y);
   useLinkDrag().dragmove(x, y);
-  moveParameterSetting(x, y);
+  moveParameterSetting($event);
 }
 
 export function dragend() {
