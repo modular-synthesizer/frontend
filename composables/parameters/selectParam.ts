@@ -5,12 +5,18 @@ import Parameter from '~~/lib/wrappers/Parameter';
 
 export let selectedParameter: Parameter|null = null;
 
-export function selectParameter(parameter: Parameter) {
+export const yOrigin: Ref<number> = ref(0);
+
+export function selectParameter(parameter: Parameter, origin: number = 0) {
   selectedParameter = parameter;
-  console.log(selectedParameter)
+  yOrigin.value = origin;
+}
+
+export function resetOrigin(y: number) {
+  yOrigin.value = y;
 }
 
 export function unselectParameter() {
   selectedParameter = null;
-  console.log(selectedParameter)
+  yOrigin.value = 0;
 }

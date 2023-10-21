@@ -8,14 +8,8 @@ import Synthesizer from "~~/lib/wrappers/Synthesizer";
 
 const { EDITING_PARAMETER } = SynthState;
 
-interface Payload {
-  yOrigin: number;
-}
-
 export const useParameters = defineStore('parameters', {
-  state: (): Payload => ({
-    yOrigin: 0
-  }),
+  state: () => ({ }),
   getters: {
     synth(): Synthesizer {
       return useSynthesizerDetails().synthesizer as Synthesizer
@@ -29,18 +23,17 @@ export const useParameters = defineStore('parameters', {
       useContexts().hide();
       useStates().unblock();
       if (this.synth.isReadonly(this.username)) return;
-      selectParameter(parameter);
-      this.yOrigin = $event.clientY;
+      selectParameter(parameter, $event.clientY);
       useStates().setState(EDITING_PARAMETER);
       sendParamEvent('startEdit', parameter);
     },
     moveParameterSetting(_x: number, y: number) {
       if (selectedParameter === null) return;
 
-      const delta = y - this.yOrigin;
+      const delta = y - yOrigin.value;
       if (Math.abs(delta) >= 5) {
         selectedParameter.moveValue(- (delta / 5) * selectedParameter.step);
-        this.yOrigin = y;
+        resetOrigin(y)
       }
     },
     endParameterSetting() {
