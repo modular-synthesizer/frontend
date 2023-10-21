@@ -25,7 +25,10 @@
     stroke="#DDDDDD"
     stroke-width="1.5"
   />
-  <g @mousedown.left.stop="!control.editing && startParameterSetting($event, parameter)">
+  <g
+    @mousedown.left.stop="!control.editing && startParameterSetting($event, parameter)"
+    @click.right.stop.prevent="showMenu(parameter, $event)"
+  >
     <rect
       :x="x - (knobSize / 2)"
       :width="knobSize"
@@ -88,6 +91,15 @@ export default {
   },
   methods: {
     ...mapActions(useParameters, ['startParameterSetting']),
+    showMenu(parameter: Parameter, $event: MouseEvent) {
+      useContexts().display($event, {
+        items: [
+          {label: 'bind', action: useMidiLearn().learn},
+          {label: 'unbind', action: useMidiLearn().unlearn}
+        ],
+        payload: parameter,
+      })
+    },
   }
 }
 </script>
