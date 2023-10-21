@@ -9,13 +9,11 @@ import Synthesizer from "~~/lib/wrappers/Synthesizer";
 const { EDITING_PARAMETER } = SynthState;
 
 interface Payload {
-  parameter: null | Parameter;
   yOrigin: number;
 }
 
 export const useParameters = defineStore('parameters', {
   state: (): Payload => ({
-    parameter: null,
     yOrigin: 0
   }),
   getters: {
@@ -31,26 +29,26 @@ export const useParameters = defineStore('parameters', {
       useContexts().hide();
       useStates().unblock();
       if (this.synth.isReadonly(this.username)) return;
-      this.parameter = parameter;
+      selectParameter(parameter);
       this.yOrigin = $event.clientY;
       useStates().setState(EDITING_PARAMETER);
       sendParamEvent('startEdit', parameter);
     },
     moveParameterSetting(_x: number, y: number) {
-      if (this.parameter === null) return;
+      if (selectedParameter === null) return;
 
       const delta = y - this.yOrigin;
       if (Math.abs(delta) >= 5) {
-        this.parameter.moveValue(- (delta / 5) * this.parameter.step);
+        selectedParameter.moveValue(- (delta / 5) * selectedParameter.step);
         this.yOrigin = y;
       }
     },
     endParameterSetting() {
-      if (this.parameter === null) return;
+      if (selectedParameter === null) return;
       useStates().unblock();
-      this.saveParameter(this.parameter as Parameter);
-      sendParamEvent('endEdit', this.parameter as Parameter);
-      this.parameter = null;
+      this.saveParameter(selectedParameter as Parameter);
+      sendParamEvent('endEdit', selectedParameter as Parameter);
+      unselectParameter();
     },
     async saveParameter(param: Parameter): Promise<any> {
       const auth_token: string = useAuthentication().session.token;
