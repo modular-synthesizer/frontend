@@ -5,14 +5,14 @@ export function dragmove($event: MouseEvent) {
   useSynthesizerDrag().dragmove(x, y);
   useModDrag().dragmove(x, y);
   useLinkDrag().dragmove(x, y);
-  useParameters().moveParameterSetting(x, y);
+  moveParameterSetting(x, y);
 }
 
 export function dragend() {
   useSynthesizerDrag().dragend();
   useModDrag().dragend()
   useLinkDrag().dragend()
-  useParameters().endParameterSetting();
+  endParameterSetting();
   useModHover().update();
 }
 
