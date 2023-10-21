@@ -51,7 +51,6 @@
 
 <script lang="ts">
 import { round } from 'lodash';
-import { mapActions } from 'pinia';
 import { IControl } from '~~/lib/interfaces/IControl';
 import Mod from '~~/lib/wrappers/Mod';
 import Parameter from '~~/lib/wrappers/Parameter';
@@ -90,7 +89,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useParameters, ['startParameterSetting']),
     showMenu(parameter: Parameter, $event: MouseEvent) {
       useContexts().display($event, {
         items: [

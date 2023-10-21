@@ -2,26 +2,26 @@ import Parameter from "~~/lib/wrappers/Parameter";
 import sendParamEvent from '~~/lib/commands/events/sendParamEvent'
 import { api } from "~~/lib/api/Api";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
+import { Strategies } from "./editionStrategy";
 
 const { EDITING_PARAMETER } = SynthState;
 
-export function startParameterSetting($event: MouseEvent, parameter: Parameter) {
+const { DECORRELATED } = Strategies;
+
+const strategy: Ref<Strategies> = ref(DECORRELATED);
+
+export function startParameterSetting($event: MouseEvent, parameter: Parameter, mode: Strategies = DECORRELATED) {
   useContexts().hide();
   useStates().unblock();
   if (useSynthesizerDetails().synthesizer.isReadonly(useAuthentication().storedSession.username)) return;
   selectParameter(parameter, $event.clientY);
+  strategy.value = mode;
   useStates().setState(EDITING_PARAMETER);
   sendParamEvent('startEdit', parameter);
 }
 
 export function moveParameterSetting(_: number, y: number) {
-  if (selectedParameter === null) return;
-
-  const delta = y - yOrigin.value;
-  if (Math.abs(delta) >= 5) {
-    selectedParameter.moveValue(- (delta / 5) * selectedParameter.step);
-    resetOrigin(y)
-  }
+  EDITION_STRATEGIES[strategy.value](y)
 }
 
 export function endParameterSetting() {
