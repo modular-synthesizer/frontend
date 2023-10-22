@@ -26,7 +26,7 @@
     stroke-width="1.5"
   />
   <g
-    @mousedown.left.stop="!control.editing && startParameterSetting($event, parameter)"
+    @mousedown.left.stop="!control.editing && startParameterSetting({ $event, parameter, control, mode: Strategies.LINEAR })"
     @click.right.stop.prevent="showMenu(parameter, $event)"
   >
     <rect
@@ -52,6 +52,7 @@
 <script lang="ts">
 import { round } from 'lodash';
 import { IControl } from '~~/lib/interfaces/IControl';
+import { DEFAULT_FADER_HEIGHT } from '~~/lib/utils/constants';
 import Mod from '~~/lib/wrappers/Mod';
 import Parameter from '~~/lib/wrappers/Parameter';
 
@@ -61,7 +62,7 @@ export default {
   props: {
     x: { type: Number, default: 0 },
     y: { type: Number, default: 0 },
-    height: { type: Number, default: 180 },
+    height: { type: Number, default: DEFAULT_FADER_HEIGHT },
     target: { type: String, required: true },
     label: { type: String, default: "" },
     mod: { type: Mod, required: true },

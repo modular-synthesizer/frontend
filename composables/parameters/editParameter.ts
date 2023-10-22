@@ -3,6 +3,7 @@ import sendParamEvent from '~~/lib/commands/events/sendParamEvent'
 import { api } from "~~/lib/api/Api";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import { Strategies } from "./editionStrategy";
+import { IControl } from "~~/lib/interfaces/IControl";
 
 const { EDITING_PARAMETER } = SynthState;
 
@@ -10,11 +11,18 @@ const { DECORRELATED } = Strategies;
 
 const strategy: Ref<Strategies> = ref(DECORRELATED);
 
-export function startParameterSetting($event: MouseEvent, parameter: Parameter, mode: Strategies = DECORRELATED) {
+interface ParameterSettings {
+  $event: MouseEvent;
+  parameter: Parameter;
+  control: IControl;
+  mode: Strategies;
+}
+
+export function startParameterSetting({ $event, parameter, control, mode}: ParameterSettings) {
   useContexts().hide();
   useStates().unblock();
   if (useSynthesizerDetails().synthesizer.isReadonly(useAuthentication().storedSession.username)) return;
-  selectParameter(parameter, { x: $event.clientX, y: $event.clientY });
+  selectParameter({ parameter, control, x: $event.clientX, y: $event.clientY });
   strategy.value = mode;
   useStates().setState(EDITING_PARAMETER);
   sendParamEvent('startEdit', parameter);

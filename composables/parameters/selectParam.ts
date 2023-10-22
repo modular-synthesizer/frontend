@@ -11,10 +11,15 @@ export let selectedControl: IControl|null = null;
 
 export const parameterOrigin: ICoordinates = { x: 0, y: 0 };
 
-export function selectParameter(parameter: Parameter, control: IControl, coords: ICoordinates) {
+interface ParametersSelection extends ICoordinates {
+  control: IControl;
+  parameter: Parameter;
+}
+
+export function selectParameter({ parameter, control, x, y }: ParametersSelection) {
   selectedParameter = parameter;
   selectedControl = control;
-  resetOrigin(coords);
+  resetOrigin({ x, y });
 }
 
 export function resetOrigin({ x, y }: ICoordinates) {

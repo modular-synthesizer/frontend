@@ -1,7 +1,7 @@
 <template>
   <g
     v-if="parameter !== undefined"
-    @mousedown.left.stop="!control.editing && startParameterSetting($event, parameter)"
+    @mousedown.left.stop="!control.editing && startParameterSetting({ control, $event, parameter, mode: Strategies.DECORRELATED })"
     @wheel.passive="wheelEvent"
     @click.right.stop.prevent="showMenu(parameter, $event)"
   >
