@@ -1,11 +1,10 @@
 <template>
   <g
     v-if="parameter !== undefined"
-    @mousedown.left.stop="!control.editing && startParameterSetting($event, parameter)"
+    @mousedown.left.stop="!control.editing && startParameterSetting({ control, $event, parameter, mode: Strategies.DECORRELATED })"
     @wheel.passive="wheelEvent"
     @click.right.stop.prevent="showMenu(parameter, $event)"
   >
-  <!-- @click.right.stop.prevent="showMenu(parameter, $event)" -->
     <text
       v-if="displayLabel"
       :transform="`translate(${x}, ${y - r - 6})`"
@@ -91,7 +90,6 @@ export default {
     },
   },
   methods: {
-    // ...mapActions(useParameterMenu, {showMenu: 'show'}),
     showMenu(parameter: Parameter, $event: MouseEvent) {
       useContexts().display($event, {
         items: [
@@ -101,7 +99,6 @@ export default {
         payload: parameter,
       })
     },
-    ...mapActions(useParameters, ['startParameterSetting']),
     wheeled($e: WheelEvent) {
       if (this.timeout !== -1) window.clearTimeout(this.timeout);
 

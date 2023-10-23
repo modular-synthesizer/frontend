@@ -26,3 +26,5 @@ export const PORT_RADIUS = 13;
 export const POLYPHONY_CHANNELS = 16;
 
 export const GATES_INTERVAL = 5;
+
+export const DEFAULT_FADER_HEIGHT = 180;
