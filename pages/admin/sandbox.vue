@@ -8,8 +8,12 @@
     <v-row>
       <v-col :offset="offset" :cols="cols">
         <v-alert type="info">
-          La variable "context" est accessible pour créer des noeuds dans le code,
-          ainsi que la variable "destination" pour sortir l'audio
+          Certaines variables sont disponibles :
+          <ul>
+            <li>La variable "context" permet d'accéder à l'AudioContext</li>
+            <li>La variable "destination" pour accéder à la sortie audio</li>
+            <li>La variable "trig" pour déclencher un impulse via <a @click="triggerImpulse()">ce lien</a></li>
+          </ul>
         </v-alert>
       </v-col>
     </v-row>
@@ -51,6 +55,7 @@ export default {
     initialized: false,
     context: null as unknown as AudioContext,
     destination: null as unknown as GainNode,
+    trigger: null as unknown as ConstantSourceNode,
     muted: false,
     previousVolume: 1,
     code: localStorage.getItem("sandbox-code") ?? "",
@@ -63,14 +68,17 @@ export default {
       await loadProcessors(this.context);
       this.destination = this.context.createGain();
       this.destination.connect(this.context.destination);
+      this.trigger = this.context.createConstantSource();
+      this.trigger.offset.setValueAtTime(0, this.context.currentTime);
+      this.trigger.start();
     },
     async run() {
       if (this.context !== null) {
         this.context.close();
       }
       await this.init();
-      const fct = new Function('context', 'destination', this.code);
-      fct(this.context, this.destination);
+      const fct = new Function('context', 'destination', "trigger", this.code);
+      fct(this.context, this.destination, this.trigger);
       if (this.muted) this.context.suspend();
     },
     mute() {
@@ -81,6 +89,12 @@ export default {
       const highlighter = this.$refs.highlighter as any;
       this.code = highlighter.modelValue;
       localStorage.setItem("sandbox-code", highlighter.modelValue);
+    },
+    triggerImpulse() {
+      this.trigger.offset.setValueAtTime(1, this.context.currentTime);
+      window.setTimeout(() => {
+        this.trigger.offset.setValueAtTime(0, this.context.currentTime);
+      }, 5);
     }
   },
 }
