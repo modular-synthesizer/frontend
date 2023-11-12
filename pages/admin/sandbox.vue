@@ -12,7 +12,7 @@
           <ul>
             <li>La variable "context" permet d'accéder à l'AudioContext</li>
             <li>La variable "destination" pour accéder à la sortie audio</li>
-            <li>La variable "trig" pour déclencher un impulse via <a @click="triggerImpulse()">ce lien</a></li>
+            <li>La variable "trigger" pour déclencher un impulse via <v-btn variant="text" @click="triggerImpulse()">ce lien</v-btn></li>
           </ul>
         </v-alert>
       </v-col>
@@ -55,7 +55,7 @@ export default {
     initialized: false,
     context: null as unknown as AudioContext,
     destination: null as unknown as GainNode,
-    trigger: null as unknown as ConstantSourceNode,
+    trigger: null as unknown as AudioWorkletNode,
     muted: false,
     previousVolume: 1,
     code: localStorage.getItem("sandbox-code") ?? "",
@@ -68,9 +68,8 @@ export default {
       await loadProcessors(this.context);
       this.destination = this.context.createGain();
       this.destination.connect(this.context.destination);
-      this.trigger = this.context.createConstantSource();
-      this.trigger.offset.setValueAtTime(0, this.context.currentTime);
-      this.trigger.start();
+
+      this.trigger = new AudioWorkletNode(this.context, "pulse", {numberOfOutputs: 1});
     },
     async run() {
       if (this.context !== null) {
@@ -91,10 +90,7 @@ export default {
       localStorage.setItem("sandbox-code", highlighter.modelValue);
     },
     triggerImpulse() {
-      this.trigger.offset.setValueAtTime(1, this.context.currentTime);
-      window.setTimeout(() => {
-        this.trigger.offset.setValueAtTime(0, this.context.currentTime);
-      }, 5);
+      this.trigger.port.postMessage('pulse');
     }
   },
 }
