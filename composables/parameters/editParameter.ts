@@ -40,7 +40,7 @@ export function endParameterSetting() {
   unselectParameter();
 }
 
-async function saveParameter(param: Parameter): Promise<any> {
+export async function saveParameter(param: Parameter): Promise<any> {
   const auth_token: string = useAuthentication().session.token;
   const payload = {
     auth_token,

@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapState } from 'pinia';
+import { mapState } from 'pinia';
 import Parameter from '~~/lib/wrappers/Parameter';
 import { round } from "lodash"
 import ICoordinates from '~~/lib/interfaces/ICoordinates';
@@ -105,7 +105,7 @@ export default {
       sendParamEvent('startEdit', this.parameter);
 
       this.timeout = window.setTimeout(() => {
-        useParameters().saveParameter(this.parameter);
+        saveParameter(this.parameter);
         sendParamEvent('endEdit', this.parameter);
         this.timeout = -1;
       }, 500);

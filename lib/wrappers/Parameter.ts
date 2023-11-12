@@ -42,13 +42,23 @@ export default class Parameter {
     this.value = clamp(val, this.minimum, this.maximum);
     this.targets.forEach((target: string) => {
       this.mod.channels.forEach((channel: Channel) => {
-        const param: AudioParam = channel.getNode(target)?.node[this.field as keyof AudioNode] as unknown as AudioParam;
+        const node: AudioNode = channel.getNode(target)!.node;
+        const param: AudioParam|undefined = this.param(node);
         if (param !== undefined) param.setValueAtTime(this.value, this.ctx.currentTime);
       })
     });
     this.callbacks.forEach((callback: (v: number) => void) => {
       callback(this.value);
     })
+  }
+
+  public param(node: AudioNode): AudioParam|undefined {
+    if ('parameters' in node) {
+      return (node as AudioWorkletNode).parameters.get(this.field);
+    }
+    else {
+      return node[this.field as keyof AudioNode] as unknown as AudioParam;
+    }
   }
 
   public moveValue(diff: number) {
