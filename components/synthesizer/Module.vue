@@ -1,4 +1,10 @@
 <template>
+  <defs>
+    <path :id="mod.id" :d="`M 0 0 H ${width} V ${height} H 0 V 0`" />
+    <clipPath :id="`clip-${mod.id}`">
+      <use :xlink:href="`#${mod.id}`" />
+    </clipPath>
+  </defs>
   <g :transform="`translate(${x} ${y})`"
     @mousedown.left.stop="dragstart"
     @click.right.stop.prevent="showMenu(mod, $event)"
@@ -11,6 +17,7 @@
       stroke="black"
       fill="#777777"
       :class="{ hovered }"
+      :clip-path="`url(#clip-${mod.id})`"
     />
     <template v-if="mod.controls.length > 0" v-for="control in mod.controls">
       <ControlsWrapper :mod="mod" :control="control" />
@@ -67,6 +74,6 @@ export default {
 .hovered {
   z-index: 100;
   stroke: white;
-  stroke-width: 3;
+  stroke-width: 4;
 }
 </style>
