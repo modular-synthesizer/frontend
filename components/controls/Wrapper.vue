@@ -13,6 +13,7 @@ import {
   ControlsEnvelopeTrigger,
   ControlsAnalyser,
   ControlsFader,
+  ControlsStepScreen,
 } from "#components"
 
 import { IControl } from "~~/lib/interfaces/IControl";
@@ -29,6 +30,7 @@ export default {
     ControlsEnvelopeTrigger,
     ControlsAnalyser,
     ControlsFader,
+    ControlsStepScreen,
   },
   props: {
     control: {

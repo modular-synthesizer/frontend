@@ -26,6 +26,7 @@ class SequencerProcessor extends AudioWorkletProcessor {
 
       if (clockSignal && runSignal === 1) {
         this.step = (this.step >= steps) ? 0 : (this.step + 1);
+        this.port.postMessage({ type: "content", content: this.step })
       }
 
       outputs[this.step][0][i] = runSignal;
