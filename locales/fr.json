@@ -191,6 +191,11 @@
         "title": "Oscilloscope",
         "description": "Un oscilloscope permettant de voir la forme d'un signal en entrée."
       },
+      "clock": {
+        "short": "Horloge",
+        "title": "Horloge",
+        "description": "Un module émettant un signal de contrôle très court à intervalle régulier, servant à orchestrer d'autres modules."
+      },
       "mixer": {
         "short": "Mixeur",
         "title": "Mixeur",
@@ -200,6 +205,21 @@
         "Short": "Multiple",
         "title": "Multiple",
         "description": "Une prise multiple permettant de dupliquer les signaux à l'identique."
+      },
+      "pulse": {
+        "short": "Impulsions",
+        "title": "Impulsions",
+        "description": "Un module permettant de générer de courtes impulsions manuelles pour déclencher d'autres actions."
+      },
+      "sequencer": {
+        "short": "Séquenceur",
+        "title": "Séquenceur 8 pas",
+        "description": "Un séquenceur pouvant émettre jusqu'à huit pas de signaux de contrôles réglables."
+      },
+      "trig_to_gate": {
+        "short": "Gate",
+        "title": "Pulse to gate",
+        "description": "Un module permettant de transformer une très court impulsion de contrôle en une impulsion plus longue d'une durée définie."
       }
     }
   },

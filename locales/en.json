@@ -191,6 +191,11 @@
         "title": "Oscilloscope",
         "description": "A tool to visualize the form of a signal input into it."
       },
+      "clock": {
+        "short": "Clock",
+        "title": "Clock",
+        "description": "A clock emitting a very short signal at set interval, used to orchestrate other modules."
+      },
       "mixer": {
         "short": "Mixer",
         "title": "Mixer",
@@ -200,6 +205,21 @@
         "Short": "Multiple",
         "title": "Multiple",
         "description": "One input, multiple outputs duplicating the signal."
+      },
+      "pulse": {
+        "short": "Pulses",
+        "title": "Pulses",
+        "description": "Very short pulses acting as manual control signals for other."
+      },
+      "sequencer": {
+        "short": "Sequencer",
+        "title": "8-steps sequencer",
+        "description": "An eight steps sequencer emitting control signals usually used as volt per octave signals."
+      },
+      "trig_to_gate": {
+        "short": "Gate",
+        "title": "Pulse to gate",
+        "description": "Transforms a short pulse into a longer gate with a duration set by the user."
       }
     }
   },
