@@ -16,6 +16,7 @@
           <v-tab value="ports">Ports</v-tab>
           <v-tab value="parameters">Paramètres</v-tab>
           <v-tab value="controls">Contrôles</v-tab>
+          <v-tab value="preview">Preview</v-tab>
         </v-tabs>
         <v-window v-model="currentTab">
           <v-window-item value="informations">
@@ -36,6 +37,9 @@
           <v-window-item value="controls">
             <tools-controls v-model="tool.controls" :tool="tool" :creation-mode="creationMode" />
           </v-window-item>
+          <v-window-item value="preview">
+            <tools-structure v-model="tool" />
+          </v-window-item>
         </v-window>
       </div>
     </v-col>
@@ -55,7 +59,7 @@ export default {
   },
   emits: ['update:modelValue'],
   data: () => ({
-    currentTab: "informations"
+    currentTab: "preview"
   }),
   computed: {
     tool() { return this.modelValue },
