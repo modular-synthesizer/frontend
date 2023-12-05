@@ -13,6 +13,7 @@ export default abstract class Port implements IPort {
   target: string;
   mod: Mod;
   kind: string;
+  analyser!: AnalyserNode;
 
   public link: Link|null = null;
 
@@ -23,6 +24,13 @@ export default abstract class Port implements IPort {
     this.target = target;
     this.mod = mod;
     this.kind = kind;
+    this.createAnalyser();
+  }
+
+  public createAnalyser() {
+    const context: AudioContext = useAudioContext().context as AudioContext;
+    if (context !== undefined) this.analyser = context.createAnalyser();
+    console.log(this.analyser);
   }
 
   abstract isInput(): boolean;
