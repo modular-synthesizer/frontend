@@ -1,9 +1,9 @@
-import GatesManager from "./GatesManager";
 import KeyboardManager from "./KeyboardManager";
 import MidiManager from "./MidiManager";
+import PortsManager from "./PortsManager";
 
 export const managers = {
   midi: new MidiManager(),
-  gates: new GatesManager(),
+  ports: new PortsManager(),
   keyboard: new KeyboardManager(),
 };

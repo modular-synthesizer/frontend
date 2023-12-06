@@ -24,11 +24,16 @@
         @mousedown.left.stop="dragstart"
       />
     </g>
+    <g v-if="port.kind === 'output'" :transform="`translate(${x + radius}, ${y + radius + 2})`">
+      <circle cx="0" cy="0" r="4" fill="black" />
+      <circle cx="0" cy="0" r="3" fill="green" :fill-opacity="value" />
+    </g>
   </g>
 </template>
 
 <script lang="ts">
 import { mapActions } from 'pinia';
+import { managers } from '~~/lib/managers';
 import { PORT_RADIUS } from '~~/lib/utils/constants';
 import Mod from '~~/lib/wrappers/Mod';
 import Port from '~~/lib/wrappers/Port';
@@ -36,7 +41,8 @@ import Port from '~~/lib/wrappers/Port';
 export default {
   name: 'controls-port',
   data: () => ({
-    radius: PORT_RADIUS
+    radius: PORT_RADIUS,
+    value: 0,
   }),
   methods: {
     ...mapActions(useLinkDrag, ['magnetize', 'unmagnetize']),
@@ -67,8 +73,13 @@ export default {
     fillColor() {
       if (this.port === undefined) return "#CC0000";
       return this.port.isInput() ? "#555555" : "#000099"
+    },
+  },
+  mounted() {
+    if (this.port.kind === 'output') {
+      managers.ports.add(() => this.value = (this.port.getValue() + 1) / 2);
     }
-  }
+  },
 }
 </script>
 
