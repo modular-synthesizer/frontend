@@ -37,8 +37,8 @@
           <v-window-item value="controls">
             <tools-controls v-model="tool.controls" :tool="tool" :creation-mode="creationMode" />
           </v-window-item>
-          <v-window-item value="graph">
-            <tools-graph v-model="tool" />
+          <v-window-item value="graph" v-if="tool">
+            <tools-graph :tool="tool" />
           </v-window-item>
         </v-window>
       </div>
