@@ -1,5 +1,13 @@
+
+import loginVue from '~~/pages/login.vue';
 <template>
-  <rect :x="node.x" :y="node.y" fill="white" width="50" height="50" />
+  <g
+    :transform="`translate(${node.x} ${node.y})`"
+    @mousedown.prevent.stop="startInnerNodeDrag"
+  >
+    <rect x="0" y="0" fill="white" width="50" height="50" />
+    <text x="3" y="15">{{node.name}}</text>
+  </g>
 </template>
 
 <script lang="ts" setup>

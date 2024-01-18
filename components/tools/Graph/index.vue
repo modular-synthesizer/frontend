@@ -1,7 +1,11 @@
 
 import loginVue from '~~/pages/login.vue';
 <template>
-  <svg class="tool-graph">
+  <svg
+    class="tool-graph"
+    @mouseup.prevent.stop="startInnerNodeDrag"
+    @mouseout.prevent.stop="startInnerNodeDrag"
+  >
     <tools-graph-node v-for="node in tool.nodes" :node="node" :key="node.id" />
   </svg>
 </template>
