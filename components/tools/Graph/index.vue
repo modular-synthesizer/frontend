@@ -6,13 +6,18 @@ import loginVue from '~~/pages/login.vue';
     @mouseup.prevent.stop="startInnerNodeDrag"
     @mouseout.prevent.stop="startInnerNodeDrag"
   >
-    <tools-graph-node v-for="node in tool.nodes" :node="node" :key="node.id" />
+    <g transform="translate(20 0)">
+      <g v-for="node in tool.nodes" :key="node.id" :transform="`translate(${node.x} ${node.y})`">
+        <tools-graph-node :node="node" />
+      </g>
+    </g>
   </svg>
 </template>
 
 <script lang="ts" setup>
 import ITool from "~~/lib/interfaces/ITool";
 const { tool } = defineProps<{tool: ITool}>();
+
 </script>
 
 <style scoped>
