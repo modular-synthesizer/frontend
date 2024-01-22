@@ -1,6 +1,7 @@
 <template>
   <g
-    @mousedown.prevent.stop="startInnerNodeDrag"
+    @mousedown.prevent.stop="startInnerNodeDrag($event, node)"
+    class="inner-node"
   >
     <rect x="0" y="0" fill="white" :width="value.width" :height="value.height" />
     <text x="20" y="15" ref="input">{{node.name}}</text>
@@ -24,3 +25,9 @@ watch(input, ({ clientWidth }) => {
   value.width = clientWidth + 20;
 });
 </script>
+
+<style scoped>
+.inner-node {
+  user-select: none;
+}
+</style>

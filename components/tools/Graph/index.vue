@@ -3,8 +3,9 @@ import loginVue from '~~/pages/login.vue';
 <template>
   <svg
     class="tool-graph"
-    @mouseup.prevent.stop="startInnerNodeDrag"
-    @mouseout.prevent.stop="startInnerNodeDrag"
+    @mouseup.prevent.stop="stopInnerNodeDrag"
+    @mousemove.prevent.stop="moveInnerNodeDrag"
+    @mouseout.prevent.stop="stopInnerNodeDrag"
   >
     <g transform="translate(20 0)">
       <g v-for="node in tool.nodes" :key="node.id" :transform="`translate(${node.x} ${node.y})`">
