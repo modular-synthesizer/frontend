@@ -1,28 +1,22 @@
-
-import loginVue from '~~/pages/login.vue';
 <template>
-  <svg
-    class="tool-graph"
-    @mouseup.prevent.stop="stopInnerNodeDrag"
-    @mousemove.prevent.stop="moveInnerNodeDrag"
-    @mouseout.prevent.stop="stopInnerNodeDrag"
-  >
-    <g transform="translate(20 0)">
-      <g v-for="node in tool.nodes" :key="node.id" :transform="`translate(${node.x} ${node.y})`">
-        <tools-graph-node :node="node" />
-      </g>
+  <synthesizer-events :position="position">
+    <g v-for="node in tool.nodes" :key="node.id" :transform="`translate(${node.x} ${node.y})`">
+      <tools-graph-node :node="node" />
     </g>
-  </svg>
+  </synthesizer-events>
 </template>
 
 <script lang="ts" setup>
 import ITool from "~~/lib/interfaces/ITool";
+import { ScalablePosition } from "@/lib/types/ScalablePosition"
+
 const { tool } = defineProps<{tool: ITool}>();
+const position: ScalablePosition = reactive({ x: 100, y: 0, scale: 1 })
 
 </script>
 
 <style scoped>
-svg.tool-graph {
+svg {
   height: calc(100vh - 150px);
   width: 100%;
 }
