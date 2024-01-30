@@ -1,14 +1,12 @@
 <template>
-  <svg>
-    <g transform="translate(100, 50) scale(1.5)">
-      <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
-      <module-screws :slots="tool.slots" />
-      <template v-for="control in tool.controls">
-        <ControlsWrapper :mod="mod" :control="control" />
-      </template>
-      <rect :width="modWidth" :height="modHeight" fill="transparent" />
-    </g>
-  </svg>
+  <synthesizer-events :position="position">
+    <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
+    <module-screws :slots="tool.slots" />
+    <template v-for="control in tool.controls">
+      <ControlsWrapper :mod="mod" :control="control" />
+    </template>
+    <rect :width="modWidth" :height="modHeight" fill="transparent" />
+  </synthesizer-events>
 </template>
 
 <script lang="ts">import { PropType } from 'vue';
@@ -21,6 +19,7 @@ import SmallKnob from "../controls/SmallKnob.vue";
 import LargeKnob from "../controls/LargeKnob.vue";
 import MuteButton from "../controls/MuteButton.vue";
 import Port from "../controls/Port.vue";
+import { ScalablePosition } from '~~/lib/types/ScalablePosition';
 
 export default {
   components: { Knob, LargeKnob, MuteButton, SmallKnob, Port },
@@ -33,6 +32,7 @@ export default {
   data() {
     return {
       mod: new FakeModule(ModulesFactory.empty()),
+      position: { x: 100, y: 50, scale: 1.5 } as ScalablePosition
     }
   },
   computed: {
@@ -45,7 +45,8 @@ export default {
 
 <style scoped>
 svg {
-  height: calc(100% - 64px);
+  height: calc(100vh - 140px);
   width: 100%;
+  background-color: #666666;
 }
 </style>

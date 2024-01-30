@@ -1,0 +1,1 @@
+export type ScalablePosition = { x: number, y: number, scale: number };

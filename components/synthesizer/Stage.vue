@@ -1,19 +1,19 @@
 <template>
-  <synthesizer-events-handler :key="synthesizerKey">
-    <g :transform="`translate(${synthesizer.x} ${synthesizer.y}) scale(${synthesizer.scale} ${synthesizer.scale})`" v-if="synthesizer">
-      <synthesizer-rack v-for="rack in synthesizer.created_racks" :rack="rack" />
-      <synthesizer-module v-for="mod in modules" :mod="mod" :hovered="hovered !== null && hovered.id === mod.id" />
-      <synthesizer-link v-for="link in links" :link="link" />
-      <LinkCreator />
-      <ExpandersRacks :synthesizer="synthesizer" />
-      <module-tooltip v-if="hovered" :mod="hovered" />
-    </g>
-  </synthesizer-events-handler>
+  <synthesizer-events :key="synthesizerKey" :position="synthesizer" @dragend="save(synthesizer)" @wheel="save(synthesizer)" v-if="synthesizer">
+    <synthesizer-rack v-for="rack in synthesizer.created_racks" :rack="rack" />
+    <synthesizer-module v-for="mod in modules" :mod="mod" :hovered="hovered !== null && hovered.id === mod.id" />
+    <synthesizer-link v-for="link in links" :link="link" />
+    <LinkCreator />
+    <ExpandersRacks :synthesizer="synthesizer" />
+    <module-tooltip v-if="hovered" :mod="hovered" />
+  </synthesizer-events>
 </template>
 
 <script lang="ts">
 import { mapState, mapActions } from 'pinia';
 import { v4 as uuid } from 'uuid';
+import { api } from '~~/lib/api/Api';
+import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
 import { useModHover } from '~~/stores/mods/hover';
 import { useStates } from '~~/stores/synthesizers/states';
 
@@ -40,6 +40,9 @@ export default {
   },
   methods: {
     ...mapActions(useStates, ['is']),
+    save({ id, scale, x, y }: ISynthesizer) {
+      debounce('save', 500, () => api.auth_put(`/synthesizers/${id}`, { x, y, scale }))
+    }
   },
   unmounted() {
     useSynthesizerDetails().reset();
