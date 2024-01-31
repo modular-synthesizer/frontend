@@ -15,6 +15,8 @@ export enum SynthState {
   DISPLAYING_CONTEXT = 'DISPLAYING_CONTEXT',
   // The user is currently dragging (panning) the whole view
   DRAGGING_VIEW = 'DRAGGING_VIEW',
+
+  DRAGGING = 'DRAGGING',
 }
 
 interface Payload {
@@ -38,7 +40,8 @@ export const isBlocking: BlockMapping = {
 [SynthState.ZOOMING]: true,
 [SynthState.EDITING_PARAMETER]: true,
 [SynthState.DISPLAYING_CONTEXT]: true,
-[SynthState.DRAGGING_VIEW]: true
+[SynthState.DRAGGING_VIEW]: true,
+[SynthState.DRAGGING]: true,
 }
 
 /**

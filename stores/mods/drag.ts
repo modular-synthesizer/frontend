@@ -47,15 +47,13 @@ export const useModDrag = defineStore("moduleDrag", {
       this.slots.click = getSlot($event.clientX, $event.clientY);
       this.slots.mod = this.mod.slot;
       this.rack = mod.rack;
-      useModHover().block();
-      useStates().setState(SynthState.DRAGGING_MODULE);
       sendModuleEvent('startDrag', mod);
       declareDragMove(this.dragmove);
       declareDragEnd(this.dragend);
+      startDragEvent($event, { move: this.dragmove, end: this.dragend })
     },
     dragmove(x: number, y: number) {
-      if (this.blocked) return;
-      if (!useStates().is(SynthState.DRAGGING_MODULE) || this.mod === null) return;
+      if (this.blocked || !this.mod) return;
 
       const rack = getRack(x, y);
       const slot = clamp(getSlot(x, y), 0, this.synth.maxSlot);

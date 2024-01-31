@@ -5,8 +5,6 @@ import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import { Strategies } from "./editionStrategy";
 import { IControl } from "~~/lib/interfaces/IControl";
 
-const { EDITING_PARAMETER } = SynthState;
-
 const { DECORRELATED } = Strategies;
 
 const strategy: Ref<Strategies> = ref(DECORRELATED);
@@ -18,16 +16,16 @@ interface ParameterSettings {
   mode: Strategies;
 }
 
-export function startParameterSetting({ $event, parameter, control, mode}: ParameterSettings) {
-  useContexts().hide();
-  useStates().unblock();
+export function startParameterSetting({ $event, parameter, control, mode }: ParameterSettings) {
   if (useSynthesizerDetails().synthesizer.isReadonly(useAuthentication().storedSession.username)) return;
   selectParameter({ parameter, control, x: $event.clientX, y: $event.clientY });
   strategy.value = mode;
-  useStates().setState(EDITING_PARAMETER);
   sendParamEvent('startEdit', parameter);
-  declareDragMove(moveParameterSetting);
-  declareDragEnd(endParameterSetting);
+
+  startDragEvent($event, {
+    move: moveParameterSetting,
+    end: endParameterSetting
+  });
 }
 
 export function moveParameterSetting(x: number, y: number) {
@@ -35,8 +33,8 @@ export function moveParameterSetting(x: number, y: number) {
 }
 
 export function endParameterSetting() {
-  if (selectedParameter === null) return;
   useStates().unblock();
+  if (selectedParameter === null) return;
   saveParameter(selectedParameter as Parameter);
   sendParamEvent('endEdit', selectedParameter as Parameter);
   unselectParameter();

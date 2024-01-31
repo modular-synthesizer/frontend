@@ -1,7 +1,6 @@
 import { Coordinates } from "~~/lib/types/Coordinates";
 import { ScalablePosition } from "~~/lib/types/ScalablePosition";
 import { MAX_ZOOM_IN, MAX_ZOOM_OUT, ZOOM_RATIO } from "~~/lib/utils/constants";
-import { declareDragMove } from "~~/composables/events/dragMove";
 
 /**
  * Sets the scale of a given object by determining it from a given wheel event. The dela Y of the wheel event is used
@@ -31,20 +30,16 @@ function syncPosition(position: Coordinates, { clientX, clientY }: MouseEvent) {
  * Sets the origin of a drag'n'drop where the user clicks and indicates he's currently dragging it.
  * @param $event the mouse button down event that contains the coordinates where the drag starts.
  */
-export function dragStart(position: ScalablePosition, $event: MouseEvent) {
+export function dragStart(position: ScalablePosition, emit: Function, $event: MouseEvent) {
   useStates().setState(SynthState.DRAGGING_VIEW);
   syncPosition(origin, $event);
-  declareDragMove((x: number, y: number) => {
-    if (!useStates().is(SynthState.DRAGGING_VIEW)) return;
-    position.x += x - origin.x;
-    position.y += y - origin.y;
-    syncPosition(origin, { clientX: x, clientY: y } as MouseEvent);
-  });
-  triggerDragMoves();
-}
 
-export function dragEnd() {
-  useStates().unblock();
-  useStates().setState(SynthState.NONE);
-  removeDragMove()
+  startDragEvent($event, {
+    move: (x: number, y: number) => {
+      position.x += x - origin.x;
+      position.y += y - origin.y;
+      syncPosition(origin, { clientX: x, clientY: y } as MouseEvent);
+    },
+    end: () => emit("dragend"),
+  });
 }
