@@ -26,7 +26,7 @@
     stroke-width="1.5"
   />
   <g
-    @mousedown.left.stop="!control.editing && startParameterSetting({ $event, parameter, control, mode: Strategies.LINEAR })"
+    @mousedown.left.stop="startParameterSetting({ $event, parameter, control, mode: Strategies.LINEAR })"
     @click.right.stop.prevent="showMenu(parameter, $event)"
   >
     <rect

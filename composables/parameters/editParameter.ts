@@ -5,9 +5,7 @@ import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import { Strategies } from "./editionStrategy";
 import { IControl } from "~~/lib/interfaces/IControl";
 
-const { DECORRELATED } = Strategies;
-
-const strategy: Ref<Strategies> = ref(DECORRELATED);
+const strategy: Ref<Strategies> = ref(Strategies.DECORRELATED);
 
 interface ParameterSettings {
   $event: MouseEvent;
