@@ -26,10 +26,12 @@ export function startParameterSetting({ $event, parameter, control, mode}: Param
   strategy.value = mode;
   useStates().setState(EDITING_PARAMETER);
   sendParamEvent('startEdit', parameter);
+  declareDragMove(moveParameterSetting);
+  declareDragEnd(endParameterSetting);
 }
 
-export function moveParameterSetting($event: MouseEvent) {
-  EDITION_STRATEGIES[strategy.value]($event)
+export function moveParameterSetting(x: number, y: number) {
+  EDITION_STRATEGIES[strategy.value]({ clientX: x, clientY: y })
 }
 
 export function endParameterSetting() {

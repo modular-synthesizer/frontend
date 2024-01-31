@@ -1,8 +1,7 @@
 <template>
 <svg
-    @mousedown.left.stop="dragStart($event)"
+    @mousedown.left.stop="dragStart(position, $event)"
     @mousedown.right.stop="hide"
-    @mousemove="dragMove(position, $event)"
     @mouseup.left.stop="endDrag"
     @mouseleave="endDrag"
     @wheel.passive.prevent.stop="setScale(position, $event); emit('wheel')"
