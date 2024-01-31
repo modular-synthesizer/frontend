@@ -1,7 +1,7 @@
 <template>
   <synthesizer-events :position="position">
     <g v-for="node in tool.nodes" :key="node.id" :transform="`translate(${node.x} ${node.y})`">
-      <tools-graph-node :node="node" />
+      <tools-graph-node :node="node" :nodes="tool.nodes" :tool="tool" />
     </g>
   </synthesizer-events>
 </template>

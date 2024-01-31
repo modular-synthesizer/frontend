@@ -1,6 +1,6 @@
 <template>
   <g
-    @mousedown.prevent.stop="startInnerNodeDrag($event, node)"
+    @mousedown.prevent.stop="startInnerNodeDrag($event, node, tool, nodes)"
     class="inner-node"
   >
     <rect x="0" y="0" fill="white" :width="value.width" :height="value.height" />
@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts" setup>
-import { InnerNode } from '~~/lib/interfaces/ITool';
-const { node } = defineProps<{node: InnerNode}>();
+import ITool, { InnerNode } from '~~/lib/interfaces/ITool';
+const { node } = defineProps<{node: InnerNode, tool: ITool, nodes: InnerNode[]}>();
 const input: Ref<any> = ref(null);
 
 const ports: number = Math.max(node.inputs, node.outputs);

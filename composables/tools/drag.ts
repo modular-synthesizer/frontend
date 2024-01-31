@@ -1,22 +1,19 @@
 import ICoordinates from "~~/lib/interfaces/ICoordinates";
-import { InnerNode } from "~~/lib/interfaces/ITool";
+import ITool, { InnerNode } from "~~/lib/interfaces/ITool";
 
-let movedNode: InnerNode | null = null;
+let movedNode: InnerNode;
 
 let origin: ICoordinates = {x: 0, y: 0}
 
-export function startInnerNodeDrag($event: MouseEvent, node: InnerNode) {
+export function startInnerNodeDrag($event: MouseEvent, node: InnerNode, tool: ITool, nodes: InnerNode[]) {
   movedNode = node;
-  origin.x = $event.clientX;
-  origin.y = $event.clientY;
+  origin = {x: $event.clientX, y: $event.clientY}
+  startDragEvent($event, { move, end: () => saveInnerNode(nodes, node, tool) });
 }
 
-export function stopInnerNodeDrag($event: MouseEvent) {
-  movedNode = null;
-}
-
-export function moveInnerNodeDrag($event: MouseEvent) {
-  if (movedNode === null) return;
-  movedNode.x = $event.clientX - origin.x;
-  movedNode.y = $event.clientY - origin.y;
+function move(x: number, y: number) {
+  movedNode.x += x - origin.x;
+  movedNode.y += y - origin.y;
+  origin.x = x;
+  origin.y = y;
 }
