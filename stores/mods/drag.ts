@@ -50,6 +50,8 @@ export const useModDrag = defineStore("moduleDrag", {
       useModHover().block();
       useStates().setState(SynthState.DRAGGING_MODULE);
       sendModuleEvent('startDrag', mod);
+      declareDragMove(this.dragmove);
+      declareDragEnd(this.dragend);
     },
     dragmove(x: number, y: number) {
       if (this.blocked) return;
