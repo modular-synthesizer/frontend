@@ -1,12 +1,12 @@
 <template>
-  <synthesizer-events :key="synthesizerKey" :position="synthesizer" @dragend="save(synthesizer)" @wheel="save(synthesizer)" v-if="synthesizer">
+  <draggable-stage :key="synthesizerKey" :position="synthesizer" @move="save(synthesizer)" @zoom="save(synthesizer)" v-if="synthesizer">
     <synthesizer-rack v-for="rack in synthesizer.created_racks" :rack="rack" />
     <synthesizer-module v-for="mod in modules" :mod="mod" :hovered="hovered !== null && hovered.id === mod.id" />
     <synthesizer-link v-for="link in links" :link="link" />
     <LinkCreator />
     <ExpandersRacks :synthesizer="synthesizer" />
     <module-tooltip v-if="hovered" :mod="hovered" />
-  </synthesizer-events>
+  </draggable-stage>
 </template>
 
 <script lang="ts">

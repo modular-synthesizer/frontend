@@ -1,12 +1,12 @@
 <template>
-  <synthesizer-events :position="position">
+  <draggable-stage :position="position">
     <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
     <module-screws :slots="tool.slots" />
     <template v-for="control in tool.controls">
       <ControlsWrapper :mod="mod" :control="control" />
     </template>
     <rect :width="modWidth" :height="modHeight" fill="transparent" />
-  </synthesizer-events>
+  </draggable-stage>
 </template>
 
 <script lang="ts">import { PropType } from 'vue';

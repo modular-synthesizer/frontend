@@ -3,7 +3,7 @@
     <Title>Synple</Title>
     <Meta name="description" content="A modular synthesizer edition engine" />
   </Head>
-  <VApp @mousemove="triggerDragMove" @mouseup="triggerDragEnd">
+  <VApp @mousemove="triggerDragMove">
     <VLayout>
       <NuxtLayout>
         <NuxtPage />
