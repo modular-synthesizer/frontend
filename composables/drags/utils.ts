@@ -1,3 +1,6 @@
+// This composable holds the logic to generally declare drag'n'drop events handlers. It provides utility functions
+// to tell the application what should be done when moving during or cancelling/finishing a drag.
+
 import { SynthState } from "@/stores/synthesizers/states"
 
 export type DragMoveCallback = (x: number, y: number) => void;
@@ -8,12 +11,17 @@ let dragMoveCallback: DragMoveCallback|null = null;
 
 let dragEndCallback: DragEndCallback|null = null;
 
+/**
+ * Declares callbacks to call at different points during the current drag.
+ * @param $event the mouse event triggering the drag (mouse button down).
+ * @param callbacks the callbacks to call when moving with the mouse click pressed, or when ending the drag. 
+ */
 export function startDragEvent($event: MouseEvent, { end, move }: { end: DragEndCallback | null, move: DragMoveCallback }) {
   useContexts().hide();
   useStates().unblock();
   useStates().setState(SynthState.DRAGGING);
   declareDragMove(move);
-  declareDragEnd(end);
+  if (end !== null) declareDragEnd(end);
   triggerDragMove($event);
 }
 
