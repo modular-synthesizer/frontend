@@ -1,6 +1,6 @@
 <template>
-  <div class="main-menu-wrapper" :style="coordinates" v-if="visible">
-    <div class="background-shadow" />
+  <div class="main-menu-wrapper" :style="coordinates" v-show="visible">
+    <div class="background-shadow"></div>
     <div class="items-wrapper">
       <template v-for="item in items">
         <a @click="triggerAction(item)" v-if="item.action" class="item-wrapper">{{ t(item) }}</a>

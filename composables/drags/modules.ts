@@ -27,7 +27,7 @@ export const useModuleDrag = () => {
     const delta = slot - clickedSlot;
 
     // The new place the module SHOULD go if it's free.
-    const newPlace = clamp(movedSlot + delta, 0, synth.maxSlot - movedSlot);
+    const newPlace = clamp(movedSlot + delta, 0, synth.maxSlot - mod.slots);
 
     if (newPlace === mod.slot && rack === mod.rack) return;
 
