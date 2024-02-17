@@ -1,7 +1,5 @@
-import { defineStore } from "pinia";
-
-export const storage = defineStore('storage', {
-  actions: {
+export function useStorage() {
+  return {
     get(key: string) {
       return (window !== undefined) ? localStorage.getItem(key) : ""
     },
@@ -17,4 +15,4 @@ export const storage = defineStore('storage', {
       }
     }
   }
-})
+}

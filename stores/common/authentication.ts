@@ -1,12 +1,11 @@
 import { defineStore } from "pinia";
 import { api } from "~~/lib/api/Api";
 import ISession from "~~/lib/interfaces/ISession";
-import { storage } from "./storage"
 
 export const useAuthentication = defineStore('authentication', {
   state: (): IAuthenticationState => ({
     session: emptySession() as ISession,
-    storage: storage()
+    storage: useStorage()
   }),
   getters: {
     authenticated(): boolean {
