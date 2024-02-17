@@ -33,6 +33,7 @@ import { mapActions } from 'pinia';
 import Mod from '~~/lib/wrappers/Mod';
 import { useModHover } from '~~/stores/mods/hover';
 import { useModulesLinks } from '~~/stores/mods/links';
+import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 export default {
   name: "module-body",
@@ -55,7 +56,7 @@ export default {
   methods: {
     ...mapActions(useModHover, ['mouseenter', 'mouseleave']),
     dragstart($event: MouseEvent) {
-      useModDrag().dragstart(this.mod, $event);
+      useModuleDrag().start($event, this.mod, useSynthesizerDetails().synthesizer as Synthesizer);
     },
     showMenu(mod: Mod, $event: MouseEvent) {
       useContexts().display($event, {
