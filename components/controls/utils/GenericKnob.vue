@@ -67,7 +67,6 @@ export default {
     }
   },
   computed: {
-    ...mapState(useZoomStore, ['zooming']),
     fill(): string {
       return this.control.editing ? 'red' : 'black';
     },
