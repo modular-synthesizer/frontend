@@ -11,7 +11,6 @@ export default {
   },
   methods: {
     ...mapActions(useLinksList, ['remove']),
-    ...mapActions(useLinkDrag, ['magnetize', 'unmagnetize', 'dragstart']),
   }
 }
 </script>
@@ -24,11 +23,6 @@ export default {
       :end-x="link.to.ax"
       :end-y="link.to.ay"
       @click="remove(link.id)"
-      @start-mousedown="$event => dragstart(link.from, $event)"
-      @start-mouseenter="magnetize(link.from)"
-      @end-mousedown="$event => dragstart(link.to, $event)"
-      @end-mouseenter="magnetize(link.to)"
-      @mouseout="unmagnetize()"
     />
   </g>
 </template>

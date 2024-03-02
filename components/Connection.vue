@@ -1,5 +1,5 @@
 <template>
-  <g :class="{'no-events': useLinkDrag().start !== null}">
+  <g :class="{'no-events': linkCreationState.display}">
     <path
       :d="path"
       :stroke="color"
@@ -38,7 +38,7 @@
 import { PORT_RADIUS } from '~~/lib/utils/constants';
 
 export default {
-  emits: ['click', 'startMousedown', 'endMousedown', 'startMouseenter', 'endMouseenter', 'mouseout'],
+  emits: ['click'],
   props: {
     startX: { type: Number, default: 0 },
     startY: { type: Number, default: 0 },
@@ -76,23 +76,6 @@ export default {
     click(force: boolean = false) {
       if(this.moved && !force) return;
       this.$emit('click');
-    },
-    startMouseDown($event: MouseEvent) {
-      this.moved = false;
-      this.$emit('startMousedown', $event);
-    },
-    endMouseDown($event: MouseEvent) {
-      this.moved = false;
-      this.$emit('endMousedown', $event);
-    },
-    startMouseEnter() {
-      this.$emit('startMouseenter');
-    },
-    endMouseEnter() {
-      this.$emit('endMouseenter');
-    },
-    mouseOut() {
-      this.$emit('mouseout');
     },
   }
 }

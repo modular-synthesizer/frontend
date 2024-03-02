@@ -21,14 +21,14 @@
         :r="radius"
         @mouseenter="magnetize(port)"
         @mouseout="unmagnetize()"
-        @mousedown.left.stop="dragstart"
+        @mousedown.left.stop="startLinkCreation(port, $event)"
       />
     </g>
   </g>
 </template>
 
 <script lang="ts">
-import { mapActions } from 'pinia';
+import { startLinkCreation } from '~~/composables/drags/links';
 import { PORT_RADIUS } from '~~/lib/utils/constants';
 import Mod from '~~/lib/wrappers/Mod';
 import Port from '~~/lib/wrappers/Port';
@@ -38,12 +38,6 @@ export default {
   data: () => ({
     radius: PORT_RADIUS
   }),
-  methods: {
-    ...mapActions(useLinkDrag, ['magnetize', 'unmagnetize']),
-    dragstart($event: MouseEvent) {
-      useLinkDrag().dragstart(this.port, $event);
-    },
-  },
   props: {
     mod: {
       type: Mod, required: true
