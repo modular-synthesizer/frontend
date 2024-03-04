@@ -1,6 +1,5 @@
 <template>
   <draggable-stage :key="synthesizerKey" :position="synthesizer" @move="save(synthesizer)" @zoom="save(synthesizer)" v-if="synthesizer">
-    <synthesizer-rack v-for="rack in synthesizer.created_racks" :rack="rack" />
     <synthesizer-module v-for="mod in modules" :mod="mod" :hovered="hovered !== null && hovered.id === mod.id" />
     <synthesizer-link v-for="link in links" :link="link" />
     <LinkCreator />
