@@ -89,16 +89,5 @@ export default class Mod {
     if (end <= this.slot) return false;
     if (begin >= this.slot + this.slots) return false;
     return true;
-
-    // console.log(mod);
-    // console.log("self : " + begin + " " + end + " and other : " + slot + " " + (slot + slots));
-    // console.log(inRange(begin, slot, slot + slots) || inRange(end, slot, slot + slots))
-    // return inRange(begin, slot, slot + slots) || inRange(end, slot, slot + slots);
   }
-
-  // public crosses(rack: number, slot: number, slots: number): boolean {
-  //   if (rack !== this.rack) return false;
-  //   const [ begin, end] = [this.slot, this.slot + this.slots];
-  //   return !(inRange(begin, slot, slot + slots) | inRange(end, slot, slot + slots));
-  // }
 }

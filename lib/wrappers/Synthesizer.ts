@@ -56,7 +56,6 @@ export default class Synthesizer {
   }
 
   public hasRoom(rack: number, slot: number, modToPlace: Mod): boolean {
-    console.log(modToPlace);
     for (let mod of this.modules) {
       if (mod.crosses(rack, slot, modToPlace)) return false;
     }
