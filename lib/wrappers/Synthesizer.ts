@@ -67,10 +67,6 @@ export default class Synthesizer {
     mod.slot = slot;
   }
 
-  public remove(mod: Mod) {
-    this.created_racks[mod.rack].remove(mod);
-  }
-
   public get maxSlot(): number {
     return this.slots;
   }
