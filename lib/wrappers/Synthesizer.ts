@@ -51,13 +51,19 @@ export default class Synthesizer {
     })
   }
 
-  public hasRoom(rack: number, slot: number, slots: number): boolean {
-    const results = this.created_racks[rack].toString().substring(slot, slot + slots);
-    return results === '0'.repeat(slots);
+  public setModules(mods: Mod[]) {
+    this.modules = mods;
+  }
+
+  public hasRoom(rack: number, slot: number, modToPlace: Mod): boolean {
+    console.log(modToPlace);
+    for (let mod of this.modules) {
+      if (mod.crosses(rack, slot, modToPlace)) return false;
+    }
+    return true;
   }
 
   public place(rack: number, slot: number, mod: Mod) {
-    this.created_racks[rack].add(mod);
     mod.rack = rack;
     mod.slot = slot;
   }

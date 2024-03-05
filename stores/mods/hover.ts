@@ -15,10 +15,12 @@ export const useModHover = defineStore("moduleHover", {
   actions: {
     mouseenter(mod: Mod) {
       useStates().setState(S.HOVERING_MODULE);
+      useModuleDrag().entersOtherModule()
       this.next = mod;
       this.update();
     },
     mouseleave() {
+      useModuleDrag().outsOtherModule()
       this.update();
     },
     update() {

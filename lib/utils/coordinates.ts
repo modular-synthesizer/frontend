@@ -31,8 +31,7 @@ export function relativePosition(ax: number, ay: number): ICoordinates {
 export function getRack(x: number, y: number): number {
   const synth = useSynthesizerDetails().synthesizer;
    const position: ICoordinates = relativePosition(x, y);
-   const rack = Math.floor(position.y/ RACK_HEIGHT);
-   return clamp(rack, 0, synth.racks - 1);
+   return Math.floor(position.y/ RACK_HEIGHT);
 }
 
 /**
@@ -48,6 +47,5 @@ export function getRack(x: number, y: number): number {
 export function getSlot(x: number, y: number): number {
   const synth = useSynthesizerDetails().synthesizer;
   const position: ICoordinates = relativePosition(x, y);
-  const slot = Math.floor(position.x / SLOT_SIZE);
-  return clamp(slot, 0, synth.created_racks[0].slots);
+  return Math.floor(position.x / SLOT_SIZE);
 }

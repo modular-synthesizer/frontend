@@ -43,6 +43,7 @@ export default {
       await loadProcessors(useAudioContext().context as AudioContext);
       await useSynthesizerDetails().fetch(this.id);
       await useModulesList().fetch(this.id);
+      useSynthesizerDetails().synthesizer.setModules(useModulesList().modules);
       await useLinksList().fetch(this.id);
       this.loading = false;
       this.display = false;
