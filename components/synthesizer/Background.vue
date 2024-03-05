@@ -1,22 +1,24 @@
 <template>
-  <g>
-    <text x="20" y="300">origin: [{{ origin().x }};{{ origin().y }}] - {{ position.scale }}</text>
-    <text x="20" y="320">position : [{{ position.x }};{{ position.y }}]</text>
-    <text x="20" y="340">sizes : [{{ SLOT_SIZE }};{{ RACK_HEIGHT }}]</text>
-    <text x="20" y="360">slots/racks : [{{ nbSlots() }};{{ nbRacks() }}]</text>
-  </g>
-  <g :transform="`translate(${origin().x} ${origin().y}) scale(${position.scale} ${position.scale})`">
-    <template v-for="r in nbRacks()">
+  <defs>
+    <pattern id="singleSlot" :width="1/nbSlots()" :height="1/nbRacks()" viewPort="0,0,20,400">
+      <rect :width="SLOT_SIZE" :height="SLOT_SIZE" fill="black" />
+      <rect :width="SLOT_SIZE" :height="SLOT_SIZE" :y="RACK_HEIGHT - SLOT_SIZE" fill="black" />
+      <rect :width="SLOT_SIZE" :height="SLOT_SIZE - 1" fill="silver" />
+      <rect :width="SLOT_SIZE" :height="SLOT_SIZE - 2" y="381" fill="silver" />
+      <circle fill="#444444" cx="10" cy="10" r="5" />
+      <circle fill="black" cx="10" cy="10" r="3" />
+      <circle fill="#444444" cx="10" cy="390" r="5" />
+      <circle fill="black" cx="10" cy="390" r="3" />
+    </pattern>
+  </defs>
+  <g :transform="`scale(${position.scale} ${position.scale})`">
+    <g :transform="`translate(${origin().x} ${origin().y})`">
       <rect
-        v-for="i in nbSlots()"
-        :width="SLOT_SIZE"
-        :height="SLOT_SIZE"
-        fill="white"
-        stroke="black"
-        :x="(i-2) * SLOT_SIZE"
-        :y="(r-2) * RACK_HEIGHT"
+        :height="nbRacks() * RACK_HEIGHT"
+        :width="nbSlots() * SLOT_SIZE"
+        fill="url(#singleSlot)"
       />
-    </template>
+    </g>
   </g>
 </template>
 
@@ -31,22 +33,32 @@ const { position } = defineProps<{position: ScalablePosition}>();
 const dimensions = ref<Dimensions>({ width: 0, height: 0 });
 
 function setScreenSize() {
-  // TODO diviser coords par scale, et utiliser tout en valeurs absolues partout, avec translate/resize du g principal
-  dimensions.value = { width: window.innerWidth / position.scale, height: window.innerHeight / position.scale }
+  dimensions.value = {
+    width: window.innerWidth,
+    height: window.innerHeight
+  }
+}
+
+function screenWidth() {
+  return dimensions.value.width / position.scale
+}
+
+function screenHeight() {
+  return dimensions.value.height / position.scale
 }
 
 function nbRacks() {
-  return Math.ceil(((dimensions.value.height / RACK_HEIGHT) + 1) / position.scale);
+  return Math.ceil((screenHeight() / RACK_HEIGHT) + 1);
 }
 
 function nbSlots() {
-  return Math.ceil(((dimensions.value.width / SLOT_SIZE) + 1) / position.scale);
+  return Math.ceil((screenWidth() / SLOT_SIZE) + 1);
 }
 
 function origin(): Coordinates {
   return {
-    x: position.x % (SLOT_SIZE * position.scale),
-    y: position.y % (RACK_HEIGHT * position.scale),
+    x: (position.x / position.scale) % SLOT_SIZE - SLOT_SIZE,
+    y: (position.y / position.scale) % RACK_HEIGHT - RACK_HEIGHT,
   }
 }
 
