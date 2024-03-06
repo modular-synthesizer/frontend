@@ -21,26 +21,6 @@
               class="mb-3"
             />
             <v-text-field
-              v-model="synthesizer.racks"
-              type="number"
-              variant="outlined"
-              density="comfortable"
-              :label="$t('synthesizers.create.labels.racks')"
-              :min=1
-              :max=4
-              class="mb-3"
-            />
-            <v-text-field
-              v-model="synthesizer.slots"
-              type="number"
-              variant="outlined"
-              density="comfortable"
-              :label="$t('synthesizers.create.labels.slots')"
-              :min=10
-              :max=50
-              class="mb-3"
-            />
-            <v-text-field
               v-model="synthesizer.voices"
               type="number"
               variant="outlined"
@@ -81,12 +61,6 @@ const rules: {[key: string]: Function[]} = {
   name: [
     required("synthesizers.errors.name.required", translator),
     minlength(6, "synthesizers.errors.name.minlength", translator),
-  ],
-  racks: [
-    boundaries(1, 4, "synthesizers.errors.racks.boundaries", translator),
-  ],
-  slots: [
-    boundaries(10, 50, "synthesizers.errors.slots.boundaries", translator),
   ],
   voices: [
     boundaries(1, 32, "synthesizers.errors.voices.boundaries", translator),

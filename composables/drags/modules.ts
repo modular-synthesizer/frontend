@@ -43,7 +43,6 @@ export const useModuleDrag = () => {
     else {
       synth.place(mod.rack || 0, mod.slot || 0, mod);
     }
-    console.log(' ');
   }
   
   function end() {

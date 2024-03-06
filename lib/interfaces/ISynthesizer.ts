@@ -5,8 +5,6 @@ export default interface ISynthesizer {
   creator?: IMembership,
   members: IMembership[],
   name: string;
-  slots: number;
-  racks: number;
   x: number;
   y: number;
   scale: number;

@@ -296,8 +296,6 @@
     "create": {
       "labels": {
         "name": "Nom du synthétiseur",
-        "racks": "Nombre de rails 3U de hauteur",
-        "slots": "Nombre d'emplacements de 1HP de large",
         "voices": "Nombre de voix de polyphonie"
       }
     },
@@ -305,12 +303,6 @@
       "name": {
         "minlength": "Le nom du synthétiseur doit faire {length} caractère(s) ou plus.",
         "required": "Votre synthétiseur doit avoir un nom"
-      },
-      "racks": {
-        "boundaries": "Le synthétiseur peut comporter de {min} à {max} rangs."
-      },
-      "slots": {
-        "boundaries": "Le synthétiseur peut comporter de {min} à {max} emplacements."
       },
       "voices": {
         "boundaries": "Le synthétiseur peut comporter de {min} à {max} voix de polyphonie."

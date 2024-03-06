@@ -10,7 +10,7 @@ import IMembership from "../interfaces/IMembership";
  * as an interface on which all nodes and links are drawn.
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
-export default class Synthesizer {
+export default class Synthesizer implements ISynthesizer {
   // The unique UUID of the synthesizer, identifying it for requests.
   public readonly id: string;
   // The name the user has given to this synthesizer.
@@ -22,18 +22,13 @@ export default class Synthesizer {
   // The scale of zoom the synthesizer is currently displayed at.
   public scale: number;
 
-  public racks: number;
-
-  // The list of racks available in the synthesizer.
-  public created_racks: Rack[] = [];
-
-  public slots: number;
-
   public voices: number = 1;
 
   public modules: Mod[] = [];
 
   public members: IMembership[] = [];
+
+  public creator?: Membership;
 
   public constructor(infos: ISynthesizer) {
     this.id = infos.id;
@@ -41,14 +36,9 @@ export default class Synthesizer {
     this.x = infos.x;
     this.y = infos.y;
     this.scale = infos.scale;
-    this.slots = infos.slots;
-    this.racks = infos.racks;
     this.voices = infos.voices;
     this.members = infos.members;
-
-    times(infos.racks, (index: number) => {
-      this.created_racks.push(new Rack(index, infos.slots));
-    })
+    this.creator = infos.creator;
   }
 
   public setModules(mods: Mod[]) {
@@ -67,21 +57,12 @@ export default class Synthesizer {
     mod.slot = slot;
   }
 
-  public get maxSlot(): number {
-    return this.slots;
-  }
-
   public firstFreeSlot(size: number): number {
     let slot = 0;
     while(!this.hasRoom(0, slot, size, '')) {
       slot += 1
     }
     return slot;
-    // for (let rack of this.created_racks) {
-    //   const results: number = rack.freeSpace(size);
-    //   if (results > -1) return {rack: rack.index, slot: results};
-    // }
-    // return {rack: -1, slot: -1}
   }
 
   public toString(): string {
