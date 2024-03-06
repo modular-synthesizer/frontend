@@ -65,7 +65,7 @@ export default {
       return Math.sqrt((this.startX - this.endX) ** 2 + (this.startY - this.endY) ** 2);
     },
     cx(): number {
-      return Math.abs(this.endX + this.startX) / 2;
+      return (this.endX + this.startX) / 2
     },
     cy(): number {
       const dangle: number = Math.min(this.distance, 125) + 0.5 * Math.abs(this.startY - this.endY)
