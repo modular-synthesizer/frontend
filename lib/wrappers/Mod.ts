@@ -7,6 +7,7 @@ import IPort from "../interfaces/IPort";
 import Channel from "./Channel";
 import IParameter from "../interfaces/IParameter";
 import InnerAudioNode from "./InnerAudioNode";
+import { inRange } from 'lodash';
 
 export default class Mod {
   public readonly id: string;
@@ -78,5 +79,15 @@ export default class Mod {
 
   public watch(name: string, callback: (v: number) => void) {
     this.param(name).watch(callback);
+  }
+
+  public crosses(rack: number, slot: number, slots: number, id: string) {
+    if (this.rack !== rack) return false;
+    if (this.id === id) return false;
+    const [ begin, end ]: [ number, number ] = [ slot, slot + slots ];
+    if (this.rack !== rack) return false;
+    if (end <= this.slot) return false;
+    if (begin >= this.slot + this.slots) return false;
+    return true;
   }
 }
