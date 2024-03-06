@@ -27,3 +27,10 @@ useAuthentication().refresh();
 
 window.addEventListener("beforeunload", () => closeWebsocket());
 </script>
+
+<style>
+html {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+</style>
