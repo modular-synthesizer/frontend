@@ -1,6 +1,6 @@
 <template>
   <g>
-    <text :x="x" :y="y - radius - 4" text-anchor="middle" class="port-label">{{ label }}</text>
+    <text :x="x" :y="y - radius - 4" text-anchor="middle" class="port-label" fill="black">{{ label }}</text>
     <g
       :transform="`translate(${x},${y})`"
     >
@@ -60,7 +60,7 @@ export default {
     },
     fillColor() {
       if (this.port === undefined) return "#CC0000";
-      return this.port.isInput() ? "#555555" : "#000099"
+      return this.port.isInput() ? "#555555" : "#000077"
     }
   }
 }

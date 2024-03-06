@@ -6,12 +6,12 @@
     @click.right.stop.prevent="showMenu(parameter, $event)"
   >
     <text
-      v-if="displayLabel"
       :transform="`translate(${x}, ${y - r - 6})`"
       text-anchor="middle"
       class="label-text"
+      fill="black"
     >
-      {{ label }}
+      {{ label  }}
     </text>
     <circle :cx="x" :cy="y" :r="r" fill="black" />
     <path :d="arcPath(x, y, r - 4, 30, 330)" stroke="#555555" stroke-width="2" fill="transparent"/>

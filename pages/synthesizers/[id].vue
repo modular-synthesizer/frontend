@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper synthesizer-wrapper">
     <synthesizer-initializer v-if="!loaded" :id="id" />
     <synthesizer-stage :id="id" />
     <v-toolbar collapse density="compact" color="deep-purple darken-2">
@@ -61,6 +61,12 @@ export default {
   }
 }
 </script>
+
+<style>
+html {
+  overscroll-behavior: none;
+}
+</style>
 
 <style scoped>
 svg, .wrapper {

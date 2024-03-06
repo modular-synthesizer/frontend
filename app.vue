@@ -30,7 +30,6 @@ window.addEventListener("beforeunload", () => closeWebsocket());
 
 <style>
 html {
-  overflow: hidden;
-  overscroll-behavior: none;
+  overflow: auto;
 }
 </style>
