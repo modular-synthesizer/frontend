@@ -4,6 +4,10 @@
     @mousedown.right.stop="hide"
     @mouseleave="triggerDragEnd($event); emit('move')"
     @mouseup="triggerDragEnd($event); emit('move')"
+
+    @touchstart="dragStart(position, emit, $event.touches[0])"
+    @touchend="triggerDragEnd($event.touches[0]); emit('move')"
+
     @wheel.passive.stop="setScale(position, $event); emit('zoom')"
     @click.right.stop.prevent="displayContext"
   >
