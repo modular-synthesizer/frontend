@@ -16,8 +16,9 @@
       <circle :r="radius - 7" stroke-width="2" stroke="white" />
       <circle :r="radius - 8" />
       <circle
-        v-if="port?.free"
-        opacity="0"
+        class="port-event-handler"
+        fill-opacity="0"
+        fill="white"
         :r="radius"
         @mouseenter="magnetize(port)"
         @mouseout="unmagnetize()"
@@ -67,9 +68,6 @@ export default {
 </script>
 
 <style scoped>
-text {
-  user-select: none;
-}
 .port-label {
   font-size: 9px;
   user-select: none;
