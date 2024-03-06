@@ -21,24 +21,29 @@ export const useModuleDrag = () => {
 
   let blocked: boolean = false;
 
+  let onOtherModule: boolean = false;
+
   function move(x: number, y: number) {
+
+    if (onOtherModule) return;
+
     const rack = getRack(x, y);
-    const slot = clamp(getSlot(x, y), 0, synth.maxSlot);
+    const slot = getSlot(x, y);
     const delta = slot - clickedSlot;
 
     // The new place the module SHOULD go if it's free.
-    const newPlace = clamp(movedSlot + delta, 0, synth.maxSlot - mod.slots);
+    const newPlace = movedSlot + delta;
+
 
     if (newPlace === mod.slot && rack === mod.rack) return;
 
-    synth.remove(mod as Mod);
-
-    if (synth.hasRoom(rack, newPlace, mod.slots || 0)) {
+    if (synth.hasRoom(rack, newPlace, mod.slots, mod.id)) {
       synth.place(rack, newPlace, mod);
     }
     else {
       synth.place(mod.rack || 0, mod.slot || 0, mod);
     }
+    console.log(' ');
   }
   
   function end() {
@@ -68,6 +73,12 @@ export const useModuleDrag = () => {
     },
     unblock() {
       blocked = false;
+    },
+    entersOtherModule() {
+      onOtherModule = true
+    },
+    outsOtherModule() {
+      onOtherModule = false
     }
   }
 }

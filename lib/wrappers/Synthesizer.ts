@@ -51,31 +51,37 @@ export default class Synthesizer {
     })
   }
 
-  public hasRoom(rack: number, slot: number, slots: number): boolean {
-    const results = this.created_racks[rack].toString().substring(slot, slot + slots);
-    return results === '0'.repeat(slots);
+  public setModules(mods: Mod[]) {
+    this.modules = mods;
+  }
+
+  public hasRoom(rack: number, slot: number, slots: number, id: string): boolean {
+    for (let mod of this.modules) {
+      if (mod.crosses(rack, slot, slots, id)) return false;
+    }
+    return true;
   }
 
   public place(rack: number, slot: number, mod: Mod) {
-    this.created_racks[rack].add(mod);
     mod.rack = rack;
     mod.slot = slot;
-  }
-
-  public remove(mod: Mod) {
-    this.created_racks[mod.rack].remove(mod);
   }
 
   public get maxSlot(): number {
     return this.slots;
   }
 
-  public firstFreeSlot(size: number): {rack: number, slot: number} {
-    for (let rack of this.created_racks) {
-      const results: number = rack.freeSpace(size);
-      if (results > -1) return {rack: rack.index, slot: results};
+  public firstFreeSlot(size: number): number {
+    let slot = 0;
+    while(!this.hasRoom(0, slot, size, '')) {
+      slot += 1
     }
-    return {rack: -1, slot: -1}
+    return slot;
+    // for (let rack of this.created_racks) {
+    //   const results: number = rack.freeSpace(size);
+    //   if (results > -1) return {rack: rack.index, slot: results};
+    // }
+    // return {rack: -1, slot: -1}
   }
 
   public toString(): string {

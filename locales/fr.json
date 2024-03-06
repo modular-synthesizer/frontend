@@ -301,6 +301,21 @@
         "voices": "Nombre de voix de polyphonie"
       }
     },
+    "errors": {
+      "name": {
+        "minlength": "Le nom du synthétiseur doit faire {length} caractère(s) ou plus.",
+        "required": "Votre synthétiseur doit avoir un nom"
+      },
+      "racks": {
+        "boundaries": "Le synthétiseur peut comporter de {min} à {max} rangs."
+      },
+      "slots": {
+        "boundaries": "Le synthétiseur peut comporter de {min} à {max} emplacements."
+      },
+      "voices": {
+        "boundaries": "Le synthétiseur peut comporter de {min} à {max} voix de polyphonie."
+      }
+    },
     "list": {
       "others": "Autres synthétiseurs",
       "owned": "Mes synthétiseurs"
