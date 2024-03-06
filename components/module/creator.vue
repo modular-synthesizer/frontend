@@ -81,19 +81,15 @@ export default {
         auth_token: this.session.token,
         tool_id: tool.id,
         synthesizer_id: this.synthesizer.id,
-        ...this.synthesizer.firstFreeSlot(tool.slots),
+        rack: 0,
+        slot: this.synthesizer.firstFreeSlot(tool.slots),
       };
-      if (payload.slot === -1 || payload.rack === -1) {
-        this.close();
-      }
-      else {
-        api.post('/modules', payload).then((response: IModule) => {
-          ModulesFactory.build(response, this.synthesizer).then((mod: Mod) => {
-            this.$emit('selected', mod);
-            this.close();
-          })
+      api.post('/modules', payload).then((response: IModule) => {
+        ModulesFactory.build(response, this.synthesizer).then((mod: Mod) => {
+          this.$emit('selected', mod);
+          this.close();
         })
-      }
+      })
     },
   }
 }

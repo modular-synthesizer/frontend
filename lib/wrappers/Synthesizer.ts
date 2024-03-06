@@ -55,9 +55,9 @@ export default class Synthesizer {
     this.modules = mods;
   }
 
-  public hasRoom(rack: number, slot: number, modToPlace: Mod): boolean {
+  public hasRoom(rack: number, slot: number, slots: number, id: string): boolean {
     for (let mod of this.modules) {
-      if (mod.crosses(rack, slot, modToPlace)) return false;
+      if (mod.crosses(rack, slot, slots, id)) return false;
     }
     return true;
   }
@@ -71,12 +71,17 @@ export default class Synthesizer {
     return this.slots;
   }
 
-  public firstFreeSlot(size: number): {rack: number, slot: number} {
-    for (let rack of this.created_racks) {
-      const results: number = rack.freeSpace(size);
-      if (results > -1) return {rack: rack.index, slot: results};
+  public firstFreeSlot(size: number): number {
+    let slot = 0;
+    while(!this.hasRoom(0, slot, size, '')) {
+      slot += 1
     }
-    return {rack: -1, slot: -1}
+    return slot;
+    // for (let rack of this.created_racks) {
+    //   const results: number = rack.freeSpace(size);
+    //   if (results > -1) return {rack: rack.index, slot: results};
+    // }
+    // return {rack: -1, slot: -1}
   }
 
   public toString(): string {

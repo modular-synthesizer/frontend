@@ -37,7 +37,7 @@ export const useModuleDrag = () => {
 
     if (newPlace === mod.slot && rack === mod.rack) return;
 
-    if (synth.hasRoom(rack, newPlace, mod)) {
+    if (synth.hasRoom(rack, newPlace, mod.slots, mod.id)) {
       synth.place(rack, newPlace, mod);
     }
     else {

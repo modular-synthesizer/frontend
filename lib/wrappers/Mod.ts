@@ -81,7 +81,7 @@ export default class Mod {
     this.param(name).watch(callback);
   }
 
-  public crosses(rack: number, slot: number, { id, slots}: Mod) {
+  public crosses(rack: number, slot: number, slots: number, id: string) {
     if (this.rack !== rack) return false;
     if (this.id === id) return false;
     const [ begin, end ]: [ number, number ] = [ slot, slot + slots ];
