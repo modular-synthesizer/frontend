@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :persistent="true" v-model="display" class="welcome-dialog">
+  <v-dialog :persistent="true" v-model="display" :class="{'welcome-dialog': !mobile}" :fullscreen="mobile">
     <v-card class="mx-auto" max-width="100%">
       <template v-slot:title>{{ $t('init.title') }}</template>
       <v-card-text>
@@ -25,6 +25,8 @@
 </template>
 
 <script lang="ts">
+import { useDisplay } from 'vuetify'
+
 export default {
   props: {
     id: {
@@ -35,6 +37,7 @@ export default {
   data: () => ({
     display: true,
     loading: false,
+    mobile: false,
   }),
   methods: {
     async click() {
@@ -48,6 +51,10 @@ export default {
       this.loading = false;
       this.display = false;
     }
+  },
+  mounted() {
+    this.mobile = useDisplay().mobile.value;
+    console.log(this.mobile)
   }
 }
 </script>
