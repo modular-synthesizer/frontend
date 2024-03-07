@@ -1,14 +1,14 @@
 <template>
   <defs>
     <pattern id="singleSlot" :width="1/nbSlots()" :height="1/nbRacks()" viewPort="0,0,20,400">
-      <rect :width="SLOT_SIZE" :height="SLOT_SIZE" fill="black" />
-      <rect :width="SLOT_SIZE" :height="SLOT_SIZE" :y="RACK_HEIGHT - SLOT_SIZE" fill="black" />
-      <rect :width="SLOT_SIZE" :height="SLOT_SIZE - 1" fill="silver" />
-      <rect :width="SLOT_SIZE" :height="SLOT_SIZE - 2" y="381" fill="silver" />
-      <circle fill="#444444" cx="10" cy="10" r="5" />
-      <circle fill="black" cx="10" cy="10" r="3" />
-      <circle fill="#444444" cx="10" cy="390" r="5" />
-      <circle fill="black" cx="10" cy="390" r="3" />
+      <rect :width="SLOT_SIZE" :height="SLOT_SIZE" class="fill-grey-darken-3" />
+      <rect :width="SLOT_SIZE" :height="SLOT_SIZE" :y="RACK_HEIGHT - SLOT_SIZE" class="fill-grey-darken-3" />
+      <rect :width="SLOT_SIZE" :height="SLOT_SIZE - 1" class="fill-grey-lighten-2" />
+      <rect :width="SLOT_SIZE" :height="SLOT_SIZE - 2" y="381" class="fill-grey-lighten-2" />
+      <circle cx="10" cy="10" r="5" class="fill-grey-darken-1" />
+      <circle cx="10" cy="10" r="3" class="fill-black" />
+      <circle cx="10" cy="390" r="5" class="fill-grey-darken-1" />
+      <circle cx="10" cy="390" r="3" class="fill-black" />
     </pattern>
   </defs>
   <g :transform="`scale(${position.scale} ${position.scale})`">

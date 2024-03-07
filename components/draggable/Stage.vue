@@ -10,6 +10,8 @@
 
     @wheel.passive.stop="setScale(position, $event); emit('zoom')"
     @click.right.stop.prevent="displayContext"
+
+    class="bg-grey-darken-1"
   >
     <synthesizer-background :position="position" />
     <g :transform="`translate(${position.x} ${position.y}) scale(${position.scale} ${position.scale})`" fill="url(#eurorackSlot)">
@@ -30,7 +32,7 @@ const emit = defineEmits(['zoom', 'move']);
 const dimensions = ref<Dimensions>({ width: 0, height: 0 });
 const nbRacks = ref(0);
 const nbSlots = ref(0);
-const origin: Ref<Coordinates> = ref({ x: 0, y: 0 });
+const origin = ref({ x: 0, y: 0 });
 setSize();
 
 function setSize() {

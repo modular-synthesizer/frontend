@@ -14,8 +14,7 @@
     <rect
       :width="width"
       :height="height"
-      stroke="black"
-      fill="#777777"
+      class="stroke-shades-black fill-grey"
       :class="{ hovered }"
       :clip-path="`url(#clip-${mod.id})`"
     />

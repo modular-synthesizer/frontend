@@ -4,7 +4,7 @@
   @each $color_type, $color_value in $color_color {
     @if ($color_type == 'base') {
       .fill-#{$color_name} {
-        stroke: $color_value;
+        fill: $color_value;
       }
       .stroke-#{$color_name} {
         stroke: $color_value;
