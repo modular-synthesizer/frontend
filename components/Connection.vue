@@ -2,32 +2,26 @@
   <g :class="{'no-events': linkCreationState.display}">
     <path
       :d="path"
-      :stroke="color"
       :opacity="entered ? 1 : opacity"
       stroke-width="7"
-      fill="none"
-      :class="{ 'no-events': noEvents, path: true, entered }"
+      :class="[{ 'no-events': noEvents, path: true, entered }, 'stroke-purple-darken-3']"
       @click.prevent="click(true)"
     />
     <circle
-      :class="{ 'no-events': noEvents }"
+      :class="[{ 'no-events': noEvents }, 'stroke-purple-darken-3 fill-shades-white']"
       :cx="startX"
       :cy="startY"
       :r="r"
-      fill="white"
       stroke-width="6"
-      :stroke="color"
       @click="click()"
       @mouseenter.stop
     />
     <circle
-      :class="{ 'no-events': noEvents }"
+      :class="[{ 'no-events': noEvents }, 'stroke-purple-darken-3 fill-shades-white']"
       :cx="endX"
       :cy="endY"
       :r="r"
-      fill="white"
       stroke-width="6"
-      :stroke="color"
       @click.prevent="click()"
       @mouseenter.stop
     />

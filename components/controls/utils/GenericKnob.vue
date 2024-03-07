@@ -14,8 +14,8 @@
     </text>
     <circle :cx="x" :cy="y" :r="r" fill="black" />
     <path :d="arcPath(x, y, r - 4, 30, 330)" stroke-width="2" class="stroke-grey-darken-2"/>
-    <path :d="arcPath(x, y, r - 4, 30, angle)" stroke-width="2" class="stroke-purple" />
-    <circle :cx="lightCoords.x" :cy="lightCoords.y" :r="2" class="fill-purple stroke-purple-lighten-1" />
+    <path :d="arcPath(x, y, r - 4, 30, angle)" stroke-width="2" class="stroke-blue" />
+    <circle :cx="lightCoords.x" :cy="lightCoords.y" :r="2" class="fill-blue stroke-blue-lighten-1" />
     <text :class="['value', {'small': r < 20}, 'fill-grey-lighten-2', 'stroke-grey-lighten-1']" :x="x" :y="y" text-anchor="middle" alignment-baseline="middle">
       <slot :value="value">
         {{ value }}
