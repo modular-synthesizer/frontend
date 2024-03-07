@@ -1,10 +1,11 @@
-import { createVuetify } from 'vuetify'
+import { VuetifyOptions, createVuetify } from 'vuetify'
 import * as labs from 'vuetify/labs/components';
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import '@/styles/main.scss'
 
 export default defineNuxtPlugin(nuxtApp => {
-  const vuetify = createVuetify({
+  const opt: VuetifyOptions = {
     theme: {
       defaultTheme: 'dark',
     },
@@ -13,7 +14,6 @@ export default defineNuxtPlugin(nuxtApp => {
       ...labs
     },
     directives,
-  })
-
-  nuxtApp.vueApp.use(vuetify)
+  }
+  nuxtApp.vueApp.use(createVuetify(opt))
 })
