@@ -1,0 +1,22 @@
+@use 'vuetify/styles/settings/colors';
+
+@each $color_name, $color_color in colors.$colors {
+  @each $color_type, $color_value in $color_color {
+    @if ($color_type == 'base') {
+      .fill-#{$color_name} {
+        stroke: $color_value;
+      }
+      .stroke-#{$color_name} {
+        stroke: $color_value;
+      }
+    }
+    @else if ($color_type != 'shades') {
+      .fill-#{$color_name}-#{$color_type} {
+        fill: $color_value;
+      }
+      .stroke-#{$color_name}-#{$color_type} {
+        stroke: $color_value;
+      }
+    }
+  }
+}
