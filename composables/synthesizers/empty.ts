@@ -7,6 +7,6 @@ import ISynthesizer from "~~/lib/interfaces/ISynthesizer";
  */
 export function createEmptySynthesizer(): ISynthesizer {
   return {
-    id: "", name: "", slots: 40, racks: 1, x: 0, y: 0, scale: 1, voices: 1
+    id: "", name: "", x: 0, y: 0, scale: 1, voices: 1, members: []
   }
 }

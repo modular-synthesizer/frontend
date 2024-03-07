@@ -1,6 +1,4 @@
 import ISynthesizer from "../interfaces/ISynthesizer";
-import { times } from "lodash";
-import Rack from "./Rack";
 import Mod from "./Mod";
 import ICoordinates from "../interfaces/ICoordinates";
 import IMembership from "../interfaces/IMembership";
