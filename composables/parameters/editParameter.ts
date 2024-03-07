@@ -14,7 +14,7 @@ interface ParameterSettings {
   mode: Strategies;
 }
 
-export function startParameterSetting({ $event, parameter, control, mode }: ParameterSettings) {
+export function startParameterSetting({ $event, parameter, control, mode }: ParameterSettings, callback: () => void) {
   if (useSynthesizerDetails().synthesizer.isReadonly(useAuthentication().storedSession.username)) return;
   selectParameter({ parameter, control, x: $event.clientX, y: $event.clientY });
   strategy.value = mode;
@@ -22,7 +22,10 @@ export function startParameterSetting({ $event, parameter, control, mode }: Para
 
   startDragEvent($event, {
     move: moveParameterSetting,
-    end: endParameterSetting
+    end: () => {
+      endParameterSetting();
+      callback();
+    },
   });
 }
 

@@ -1,33 +1,32 @@
 <template>
   <g
     v-if="parameter !== undefined"
-    @mousedown.left.stop="!control.editing && startParameterSetting({ control, $event, parameter, mode: Strategies.DECORRELATED })"
+    @mousedown.left.stop="mouseDown"
     @wheel.passive="wheelEvent"
     @click.right.stop.prevent="showMenu(parameter, $event)"
   >
     <text
       :transform="`translate(${x}, ${y - r - 6})`"
       text-anchor="middle"
-      class="label-text"
-      fill="black"
+      class="label-text fill-shade-black"
     >
       {{ label  }}
     </text>
     <circle :cx="x" :cy="y" :r="r" fill="black" />
-    <path :d="arcPath(x, y, r - 4, 30, 330)" stroke="#555555" stroke-width="2" fill="transparent"/>
-    <path :d="arcPath(x, y, r - 4, 30, angle)" :stroke="lightColor" stroke-width="2" fill="transparent"/>
-    <circle :cx="lightCoords.x" :cy="lightCoords.y" :r="2" :fill="lightColor" />
-    <text :class="['value', {'small': r < 20}]" :x="x" :y="y" text-anchor="middle" alignment-baseline="middle">
+    <path :d="arcPath(x, y, r - 4, 30, 330)" stroke-width="2" class="stroke-grey-darken-2"/>
+    <path :d="arcPath(x, y, r - 4, 30, angle)" stroke-width="2" class="stroke-purple" />
+    <circle :cx="lightCoords.x" :cy="lightCoords.y" :r="2" class="fill-purple stroke-purple-lighten-1" />
+    <text :class="['value', {'small': r < 20}, 'fill-grey-lighten-2', 'stroke-grey-lighten-1']" :x="x" :y="y" text-anchor="middle" alignment-baseline="middle">
       <slot :value="value">
         {{ value }}
       </slot>
     </text>
   </g>
-  <circle :cx="x" :cy="y" :r="r" fill="white" v-if="control.editing" fill-opacity="0.5" stroke="#BB0000" stroke-width="3" />
+  <circle :cx="x" :cy="y" :r="r + 1" v-if="control.editing" class="stroke-grey-lighten-2" stroke-width="2" />
+  <circle :cx="x" :cy="y" :r="r + 3" v-if="control.editing" class="stroke-grey-lighten-1" stroke-width="2" />
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
 import Parameter from '~~/lib/wrappers/Parameter';
 import { round } from "lodash"
 import ICoordinates from '~~/lib/interfaces/ICoordinates';
@@ -119,6 +118,17 @@ export default {
       $event.stopPropagation();
       this.wheeled($event)
     },
+    mouseDown($event: MouseEvent) {
+      if (this.control.editing) return;
+      this.control.editing = true;
+      startParameterSetting({
+        control: this.control,
+        $event,
+        parameter: this.parameter,
+        mode: Strategies.DECORRELATED
+      },
+      () => (this.control.editing = false));
+    }
   },
 }
 </script>
@@ -128,8 +138,6 @@ export default {
     font-size: 12px;
     user-select: none;
     paint-order: stroke;
-    stroke: #A9A9A9;
-    fill: #B5B5B5;
     stroke-width: 1px;
     stroke-linecap: butt;
     stroke-linejoin: miter;

@@ -1,18 +1,18 @@
 <template>
   <g>
-    <text :x="x" :y="y - radius - 4" text-anchor="middle" class="port-label" fill="black">{{ label }}</text>
+    <text :x="x" :y="y - radius - 4" text-anchor="middle" class="port-label fill-shade-black">{{ label }}</text>
     <g
       :transform="`translate(${x},${y})`"
     >
       <circle
         :r="radius"
-        :fill="fillColor"
+        :class="colorClass"
         stroke-width="2"
         :stroke="strokeColor"
       />
       <circle :r="radius - 4" stroke-width="2" stroke="white" />
-      <line :x1="3 - radius" :x2="radius - 3" :stroke="fillColor" stroke-width="2" />
-      <circle :r="radius - 5" :stroke="fillColor" />
+      <line :x1="3 - radius" :x2="radius - 3" :class="strokeClass" stroke-width="2" />
+      <circle :r="radius - 5" :class="colorClass" />
       <circle :r="radius - 7" stroke-width="2" stroke="white" />
       <circle :r="radius - 8" />
       <circle
@@ -59,9 +59,13 @@ export default {
     port() {
       return this.mod.ports.find(p => p.name === this.target) as Port;
     },
-    fillColor() {
-      if (this.port === undefined) return "#CC0000";
-      return this.port.isInput() ? "#555555" : "#000077"
+    colorClass() {
+      const input: boolean = this.port.isInput();
+      return { 'fill-grey-darken-3': input, 'fill-indigo-darken-3': !input };
+    },
+    strokeClass() {
+      const input: boolean = this.port.isInput();
+      return { 'stroke-grey-darken-3': input, 'stroke-indigo-darken-3': !input };
     }
   }
 }
