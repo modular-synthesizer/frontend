@@ -7,7 +7,6 @@ import IPort from "../interfaces/IPort";
 import Channel from "./Channel";
 import IParameter from "../interfaces/IParameter";
 import InnerAudioNode from "./InnerAudioNode";
-import { inRange } from 'lodash';
 
 export default class Mod {
   public readonly id: string;

@@ -35,7 +35,7 @@ export const useMidiLearn = defineStore('midiLearn', {
         parameter.setValue(flooredValue);
         
         this.timeout = window.setTimeout(() => {
-          useParameters().saveParameter(parameter);
+          saveParameter(parameter);
           sendParamEvent('endEdit', parameter);
           this.timeout = -1;
         }, 250);

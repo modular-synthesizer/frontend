@@ -54,7 +54,6 @@ export default {
   },
   mounted() {
     this.mobile = useDisplay().mobile.value;
-    console.log(this.mobile)
   }
 }
 </script>
