@@ -3,8 +3,9 @@ import Mod from "./Mod";
 import { clamp } from "lodash"
 import Channel from "./Channel";
 import { IControl } from "../interfaces/IControl";
+import { WatcherCallback } from "../types/Parameters";
 
-export default class Parameter {
+export default class Parameter implements IParameter {
   
   public readonly id: string;
   public readonly name: string;
@@ -34,7 +35,7 @@ export default class Parameter {
     this.setValue(this.value);
   }
 
-  public watch(callback: (val: number) => void) {
+  public watch(callback: WatcherCallback) {
     this.callbacks.push(callback);
   }
 
@@ -43,7 +44,7 @@ export default class Parameter {
     this.targets.forEach((target: string) => {
       this.mod.channels.forEach((channel: Channel) => {
         const node: AudioNode = channel.getNode(target)!.node;
-        const param: AudioParam|undefined = this.param(node);
+        const param: AudioParam|undefined = this.audioParam(node);
         if (param !== undefined) param.setValueAtTime(this.value, this.ctx.currentTime);
       })
     });
@@ -52,7 +53,7 @@ export default class Parameter {
     })
   }
 
-  public param(node: AudioNode): AudioParam|undefined {
+  public audioParam(node: AudioNode): AudioParam|undefined {
     if ('parameters' in node) {
       return (node as AudioWorkletNode).parameters.get(this.field);
     }
@@ -61,8 +62,8 @@ export default class Parameter {
     }
   }
 
-  public moveValue(diff: number) {
-    this.setValue(this.value + diff);
+  public moveValue(value: number): void {
+    this.setValue(this.value + value);
   }
 
   public get controls(): IControl[] {
