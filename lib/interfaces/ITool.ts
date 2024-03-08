@@ -1,9 +1,8 @@
 import ICategory from "./ICategory";
 import { IControl } from "./IControl";
+import { Identifiable } from "./common/Identifiable";
 
-export default interface ITool {
-  id: string;
-  name: string;
+export default interface ITool extends Identifiable {
   category: ICategory;
   categoryId: string;
   nodes: InnerNode[];
@@ -15,8 +14,7 @@ export default interface ITool {
   experimental: boolean;
 }
 
-export interface IToolParameter {
-  id: string;
+export interface IToolParameter extends Identifiable {
   targets: string[];
   name: string;
   descriptorId?: string,
@@ -28,8 +26,7 @@ export interface IToolParameter {
   precision: number
 }
 
-export interface InnerNode {
-  id?: string;
+export interface InnerNode extends Identifiable {
   name: string;
   generator: string;
   x: number;
@@ -38,14 +35,12 @@ export interface InnerNode {
   outputs: number;
 }
 
-export interface InnerLink {
-  id?: string;
+export interface InnerLink extends Identifiable {
   from: { node: string, index: number };
   to: { node: string, index: number };
 }
 
-export interface IToolPort {
-  id: string;
+export interface IToolPort extends Identifiable {
   name: string;
   target: string;
   index: number;

@@ -1,13 +1,12 @@
 import { WatcherCallback } from "../types/Parameters";
 import { IControl } from "./IControl";
+import { Identifiable } from "./common/Identifiable";
 
 /**
  * This represents a parameter accessible on a module, that can be modified by a control.
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
-export default interface IParameter {
-  // The unique identifier as an object UUID of the parameter in the database.
-  id: string;
+export default interface IParameter extends Identifiable {
   // The name of the parameter, used to target it with controls.
   name: string;
   // The current value of the parameter as a number bounded between min and max.
