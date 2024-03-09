@@ -8,7 +8,7 @@
     <text
       :transform="`translate(${x}, ${y - r - 6})`"
       text-anchor="middle"
-      class="label-text fill-shade-black"
+      class="label-text fill-shades-black stroke-grey-darken-1"
     >
       {{ label  }}
     </text>
@@ -151,5 +151,6 @@ export default {
 .label-text {
   font-size: 10px;
   user-select: none;
+  paint-order: stroke;
 }
 </style>

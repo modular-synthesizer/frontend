@@ -1,6 +1,6 @@
 <template>
   <g>
-    <text :x="x" :y="y - radius - 4" text-anchor="middle" class="port-label fill-shade-black">{{ label }}</text>
+    <text :x="x" :y="y - radius - 4" text-anchor="middle" class="port-label fill-shades-black stroke-grey-darken-1" font-size="10px">{{ label }}</text>
     <g
       :transform="`translate(${x},${y})`"
     >
@@ -75,5 +75,6 @@ export default {
 .port-label {
   font-size: 9px;
   user-select: none;
+  paint-order: stroke;
 }
 </style>
