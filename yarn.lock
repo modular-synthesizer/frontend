@@ -5927,6 +5927,11 @@ vue3-country-flag-icon@^0.1.2:
     node-sass "^6.0.0"
     vue "^3.0.0-beta.1"
 
+vue3-touch-events@^4.1.8:
+  version "4.1.8"
+  resolved "https://registry.yarnpkg.com/vue3-touch-events/-/vue3-touch-events-4.1.8.tgz#0cc7389a9fc2ecc6b34095b27d7174d5d3edc300"
+  integrity sha512-8Zs0mj5k/7R579JHsc5w1V2IqAkNlz2gJs18bRV4T5WyCMfd5sBf2ESJ2xR8z+n7ypgK8fQO5MmDOPal0Evf3Q==
+
 vue@^3.0.0-beta.1, vue@^3.2.25, vue@^3.2.47:
   version "3.4.21"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.4.21.tgz#69ec30e267d358ee3a0ce16612ba89e00aaeb731"
