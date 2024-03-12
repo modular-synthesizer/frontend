@@ -1,4 +1,5 @@
 import { api } from "../api/Api";
+import { Identifiable, equals } from "../interfaces/common/Identifiable";
 
 // Default values for the options, completing the ones provided when creating the list.
 const defaults = {
@@ -16,7 +17,7 @@ const defaults = {
  * - if items have been passed in the options to initialize the list it appends them
  * @param options an option object used by the items list itself.
  */
-export async function buildList<T extends { id?: string; }>(options = {}): Promise<ItemsList<T>> {
+export async function buildList<T extends Identifiable>(options = {}): Promise<ItemsList<T>> {
   const list: ItemsList<T> = new ItemsList<T>(options);
   if (list.options.autofetch) await list.refresh();
   list.options.items.forEach((i: T) => list.append(i));
@@ -28,7 +29,7 @@ export async function buildList<T extends { id?: string; }>(options = {}): Promi
  * Describes a list of item and provides methods to add/remove/edit them with or without calls to the API.
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
-export default class ItemsList<T extends { id?: string }> {
+export default class ItemsList<T extends Identifiable> {
   protected items: T[] = [];
 
   public options: { [key: string]: any };
@@ -48,11 +49,11 @@ export default class ItemsList<T extends { id?: string }> {
   }
 
   public find(id: string): T {
-    return this.items.find((i: T) => i.id === id) as T;
+    return this.items.find((i: T) => equals(i, { id })) as T;
   }
 
   public findIndex(id: string): number {
-    return this.items.findIndex((i: T) => i.id === id);
+    return this.items.findIndex((i: T) => equals(i, { id }));
   }
 
   public update(id: string, payload: { [key: string]: any }): void {

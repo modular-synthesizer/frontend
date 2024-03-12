@@ -16,6 +16,7 @@
     "@growthbunker/vueflags": "^0.1.14",
     "@nuxtjs/robots": "^3.0.0",
     "@types/lodash": "^4.14.191",
+    "@types/uuid": "^9.0.8",
     "@vuelidate/core": "^2.0.0",
     "@vuelidate/validators": "^2.0.0",
     "axios": "^1.1.2",

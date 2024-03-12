@@ -1,6 +1,6 @@
 <template>
   <draggable-stage :key="synthesizerKey" :position="synthesizer" @move="save(synthesizer)" @zoom="save(synthesizer)" v-if="synthesizer">
-    <synthesizer-module v-for="mod in modules" :mod="mod" :hovered="hovered !== null && hovered.id === mod.id" />
+    <synthesizer-module v-for="mod in modules" :mod="mod" :hovered="hovered !== null && equals(hovered, mod)" />
     <synthesizer-link v-for="link in links" :link="link" />
     <LinkCreator />
     <module-tooltip v-if="hovered" :mod="hovered" />
@@ -12,6 +12,7 @@ import { mapState, mapActions } from 'pinia';
 import { v4 as uuid } from 'uuid';
 import { api } from '~~/lib/api/Api';
 import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
+import { equals } from '~~/lib/interfaces/common/Identifiable';
 import { useModHover } from '~~/stores/mods/hover';
 import { useStates } from '~~/stores/synthesizers/states';
 
