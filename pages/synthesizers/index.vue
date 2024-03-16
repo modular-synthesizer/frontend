@@ -26,7 +26,7 @@
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 // This middleware is declared because this page does not use layout.
-definePageMeta({ middleware: ['check-authentication', 'websockets'] });
+definePageMeta({ middleware: ['websockets'] });
 
 const synthesizers = ref(await useLists().synthesizers);
 

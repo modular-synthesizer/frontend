@@ -20,7 +20,7 @@ import Mod from '~~/lib/wrappers/Mod';
 definePageMeta({
   layout: false,
   menu: false,
-  middleware: ['check-authentication', 'websockets'],
+  middleware: ['websockets'],
 })
 export default {
   data() {

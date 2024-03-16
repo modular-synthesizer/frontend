@@ -3,33 +3,25 @@
     <Title>Synple</Title>
     <Meta name="description" content="A modular synthesizer edition engine" />
   </Head>
-  <VApp
+  <v-app
     @mousemove="triggerDragMove"
-    @touchmove="($event) => triggerDragMove($event.touches[0])"
+    @touchmove="($event: TouchEvent) => triggerDragMove($event.touches[0])"
   >
-    <VLayout>
+    <v-layout>
       <NuxtLayout>
         <NuxtPage />
         <context-handler />
       </NuxtLayout>
-    </VLayout>
-  </VApp>
+    </v-layout>
+  </v-app>
 </template>
 
 <script lang="ts" setup>
-import { VLayout, VApp } from 'vuetify/components'
-
-useHead({
-  htmlAttrs: { lang: 'fr' }
-});
-
-useAuthentication().refresh();
+useHead({ htmlAttrs: { lang: 'fr' } });
 
 window.addEventListener("beforeunload", () => closeWebsocket());
 </script>
 
 <style>
-html {
-  overflow: auto;
-}
+html { overflow: auto; }
 </style>
