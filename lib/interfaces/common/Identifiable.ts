@@ -6,3 +6,7 @@ export interface Identifiable {
   // UUIDs in the application are most often ObjectIds from the MongoDB database.
   id: string;
 }
+
+export function equals(first: Identifiable, second: Identifiable): boolean {
+  return first.id !== undefined && second.id !== undefined && first.id === second.id;
+}

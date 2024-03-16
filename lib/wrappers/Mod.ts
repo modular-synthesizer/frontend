@@ -7,6 +7,7 @@ import IPort from "../interfaces/IPort";
 import Channel from "./Channel";
 import IParameter from "../interfaces/IParameter";
 import InnerAudioNode from "./InnerAudioNode";
+import { equals } from "../interfaces/common/Identifiable";
 
 export default class Mod {
   public readonly id: string;
@@ -82,7 +83,7 @@ export default class Mod {
 
   public crosses(rack: number, slot: number, slots: number, id: string) {
     if (this.rack !== rack) return false;
-    if (this.id === id) return false;
+    if (equals(this, { id })) return false;
     const [ begin, end ]: [ number, number ] = [ slot, slot + slots ];
     if (this.rack !== rack) return false;
     if (end <= this.slot) return false;

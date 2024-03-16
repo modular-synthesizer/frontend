@@ -49,6 +49,7 @@
 <script lang="ts">
 import { PropType } from "vue";
 import ITool from "~~/lib/interfaces/ITool"
+import { equals } from "~~/lib/interfaces/common/Identifiable";
 
 export default {
   props: {
@@ -63,7 +64,7 @@ export default {
   }),
   computed: {
     tool() { return this.modelValue },
-    creationMode() { return this.tool.id === "" }
+    creationMode() { return equals(this.tool, { id: '' }) }
   },
   methods: {
     saveTool() {
