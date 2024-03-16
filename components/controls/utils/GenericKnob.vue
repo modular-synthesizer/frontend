@@ -15,12 +15,7 @@
       {{ label  }}
     </text>
     <circle :cx="x" :cy="y" :r="r" fill="black" />
-    <!-- <path :d="arcPath(x, y, r - 4, 30, 330)" stroke-width="2" class="stroke-grey-darken-2"/>
-    <path :d="arcPath(x, y, r - 4, 30, angle)" stroke-width="2" class="stroke-blue" />
-    <circle :cx="lightCoords.x" :cy="lightCoords.y" :r="2" class="fill-blue stroke-blue-lighten-1  " /> -->
-
     <arc-circle :x="x" :y="y":r="r - 4" :ir="2" :min="parameter.minimum" :max="parameter.maximum" :value="value" />
-
     <text :class="['value', {'small': r < 20}, 'fill-grey-lighten-2', 'stroke-grey-lighten-1']" :x="x" :y="y" text-anchor="middle" alignment-baseline="middle">
       <slot :value="value">
         {{ value }}
@@ -34,11 +29,11 @@
 <script lang="ts">
 import Parameter from '~~/lib/wrappers/Parameter';
 import { round } from "lodash"
-import ICoordinates from '~~/lib/interfaces/ICoordinates';
 import { useKeyboard } from '~~/stores/common/keyboard';
 import { IControl } from '~~/lib/interfaces/IControl';
 import sendParamEvent from '~~/lib/commands/events/sendParamEvent';
 import { useMidiLearn } from '~~/stores/parameters/midi_learn';
+import { useDisplay } from 'vuetify/lib/framework.mjs';
 
 export default {
   props: {
@@ -67,7 +62,8 @@ export default {
   },
   data: function() {
     return {
-      timeout: -1
+      timeout: -1,
+      mobile: false,
     }
   },
   computed: {
@@ -77,19 +73,8 @@ export default {
     value(): Number {
         return round(this.parameter.value, this.parameter.precision);
     },
-    angle(): number {
-      const { maximum, minimum, value } = this.parameter;
-      if (maximum === undefined || minimum === undefined) return 30;
-      return 30 + (300 / maximum * value)
-    },
     displayLabel(): boolean {
       return this.label !== ""
-    },
-    lightCoords(): ICoordinates {
-      return polarToCartesian(this.x, this.y, this.r - 4, this.angle)
-    },
-    lightColor(): string {
-      return '#2196F3'
     },
   },
   methods: {
@@ -135,9 +120,15 @@ export default {
       () => (this.control.editing = false));
     },
     startModalEdition($event: TouchEvent) {
+      console.log(this.mobile);
+      if (!this.mobile) return;
       useEditionModal().showParameter(this.parameter);
     }
   },
+  mounted() {
+    this.mobile = useDisplay().mobile.value;
+    console.log(this.mobile);
+  }
 }
 </script>
 

@@ -2,17 +2,25 @@
   <v-dialog v-model="display" fullscreen>
     <v-card>
       <v-card-text class="text-center pt-8">
-        <svg width="300" height="300">
-          <circle cx="150" cy="150" r="100" fill="white" />
-          <path :d="arcPath(150, 150, 110, 30, 330)" stroke-width="2" class="stroke-grey-darken-2 fill-shades-transparent"/>
-          <g transform="translate(150 150)">
-            <g :transform="`rotate(${angle()})`">
-              <circle cx="0" cy="80" r="7" fill="blue" />
-            </g>
-          </g>
-          <arc-circle :x="150" :y="150":r="110" :ir="5" :min="parameter?.minimum" :max="parameter?.maximum" :value="parameter?.value" />
+        <svg width="300" height="300" ref="container">
+          <circle cx="150" cy="150" r="100" class="fill-shades-black stroke-grey-darken-3" />
+          <arc-circle :x="150" :y="150":r="85" :ir="5" :min="parameter?.minimum" :max="parameter?.maximum" :value="parameter?.value" />
+          <text x="150" y="150" class="stroke-shades-white" text-anchor="middle" alignment-baseline="middle">
+            {{ roundedValue }}
+          </text>
         </svg>
+        <v-text-field
+          v-if="parameter"
+          :min="parameter?.minimum"
+          :max="parameter?.maximum"
+          type="number"
+          v-model="parameter.value"
+          label="Valeur"
+        />
       </v-card-text>
+      <v-card-actions>
+        <v-btn @click="display = false">Sauvegarder et fermer</v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -24,14 +32,12 @@ const modal = useEditionModal();
 let display = ref(false);
 let parameter = ref<Parameter>();
 
-function angle(): number {
-  const max: number = parameter.value?.maximum || 1;
-  const min: number = parameter.value?.minimum || 0;
-  const val: number = parameter.value?.value || 1;
+const container = ref<SVGSVGElement>();
 
-  const ratio: number = val / (max - min);
-  return 30 + (300 * ratio);
-}
+const roundedValue = computed(() => {
+  const power: number = 10 ** (parameter.value?.precision || 2)
+  return Math.round((parameter.value?.value || 1) * 100) / 100
+});
 
 modal.whenOpened((param: Parameter) => {
   display.value = true;

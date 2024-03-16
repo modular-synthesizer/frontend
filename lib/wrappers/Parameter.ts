@@ -9,7 +9,7 @@ export default class Parameter implements IParameter {
   
   public readonly id: string;
   public readonly name: string;
-  public value: number;
+  public _value: number;
   public readonly minimum: number;
   public readonly maximum: number;
   public readonly step: number;
@@ -23,7 +23,7 @@ export default class Parameter implements IParameter {
   constructor(details: IParameter, mod: Mod) {
     this.id = details.id;
     this.name = details.name;
-    this.value = details.value;
+    this._value = details.value;
     this.minimum = details.minimum;
     this.maximum = details.maximum;
     this.step = details.step;
@@ -39,8 +39,17 @@ export default class Parameter implements IParameter {
     this.callbacks.push(callback);
   }
 
+  public get value(): number {
+    return this._value;
+  }
+
+  public set value(v:number)  {
+    console.log("passage dans le setter");
+    this.setValue(v);
+  }
+
   public setValue(val: number) {
-    this.value = clamp(val, this.minimum, this.maximum);
+    this._value = clamp(val, this.minimum, this.maximum);
     this.targets.forEach((target: string) => {
       this.mod.channels.forEach((channel: Channel) => {
         const node: AudioNode = channel.getNode(target)!.node;
