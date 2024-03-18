@@ -29,7 +29,7 @@ import Synthesizer from '~~/lib/wrappers/Synthesizer';
 // This middleware is declared because this page does not use layout.
 definePageMeta({ middleware: ['websockets'] });
 
-const synthesizers: Ref<ItemsList<Synthesizer>> = ref(await useLists().synthesizers);
+const synthesizers = ref(await useLists().synthesizers);
 
 function isOwned(s: Synthesizer) {
   return s.creator?.username === useAuthentication().session.username
