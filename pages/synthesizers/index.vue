@@ -31,8 +31,6 @@ definePageMeta({ middleware: ['websockets'] });
 
 const synthesizers: Ref<ItemsList<Synthesizer>> = ref(await useLists().synthesizers);
 
-await synthesizers.value.refresh()
-
 function isOwned(s: Synthesizer) {
   return s.creator?.username === useAuthentication().session.username
 }
