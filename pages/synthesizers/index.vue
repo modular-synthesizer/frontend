@@ -23,12 +23,15 @@
 </template>
 
 <script lang="ts" setup>
+import ItemsList from '~~/lib/utils/ItemsList';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 // This middleware is declared because this page does not use layout.
 definePageMeta({ middleware: ['websockets'] });
 
-const synthesizers = ref(await useLists().synthesizers);
+const synthesizers: Ref<ItemsList<Synthesizer>> = ref(await useLists().synthesizers);
+
+await synthesizers.value.refresh()
 
 function isOwned(s: Synthesizer) {
   return s.creator?.username === useAuthentication().session.username
@@ -36,5 +39,4 @@ function isOwned(s: Synthesizer) {
 
 const owned = computed(() => synthesizers.value.filter(isOwned))
 const others = computed(() => synthesizers.value.exclude(isOwned))
-const synthesizer = ref(createEmptySynthesizer());
 </script>

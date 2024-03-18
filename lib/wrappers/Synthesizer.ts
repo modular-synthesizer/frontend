@@ -26,8 +26,6 @@ export default class Synthesizer implements ISynthesizer {
 
   public members: IMembership[] = [];
 
-  public creator?: Membership;
-
   public constructor(infos: ISynthesizer) {
     this.id = infos.id;
     this.name = infos.name;
@@ -36,7 +34,6 @@ export default class Synthesizer implements ISynthesizer {
     this.scale = infos.scale;
     this.voices = infos.voices;
     this.members = infos.members;
-    this.creator = infos.creator;
   }
 
   public setModules(mods: Mod[]) {
