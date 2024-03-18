@@ -27,7 +27,6 @@ export function useLists() {
 
 export function useMemberships(s: ISynthesizer): Promise<any> {
   return buildList<IMembership>({
-    autofetch: false,
     items: (new Synthesizer(s)).members,
     url: '/memberships',
   });
