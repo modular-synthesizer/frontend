@@ -47,20 +47,20 @@ export default class ItemsList<T extends Identifiable> {
 
   public append(item: T): void {
     const instanced: any = this.options.useClass ? new this.options.useClass(item) : item
-    this.all().push(instanced);
+    this.items.push(instanced);
   }
 
   public prepend(item: T): void {
     const instanced: any = this.options.useClass ? new this.options.useClass(item) : item
-    this.items = [instanced, ...this.all()];
+    this.items = [instanced, ...this.items];
   }
 
   public find(id: string): T {
-    return this.all().find((i: T) => equals(i, { id })) as T;
+    return this.items.find((i: T) => equals(i, { id })) as T;
   }
 
   public findIndex(id: string): number {
-    return this.all().findIndex((i: T) => equals(i, { id }));
+    return this.items.findIndex((i: T) => equals(i, { id }));
   }
 
   public update(id: string, payload: { [key: string]: any }): void {
@@ -71,7 +71,7 @@ export default class ItemsList<T extends Identifiable> {
   }
 
   public remove(id: string): void {
-    this.all().splice(this.findIndex(id), 1);
+    this.items.splice(this.findIndex(id), 1);
   }
 
   public async create(payload: T): Promise<T> {
@@ -92,23 +92,23 @@ export default class ItemsList<T extends Identifiable> {
 
   public async fetch(criterias: { [key: string]: any } = {}): Promise<void> {
     const items: T[] = await this.options.api.auth_get(this.options.url, criterias);
-    items?.forEach((item: T) => this.append(item));
+    items?.forEach((item: T) => this.items.push(item));
   }
 
-  public all() {
+  public async all() {
     if (!this.fetchedOnce) {
-      this.refresh();
+      await this.refresh();
       this.fetchedOnce = true;
     }
     return this.items;
   }
 
-  public filter(comparator: (item: T) => boolean) {
-    return this.all().filter(comparator)
+  public async filter(comparator: (item: T) => boolean) {
+    return (await this.all()).filter(comparator)
   }
 
-  public exclude(comparator: (item: T) => boolean) {
-    return this.all().filter((item: T) => !comparator(item));
+  public async exclude(comparator: (item: T) => boolean) {
+    return (await this.all()).filter((item: T) => !comparator(item));
   }
 
   public get populated(): boolean {
@@ -116,6 +116,6 @@ export default class ItemsList<T extends Identifiable> {
   }
 
   public get empty(): boolean {
-    return this.all().length <= 0;
+    return this.items.length <= 0;
   }
 }
