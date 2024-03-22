@@ -36,14 +36,14 @@ definePageMeta({ middleware: ['websockets'] });
 const username: string = useAuthentication().session.username;
 
 function instanciate(items: ISynthesizer[]): Synthesizer[] {
-  return items.map((s: ISynthesizer) => new Synthesizer(s));
+  return items.map(s => new Synthesizer(s));
 }
 
 function owned(items: ISynthesizer[]): Synthesizer[] {
-    return instanciate(items).filter((s: ISynthesizer) => s.creator?.username === username);
+    return instanciate(items).filter(s => s.isCreator(username));
 }
 
 function others(items: ISynthesizer[]): Synthesizer[] {
-    return instanciate(items).filter((s: ISynthesizer) => s.creator?.username !== username);
+    return instanciate(items).filter(s => !s.isCreator(username));
 }
 </script>

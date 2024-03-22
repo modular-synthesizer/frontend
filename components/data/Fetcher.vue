@@ -5,6 +5,6 @@
 <script setup lang="ts">
 import { api } from '~~/lib/api/Api';
 
-const { url } = defineProps<{ url: string}>();
+const { url } = defineProps<{ url: string }>();
 const items: any[] = await api.auth_get(url);
 </script>
