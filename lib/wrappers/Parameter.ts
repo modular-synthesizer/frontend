@@ -44,9 +44,6 @@ export default class Parameter implements IParameter {
     this.targets.forEach((target: string) => {
       this.mod.channels.forEach((channel: Channel) => {
         const node: AudioNode = channel.getNode(target)!.node;
-        if (node === undefined) {
-          console.log(target);
-        }
         const param: AudioParam|undefined = this.audioParam(node);
         if (param !== undefined) param.setValueAtTime(this.value, this.ctx.currentTime);
       })
