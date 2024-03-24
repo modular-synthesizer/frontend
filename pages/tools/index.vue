@@ -28,34 +28,38 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="tools" v-for="tool in tools">
-              <td>{{ tool.id }}</td>
-              <td><v-icon v-if=tool.experimental color="red">mdi-alert</v-icon></td>
-              <td>{{ tool.name }}</td>
-              <td>{{ tool.slots }}</td>
-              <td>{{ tool.nodes.length }}</td>
-              <td>{{ tool.links.length }}</td>
-              <td>{{ tool.ports.length }}</td>
-              <td>{{ tool.parameters.length }}</td>
-              <td>{{ tool.controls.length }}</td>
-              <td>
-                <deletion-dialog
-                  :url="`/tools/${tool.id}`"
-                  size="small"
-                  icon
-                  @confirmed="deleteTool(tool.id)"
-                  :text="`l'outil '${tool.name}'`"
-                >
-                  <v-icon>mdi-delete</v-icon>
-                </deletion-dialog>
-                <v-btn @click="exportTool(tool)" icon variant="plain" size="small">
-                  <v-icon>mdi-export</v-icon>
-                </v-btn>
-                <v-btn :to="`/tools/${tool.id}`" icon variant="plain" size="small">
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-              </td>
-            </tr>
+            <data-fetcher url="/tools">
+              <template v-slot:default="{ items: tools }">
+                <tr v-if="tools" v-for="tool in tools">
+                  <td>{{ tool.id }}</td>
+                  <td><v-icon v-if=tool.experimental color="red">mdi-alert</v-icon></td>
+                  <td>{{ tool.name }}</td>
+                  <td>{{ tool.slots }}</td>
+                  <td>{{ tool.nodes.length }}</td>
+                  <td>{{ tool.links.length }}</td>
+                  <td>{{ tool.ports.length }}</td>
+                  <td>{{ tool.parameters.length }}</td>
+                  <td>{{ tool.controls.length }}</td>
+                  <td>
+                    <deletion-dialog
+                      :url="`/tools/${tool.id}`"
+                      size="small"
+                      icon
+                      @confirmed="deleteTool(tool.id)"
+                      :text="`l'outil '${tool.name}'`"
+                    >
+                      <v-icon>mdi-delete</v-icon>
+                    </deletion-dialog>
+                    <v-btn @click="exportTool(tool)" icon variant="plain" size="small">
+                      <v-icon>mdi-export</v-icon>
+                    </v-btn>
+                    <v-btn :to="`/tools/${tool.id}`" icon variant="plain" size="small">
+                      <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                  </td>
+                </tr>
+              </template>
+            </data-fetcher>
           </tbody>
         </v-table>
       </v-col>
@@ -73,15 +77,12 @@ export default {
       tools: [] as ITool[],
     };
   },
-  async mounted() {
-    this.tools = (await useLists().tools).all();
-  },
   methods: {
     exportTool(tool: ITool) {
       const blob = new Blob([JSON.stringify(tool)], {type: 'application/json'})
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = `${tool.name}.json`
+      // link.download = `${tool.name}.json`
       link.click();
       URL.revokeObjectURL(link.href);
     },

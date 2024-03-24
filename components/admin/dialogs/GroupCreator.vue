@@ -7,7 +7,6 @@
       <v-card class="mx-auto" width="50%">
         <template v-slot:title>{{ $t('groups.dialog.title')}}</template>
         <v-card-text>
-          {{ group }}
           <v-text-field
             variant="outlined"
             density="compact"
@@ -16,17 +15,19 @@
             v-model="group.slug"
           />
           <v-switch v-model="group.is_default" label="groupe par défaut" inset color="primary" />
-          {{ rights.all() }}
-          <RightsTable v-slot="{ right }" density="compact" :rights="rights.all()">
-            
-            <!--v-switch
-              class="without-messages"
-              inset
-              color="primary"
-              density="compact"
-              :value="right.id"
-              :v-model="group.rights" /-->
-          </RightsTable>
+          <data-fetcher url="/rights">
+            <template v-slot="{ items: rights }">
+              <RightsTable density="compact" :rights="rights">
+                <!--v-switch
+                  class="without-messages"
+                  inset
+                  color="primary"
+                  density="compact"
+                  :value="right.id"
+                  :v-model="group.rights" /-->
+              </RightsTable>
+            </template>
+          </data-fetcher>
         </v-card-text>
         <v-card-actions>
           <v-btn type="submit" color="primary">Valider</v-btn>
