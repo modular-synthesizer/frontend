@@ -32,21 +32,18 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { IGenerator } from '~~/lib/interfaces/IGenerator';
 
-export default {
-  data: () => ({
-    generator: {name: "", code: "", id: ""} as IGenerator,
-    creationDialog: false,
-    validForm: true,
-  }),
-  methods: {
-    create() {
-      this.$emit('submitted', this.generator);
-      this.generator = {name: "", code: "", id: ""};
-      this.creationDialog = false;
-    },
-  }
+const emit = defineEmits<{ submitted: [generator: IGenerator]}>()
+
+const generator: Ref<IGenerator> = ref({name: "", code: "", id: ""});
+const creationDialog: Ref<boolean> = ref(false);
+const validForm: Ref<boolean> = ref(true);
+
+function create() {
+  emit('submitted', generator.value);
+  generator.value = {name: "", code: "", id: ""};
+  creationDialog.value = false;
 }
 </script>

@@ -41,7 +41,8 @@ export default {
     ...mapActions(useStates, ['is']),
     save({ id, scale, x, y }: ISynthesizer) {
       debounce('save', 500, () => api.auth_put(`/synthesizers/${id}`, { x, y, scale }))
-    }
+    },
+    equals
   },
   unmounted() {
     useSynthesizerDetails().reset();
