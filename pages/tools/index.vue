@@ -74,14 +74,14 @@ export default {
     };
   },
   async mounted() {
-    this.tools = (await useLists().tools).all();
+    // this.tools = await useLists().tools.all();
   },
   methods: {
     exportTool(tool: ITool) {
       const blob = new Blob([JSON.stringify(tool)], {type: 'application/json'})
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = `${tool.name}.json`
+      // link.download = `${tool.name}.json`
       link.click();
       URL.revokeObjectURL(link.href);
     },
