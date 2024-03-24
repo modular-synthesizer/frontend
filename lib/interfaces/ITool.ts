@@ -12,6 +12,7 @@ export default interface ITool extends Identifiable {
   slots: number;
   controls: IControl[]
   experimental: boolean;
+  name: string;
 }
 
 export interface IToolParameter extends Identifiable {

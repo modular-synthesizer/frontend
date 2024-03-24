@@ -13,28 +13,32 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
-      <v-container v-if="tools.length > 0" v-for="(category, name) in categories">
-        <v-row>
-          <v-col cols="12">
-            <div class="text-h4">{{ $t(`categories.names.${name}`) }}</div>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-list>
-              <v-list-item
-                :disabled="loading"
-                v-for="tool in category"
-                :key="`${name}.${tool.name}`"
-                :value="tool"
-                :title="$t(`modules.${name}.${tool.name}.title`)"
-                :subtitle="$t(`modules.${name}.${tool.name}.description`)"
-                @click="select(tool)"
-              />
-            </v-list>
-          </v-col>
-        </v-row>
-      </v-container>
+      <data-fetcher url="/tools">
+        <template v-slot="{ items: tools }">
+          <v-container v-for="(category, name) in categories(tools)">
+            <v-row>
+              <v-col cols="12">
+                <div class="text-h4">{{ $t(`categories.names.${name}`) }}</div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-list>
+                  <v-list-item
+                    :disabled="loading"
+                    v-for="tool in category"
+                    :key="`${name}.${tool.name}`"
+                    :value="tool"
+                    :title="$t(`modules.${name}.${tool.name}.title`)"
+                    :subtitle="$t(`modules.${name}.${tool.name}.description`)"
+                    @click="select(tool)"
+                  />
+                </v-list>
+              </v-col>
+            </v-row>
+          </v-container>
+        </template>
+      </data-fetcher>
     </v-card>
   </v-dialog>
 </template>
@@ -46,6 +50,7 @@ import { api } from '~~/lib/api/Api';
 import ModulesFactory from '~~/lib/factories/ModulesFactory';
 import IModule from '~~/lib/interfaces/IModule';
 import ITool from '~~/lib/interfaces/ITool';
+import Tool from '~~/lib/interfaces/ITool';
 import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
@@ -55,10 +60,6 @@ export default {
     loading: false,
   }),
   props: {
-    tools: {
-      type: Array<ITool>,
-      default: () => []
-    },
     synthesizer: {
       type: Synthesizer,
       required: true
@@ -66,9 +67,6 @@ export default {
   },
   computed: {
     ...mapState(useAuthentication, ['session']),
-    categories() {
-      return groupBy(this.tools, tool => tool.category.name);
-    },
   },
   methods: {
     close() {
@@ -90,6 +88,9 @@ export default {
           this.close();
         })
       })
+    },
+    categories(tools: Tool[]) {
+      return groupBy(tools, tool => tool.category.name);
     },
   }
 }
