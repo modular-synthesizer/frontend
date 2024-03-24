@@ -37,14 +37,14 @@ import { IGenerator } from '~~/lib/interfaces/IGenerator';
 
 export default {
   data: () => ({
-    generator: {name: "", code: ""} as IGenerator,
+    generator: {name: "", code: "", id: ""} as IGenerator,
     creationDialog: false,
     validForm: true,
   }),
   methods: {
     create() {
       this.$emit('submitted', this.generator);
-      this.generator = {name: "", code: ""};
+      this.generator = {name: "", code: "", id: ""};
       this.creationDialog = false;
     },
   }
