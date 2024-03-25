@@ -1,5 +1,4 @@
 import IModule from "../interfaces/IModule";
-import { POLYPHONY_CHANNELS } from "../utils/constants";
 import Channel from "../wrappers/Channel";
 import Mod from "../wrappers/Mod";
 import InnerNodesFactory from "./InnerNodes"
@@ -23,7 +22,6 @@ export class ModulesFactory {
       controls: []
     }
   }
-
   public async build(details: IModule, synthesizer: ISynthesizer|Synthesizer) {
     const channels: Channel[] = [];
     for (let i = 0 ; i < synthesizer.voices ; ++i) {
