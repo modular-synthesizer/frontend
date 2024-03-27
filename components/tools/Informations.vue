@@ -11,7 +11,19 @@
   </v-row>
   <v-row>
     <v-col cols="4">
-      <v-select :items="selectableCategories" variant="outlined" density="comfortable" label="Catégorie" v-model="tool.categoryId" />
+      <data-fetcher url="/categories">
+        <template v-slot="{ items: categories}">
+          <v-select
+            :items="categories"
+            variant="outlined"
+            density="comfortable"
+            label="Catégorie"
+            v-model="tool.categoryId"
+            item-title="name"
+            item-value="id"
+          />
+        </template>
+      </data-fetcher>
     </v-col>
   </v-row>
   <v-row>
@@ -38,15 +50,7 @@ export default {
       selectableCategories: [] as any[],
     };
   },
-  async mounted() {
-    this.selectableCategories = (await this.categories).all().map((category: ICategory) => {
-        return {title: category.name, value: category.id}
-      })
-  },
   computed: {
-    async categories() {
-      return await useLists().categories
-    },
     tool() { return this.modelValue }
   }
 }

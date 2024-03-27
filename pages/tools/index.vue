@@ -1,15 +1,13 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12">
+      <v-col cols="6" offset="3">
         <div class="text-h2">Mes outils</div>
-      </v-col>
-      <v-col cols="12">
-        <v-btn to="/tools/new">Nouveau</v-btn>
+        <v-btn to="/tools/new" class="mt-2">Nouveau</v-btn>
       </v-col>
     </v-row>
     <v-row class="mt-5">
-      <v-col cols="12">
+      <v-col cols="6" offset="3">
         <v-table>
           <thead>
             <tr>
@@ -17,11 +15,6 @@
               <th>&nbsp;</th>
               <th>Nom</th>
               <th>Largeur</th>
-              <th>Noeuds</th>
-              <th>Liens</th>
-              <th>Ports</th>
-              <th>Paramètres</th>
-              <th>Contrôles</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -33,11 +26,6 @@
                   <td><v-icon v-if=tool.experimental color="red">mdi-alert</v-icon></td>
                   <td>{{ tool.name }}</td>
                   <td>{{ tool.slots }}</td>
-                  <td>{{ tool.nodes.length }}</td>
-                  <td>{{ tool.links.length }}</td>
-                  <td>{{ tool.ports.length }}</td>
-                  <td>{{ tool.parameters.length }}</td>
-                  <td>{{ tool.controls.length }}</td>
                   <td>
                     <deletion-dialog
                       :url="`/tools/${tool.id}`"
