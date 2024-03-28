@@ -1,12 +1,18 @@
 <template>
-    <slot v-if="items.length > 0" :items="items" :remove="remove" :add="add"></slot>
+    <slot v-if="fetched" :items="items" :remove="remove" :add="add"></slot>
 </template>
 
 <script setup lang="ts">
 import { api } from '~~/lib/api/Api';
 
 const { url } = defineProps<{ url: string }>();
-const items = ref(await api.auth_get(url));
+const items = ref();
+const fetched = ref(false);
+
+api.auth_get(url).then(results => {
+    items.value = results;
+    fetched.value = true;
+})
 
 async function remove(id: string): Promise<void> {
     await api.auth_delete(`${url}/${id}`);
