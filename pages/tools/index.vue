@@ -20,7 +20,7 @@
           </thead>
           <tbody>
             <data-fetcher url="/tools">
-              <template v-slot:default="{ items: tools, remove }: { items: ITool[], remove: Function }">
+              <template v-slot="{ items: tools, remove }">
                 <tr v-if="tools" v-for="tool in tools">
                   <td>{{ tool.id }}</td>
                   <td><v-icon v-if=tool.experimental color="red">mdi-alert</v-icon></td>
@@ -49,7 +49,3 @@
     </v-row>
   </v-container>
 </template>
-
-<script lang="ts">
-import ITool from '~~/lib/interfaces/ITool';
-</script>
