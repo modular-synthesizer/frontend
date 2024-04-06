@@ -15,13 +15,15 @@ enum FetcherState {
     ERROR
 }
 
-const { url, loader } = defineProps<{ url: string, loader?: string }>();
+type Parameters = { [key: string]: any }
+
+const { url, loader, params = {} } = defineProps<{ url: string, loader?: string, params?: Parameters }>();
 const items = ref();
 const state: Ref<FetcherState> = ref(FetcherState.IDLE);
 
 
 state.value = FetcherState.LOADING
-api.auth_get(url).then(results => {
+useMemoization().query(url, params).then(results => {
     items.value = results;
     state.value = FetcherState.FETCHED;
 })
