@@ -22,6 +22,14 @@
           </v-col>
         </v-row>
       </template>
+      <template v-slot:loading>
+        <v-skeleton-loader type="heading" class="mb-5 mt-5" max-width="500" />
+        <v-row>
+          <v-col cols="4"><v-skeleton-loader type="card" /></v-col>
+          <v-col cols="4"><v-skeleton-loader type="card" /></v-col>
+          <v-col cols="4"><v-skeleton-loader type="card" /></v-col>
+        </v-row>
+      </template>
     </data-fetcher>
   </v-container>
 </template>

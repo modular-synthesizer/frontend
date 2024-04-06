@@ -1,17 +1,29 @@
 <template>
-    <slot v-if="fetched" :items="items" :remove="remove" :add="add"></slot>
+    <slot v-if="state === FetcherState.FETCHED" :items="items" :remove="remove" :add="add"></slot>
+    <slot v-if="state === FetcherState.LOADING" name="loading">
+        <v-skeleton-loader :type="loader" v-if="loader" />
+    </slot>
 </template>
 
 <script setup lang="ts">
 import { api } from '~~/lib/api/Api';
 
-const { url } = defineProps<{ url: string }>();
-const items = ref();
-const fetched = ref(false);
+enum FetcherState {
+    LOADING,
+    FETCHED,
+    IDLE,
+    ERROR
+}
 
+const { url, loader } = defineProps<{ url: string, loader?: string }>();
+const items = ref();
+const state: Ref<FetcherState> = ref(FetcherState.IDLE);
+
+
+state.value = FetcherState.LOADING
 api.auth_get(url).then(results => {
     items.value = results;
-    fetched.value = true;
+    state.value = FetcherState.FETCHED;
 })
 
 async function remove(id: string): Promise<void> {
