@@ -84,7 +84,7 @@ export default {
         slot: this.synthesizer.firstFreeSlot(tool.slots),
       };
       api.post('/modules', payload).then(async (response: IModule) => {
-        const generators: IGenerator[] = await useMemoization().query("/generators");
+        const generators: IGenerator[] = await api.auth_get("/generators");
         ModulesFactory.build(response, this.synthesizer, generators).then((mod: Mod) => {
           this.$emit('selected', mod);
           this.close();

@@ -23,7 +23,7 @@ const state: Ref<FetcherState> = ref(FetcherState.IDLE);
 
 
 state.value = FetcherState.LOADING
-useMemoization().query(url, params).then(results => {
+api.auth_get(url, params).then(results => {
     items.value = results;
     state.value = FetcherState.FETCHED;
 })

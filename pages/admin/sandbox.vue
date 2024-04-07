@@ -70,6 +70,7 @@ export default {
       this.destination.connect(this.context.destination);
 
       this.trigger = new AudioWorkletNode(this.context, "pulse", {numberOfOutputs: 1});
+
     },
     async run() {
       if (this.context !== null) {
@@ -92,7 +93,7 @@ export default {
     triggerImpulse() {
       this.trigger.port.postMessage('pulse');
     }
-  },
+  }
 }
 </script>
 
