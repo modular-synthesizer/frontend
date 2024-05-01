@@ -5,6 +5,7 @@ import InnerNodesFactory from "./InnerNodes"
 import InnerLinksFactory from "./InnerLinks"
 import ISynthesizer from "../interfaces/ISynthesizer";
 import Synthesizer from "../wrappers/Synthesizer";
+import { IGenerator } from "../interfaces/IGenerator";
 
 export class ModulesFactory {
   public empty(): IModule {
@@ -19,14 +20,14 @@ export class ModulesFactory {
       ports: [],
       parameters: [],
       category: "",
-      controls: []
+      controls: [],
     }
   }
-  public async build(details: IModule, synthesizer: ISynthesizer|Synthesizer) {
+  public async build(details: IModule, synthesizer: ISynthesizer|Synthesizer, generators: IGenerator[]) {
     const channels: Channel[] = [];
     for (let i = 0 ; i < synthesizer.voices ; ++i) {
       const channel = new Channel(i);
-      channel.nodes = await InnerNodesFactory.create(details.nodes);
+      channel.nodes = await InnerNodesFactory.create(details.nodes, generators);
       channel.links = InnerLinksFactory.link(channel.nodes, details.links);
       channels.push(channel);
     }

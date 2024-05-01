@@ -8,10 +8,6 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
-  "devDependencies": {
-    "nuxt": "3.2.2",
-    "vue-i18n": "^9.2.2"
-  },
   "dependencies": {
     "@growthbunker/vueflags": "^0.1.14",
     "@nuxtjs/robots": "^3.0.0",
@@ -23,12 +19,16 @@
     "click-outside-vue3": "^4.0.1",
     "lodash": "^4.17.21",
     "mdi": "^2.2.43",
+    "nuxt": "3.2.2",
     "pinia": "^2.0.23",
     "sass": "^1.55.0",
     "uuid": "^9.0.0",
+    "vue": "3.4.25",
     "vue-class-component": "^7.2.6",
     "vue-highlight-code": "^0.1.16",
+    "vue-i18n": "^9.2.2",
+    "vue-router": "^4.3.2",
     "vue3-country-flag-icon": "^0.1.2",
-    "vuetify": "3.1.5"
+    "vuetify": "3.5.12"
   }
 }

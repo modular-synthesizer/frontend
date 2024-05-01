@@ -1,8 +1,6 @@
-import { api } from '~~/lib/api/Api';
+import axios from 'axios';
 
 export async function loadProcessors(context: AudioContext) {
-  const processors = await api.auth_get('/processors');
-  for (let processor of processors) {
-    await context.audioWorklet.addModule(processor.url);
-  }
+  const uri: string = useRuntimeConfig().public.processors_url;
+  await context.audioWorklet.addModule(`${uri}/processors.js`);
 }

@@ -11,15 +11,12 @@ class InnerNodesFactory {
      * @return the list of instanciated inner nodes with a :node field containing
      *   the corresponding Web Audio API node(s).
      */
-    public async create(list: InnerNode[]): Promise<InnerAudioNode[]> {
+    public async create(list: InnerNode[], generators: IGenerator[]): Promise<InnerAudioNode[]> {
         const ctx: AudioContext = useAudioContext().context as AudioContext;
-        const generators = await useLists().generators;
-        await generators.fetch();
-        const gens: IGenerator[] = await generators.all();
         const results: InnerAudioNode[] = [];
 
         for(let innerNode of list) {
-            const gen: IGenerator = find(gens, {name: innerNode.generator}) as IGenerator;
+            const gen: IGenerator = find(generators, {name: innerNode.generator}) as IGenerator;
 
             if (gen !== undefined) {
                 const executor = {func: async function(_ctx: AudioContext, _payload: any) {}};

@@ -8,19 +8,19 @@
     </v-row>
     <v-row class="mt-5">
       <v-col cols="6" offset="3">
-        <v-table>
-          <thead>
-            <tr>
-              <th>UUID</th>
-              <th>&nbsp;</th>
-              <th>Nom</th>
-              <th>Largeur</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <data-fetcher url="/tools">
-              <template v-slot="{ items: tools, remove }">
+        <data-fetcher url="/tools" loader="table">
+          <template v-slot="{ items: tools, remove }">
+            <v-table>
+              <thead>
+                <tr>
+                  <th>UUID</th>
+                  <th>&nbsp;</th>
+                  <th>Nom</th>
+                  <th>Largeur</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
                 <tr v-if="tools" v-for="tool in tools">
                   <td>{{ tool.id }}</td>
                   <td><v-icon v-if=tool.experimental color="red">mdi-alert</v-icon></td>
@@ -41,10 +41,10 @@
                     </v-btn>
                   </td>
                 </tr>
-              </template>
-            </data-fetcher>
-          </tbody>
-        </v-table>
+              </tbody>
+            </v-table>
+          </template>
+        </data-fetcher>
       </v-col>
     </v-row>
   </v-container>

@@ -48,6 +48,7 @@ import { groupBy } from 'lodash';
 import { mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
 import ModulesFactory from '~~/lib/factories/ModulesFactory';
+import { IGenerator } from '~~/lib/interfaces/IGenerator';
 import IModule from '~~/lib/interfaces/IModule';
 import ITool from '~~/lib/interfaces/ITool';
 import Tool from '~~/lib/interfaces/ITool';
@@ -82,8 +83,9 @@ export default {
         rack: 0,
         slot: this.synthesizer.firstFreeSlot(tool.slots),
       };
-      api.post('/modules', payload).then((response: IModule) => {
-        ModulesFactory.build(response, this.synthesizer).then((mod: Mod) => {
+      api.post('/modules', payload).then(async (response: IModule) => {
+        const generators: IGenerator[] = await api.auth_get("/generators");
+        ModulesFactory.build(response, this.synthesizer, generators).then((mod: Mod) => {
           this.$emit('selected', mod);
           this.close();
         })
