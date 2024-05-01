@@ -17,9 +17,6 @@ dependencies:
   '@types/uuid':
     specifier: ^9.0.8
     version: 9.0.8
-  '@types/webaudioapi':
-    specifier: ^0.0.27
-    version: 0.0.27
   '@vuelidate/core':
     specifier: ^2.0.0
     version: 2.0.3(vue@3.4.25)
@@ -1881,10 +1878,6 @@ packages:
 
   /@types/uuid@9.0.8:
     resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
-    dev: false
-
-  /@types/webaudioapi@0.0.27:
-    resolution: {integrity: sha512-UWVaT2JkjAMU0x9BHWE8Lm4cFfVAzd5Av1v+b7phOXBY047prADh/dz+VW5SG0CxVutcE7DXtR9rTKFq76ODaQ==}
     dev: false
 
   /@unhead/dom@1.9.7:
