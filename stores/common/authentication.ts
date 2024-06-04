@@ -58,6 +58,7 @@ export const useAuthentication = defineStore('authentication', {
       if (!this.token) return;
       api.delete(`/sessions/${this.token}`, {auth_token: this.token})
       this.storage.remove("auth-token");
+      this.storage.remove("session");
       closeWebsocket();
       this.session = emptySession();
       window.location.href = '/';
@@ -67,11 +68,15 @@ export const useAuthentication = defineStore('authentication', {
      * recreating the session object in this storage so that the user does not
      * have to login again in the application when its session is still valid.
      */
-    async refresh(): Promise<void> {
+    async refresh(): Promise<ISession|undefined> {
       if (!this.token) return;
-      return api.get(`/sessions/${this.token}`, {auth_token: this.token})
-        .then((session: ISession) => { this.session = session; })
-        .catch(this.logout);
+      try {
+        this.session = await api.get(`/sessions/${this.token}`, {auth_token: this.token})
+        return this.session
+      }
+      catch (exception: any) {
+        this.logout();
+      }
     }
   }
 })

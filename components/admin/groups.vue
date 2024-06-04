@@ -12,8 +12,8 @@
             <v-data-table :headers="headers" :items="groups">
               <template v-slot:item="{ item }">
                 <tr>
-                  <td>{{ item.columns.id }}</td>
-                  <td>{{ item.columns.slug }}</td>
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.slug }}</td>
                   <td>
                     <v-btn icon small variant="plain" @click="remove(item.columns.id)">
                       <v-icon>mdi-delete</v-icon>

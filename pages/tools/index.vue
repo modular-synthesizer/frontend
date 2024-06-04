@@ -7,7 +7,7 @@
       </v-col>
     </v-row>
     <v-row class="mt-5">
-      <v-col cols="6" offset="3">
+      <v-col cols="10" offset="1">
         <data-fetcher url="/tools" loader="table">
           <template v-slot="{ items: tools, remove }">
             <v-table>
