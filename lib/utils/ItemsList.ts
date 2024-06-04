@@ -93,6 +93,8 @@ export default class ItemsList<T extends Identifiable> {
   public async fetch(criterias: { [key: string]: any } = {}): Promise<void> {
     const items: T[] = await this.options.api.auth_get(this.options.url, criterias);
     items?.forEach((item: T) => this.items.push(item));
+    console.log(this.items);
+    console.log(this.options);
   }
 
   public async all() {

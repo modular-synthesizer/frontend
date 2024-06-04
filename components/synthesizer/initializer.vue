@@ -41,11 +41,14 @@ export default {
   }),
   methods: {
     async click() {
+      console.log("Clicking on button")
       this.loading = true;
       await useAudioContext().initContext();
       await loadProcessors(useAudioContext().context as AudioContext);
+      console.log("pouet pouet");
       await useSynthesizerDetails().fetch(this.id);
       await useModulesList().fetch(this.id);
+      console.log(useModulesList().modules)
       useSynthesizerDetails().synthesizer.setModules(useModulesList().modules);
       await useLinksList().fetch(this.id);
       this.loading = false;

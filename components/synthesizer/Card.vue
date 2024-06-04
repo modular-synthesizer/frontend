@@ -25,56 +25,56 @@
                     v-model="search"
                     label="Search users"
                     append-inner-icon="mdi-magnify"
-                    @click:append-inner="accounts.refresh({ query: search })"
+                    @click:append-inner="searchAccounts(search)"
                   />
                 </v-col>
               </v-row>
-              <v-row v-if="accounts.populated">
+              <v-row v-if="results">
                 <v-col cols="12">
-                  <div class="text-h6">{{ $t('memberships.results') }}</div>
                   <v-list>
-                    <template v-for="account in accounts.all()">
-                      <v-list-item
-                        v-if="!usernames.includes(account.username)"
-                        :title="`${account.username}`"
-                        :subtitle="account.id"
-                      >
-                        <template v-slot:append>
-                          <v-list-item-action>
-                            <v-tooltip text="Ajouter en lecture seule" location="bottom">
-                              <template v-slot:activator="{ props }">
-                                <v-btn v-bind="props" icon variant="text" @click="addMember(`${account.id}`, account.username, 'read')">
-                                  <v-icon>mdi-plus</v-icon>
-                                </v-btn>
-                              </template>
-                            </v-tooltip>
-                            <v-tooltip text="Ajouter un éditeur" location="bottom">
-                              <template v-slot:activator="{ props }">
-                                <v-btn v-bind="props" icon variant="text" @click="addMember(`${account.id}`, account.username, 'write')">
-                                  <v-icon>mdi-plus-box-outline</v-icon>
-                                </v-btn>
-                              </template>
-                            </v-tooltip>
-                          </v-list-item-action>
-                        </template>
-                      </v-list-item>
+                    <template v-for="account in results">
+                      <template v-if="!usernames.includes(account.username)">
+                        <v-list-item
+                          :title="`${account.username}`"
+                          :subtitle="account.id"
+                        >
+                          <template v-slot:append>
+                            <v-list-item-action>
+                              <v-tooltip text="Ajouter en lecture seule" location="bottom">
+                                <template v-slot:activator="{ props }">
+                                  <v-btn v-bind="props" icon variant="text" @click="addMember(`${account.id}`, account.username, 'read')">
+                                    <v-icon>mdi-plus</v-icon>
+                                  </v-btn>
+                                </template>
+                              </v-tooltip>
+                              <v-tooltip text="Ajouter un éditeur" location="bottom">
+                                <template v-slot:activator="{ props }">
+                                  <v-btn v-bind="props" icon variant="text" @click="addMember(`${account.id}`, account.username, 'write')">
+                                    <v-icon>mdi-plus-box-outline</v-icon>
+                                  </v-btn>
+                                </template>
+                              </v-tooltip>
+                            </v-list-item-action>
+                          </template>
+                        </v-list-item>
+                      </template>
                     </template>
                   </v-list>
                 </v-col>
               </v-row>
-              <v-row v-if="members.populated">
+              <v-row v-if="synthesizer.members.length">
                 <v-col cols="12">
                   <div class="text-h6">{{ $t('memberships.existing') }}</div>
                   <v-list>
-                    <template v-for="member in members.all()">
+                    <template v-for="(member, idx) in synthesizer.members">
                       <v-list-item
                         v-if="member.type !== 'creator'"
-                        :title="`${member.username}`"
+                        :title="`${idx} - ${member.username}`"
                         :subtitle="member.id"
                       >
                         <template v-slot:append>
                           <v-list-item-action>
-                            <v-btn icon variant="text" @click="members.delete(member.id)">
+                            <v-btn icon variant="text" @click="deleteMember(idx)">
                               <v-icon>mdi-delete</v-icon>
                             </v-btn>
                           </v-list-item-action>
@@ -103,6 +103,7 @@
 
 <script lang="ts" setup>
 import { api } from '~~/lib/api/Api';
+import IAccount from '~~/lib/interfaces/IAccount';
 import IMembership from '~~/lib/interfaces/IMembership';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
@@ -113,18 +114,30 @@ const props = defineProps({
 const showMembers = ref(false);
 const search = ref("");
 
-const synthesizers = ref(await useLists().synthesizers);
-const accounts = ref(await useLists().accounts);
-const members = ref(await useMemberships(props.synthesizer));
 
 const usernames = computed(() => {
-  return members.value.all().map((m: IMembership) => m.username)
+  return props.synthesizer.members.map((m: IMembership) => m.username);
 });
+
+let results: Ref<IAccount[]> = ref([]);
+
+async function searchAccounts(username: string) {
+  results.value = await api.auth_get("/accounts/search", { query: username });
+}
 
 async function addMember(account_id: string, username: string, type: string) {
   const params = { account_id, synthesizer_id: props.synthesizer.id, type };
   const membership: any = await api.auth_post('/memberships', params);
-  members.value.append({ ...membership, account_id, username } as IMembership);
+  props.synthesizer.members.push({ ...membership, account_id, username } as IMembership);
+}
+
+async function deleteMember(index: number) {
+  const member: IMembership = props.synthesizer.members[index];
+  console.log(index, member)
+  await api.auth_delete(`/memberships/${member.id}`);
+  console.log(props.synthesizer.members)
+  props.synthesizer.members.splice(index, 1);
+  console.log(props.synthesizer.members)
 }
 
 const isReadOnly = computed(() => {
