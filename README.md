@@ -5,7 +5,7 @@
 Make sure to install the dependencies:
 
 ```bash
-yarn install
+pnpm install
 ```
 
 ## Development Server
@@ -27,5 +27,5 @@ For `WS_URL` and `API_URL`, values __MUST NOT__ end with a trailing slash (eg: `
 Start the development server on http://localhost:3000
 
 ```bash
-yarn dev
+pnpm run dev
 ```
