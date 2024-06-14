@@ -60,14 +60,14 @@ export default {
       return this.mod.ports.find(p => p.name === this.target) as Port;
     },
     colorClass() {
-      const input: boolean = this.port.isInput();
+      const input: boolean = !!this.port?.isInput();
       return { 'fill-grey-darken-3': input, 'fill-indigo-darken-3': !input };
     },
     strokeClass() {
-      const input: boolean = this.port.isInput();
+      const input: boolean = !!this.port?.isInput();
       return { 'stroke-grey-darken-3': input, 'stroke-indigo-darken-3': !input };
     }
-  }
+  },
 }
 </script>
 
