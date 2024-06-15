@@ -12,4 +12,5 @@ export default interface ISession {
   email: string;
   // TRUE if the user is an administrator, FALSE otherwise
   admin: boolean;
+  account_id: string;
 }

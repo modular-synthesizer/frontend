@@ -46,13 +46,13 @@
 <script setup lang="ts">
 import { boundaries, minlength, required } from '@/lib/rules';
 import { useI18n } from 'vue-i18n';
-import Synthesizer from '~~/lib/wrappers/Synthesizer';
+import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
 
-let synthesizer = ref(createEmptySynthesizer());
+let synthesizer: Ref<ISynthesizer> = ref(createEmptySynthesizer());
 
 const translator = useI18n();
 
-const synthesizers = ref(await useLists().synthesizers);
+const emit = defineEmits<{ created: [ synth: ISynthesizer ] }>();
 
 const form = ref(null);
 const validForm = ref(true);
@@ -75,8 +75,7 @@ function close(isActive: Ref<boolean>) {
 async function submit(isActive: Ref<boolean>) {
   await form.value.validate();
   if (form.value.modelValue !== false) {
-    const creation: Synthesizer = new Synthesizer(synthesizer.value);
-    synthesizers.value.create(creation);
+    emit("created", synthesizer.value);
     close(isActive)
   }
 }

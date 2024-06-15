@@ -2,8 +2,10 @@
   <v-card>
     <template v-slot:title>{{ synthesizer.name }}</template>
     <template v-slot:subtitle>{{ synthesizer.id }}</template>
-    <template v-slot:text v-if="isReadOnly">
-      <v-chip color="red" text-color="white" v-if="isReadOnly">{{ $t('common.readonly') }}</v-chip>
+    <template v-slot:text>
+      <v-chip v-if="isReadOnly" color="red" text-color="white">{{ $t('common.readonly') }}</v-chip>
+      <v-chip v-else-if="isCreator" color="green" text-color="white">Créé par vous</v-chip>
+      <v-chip v-else color="blue" text-color="white">Vous pouvez l'éditer</v-chip>
     </template>
     <v-card-actions>
       <v-btn :to="`/synthesizers/${synthesizer.id}`" icon>
