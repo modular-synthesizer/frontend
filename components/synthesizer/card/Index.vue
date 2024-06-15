@@ -51,7 +51,7 @@
         v-if="isCreator"
         :url="`/synthesizers/${synthesizer.id}`"
         :text="`'${synthesizer.name}''`"
-        @confirmed="synthesizers.delete(synthesizer.id)"
+        @confirmed="emit('delete', synthesizer.id)"
         icon
       >
         {{ $t('common.delete') }}
@@ -69,6 +69,8 @@ import Synthesizer from '~~/lib/wrappers/Synthesizer';
 const props = defineProps({
   synthesizer: { type: Synthesizer, required: true }
 });
+
+const emit = defineEmits<{ delete: [ id: string ] }>();
 
 const showMembers = ref(false);
 
