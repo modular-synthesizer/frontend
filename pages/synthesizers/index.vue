@@ -17,28 +17,22 @@
 <script lang="ts" setup>
 import _ from 'lodash';
 import { api } from '~~/lib/api/Api';
-import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
-import Synthesizer from '~~/lib/wrappers/Synthesizer';
+import ISynth from '~~/lib/interfaces/ISynthesizer';
+import Synth from '~~/lib/wrappers/Synthesizer';
 
-const synthesizers: Ref<Synthesizer[]> = ref((await api.auth_get("/synthesizers")).map((details: ISynthesizer): Synthesizer => {
-  return new Synthesizer(details)
-}));
-
+const rawList: ISynth[] = await api.auth_get("/synthesizers");
+const synthesizers: Ref<Synth[]> = ref(rawList.map((details: ISynth): Synth => new Synth(details)));
 const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
-
 const name: string = useAuthentication().storedSession.username;
-
-const sorted = computed(() => _.sortBy(synthesizers.value, (s: Synthesizer) => order[s.membershipType(name)]));
+const sorted = computed(() => _.sortBy(synthesizers.value, (s: Synth) => order[s.membershipType(name)]));
 
 async function deleteSynthesizer(id: string) {
-  const index: number = synthesizers.value.findIndex((synth: Synthesizer) => synth.id === id);
+  const index: number = synthesizers.value.findIndex((synth: Synth) => synth.id === id);
   await api.auth_delete(`/synthesizers/${id}`)
   synthesizers.value.splice(index, 1)
 }
 
-async function createSynthesizer(details: ISynthesizer) {
-  const creation: ISynthesizer = await api.auth_post("/synthesizers", details);
-  console.log(creation);
-  synthesizers.value.push(new Synthesizer(creation));
+async function createSynthesizer(details: ISynth) {
+  synthesizers.value.push(new Synth(await api.auth_post("/synthesizers", details)));
 }
 </script>
