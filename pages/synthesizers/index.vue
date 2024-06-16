@@ -15,8 +15,8 @@
 </template>
 
 <script lang="ts" setup>
+import _ from 'lodash';
 import { api } from '~~/lib/api/Api';
-import IMembership from '~~/lib/interfaces/IMembership';
 import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
@@ -24,21 +24,11 @@ const synthesizers: Ref<Synthesizer[]> = ref((await api.auth_get("/synthesizers"
   return new Synthesizer(details)
 }));
 
-const order: string[] = ['creator', 'write', 'read'];
+const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
 
-const account_id: string = useAuthentication().storedSession.account_id;
+const name: string = useAuthentication().storedSession.username;
 
-function getMembership(account_id: string, synthesizer: ISynthesizer) {
-  return synthesizer.members.find((m: IMembership) => m.account_id === account_id);
-}
-
-function typeIndex(account_id: string, synthesizer: ISynthesizer) {
-  return order.findIndex((type: string) => type === getMembership(account_id, synthesizer)?.type)
-}
-
-const sorted = computed(() => synthesizers.value.sort((first: ISynthesizer, second: ISynthesizer) => {
-  return typeIndex(account_id, first) - typeIndex(account_id, second);
-}));
+const sorted = computed(() => _.sortBy(synthesizers.value, (s: Synthesizer) => order[s.membershipType(name)]));
 
 async function deleteSynthesizer(id: string) {
   const index: number = synthesizers.value.findIndex((synth: Synthesizer) => synth.id === id);
