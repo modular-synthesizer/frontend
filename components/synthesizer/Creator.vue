@@ -1,11 +1,12 @@
 <template>
   <v-dialog max-width="500">
     <template v-slot:activator="{ props: activatorProps }">
-      <v-layout-item model-value position="bottom" class="text-end pointer-events-none" size="88">
+      <v-layout-item v-if="floating" model-value position="bottom" class="text-end pointer-events-none" size="88">
         <div class="ma-4 pointer-events-initial">
           <v-btn v-bind="activatorProps" color="primary" class="text-white" icon="mdi-plus" size="large" elevation="8" />
         </div>
       </v-layout-item>
+      <v-btn v-else v-bind="activatorProps" color="primary" class="text-white">Créer</v-btn>
     </template>
 
     <template v-slot:default=" { isActive }">
@@ -53,6 +54,8 @@ let synthesizer: Ref<ISynthesizer> = ref(createEmptySynthesizer());
 const translator = useI18n();
 
 const emit = defineEmits<{ created: [ synth: ISynthesizer ] }>();
+
+const props = defineProps({ floating: { type: Boolean, default: false } })
 
 const validForm = ref(true);
 
