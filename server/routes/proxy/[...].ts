@@ -36,7 +36,8 @@ export default defineEventHandler(async (event) => {
 
   const results = (await instance(config) as any);
 
-  setResponseStatus(results.status);
+  // @ts-ignore
+  setResponseStatus(event, results.status);
   
   if (results.headers['content-type'] !== undefined) {
     setHeader(event, 'Content-Type', results.headers['content-type']);

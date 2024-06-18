@@ -39,7 +39,7 @@ export const useAuthentication = defineStore('authentication', {
      * 
      * @return The promise for the login form to handle errors.
      */
-    login(username: string, password: string): Promise<any> {
+    async login(username: string, password: string): Promise<any> {
       return api.post("/sessions", { username, password })
         .then((session: ISession) => {
           this.storage.set("auth-token", session.token);
@@ -91,6 +91,7 @@ function emptySession(): ISession {
     token: "",
     username: "",
     email: "",
-    admin: false
+    admin: false,
+    account_id: ""
   }
 }
