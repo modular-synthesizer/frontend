@@ -24,7 +24,7 @@ const { mobile } = useDisplay()
 const rawList: ISynth[] = await api.auth_get("/synthesizers");
 const synthesizers: Ref<Synth[]> = ref(rawList.map((details: ISynth): Synth => new Synth(details)));
 const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
-const name: string = useAuthentication().storedSession.username;
+const name: string = useAuthentication().session.username;
 const sorted = computed(() => _.sortBy(synthesizers.value, (s: Synth) => order[s.membershipType(name)]));
 
 async function deleteSynthesizer(id: string) {

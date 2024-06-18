@@ -107,10 +107,10 @@ async function deleteMember(id: string) {
 }
 
 const isReadOnly = computed(() => {
-  return props.synthesizer?.isReadonly(useAuthentication()?.storedSession.username);
+  return props.synthesizer?.isReadonly(useAuthentication()?.session.username);
 });
 
 const isCreator = computed(() => {
-  return props.synthesizer?.isCreator(useAuthentication()?.storedSession.username);
+  return props.synthesizer?.isCreator(useAuthentication()?.session.username);
 });
 </script>

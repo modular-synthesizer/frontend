@@ -18,14 +18,6 @@ export const useAuthentication = defineStore('authentication', {
       if(this.session?.token !== '') return this.session.token;
       return this.storage.get('auth-token');
     },
-    storedSession(): ISession {
-      try {
-        return JSON.parse(this.storage.get("session"));
-      }
-      catch(exception) {
-        return emptySession();
-      }
-    }
   },
   actions: {
     /**
@@ -40,13 +32,11 @@ export const useAuthentication = defineStore('authentication', {
      * @return The promise for the login form to handle errors.
      */
     async login(username: string, password: string): Promise<any> {
-      return api.post("/sessions", { username, password })
-        .then((session: ISession) => {
-          this.storage.set("auth-token", session.token);
-          this.storage.set("session", JSON.stringify(session));
-          this.session = session;
-          navigateTo("/");
-        })
+      const session: ISession = await api.post("/sessions", { username, password })
+      await this.storage.set("auth-token", session.token);
+      await this.storage.set("session", JSON.stringify(session));
+      this.session = session;
+      navigateTo("/");
     },
     /**
      * Logs the user out of the application by deleting their session and deleting
