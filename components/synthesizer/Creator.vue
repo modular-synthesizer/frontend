@@ -10,7 +10,7 @@
 
     <template v-slot:default=" { isActive }">
       <v-card title="Créer un synthétiseur">
-        <v-form @submit.prevent="submit(isActive)" v-model="validForm" class="mt-5" validate-on="submit" ref="form">
+        <v-form @submit.prevent="submit(isActive)" v-model="validForm" class="mt-5" validate-on="blur">
           <v-card-text>
             <v-text-field
               v-model="synthesizer.name"
@@ -54,7 +54,6 @@ const translator = useI18n();
 
 const emit = defineEmits<{ created: [ synth: ISynthesizer ] }>();
 
-const form = ref(null);
 const validForm = ref(true);
 
 const rules: {[key: string]: Function[]} = {
@@ -68,15 +67,14 @@ const rules: {[key: string]: Function[]} = {
 };
 
 function close(isActive: Ref<boolean>) {
-  synthesizer = ref(createEmptySynthesizer());
   isActive.value = false;
+  synthesizer = ref(createEmptySynthesizer());
 }
 
 async function submit(isActive: Ref<boolean>) {
-  await form.value.validate();
-  if (form.value.modelValue !== false) {
+  if (!!validForm.value) {
     emit("created", synthesizer.value);
-    close(isActive)
+    close(isActive);
   }
 }
 </script>
