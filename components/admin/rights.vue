@@ -22,6 +22,9 @@
 </template>
 
 <script lang="ts" setup>
+import IRight from '~~/lib/interfaces/permissions/IRight';
 import SoloFieldForm from '../common/SoloFieldForm.vue';
 import RightsTable from './utils/RightsTable.vue';
+
+const right: Ref<IRight> = ref({ label: '', id: '' })
 </script>

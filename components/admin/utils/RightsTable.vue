@@ -2,8 +2,8 @@
   <v-data-table v-if="rights" :headers="headers" :items="rights" :density="density">
     <template v-slot:item="{ item }">
       <tr>
-        <td>{{ item.columns.id }}</td>
-        <td>{{ item.columns.label }}</td>
+        <td>{{ item.id }}</td>
+        <td>{{ item.label }}</td>
         <td>
           <slot :right="item.raw"></slot>
         </td>
