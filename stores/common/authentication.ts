@@ -32,10 +32,11 @@ export const useAuthentication = defineStore('authentication', {
      * @return The promise for the login form to handle errors.
      */
     async login(username: string, password: string): Promise<any> {
-      const session: ISession = await api.post("/sessions", { username, password })
+      const session: ISession & HasRights = await api.post("/sessions", { username, password })
       await this.storage.set("auth-token", session.token);
       await this.storage.set("session", JSON.stringify(session));
       this.session = session;
+      setRights(session.rights)
       navigateTo("/");
     },
     /**
@@ -51,6 +52,7 @@ export const useAuthentication = defineStore('authentication', {
       this.storage.remove("session");
       closeWebsocket();
       this.session = emptySession();
+      setRights([])
       window.location.href = '/';
     },
     /**
@@ -61,7 +63,9 @@ export const useAuthentication = defineStore('authentication', {
     async refresh(): Promise<ISession|undefined> {
       if (!this.token) return;
       try {
-        this.session = await api.get(`/sessions/${this.token}`, {auth_token: this.token})
+        const session: ISession & HasRights = await api.get(`/sessions/${this.token}`, {auth_token: this.token});
+        this.session = session;
+        setRights(session.rights)
         return this.session
       }
       catch (exception: any) {
@@ -69,7 +73,11 @@ export const useAuthentication = defineStore('authentication', {
       }
     }
   }
-})
+});
+
+interface HasRights {
+  rights: string[];
+}
 
 interface IAuthenticationState {
   session: ISession;
