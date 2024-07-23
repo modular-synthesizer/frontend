@@ -4,7 +4,7 @@
       <template v-slot="{ items: groups, remove, add }">
         <v-row>
           <v-col cols="12">
-            <GroupCreator @submitted="add" />
+            <GroupCreator v-if="hasRight('groups::write')" @submitted="add" />
           </v-col>
         </v-row>
         <v-row>

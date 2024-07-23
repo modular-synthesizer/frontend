@@ -27,7 +27,7 @@
             <v-btn v-bind="props">{{ $t('common.admin') }}</v-btn>
           </template>
           <v-list>
-            <v-list-item to="/groups">Groupes</v-list-item>
+            <v-list-item v-if="hasRight('groups::read')" to="/groups">Groupes</v-list-item>
             <v-list-item to="/admin">Autre</v-list-item>
           </v-list>
         </v-menu>
