@@ -8,6 +8,6 @@ import IRight from "./IRight";
  */
 export default interface IGroup extends Identifiable {
   slug: string;
-  rights: IRight[];
+  scopes: IRight[];
   is_default: boolean;
 }

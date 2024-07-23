@@ -15,23 +15,15 @@
             v-model="group.slug"
           />
           <v-switch v-model="group.is_default" label="groupe par défaut" inset color="primary" />
-          <data-fetcher url="/rights">
-            <template v-slot="{ items: rights }">
-              <RightsTable density="compact" :rights="rights">
-                <!--v-switch
-                  class="without-messages"
-                  inset
-                  color="primary"
-                  density="compact"
-                  :value="right.id"
-                  :v-model="group.rights" /-->
-              </RightsTable>
-            </template>
-          </data-fetcher>
+          <v-row class="rights-row mb-4">
+            <v-col cols="6" v-for="right in rights">
+              <v-checkbox color="primary" v-model="group.scopes" :value="right.id" :label="right.label" />
+            </v-col>
+          </v-row>
         </v-card-text>
         <v-card-actions>
           <v-btn type="submit" color="primary">Valider</v-btn>
-          <v-btn color="error" @click="creationDialog = false">Fermer</v-btn>
+          <v-btn color="error" @click="dialog = false">Fermer</v-btn>
         </v-card-actions>
       </v-card>
     </v-form>
@@ -39,16 +31,29 @@
 </template>
 
 <script lang="ts" setup>
+import { api } from '~~/lib/api/Api';
 import IGroup from '~~/lib/interfaces/permissions/IGroup';
 
 const emit = defineEmits(['submitted']);
-const rights = ref(await useLists().rights);
-const group: IGroup = { id: "", slug: "", rights: [], is_default: false };
+const rights = ref(await api.auth_get('/rights'));
+const group: Ref<IGroup> = ref({ id: "", slug: "", scopes: [], is_default: false });
 const dialog = ref(false);
 const validity = ref(true);
 
 function create() {
-  emit('submitted', group);
+  emit('submitted', group.value);
   dialog.value = false;
 }
 </script>
+
+<style>
+.rights-row .v-input__control {
+  height: 36px;
+}
+.rights-row .v-input__details {
+  display: none;
+}
+.rights-row .v-col {
+  padding: 0px;
+}
+</style>

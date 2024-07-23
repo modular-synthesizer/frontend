@@ -15,9 +15,14 @@
                   <td>{{ item.id }}</td>
                   <td>{{ item.slug }}</td>
                   <td>
-                    <v-btn icon small variant="plain" @click="remove(item.columns.id)">
-                      <v-icon>mdi-delete</v-icon>
-                    </v-btn>
+                    <template v-if="hasRight('groups::write')">
+                      <v-btn icon size="small" variant="plain" @click="remove(item.id)">
+                        <v-icon>mdi-delete</v-icon>
+                      </v-btn>
+                      <v-btn icon size="small" variant="plain" :to="`/groups/${item.id}`">
+                        <v-icon>mdi-pencil</v-icon>
+                      </v-btn>
+                    </template>
                   </td>
                 </tr>
               </template>
@@ -31,7 +36,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import GroupCreator from "./dialogs/GroupCreator.vue"
+import GroupCreator from "~~/components/admin/dialogs/GroupCreator.vue"
 
 const headers = useHeaders(useI18n, [
   { 'title': 'common.uuid', key: 'id' },

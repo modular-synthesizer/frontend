@@ -22,7 +22,16 @@
       <template v-if="hasRight('resources::admin')">
         <v-btn to="/admin/sandbox" aria-label="sandbox link">{{ $t('menus.sandbox') }}</v-btn>
         <v-btn to="/tools" aria-label="tools link">{{ $t('menus.tools') }}</v-btn>
-        <v-btn to="/admin" aria-label="administration panel">{{ $t('common.admin') }}</v-btn>
+        <v-menu>
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props">{{ $t('common.admin') }}</v-btn>
+          </template>
+          <v-list>
+            <v-list-item to="/groups">Groupes</v-list-item>
+            <v-list-item to="/admin">Autre</v-list-item>
+          </v-list>
+        </v-menu>
+        
       </template>
       <v-btn @click="useAuthentication().logout">{{ $t('common.logout') }}</v-btn>
       <language-switch />

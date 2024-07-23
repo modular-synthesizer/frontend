@@ -11,9 +11,6 @@
       <v-row>
         <v-col cols="8" offset="2">
           <v-window v-model="tab">
-            <v-window-item value="groups">
-              <AdminGroups />
-            </v-window-item>
             <v-window-item value="rights">
               <AdminRights />
             </v-window-item>
@@ -44,7 +41,6 @@ export default {
   data: () => ({
     tab: 'groups',
     items: [
-      {name: 'groups', icon: 'mdi-account-group'},
       {name: 'rights', icon: 'mdi-account-group'},
       {name: 'categories', icon: 'mdi-folder-outline'},
       {name: 'applications', icon: 'mdi-lock-outline'},
