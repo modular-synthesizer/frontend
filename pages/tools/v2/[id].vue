@@ -1,16 +1,23 @@
 <template>
-  <v-container>
+  <div class="wrapper">
+    <v-toolbar collapse density="compact" color="deep-purple darken-2">
+      <v-btn icon to="/tools">
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
+    </v-toolbar>
+  </div>
+  <v-container fluid class="main-wrapper">
     <v-tabs v-model="tab" align-tabs="center" color="secondary">
       <v-tab value="internal">Internal structure</v-tab>
       <v-tab value="external">External appearance</v-tab>
     </v-tabs>
-    <div class="pt-2 tabs-holder">
+    <div class="pt-2">
       <v-window v-model="tab">
         <v-window-item value="internal">
-          <tool-structure />
+          <div class="tabs-holder"><tool-structure /></div>
         </v-window-item>
         <v-window-item value="external">
-          <tool-appearance />
+          <div class="tabs-holder"><tool-appearance /></div>
         </v-window-item>
       </v-window>
     </div>
@@ -18,15 +25,26 @@
 </template>
 
 <script lang="ts" setup>
+definePageMeta({ layout: 'empty' });
 const tab: Ref<string> = ref('internal');
 </script>
 
-<style>
-.v-container {
-  padding: 0px;
+<style scoped>
+.main-wrapper {
+  padding: 0px 20px;
 }
 .tabs-holder {
-  height: calc(100vh - 64px - 48px);
+  height: calc(100vh - 56px);
   overflow-y: hidden;
+}
+.wrapper {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.menu-wrapper {
+  position: absolute;
 }
 </style>
