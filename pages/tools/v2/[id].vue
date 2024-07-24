@@ -1,16 +1,21 @@
 <template>
-  <div class="wrapper">
-    <v-toolbar collapse density="compact" color="deep-purple darken-2">
-      <v-btn icon to="/tools">
-        <v-icon>mdi-chevron-left</v-icon>
-      </v-btn>
-    </v-toolbar>
-  </div>
   <v-container fluid class="main-wrapper">
     <v-tabs v-model="tab" align-tabs="center" color="secondary">
       <v-tab value="internal">Internal structure</v-tab>
       <v-tab value="external">External appearance</v-tab>
     </v-tabs>
+  <div class="wrapper">
+    <v-toolbar collapse density="compact" color="deep-purple darken-2">
+      <template v-slot:append>
+        <v-btn icon to="/tools">
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+        <v-btn icon @click="save">
+          <v-icon>mdi-content-save</v-icon>
+        </v-btn>
+      </template>
+    </v-toolbar>
+  </div>
     <div class="pt-2" v-if="tool">
       <v-window v-model="tab">
         <v-window-item value="internal">
@@ -30,7 +35,11 @@ import ITool from '~~/lib/interfaces/ITool';
 
 definePageMeta({ layout: 'empty' });
 const tab: Ref<string> = ref('internal');
-const tool: ITool = await api.auth_get(`/tools/${useRoute().params.id}`)
+const tool: Ref<ITool> = ref(await api.auth_get(`/tools/${useRoute().params.id}`));
+
+async function save() {
+  tool.value = await api.auth_put(`/tools/${useRoute().params.id}`, tool.value)
+}
 </script>
 
 <style scoped>

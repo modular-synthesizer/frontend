@@ -5,6 +5,7 @@
 </template>
 
 <script setup lang="ts">
+import { api } from '~~/lib/api/Api';
 import { PropType } from 'vue';
 import { InnerNode } from '~~/lib/interfaces/ITool';
 
@@ -25,8 +26,11 @@ function nearestCoord(val: number) {
   return div * 20;
 }
 
+const timer: Ref<Number> = ref(-1);
+
 window.addEventListener('keydown', (event: KeyboardEvent) => {
   if (!props.selected) return;
+  window.clearTimeout(timer.value);
   switch(event.code) {
     case 'ArrowRight':
       coords.value.x = nearestCoord(coords.value.x + 20)
@@ -42,5 +46,11 @@ window.addEventListener('keydown', (event: KeyboardEvent) => {
       break;
   }
   emit('moveSelected', coords.value.x, coords.value.y);
+  timer.value = window.setTimeout(async () => {
+    await api.auth_put(`/tools/nodes/${props.node.id}`, {
+      ...props.node,
+      tool_id: useRoute().params.id
+  });
+  }, 200);
 });
 </script>
