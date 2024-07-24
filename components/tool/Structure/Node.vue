@@ -1,7 +1,6 @@
 <template>
   <g :transform="`translate(${coords.x} ${coords.y})`" @click="emit('select', node)" @keydown="handleKeyDown">
     <rect height="60" width="60" fill="white" />
-    <rect height="60" width="60" fill="transparent" stroke="red" stroke-width="3" v-if="props.selected" />
   </g>
 </template>
 
@@ -18,6 +17,7 @@ const coords: Ref<ICoordinates> = ref({ x: props.node.x, y: props.node.y })
 
 const emit = defineEmits<{
   select: [item: InnerNode],
+  moveSelected: [x: number, y: number]
 }>();
 
 function nearestCoord(val: number) {
@@ -32,14 +32,15 @@ window.addEventListener('keydown', (event: KeyboardEvent) => {
       coords.value.x = nearestCoord(coords.value.x + 20)
       break;
     case 'ArrowLeft':
-    coords.value.x = nearestCoord(coords.value.x - 20)
+      coords.value.x = nearestCoord(coords.value.x - 20)
       break;
     case 'ArrowDown':
-    coords.value.y = nearestCoord(coords.value.y + 20)
+      coords.value.y = nearestCoord(coords.value.y + 20)
       break;
     case 'ArrowUp':
-    coords.value.y = nearestCoord(coords.value.y - 20)
+      coords.value.y = nearestCoord(coords.value.y - 20)
       break;
   }
+  emit('moveSelected', coords.value.x, coords.value.y);
 });
 </script>

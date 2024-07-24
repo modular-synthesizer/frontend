@@ -2,7 +2,8 @@
   <svg>
     <tool-structure-background @move="seeMove" @start="selectItem(null)" />
     <g :transform="`translate(${x} ${y})`">
-      <tool-structure-node v-for="node in tool.nodes" :node="node" :selected="node.id === selected?.id" @select="selectItem" />
+      <tool-structure-node v-for="node in tool.nodes" :node="node" :selected="node.id === selected?.id" @select="selectItem" @moveSelected="moveSelected"/>
+      <rect :x="selected.x" :y="selected.y" height="60" width="60" fill="transparent" stroke="red" stroke-width="5" v-if="selected" />
     </g>
   </svg>
 </template>
@@ -21,6 +22,13 @@ const y: Ref<number> = ref(0);
 
 function seeMove(cx: number, cy: number) {
   x.value = cx; y.value = cy;
+}
+
+function moveSelected(x: number, y: number) {
+  if (selected.value !== null) {
+    selected.value.x = x;
+    selected.value.y = y
+  }
 }
 
 function selectItem(node: InnerNode|null) {
