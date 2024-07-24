@@ -1,6 +1,6 @@
 <template>
   <svg>
-    <tool-structure-background @move="seeMove" />
+    <tool-structure-background @move="seeMove" @start="selectItem(null)" />
     <g :transform="`translate(${x} ${y})`">
       <tool-structure-node v-for="node in tool.nodes" :node="node" :selected="node.id === selected?.id" @select="selectItem" />
     </g>
@@ -23,7 +23,7 @@ function seeMove(cx: number, cy: number) {
   x.value = cx; y.value = cy;
 }
 
-function selectItem(node: InnerNode) {
+function selectItem(node: InnerNode|null) {
   selected.value = node;
 }
 </script>

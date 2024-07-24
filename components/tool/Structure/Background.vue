@@ -21,7 +21,7 @@ import ICoordinates from '~~/lib/interfaces/ICoordinates';
 const BG_SIZE = 60;
 const DOT_SIZE = 2;
 
-const emit = defineEmits<{ move: [x: number, y: number]}>();
+const emit = defineEmits<{ move: [x: number, y: number], start: []}>();
 
 const offset: Ref<ICoordinates> = ref({ x: 0, y: 0 });
 
@@ -32,6 +32,7 @@ const coords: Ref<ICoordinates> = ref({ x: 0, y: 0 });
 const dragged: Ref<boolean> = ref(false);
 
 function startLocalDrag(event: MouseEvent) {
+  emit('start');
   start.value.x = event.clientX;
   start.value.y = event.clientY;
   dragged.value = true;

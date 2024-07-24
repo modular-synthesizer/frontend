@@ -20,20 +20,25 @@ const emit = defineEmits<{
   select: [item: InnerNode],
 }>();
 
+function nearestCoord(val: number) {
+  const div = Math.round(val / 20);
+  return div * 20;
+}
+
 window.addEventListener('keydown', (event: KeyboardEvent) => {
   if (!props.selected) return;
   switch(event.code) {
     case 'ArrowRight':
-      coords.value.x += 20
+      coords.value.x = nearestCoord(coords.value.x + 20)
       break;
     case 'ArrowLeft':
-      coords.value.x -= 20
+    coords.value.x = nearestCoord(coords.value.x - 20)
       break;
     case 'ArrowDown':
-      coords.value.y += 20
+    coords.value.y = nearestCoord(coords.value.y + 20)
       break;
     case 'ArrowUp':
-      coords.value.y -= 20
+    coords.value.y = nearestCoord(coords.value.y - 20)
       break;
   }
 });
