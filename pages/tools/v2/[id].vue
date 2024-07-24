@@ -11,10 +11,10 @@
       <v-tab value="internal">Internal structure</v-tab>
       <v-tab value="external">External appearance</v-tab>
     </v-tabs>
-    <div class="pt-2">
+    <div class="pt-2" v-if="tool">
       <v-window v-model="tab">
         <v-window-item value="internal">
-          <div class="tabs-holder"><tool-structure /></div>
+          <div class="tabs-holder"><tool-structure :tool="tool" /></div>
         </v-window-item>
         <v-window-item value="external">
           <div class="tabs-holder"><tool-appearance /></div>
@@ -25,8 +25,12 @@
 </template>
 
 <script lang="ts" setup>
+import { api } from '~~/lib/api/Api';
+import ITool from '~~/lib/interfaces/ITool';
+
 definePageMeta({ layout: 'empty' });
 const tab: Ref<string> = ref('internal');
+const tool: ITool = await api.auth_get(`/tools/${useRoute().params.id}`)
 </script>
 
 <style scoped>
