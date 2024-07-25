@@ -1,10 +1,12 @@
 <template>
   <g :transform="`translate(${coords.x} ${coords.y})`" @click="emit('select', node)">
     <rect :height="getNodeHeight(node, tool)" width="180" fill="black" stroke="white" />
-    <text x="10" y="20" fill="white">{{ node.name }}</text>
+    <text x="10" y="20" fill="white">{{ node.name }} {{ maxIndexFrom(node, tool) }}</text>
     <g  v-for="(param, i) in parametersFor(node, tool)" :transform="`translate(10, ${(i + 1) * 60 - 20})`">
       <tool-structure-param :param="param" />
     </g>
+    <circle v-for="idx in maxIndexTo(node, tool)" cx="0" :cy="20 * idx" r="5" fill="white" />
+    <circle v-for="idx in maxIndexFrom(node, tool)" cx="180" :cy="20 * idx" r="5" fill="white" />
   </g>
 </template>
 

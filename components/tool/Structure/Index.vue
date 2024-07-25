@@ -10,6 +10,7 @@
         @moveSelected="moveSelected"
         :tool="tool"
       />
+      <tool-structure-link v-for="link in tool.links" :link="link" :tool="tool" />
       <rect
         :x="selected.x"
         :y="selected.y"
