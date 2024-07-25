@@ -1,17 +1,23 @@
 <template>
-  <g :transform="`translate(${coords.x} ${coords.y})`" @click="emit('select', node)" @keydown="handleKeyDown">
-    <rect height="60" width="60" fill="white" />
+  <g :transform="`translate(${coords.x} ${coords.y})`" @click="emit('select', node)">
+    <rect :height="getNodeHeight(node, tool)" width="180" fill="black" stroke="white" />
+    <text x="10" y="20" fill="white">{{ node.name }}</text>
+    <g  v-for="(param, i) in parametersFor(node, tool)" :transform="`translate(10, ${(i + 1) * 60 - 20})`">
+      <tool-structure-param :param="param" />
+    </g>
   </g>
 </template>
 
 <script setup lang="ts">
 import { api } from '~~/lib/api/Api';
 import { PropType } from 'vue';
-import { InnerNode } from '~~/lib/interfaces/ITool';
+import ITool, { InnerNode } from '~~/lib/interfaces/ITool';
+import ICoordinates from '~~/lib/interfaces/ICoordinates';
 
 const props = defineProps({
   node: { type: Object as PropType<InnerNode>, required: true },
-  selected: { type: Boolean, default: false}
+  selected: { type: Boolean, default: false},
+  tool: { type: Object as PropType<ITool>, required: true }
 })
 
 const coords: Ref<ICoordinates> = ref({ x: props.node.x, y: props.node.y })
@@ -26,7 +32,7 @@ function nearestCoord(val: number) {
   return div * 20;
 }
 
-const timer: Ref<Number> = ref(-1);
+const timer: Ref<number> = ref(-1);
 
 window.addEventListener('keydown', (event: KeyboardEvent) => {
   if (!props.selected) return;

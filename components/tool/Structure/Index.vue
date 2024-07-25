@@ -2,14 +2,30 @@
   <svg>
     <tool-structure-background @move="seeMove" @start="selectItem(null)" />
     <g :transform="`translate(${x} ${y})`">
-      <tool-structure-node v-for="node in tool.nodes" :node="node" :selected="node.id === selected?.id" @select="selectItem" @moveSelected="moveSelected"/>
-      <rect :x="selected.x" :y="selected.y" height="60" width="60" fill="transparent" stroke="red" stroke-width="5" v-if="selected" />
+      <tool-structure-node
+        v-for="node in tool.nodes"
+        :node="node"
+        :selected="node.id === selected?.id"
+        @select="selectItem"
+        @moveSelected="moveSelected"
+        :tool="tool"
+      />
+      <rect
+        :x="selected.x"
+        :y="selected.y"
+        :height="getNodeHeight(selected, tool)"
+        width="180"
+        fill="transparent"
+        stroke="red"
+        stroke-width="5"
+        v-if="selected"
+      />
     </g>
   </svg>
 </template>
 
 <script setup lang="ts">
-import ITool, { InnerNode } from '~~/lib/interfaces/ITool';
+import ITool, { InnerNode, IToolParameter } from '~~/lib/interfaces/ITool';
 
 const { tool } = defineProps({
   tool: { type: Object as PropType<ITool>, required: true }
