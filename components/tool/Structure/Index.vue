@@ -21,6 +21,7 @@
         stroke-width="5"
         v-if="selected"
       />
+      <tool-structure-port v-for="port in tool.ports" :port="port" :tool="tool" />
     </g>
   </svg>
 </template>
