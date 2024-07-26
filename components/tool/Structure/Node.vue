@@ -5,7 +5,9 @@
     <g  v-for="(param, i) in parametersFor(node, tool)" :transform="`translate(10, ${(i + 1) * 60 - 20})`">
       <tool-structure-param :param="param" />
     </g>
-    <circle v-for="idx in maxIndexTo(node, tool)" cx="0" :cy="20 * idx" r="5" fill="white" />
+    <g v-for="idx in maxIndexTo(node, tool)" :transform="`translate(0 ${20 * idx})`">
+      <path d="M -7 -7 L 7 0 L -7 7" fill="white" />
+    </g>
     <circle v-for="idx in maxIndexFrom(node, tool)" cx="180" :cy="20 * idx" r="5" fill="white" />
   </g>
 </template>

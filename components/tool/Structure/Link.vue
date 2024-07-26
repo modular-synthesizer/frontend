@@ -1,9 +1,9 @@
 <template>
   <template v-if="hasNodeEnd(link)">
-    <path :d="path()" fill="white" stroke="white" stroke-width="2" />
+    <path :d="path()" fill="transparent" stroke="white" stroke-width="2" />
   </template>
   <template v-else>
-    <path :d="paramPath()" fill="white" stroke="white" stroke-width="2" />
+    <path :d="paramPath()" fill="transparent" stroke="white" stroke-width="2" />
   </template>
 </template>
 
@@ -34,7 +34,12 @@ function paramPath() {
   );
 }
 
-function pathFrom(from: ICoordinates, to: ICoordinates) {
-  return `M ${from.x} ${from.y} L ${to.x} ${to.y}`
+function pathFrom(s: ICoordinates, e: ICoordinates) {
+  if (s.x > e.x) {
+    const m: ICoordinates = { x: (s.x + e.x) / 2, y: (s.y + e.y) / 2 };
+    //return `M ${s.x} ${s.y} L ${m.x} ${m.y}`
+    return `M ${s.x} ${s.y} C ${s.x + 100} ${s.y} ${m.x + 100} ${m.y} ${m.x} ${m.y} C ${m.x - 100} ${m.y} ${e.x - 100} ${e.y} ${e.x} ${e.y}`
+  }
+  return `M ${s.x} ${s.y} C ${s.x + 100} ${s.y} ${e.x - 100} ${e.y} ${e.x} ${e.y}`
 }
 </script>

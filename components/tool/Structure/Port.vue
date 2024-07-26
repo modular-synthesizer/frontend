@@ -12,8 +12,6 @@ const props = defineProps({
   tool: { type: Object as PropType<ITool>, required: true }
 })
 
-console.log(props.port);
-
 function target(): InnerNode {
   return props.tool.nodes.find((n: InnerNode) => n.name === props.port.target) as InnerNode;
 }
