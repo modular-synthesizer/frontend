@@ -1,9 +1,9 @@
 <template>
   <v-container fluid class="main-wrapper">
-    <v-tabs v-model="tab" align-tabs="center" color="secondary">
-      <v-tab value="internal">Internal structure</v-tab>
-      <v-tab value="external">External appearance</v-tab>
-    </v-tabs>
+  <v-tabs v-model="tab" align-tabs="center" color="secondary">
+    <v-tab value="internal">Internal structure</v-tab>
+    <v-tab value="external">External appearance</v-tab>
+  </v-tabs>
   <div class="wrapper">
     <v-toolbar collapse density="compact" color="deep-purple darken-2">
       <template v-slot:append>
@@ -51,7 +51,6 @@ async function save() {
   overflow-y: hidden;
 }
 .wrapper {
-  width: 100vw;
   height: 100vh;
   position: absolute;
   top: 0px;
