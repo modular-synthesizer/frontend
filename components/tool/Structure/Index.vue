@@ -1,29 +1,32 @@
 <template>
-  <svg>
-    <tool-structure-background @move="seeMove" @start="selectItem(null)" />
-    <g :transform="`translate(${x} ${y})`">
-      <tool-structure-node
-        v-for="node in tool.nodes"
-        :node="node"
-        :selected="node.id === selected?.id"
-        @select="selectItem"
-        @moveSelected="moveSelected"
-        :tool="tool"
-      />
-      <tool-structure-link v-for="link in tool.links" :link="link" :tool="tool" />
-      <rect
-        :x="selected.x"
-        :y="selected.y"
-        :height="getNodeHeight(selected, tool)"
-        width="180"
-        fill="transparent"
-        stroke="red"
-        stroke-width="5"
-        v-if="selected"
-      />
-      <tool-structure-port v-for="port in tool.ports" :port="port" :tool="tool" />
-    </g>
-  </svg>
+  <div class="super-wrapper">
+    <svg>
+      <tool-structure-background @move="seeMove" @start="selectItem(null)" />
+      <g :transform="`translate(${x} ${y})`">
+        <tool-structure-node
+          v-for="node in tool.nodes"
+          :node="node"
+          :selected="node.id === selected?.id"
+          @select="selectItem"
+          @moveSelected="moveSelected"
+          :tool="tool"
+        />
+        <tool-structure-link v-for="link in tool.links" :link="link" :tool="tool" />
+        <rect
+          :x="selected.x"
+          :y="selected.y"
+          :height="getNodeHeight(selected, tool)"
+          width="180"
+          fill="transparent"
+          stroke="red"
+          stroke-width="5"
+          v-if="selected"
+        />
+        <tool-structure-port v-for="port in tool.ports" :port="port" :tool="tool" />
+      </g>
+    </svg>
+    <tool-structure-menu :tool="tool" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -55,9 +58,9 @@ function selectItem(node: InnerNode|null) {
 </script>
 
 <style>
-svg {
+.super-wrapper {
   border: 1px solid white;
-  height: calc(100% - 10px);
-  width: 100%;
+  height: calc(100vh - 48px);
+  padding: 10px;
 }
 </style>

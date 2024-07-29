@@ -5,16 +5,6 @@
     <v-tab value="external">External appearance</v-tab>
   </v-tabs>
   <div class="wrapper">
-    <v-toolbar collapse density="compact" color="deep-purple darken-2">
-      <template v-slot:append>
-        <v-btn icon to="/tools">
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-        <v-btn icon @click="save">
-          <v-icon>mdi-content-save</v-icon>
-        </v-btn>
-      </template>
-    </v-toolbar>
   </div>
     <div class="pt-2" v-if="tool">
       <v-window v-model="tab">
