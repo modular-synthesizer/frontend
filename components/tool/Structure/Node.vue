@@ -2,6 +2,7 @@
   <g :transform="`translate(${coords.x} ${coords.y})`" @click="emit('select', node)">
     <rect :height="getNodeHeight(node, tool)" width="180" fill="black" stroke="white" />
     <text x="10" y="20" fill="white">{{ node.name }}</text>
+    <text class="close" x="160" y="22" fill="white" @click.stop="deleteNode">&times;</text>
     <g  v-for="(param, i) in parametersFor(node, tool)" :transform="`translate(10, ${(i + 1) * 60 - 20})`">
       <tool-structure-param :param="param" />
     </g>
@@ -17,6 +18,7 @@ import { api } from '~~/lib/api/Api';
 import { PropType } from 'vue';
 import ITool, { InnerNode } from '~~/lib/interfaces/ITool';
 import ICoordinates from '~~/lib/interfaces/ICoordinates';
+import { remove } from 'lodash';
 
 const props = defineProps({
   node: { type: Object as PropType<InnerNode>, required: true },
@@ -63,4 +65,16 @@ window.addEventListener('keydown', (event: KeyboardEvent) => {
   });
   }, 200);
 });
+
+async function deleteNode() {
+  await api.auth_delete(`/tools/nodes/${props.node.id}`, { tool_id: props.tool.id });
+  remove(props.tool.nodes, props.node);
+}
 </script>
+
+<style scoped>
+.close {
+  font-size: 24px;
+  cursor: pointer;
+}
+</style>
