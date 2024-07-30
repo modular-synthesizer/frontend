@@ -23,11 +23,11 @@ const DOT_SIZE = 2;
 
 const emit = defineEmits<{ move: [x: number, y: number], start: []}>();
 
-const offset: Ref<ICoordinates> = ref({ x: 0, y: 0 });
+const offset: Ref<ICoordinates> = ref({ x: 100, y: 100 });
 
 const start: Ref<ICoordinates> = ref({ x: 0, y: 0 });
 
-const coords: Ref<ICoordinates> = ref({ x: 0, y: 0 });
+const coords: Ref<ICoordinates> = ref({ x: 100, y: 100 });
 
 const dragged: Ref<boolean> = ref(false);
 

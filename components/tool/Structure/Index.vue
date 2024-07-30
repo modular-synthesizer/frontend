@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import ITool, { InnerNode, IToolParameter } from '~~/lib/interfaces/ITool';
+import ITool, { InnerNode } from '~~/lib/interfaces/ITool';
 
 const { tool } = defineProps({
   tool: { type: Object as PropType<ITool>, required: true }
@@ -38,8 +38,8 @@ const { tool } = defineProps({
 
 const selected: Ref<InnerNode|null> = ref(null);
 
-const x: Ref<number> = ref(0);
-const y: Ref<number> = ref(0);
+const x: Ref<number> = ref(100);
+const y: Ref<number> = ref(100);
 
 function seeMove(cx: number, cy: number) {
   x.value = cx; y.value = cy;
@@ -60,7 +60,16 @@ function selectItem(node: InnerNode|null) {
 <style>
 .super-wrapper {
   border: 1px solid white;
-  height: calc(100vh - 48px);
-  padding: 10px;
+  height: calc(100vh - 64px);
+}
+
+.super-wrapper > header {
+  border: 1px solid white;
+  border-bottom: none;
+}
+
+svg {
+  height: 100%;
+  width: 100%;
 }
 </style>

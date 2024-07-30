@@ -2,7 +2,7 @@
   <svg></svg>
 </template>
 
-<style>
+<style scoped>
 svg {
   border: 1px solid white;
   height: calc(100% - 10px);
