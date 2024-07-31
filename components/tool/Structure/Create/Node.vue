@@ -4,7 +4,7 @@
       <v-list-item v-bind="dialogProps">Noeud</v-list-item>
     </template>
     <template v-slot:default="{ isActive }">
-      <v-form>
+      <v-form @submit.prevent.stop="save(isActive)">
         <v-card title="Créer un noeud">
           <v-card-text>
             <v-text-field v-model="node.name" label="Nom du noeud" variant="outlined" class="mb-4" />
@@ -19,7 +19,7 @@
           </v-card-text>
           <v-card-actions>
             <v-btn color="red" @click="cancel(isActive);">Annuler</v-btn>
-            <v-btn color="green" @click="save(isActive)">Valider</v-btn>
+            <v-btn color="green" type="submit">Valider</v-btn>
           </v-card-actions>
         </v-card>
       </v-form>
