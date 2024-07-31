@@ -1,5 +1,6 @@
 <template>
   <v-app-bar density="compact">
+    <v-btn to="/tools" icon><v-icon>mdi-chevron-left</v-icon></v-btn>
     <v-btn icon @click="save"><v-icon>mdi-content-save</v-icon></v-btn>
     <v-menu>
       <template v-slot:activator="{ props }">
