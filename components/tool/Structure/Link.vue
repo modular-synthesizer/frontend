@@ -40,6 +40,7 @@ function pathFrom(s: ICoordinates, e: ICoordinates) {
     //return `M ${s.x} ${s.y} L ${m.x} ${m.y}`
     return `M ${s.x} ${s.y} C ${s.x + 100} ${s.y} ${m.x + 100} ${m.y} ${m.x} ${m.y} C ${m.x - 100} ${m.y} ${e.x - 100} ${e.y} ${e.x} ${e.y}`
   }
-  return `M ${s.x} ${s.y} C ${s.x + 100} ${s.y} ${e.x - 100} ${e.y} ${e.x} ${e.y}`
+  const d: number = e.x - s.x
+  return `M ${s.x} ${s.y} C ${s.x + d} ${s.y} ${e.x - d} ${e.y} ${e.x} ${e.y}`
 }
 </script>
