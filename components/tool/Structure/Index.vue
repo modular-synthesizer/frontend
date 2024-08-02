@@ -82,6 +82,7 @@ function selectLink(link: InnerLink) {
 
 async function deleteNode(node: InnerNode|null) {
   if (node === null) return;
+  if (node.id === selectedNode.value?.id) selectedNode.value = null;
   remove(tool.nodes, node);
   await api.auth_delete(`/tools/nodes/${node.id}`, { tool_id: tool.id });
 }

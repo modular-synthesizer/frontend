@@ -47,13 +47,7 @@ function circleCoords() {
 }
 
 function isValidLink(): boolean {
-  if (hasNodeEnd(props.link)) {
-    return findIndex(props.tool.nodes, (n: InnerNode) => n.name === props.link.to.node) > -1;
-  }
-  else {
-    const [ node ] = props.link.to.node.split('.')
-    return findIndex(props.tool.nodes, (n: InnerNode) => n.name === node) > -1;
-  }
+  return findIndex(props.tool.nodes, (n: InnerNode) => n.name === props.link.to.node.split('.')[0]) >= 0;
 }
 
 function path() {
