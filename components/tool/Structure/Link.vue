@@ -1,5 +1,5 @@
 <template>
-  <g @click="handleClick" class="link">
+  <g v-if="isValidLink()" @click="handleClick" class="link">
     <circle v-bind="circleCoords()" r="6" :fill="stroke" />
     <template v-if="hasNodeEnd(link)">
       <path :d="path()" fill="transparent" :stroke="stroke" :stroke-width="STROKE_WIDTH" />
@@ -17,8 +17,9 @@
 </template>
 
 <script setup lang="ts">
+import { findIndex } from 'lodash';
 import ICoordinates from '~~/lib/interfaces/ICoordinates';
-import ITool, { InnerLink } from '~~/lib/interfaces/ITool';
+import ITool, { InnerLink, InnerNode } from '~~/lib/interfaces/ITool';
 
 const STROKE_WIDTH = 4;
 
@@ -43,6 +44,16 @@ function arrowTransform(coords: ICoordinates) {
 function circleCoords() {
   const coords: ICoordinates = getStartCoords(props.link, props.tool);
   return { cx: coords.x, cy: coords.y }
+}
+
+function isValidLink(): boolean {
+  if (hasNodeEnd(props.link)) {
+    return findIndex(props.tool.nodes, (n: InnerNode) => n.name === props.link.to.node) > -1;
+  }
+  else {
+    const [ node ] = props.link.to.node.split('.')
+    return findIndex(props.tool.nodes, (n: InnerNode) => n.name === node) > -1;
+  }
 }
 
 function path() {
