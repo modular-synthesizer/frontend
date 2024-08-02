@@ -30,7 +30,7 @@
           />
         </template>
         <tool-structure-link
-          v-if="selectedLink"
+          v-if="selectedLink !== null"
           :link="selectedLink"
           :tool="tool"
           :selected="true"
@@ -85,6 +85,25 @@ async function deleteNode(node: InnerNode|null) {
   remove(tool.nodes, node);
   await api.auth_delete(`/tools/nodes/${node.id}`, { tool_id: tool.id });
 }
+
+async function deleteLink(link: InnerLink|null) {
+  if (link === null) return;
+  selectedLink.value = null;
+  remove(tool.links, link);
+  await api.auth_delete(`/tools/links/${link.id}`, {tool_id: tool.id })
+}
+
+function deleteCurrentSelection(event: KeyboardEvent) {
+  if (event.code !== 'Delete') return;
+  deleteNode(selectedNode.value)
+  deleteLink(selectedLink.value)
+}
+
+window.addEventListener('keydown', deleteCurrentSelection)
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', deleteCurrentSelection)
+})
 </script>
 
 <style>
