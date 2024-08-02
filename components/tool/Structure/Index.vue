@@ -70,7 +70,6 @@ function moveSelected(x: number, y: number) {
 }
 
 function selectNode(node: InnerNode|null) {
-  console.log('selecting ' + node?.id)
   selectedNode.value = null;
   selectedLink.value = null;
   selectedNode.value = node;
