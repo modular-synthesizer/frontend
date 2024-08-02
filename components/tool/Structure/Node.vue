@@ -1,11 +1,20 @@
 <template>
-  <g :transform="`translate(${coords.x} ${coords.y})`" @click="emit('select', node)">
+  <g :transform="`translate(${$props.node.x} ${$props.node.y})`" @click="emit('select', node)">
     <rect :height="getNodeHeight(node, tool)" width="180" fill="black" stroke="white" />
     <text x="10" y="20" fill="white">{{ node.name }}</text>
-    <text class="close" x="160" y="22" fill="white" @click.stop="deleteNode">&times;</text>
+    <text class="close" x="160" y="22" fill="white" @click.stop="emit('removed')">&times;</text>
     <g  v-for="(param, i) in parametersFor(node, tool)" :transform="`translate(10, ${(i + 1) * 60 - 20})`">
       <tool-structure-param :param="param" />
     </g>
+    <rect
+      :height="getNodeHeight(node, tool)"
+      width="180"
+      fill="transparent"
+      stroke="red"
+      stroke-width="5"
+      v-if="$props.selected"
+      class="selected-stroke"
+    />
     <g v-for="idx in maxIndexTo(node, tool)" :transform="`translate(0 ${20 * idx})`">
       <path d="M -7 -7 L 7 0 L -7 7" fill="white" />
     </g>
@@ -17,8 +26,7 @@
 import { api } from '~~/lib/api/Api';
 import { PropType } from 'vue';
 import ITool, { InnerNode } from '~~/lib/interfaces/ITool';
-import ICoordinates from '~~/lib/interfaces/ICoordinates';
-import { remove } from 'lodash';
+import { onBeforeUnmount } from 'vue'
 
 const props = defineProps({
   node: { type: Object as PropType<InnerNode>, required: true },
@@ -26,11 +34,10 @@ const props = defineProps({
   tool: { type: Object as PropType<ITool>, required: true }
 })
 
-const coords: Ref<ICoordinates> = ref({ x: props.node.x, y: props.node.y })
-
 const emit = defineEmits<{
   select: [item: InnerNode],
-  moveSelected: [x: number, y: number]
+  moveSelected: [x: number, y: number],
+  removed: []
 }>();
 
 function nearestCoord(val: number) {
@@ -40,41 +47,44 @@ function nearestCoord(val: number) {
 
 const timer: Ref<number> = ref(-1);
 
-window.addEventListener('keydown', (event: KeyboardEvent) => {
+function handleKeyPress (event: KeyboardEvent) {
   if (!props.selected) return;
+  console.log(`${props.node.id} is selected`)
   window.clearTimeout(timer.value);
   switch(event.code) {
     case 'ArrowRight':
-      coords.value.x = nearestCoord(coords.value.x + 20)
+      props.node.x = nearestCoord(props.node.x + 20)
       break;
     case 'ArrowLeft':
-      coords.value.x = nearestCoord(coords.value.x - 20)
+      props.node.x = nearestCoord(props.node.x - 20)
       break;
     case 'ArrowDown':
-      coords.value.y = nearestCoord(coords.value.y + 20)
+      props.node.y = nearestCoord(props.node.y + 20)
       break;
     case 'ArrowUp':
-      coords.value.y = nearestCoord(coords.value.y - 20)
+      props.node.y = nearestCoord(props.node.y - 20)
       break;
   }
-  emit('moveSelected', coords.value.x, coords.value.y);
+  emit('moveSelected', props.node.x, props.node.y);
   timer.value = window.setTimeout(async () => {
     await api.auth_put(`/tools/nodes/${props.node.id}`, {
       ...props.node,
       tool_id: useRoute().params.id
   });
   }, 200);
-});
-
-async function deleteNode() {
-  await api.auth_delete(`/tools/nodes/${props.node.id}`, { tool_id: props.tool.id });
-  remove(props.tool.nodes, props.node);
 }
+
+window.addEventListener('keydown', handleKeyPress);
+
+onBeforeUnmount(() => window.removeEventListener('keydown', handleKeyPress))
 </script>
 
 <style scoped>
 .close {
   font-size: 24px;
   cursor: pointer;
+}
+.selected-stroke {
+  pointer-events: none;
 }
 </style>

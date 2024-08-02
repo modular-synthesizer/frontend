@@ -1,26 +1,40 @@
 <template>
   <div class="super-wrapper">
     <svg>
-      <tool-structure-background @move="seeMove" @start="selectItem(null)" />
+      <tool-structure-background @move="seeMove" @start="selectNode(null)" />
       <g :transform="`translate(${x} ${y})`">
+        <template v-for="node in tool.nodes">
+          <tool-structure-node
+            v-if="node.id !== selectedNode?.id"
+            :node="node"
+            :selected="false"
+            @select="selectNode"
+            @removed="deleteNode(node)"
+            :tool="tool"
+          />
+        </template>
         <tool-structure-node
-          v-for="node in tool.nodes"
-          :node="node"
-          :selected="node.id === selected?.id"
-          @select="selectItem"
+          v-if="selectedNode !== null"
+          :node="selectedNode"
+          :selected="true"
           @moveSelected="moveSelected"
+          @removed="deleteNode(selectedNode)"
           :tool="tool"
         />
-        <tool-structure-link v-for="link in tool.links" :link="link" :tool="tool" />
-        <rect
-          :x="selected.x"
-          :y="selected.y"
-          :height="getNodeHeight(selected, tool)"
-          width="180"
-          fill="transparent"
-          stroke="red"
-          stroke-width="5"
-          v-if="selected"
+        <template v-for="link in tool.links">
+          <tool-structure-link
+            v-if="link.id !== selectedLink?.id"
+            :link="link"
+            :tool="tool"
+            @selected="selectLink"
+          />
+        </template>
+        <tool-structure-link
+          v-if="selectedLink"
+          :link="selectedLink"
+          :tool="tool"
+          :selected="true"
+          @deselected="selectedLink = null"
         />
         <tool-structure-port v-for="port in tool.ports" :port="port" :tool="tool" />
       </g>
@@ -30,13 +44,16 @@
 </template>
 
 <script setup lang="ts">
-import ITool, { InnerNode } from '~~/lib/interfaces/ITool';
+import { remove } from 'lodash';
+import { api } from '~~/lib/api/Api';
+import ITool, { InnerLink, InnerNode } from '~~/lib/interfaces/ITool';
 
 const { tool } = defineProps({
   tool: { type: Object as PropType<ITool>, required: true }
 });
 
-const selected: Ref<InnerNode|null> = ref(null);
+const selectedNode: Ref<InnerNode|null> = ref(null);
+const selectedLink: Ref<InnerLink|null> = ref(null);
 
 const x: Ref<number> = ref(100);
 const y: Ref<number> = ref(100);
@@ -46,14 +63,28 @@ function seeMove(cx: number, cy: number) {
 }
 
 function moveSelected(x: number, y: number) {
-  if (selected.value !== null) {
-    selected.value.x = x;
-    selected.value.y = y
+  if (selectedNode.value !== null) {
+    selectedNode.value.x = x;
+    selectedNode.value.y = y
   }
 }
 
-function selectItem(node: InnerNode|null) {
-  selected.value = node;
+function selectNode(node: InnerNode|null) {
+  console.log('selecting ' + node?.id)
+  selectedNode.value = null;
+  selectedLink.value = null;
+  selectedNode.value = node;
+}
+
+function selectLink(link: InnerLink) {
+  selectedNode.value = null;
+  selectedLink.value = link;
+}
+
+async function deleteNode(node: InnerNode|null) {
+  if (node === null) return;
+  remove(tool.nodes, node);
+  await api.auth_delete(`/tools/nodes/${node.id}`, { tool_id: tool.id });
 }
 </script>
 
