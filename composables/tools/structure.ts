@@ -58,3 +58,13 @@ export function getParamCoords(link: InnerLink, tool: ITool) {
     y: node.y + 70 + (60 * idx)
   }
 }
+
+export const backgroundCallbacks: (() => void)[] = []
+
+export function registerBackgroundClick(callback: () => void) {
+  backgroundCallbacks.push(callback)
+}
+
+export function triggerBackgroundCallbacks() {
+  backgroundCallbacks.forEach((cb: () => void) => cb())
+}

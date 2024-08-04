@@ -23,10 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import { api } from '~~/lib/api/Api';
 import { PropType } from 'vue';
 import ITool, { InnerNode } from '~~/lib/interfaces/ITool';
-import { onBeforeUnmount } from 'vue'
 
 const props = defineProps({
   node: { type: Object as PropType<InnerNode>, required: true },
@@ -39,44 +37,6 @@ const emit = defineEmits<{
   moveSelected: [x: number, y: number],
   removed: []
 }>();
-
-function nearestCoord(val: number) {
-  const div = Math.round(val / 20);
-  return div * 20;
-}
-
-const timer: Ref<number> = ref(-1);
-
-function handleKeyPress (event: KeyboardEvent) {
-  if (!props.selected) return;
-  console.log(`${props.node.id} is selected`)
-  window.clearTimeout(timer.value);
-  switch(event.code) {
-    case 'ArrowRight':
-      props.node.x = nearestCoord(props.node.x + 20)
-      break;
-    case 'ArrowLeft':
-      props.node.x = nearestCoord(props.node.x - 20)
-      break;
-    case 'ArrowDown':
-      props.node.y = nearestCoord(props.node.y + 20)
-      break;
-    case 'ArrowUp':
-      props.node.y = nearestCoord(props.node.y - 20)
-      break;
-  }
-  emit('moveSelected', props.node.x, props.node.y);
-  timer.value = window.setTimeout(async () => {
-    await api.auth_put(`/tools/nodes/${props.node.id}`, {
-      ...props.node,
-      tool_id: useRoute().params.id
-  });
-  }, 200);
-}
-
-window.addEventListener('keydown', handleKeyPress);
-
-onBeforeUnmount(() => window.removeEventListener('keydown', handleKeyPress))
 </script>
 
 <style scoped>
