@@ -54,6 +54,8 @@ function createEmptyLink(): InnerLink {
   }
 }
 
+const emit = defineEmits<{ created: [ link: InnerLink]}>();
+
 const link: Ref<InnerLink> = ref(createEmptyLink());
 
 function getItems() {
@@ -81,7 +83,7 @@ function cancel(activeFlag: { value: boolean }) {
 
 async function create(activeFlag: { value: boolean }) {
   if (!form.value) return;
-  props.tool.links.push(await api.auth_post('/tools/links', { tool_id: props.tool.id, ...link.value }));
+  emit('created', link.value);
   cancel(activeFlag);
 }
 </script>
