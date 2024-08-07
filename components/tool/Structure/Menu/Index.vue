@@ -18,6 +18,7 @@
       <v-list v-model:opened="open" density="compact" nav :lines="false">
         <tool-structure-create-node @created="addNode" />
         <tool-structure-create-link @created="addLink" :tool="tool" />
+        <tool-structure-create-port @created="addPort" :tool="tool" />
       </v-list>
     </v-menu>
   </v-app-bar>
@@ -25,7 +26,7 @@
 
 <script lang="ts" setup>
 import { api } from '~~/lib/api/Api';
-import ITool, { InnerLink, InnerNode } from '~~/lib/interfaces/ITool';
+import ITool, { InnerLink, InnerNode, IToolPort } from '~~/lib/interfaces/ITool';
 
 const props = defineProps({
   tool: { type: Object as PropType<ITool>, required: true },
@@ -34,12 +35,15 @@ const props = defineProps({
 const open = ref([])
 
 async function addNode(node: InnerNode) {
-  const n: InnerNode = await api.auth_post('/tools/nodes', { ...node, tool_id: props.tool.id });
-  props.tool.nodes.push(n);
+  props.tool.nodes.push(await api.auth_post('/tools/nodes', { ...node, tool_id: props.tool.id }));
 }
 
 async function addLink(link: InnerLink) {
   props.tool.links.push(await api.auth_post('/tools/links', { tool_id: props.tool.id, ...link }));
+}
+
+async function addPort(port: IToolPort) {
+  props.tool.ports.push(await api.auth_post('/tools/ports', { tool_id: props.tool.id, ...port }));
 }
 
 async function save() {

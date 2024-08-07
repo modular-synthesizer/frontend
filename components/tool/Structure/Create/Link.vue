@@ -37,7 +37,6 @@
 </template>
 
 <script lang="ts" setup>
-import { api } from '~~/lib/api/Api';
 import ITool, { InnerLink, InnerNode } from '~~/lib/interfaces/ITool';
 
 const form: Ref = ref();
