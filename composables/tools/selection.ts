@@ -22,8 +22,8 @@ export function selectItem(item: Selectable, uri: Resource = '', tool: ITool|nul
 export async function deleteSelectedItem() {
   const { item, tool, uri } = selected.value;
   if (item === null || tool === null) return;
+  remove(tool[uri as keyof ITool] as unknown as any[], (i: any) => i.id === item.id);
   selectItem(null);
-  remove(tool[uri as keyof ITool] as unknown as any[], (item: any) => item.id === item.id);
   return await api.auth_delete(`/tools/${uri}/${item.id}`, { tool_id: tool.id, ...item })
 }
 
