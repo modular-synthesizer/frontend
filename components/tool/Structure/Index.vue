@@ -1,7 +1,7 @@
 <template>
   <div class="super-wrapper">
     <svg>
-      <tool-structure-background @move="seeMove" @start="triggerBackgroundCallbacks" />
+      <tool-structure-background @move="seeMove" @start="selectItem(null, '', tool)" />
       <g :transform="`translate(${x} ${y})`">
         <tool-structure-node-list :tool="tool" />
         <tool-structure-link-list :tool="tool" />
@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import { triggerBackgroundCallbacks } from '~~/composables/tools/structure';
 import ITool from '~~/lib/interfaces/ITool';
 
 const { tool } = defineProps({
@@ -26,6 +25,8 @@ const y: Ref<number> = ref(100);
 function seeMove(cx: number, cy: number) {
   x.value = cx; y.value = cy;
 }
+
+declareDeletionHandlers(window, onBeforeUnmount);
 </script>
 
 <style>
