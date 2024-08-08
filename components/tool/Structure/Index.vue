@@ -5,7 +5,6 @@
       <g :transform="`translate(${x} ${y})`">
         <tool-structure-node-list :tool="tool" />
         <tool-structure-link-list :tool="tool" />
-        <tool-structure-port-list :tool="tool" />
       </g>
     </svg>
     <tool-structure-menu :tool="tool" />

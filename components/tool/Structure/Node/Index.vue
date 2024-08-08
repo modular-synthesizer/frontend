@@ -18,12 +18,13 @@
       <path d="M -7 -7 L 7 0 L -7 7" fill="white" />
     </g>
     <circle v-for="idx in maxIndexFrom(node, tool)" cx="180" :cy="20 * idx" r="5" fill="white" />
+    <tool-structure-port-list :ports="getPorts()" :tool="tool" />
   </g>
 </template>
 
 <script setup lang="ts">
 import { PropType } from 'vue';
-import ITool, { InnerNode } from '~~/lib/interfaces/ITool';
+import ITool, { InnerNode, IToolPort } from '~~/lib/interfaces/ITool';
 
 const props = defineProps({
   node: { type: Object as PropType<InnerNode>, required: true },
@@ -35,6 +36,10 @@ const emit = defineEmits<{
   select: [item: InnerNode],
   moveSelected: [x: number, y: number]
 }>();
+
+function getPorts() {
+  return props.tool.ports.filter((p: IToolPort) => p.target === props.node.name)
+}
 </script>
 
 <style scoped>

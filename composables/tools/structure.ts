@@ -1,6 +1,6 @@
 import { max, uniq } from "lodash"
 import ICoordinates from "~~/lib/interfaces/ICoordinates"
-import ITool, { InnerLink, InnerNode, IToolParameter } from "~~/lib/interfaces/ITool"
+import ITool, { InnerLink, InnerNode, IToolParameter, IToolPort } from "~~/lib/interfaces/ITool"
 
 export function parametersFor(node: InnerNode, tool: ITool): string[] {
   return uniq(tool.links.filter((link: InnerLink) => {
@@ -10,11 +10,17 @@ export function parametersFor(node: InnerNode, tool: ITool): string[] {
 }
 
 export function maxIndexFrom(node: InnerNode, tool: ITool): number {
-  return max(tool.links.filter((l: InnerLink) => l.from.node === node.name).map((l: InnerLink) => l.from.index + 1)) || 0
+  return max([
+    ...tool.links.filter((l: InnerLink) => l.from.node === node.name).map((l: InnerLink) => l.from.index + 1),
+    ...tool.ports.filter((p: IToolPort) => p.target === node.name && p.kind === 'output').map((p: IToolPort) => p.index + 1)
+  ]) || 0
 }
 
 export function maxIndexTo(node: InnerNode, tool: ITool): number {
-  return max(tool.links.filter((l: InnerLink) => l.to.node === node.name).map((l: InnerLink) => l.to.index + 1)) || 0
+  return max([
+    ...tool.links.filter((l: InnerLink) => l.to.node === node.name).map((l: InnerLink) => l.to.index + 1),
+    ...tool.ports.filter((p: IToolPort) => p.target === node.name&& p.kind === 'input').map((p: IToolPort) => p.index + 1)
+  ]) || 0
 }
 
 export function getNodeHeight(node: InnerNode, tool: ITool) {
