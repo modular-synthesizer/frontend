@@ -1,9 +1,9 @@
 <template>
-  <rect y="0" x="10" height="20" width="150" stroke="white" />
-  <g :transform="`translate(10 10)`">
+  <rect y="0" x="0" height="60" width="160" stroke="white" />
+  <g :transform="`translate(0 30)`">
     <path d="M -7 -7 L 7 0 L -7 7" fill="white" />
   </g>
-  <text y="15" x="20" fill="white">{{ props.param }}</text>
+  <text y="30" x="10" fill="white">{{ props.param }}</text>
 </template>
 <script setup lang="ts">
 

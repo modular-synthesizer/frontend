@@ -3,10 +3,24 @@ import ICoordinates from "~~/lib/interfaces/ICoordinates"
 import ITool, { InnerLink, InnerNode, IToolParameter, IToolPort } from "~~/lib/interfaces/ITool"
 
 export function parametersFor(node: InnerNode, tool: ITool): string[] {
-  return uniq(tool.links.filter((link: InnerLink) => {
+  return uniq([
+    ...parametersFromLinks(node, tool),
+    ...parametersFromParams(node, tool)
+  ]);
+}
+
+export function parametersFromLinks(node: InnerNode, tool: ITool) {
+  return tool.links.filter((link: InnerLink) => {
     return link.to.node.includes('.') && link.to.node.split('.')[0] === node.name;
   })
-  .map((l: InnerLink) =>l.to.node.split('.')[1]));
+  .map((l: InnerLink) =>l.to.node.split('.')[1]);
+}
+
+export function parametersFromParams(node: InnerNode, tool: ITool) {
+  return tool.parameters.filter((p: IToolParameter) => {
+    return p.targets.includes(node.name)
+  })
+  .map((p: IToolParameter) => p.field)
 }
 
 export function maxIndexFrom(node: InnerNode, tool: ITool): number {
@@ -23,18 +37,24 @@ export function maxIndexTo(node: InnerNode, tool: ITool): number {
   ]) || 0
 }
 
+export const TITLE_HEIGHT = 40;
+export const PARAM_HEIGHT = 30;
+export const PORT_HEIGHT = 20;
+
+export const NODE_WIDTH = 180;
+
 export function getNodeHeight(node: InnerNode, tool: ITool) {
   const np: number = parametersFor(node, tool).length
-  const paramsHeight: number = 40 + (np * 60) + (np > 0 ? 20 : 0)
-  const fromPortsHeight: number = 20 * (maxIndexFrom(node, tool) + 1);
-  const toPortsHeight: number = 20 * (maxIndexTo(node, tool) + 1);
+  const paramsHeight: number = TITLE_HEIGHT + np * PARAM_HEIGHT;
+  const fromPortsHeight: number = PORT_HEIGHT * maxIndexFrom(node, tool) + 15;
+  const toPortsHeight: number = PORT_HEIGHT * maxIndexTo(node, tool) + 15;
   return max([paramsHeight, fromPortsHeight, toPortsHeight]);
 }
 
 export function getStartCoords(link: InnerLink, tool: ITool): ICoordinates {
   const node: InnerNode = getStartNode(link, tool);
   return {
-    x: node.x + 180,
+    x: node.x + NODE_WIDTH,
     y: node.y + (20 * (link.from.index + 1))
   }
 }
@@ -60,7 +80,7 @@ export function getParamCoords(link: InnerLink, tool: ITool) {
   const node: InnerNode = tool.nodes.find((n: InnerNode) => n.name === nodeName);
   const idx: number = parametersFor(node, tool).indexOf(paramName);
   return {
-    x: node.x + 10,
-    y: node.y + 70 + (60 * idx)
+    x: node.x + 20,
+    y: node.y + TITLE_HEIGHT + PARAM_HEIGHT * idx + 10,
   }
 }
