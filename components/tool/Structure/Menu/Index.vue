@@ -8,7 +8,7 @@
       <v-icon>mdi-content-save-outline</v-icon>
       <v-tooltip activator="parent" location="bottom">Sauvegarder</v-tooltip>
     </v-btn>
-    <v-menu>
+    <v-menu :close-on-content-click="false">
       <template v-slot:activator="{ props }">
         <v-btn v-bind="props" icon>
           <v-icon>mdi-plus</v-icon>

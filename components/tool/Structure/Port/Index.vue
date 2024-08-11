@@ -1,5 +1,9 @@
 <template>
-  <g @click.stop.prevent="selectPort" v-if="isValidPort()" :transform="`translate(${x()} ${port.index * 20 + 20})`">
+  <g
+    @click.stop.prevent="selectPort"
+    @dblclick.stop.prevent="$emit('edit', port)"
+    v-if="isValidPort()" :transform="`translate(${x()} ${port.index * 20 + 20})`"
+  >
     <path :d="path()" :stroke="selected ? 'red' : 'white'" stroke-width="3"/>
     <circle r="8" :fill="fill()" stroke="white" stroke-width="2" />
     <circle r="8" fill="transparent" stroke="red" stroke-width="4" v-if="selected" />
@@ -20,10 +24,10 @@ import ITool, { InnerNode, IToolPort } from '~~/lib/interfaces/ITool';
 const props = defineProps({
   port: { type: Object as PropType<IPort>, required: true },
   tool: { type: Object as PropType<ITool>, required: true },
-  selected: { type: Boolean, default: false }
+  selected: { type: Boolean, default: false },
 });
 
-const emit = defineEmits<{ select: [ item: IToolPort ], unselect: []}>();
+const emit = defineEmits<{ select: [ item: IToolPort ], unselect: [], edit: [ item: IToolPort ]}>();
 
 const OFFSET = 30
 

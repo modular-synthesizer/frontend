@@ -6,6 +6,7 @@
       :selected="false"
       @select="selectItem(node, 'nodes', tool)"
       :tool="tool"
+      @edit-port="editPort"
     />
   </template>
   <tool-structure-node
@@ -13,17 +14,25 @@
     :node="selected.item"
     :selected="true"
     :tool="tool"
+    @edit-port="editPort"
   />
 </template>
 
 <script lang="ts" setup>
 import { api } from '~~/lib/api/Api';
-import ITool from '~~/lib/interfaces/ITool';
+import ITool, { IToolPort } from '~~/lib/interfaces/ITool';
 
 const { tool } = defineProps({
   tool: { type: Object as PropType<ITool>, required: true }
 })
+
+const emit = defineEmits<{ editPort: [ item: IToolPort ] }>();
+
 const timer: Ref<number> = ref(-1);
+
+function editPort(port: IToolPort) {
+  emit('editPort', port)
+}
 
 function handleKeyPress (event: KeyboardEvent) {
   if (selected.value.item === null) return;

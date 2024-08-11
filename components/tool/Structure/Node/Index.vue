@@ -18,7 +18,7 @@
       <path d="M -7 -7 L 7 0 L -7 7" fill="white" />
     </g>
     <circle v-for="idx in maxIndexFrom(node, tool)" cx="180" :cy="20 * idx" r="5" fill="white" />
-    <tool-structure-port-list :ports="getPorts()" :tool="tool" />
+    <tool-structure-port-list :ports="getPorts()" :tool="tool" @edit="editPort" />
   </g>
 </template>
 
@@ -34,11 +34,16 @@ const props = defineProps({
 
 const emit = defineEmits<{
   select: [item: InnerNode],
-  moveSelected: [x: number, y: number]
+  moveSelected: [x: number, y: number],
+  editPort: [ item: IToolPort ]
 }>();
 
 function getPorts() {
   return props.tool.ports.filter((p: IToolPort) => p.target === props.node.name)
+}
+
+function editPort(port: IToolPort) {
+  emit('editPort', port)
 }
 </script>
 
