@@ -5,9 +5,16 @@
   </g>
   <text y="30" x="10" fill="white">{{ props.param }}</text>
 </template>
+
 <script setup lang="ts">
+import ITool from '~~/lib/interfaces/ITool';
 
 const props = defineProps({
-  param: { type: String, required: true }
+  param: { type: String, required: true },
+  tool: { type: Object as PropType<ITool>, required: true }
 })
+
+function getToolParameters() {
+  console.log(props.tool.parameters)
+}
 </script>
