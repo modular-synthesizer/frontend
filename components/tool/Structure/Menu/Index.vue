@@ -19,6 +19,7 @@
         <tool-structure-create-node @created="addNode" />
         <tool-structure-create-link @created="addLink" :tool="tool" />
         <tool-structure-create-port @created="addPort" :tool="tool" />
+        <tool-structure-create-parameter @created="addParameter" :tool="tool" />
       </v-list>
     </v-menu>
   </v-app-bar>
@@ -26,7 +27,7 @@
 
 <script lang="ts" setup>
 import { api } from '~~/lib/api/Api';
-import ITool, { InnerLink, InnerNode, IToolPort } from '~~/lib/interfaces/ITool';
+import ITool, { InnerLink, InnerNode, IToolParameter, IToolPort } from '~~/lib/interfaces/ITool';
 
 const props = defineProps({
   tool: { type: Object as PropType<ITool>, required: true },
@@ -44,6 +45,10 @@ async function addLink(link: InnerLink) {
 
 async function addPort(port: IToolPort) {
   props.tool.ports.push(await api.auth_post('/tools/ports', { tool_id: props.tool.id, ...port }));
+}
+
+async function addParameter(parameter: IToolParameter) {
+  props.tool.parameters.push(await api.auth_post('/tools/parameters', { tool_id: props.tool.id, ...parameter }));
 }
 
 async function save() {
