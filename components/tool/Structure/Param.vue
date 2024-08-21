@@ -11,12 +11,14 @@
     <rect x="0" y="0" :width="getRectWidth() + 20" :height="getToolParameters().length * 30" fill="silver" />
     <template v-for="p in getToolParameters()">
       <text x="10" y="20" ref="texts">{{ p.name }} :: {{ p.field }} ({{ p.minimum }} - {{ p.maximum }} &plusmn; {{ p.step }} p{{ p.precision }})</text>
+      <text class="close" :x="getRectWidth()" y="24" @click.prevent.stop="removeParameter(p)">&times;</text>
     </template>
   </g>
 </template>
 
 <script setup lang="ts">
-import { max } from 'lodash';
+import { max, remove } from 'lodash';
+import { api } from '~~/lib/api/Api';
 import ITool, { InnerNode, IToolParameter } from '~~/lib/interfaces/ITool';
 
 const props = defineProps({
@@ -38,13 +40,22 @@ function showParameters() {
   shown.value = !shown.value
 }
 
+async function removeParameter(p: IToolParameter) {
+  await api.auth_delete(`/tools/parameters/${p.id}`, { tool_id: props.tool.id });
+  remove(props.tool.parameters, (i: IToolParameter) => i.id === p.id);
+}
+
 function getRectWidth() {
-  return max(texts.value.map((r: any) => r.getComputedTextLength())) || 0;
+  return max(texts.value.map((r: any) => r.getComputedTextLength())) + 20 || 0;
 }
 </script>
 
 <style scoped>
 .circle-cursor {
   cursor: pointer;
+}
+.close {
+  cursor: pointer;
+  font-size: 24px;
 }
 </style>

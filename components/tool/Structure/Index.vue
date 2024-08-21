@@ -44,7 +44,6 @@ function editPort(port: IToolPort) {
 }
 
 async function doEditPort(port: IToolPort) {
-  console.log(port);
   await api.auth_put(`/tools/ports/${port.id}`, { ...port, tool_id: tool.id });
   const index: number = tool.ports.findIndex((po: IToolPort) => po.id === port.id);
   if (index > -1) tool.ports[index] = port;
