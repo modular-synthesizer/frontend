@@ -1,8 +1,8 @@
 <template>
   <div class="super-wrapper">
-    <svg>
+    <svg @wheel="handleZoom">
       <tool-structure-background @move="seeMove" @start="selectItem(null, '', tool)" />
-      <g :transform="`translate(${x} ${y})`">
+      <g :transform="`translate(${x} ${y}) scale(${scale} ${scale})`">
         <tool-structure-link-list :tool="tool" />
         <tool-structure-node-list :tool="tool" @edit-port="editPort" />
       </g>
@@ -20,6 +20,7 @@
 </template>
 
 <script setup lang="ts">
+import { ZOOM_RATIO, MAX_ZOOM_OUT, MAX_ZOOM_IN } from '~~/lib/utils/constants';
 import { cloneDeep } from 'lodash';
 import ITool, { IToolPort } from '~~/lib/interfaces/ITool';
 
@@ -29,6 +30,7 @@ const { tool } = defineProps({
 
 const x: Ref<number> = ref(100);
 const y: Ref<number> = ref(100);
+const scale: Ref<number> = ref(1)
 
 function seeMove(cx: number, cy: number) {
   x.value = cx; y.value = cy;
@@ -46,6 +48,11 @@ async function validateEditPort(port: IToolPort) {
   await updateElement('ports', tool, port)
   p.value = null;
   dialog.value = false;
+}
+
+function handleZoom(event: WheelEvent) {
+  let s: number = Math.abs(scale.value + event.deltaY * -ZOOM_RATIO);
+  scale.value = Math.min(Math.max(MAX_ZOOM_OUT, s), MAX_ZOOM_IN);
 }
 
 declareDeletionHandlers(window, onBeforeUnmount);
