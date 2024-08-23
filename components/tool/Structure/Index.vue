@@ -14,14 +14,13 @@
       :tool="tool"
       v-model="dialog"
       @cancelled="dialog = false"
-      @validated="doEditPort"
+      @validated="validateEditPort"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { cloneDeep } from 'lodash';
-import { api } from '~~/lib/api/Api';
 import ITool, { IToolPort } from '~~/lib/interfaces/ITool';
 
 const { tool } = defineProps({
@@ -43,10 +42,8 @@ function editPort(port: IToolPort) {
   dialog.value = true;
 }
 
-async function doEditPort(port: IToolPort) {
-  await api.auth_put(`/tools/ports/${port.id}`, { ...port, tool_id: tool.id });
-  const index: number = tool.ports.findIndex((po: IToolPort) => po.id === port.id);
-  if (index > -1) tool.ports[index] = port;
+async function validateEditPort(port: IToolPort) {
+  await updateElement('ports', tool, port)
   p.value = null;
   dialog.value = false;
 }
