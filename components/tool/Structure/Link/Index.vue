@@ -1,13 +1,13 @@
 <template>
   <g v-if="isValidLink()" @click="handleClick" class="link">
-    <circle v-bind="circleCoords()" r="6" :fill="stroke" />
+    <circle v-bind="circleCoords()" :r="PORT_RADIUS" :fill="stroke" />
     <template v-if="hasNodeEnd(link)">
       <path :d="path()" fill="transparent" :stroke="stroke" :stroke-width="STROKE_WIDTH" />
-      <circle :cx="getEndCoords(link, tool).x" :cy="getEndCoords(link, tool).y" r="5" :fill="stroke" />
+      <circle :cx="getEndCoords(link, tool).x" :cy="getEndCoords(link, tool).y" :r="PORT_RADIUS" :fill="stroke" />
     </template>
     <template v-else>
       <path :d="paramPath()" fill="transparent" :stroke="stroke" :stroke-width="STROKE_WIDTH" />
-      <circle :cx="getParamCoords(link, tool).x" :cy="getParamCoords(link, tool).y" r="5" :fill="stroke" />
+      <circle :cx="getParamCoords(link, tool).x" :cy="getParamCoords(link, tool).y" :r="PORT_RADIUS" :fill="stroke" />
     </template>
   </g>
 </template>

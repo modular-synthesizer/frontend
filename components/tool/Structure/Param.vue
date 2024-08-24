@@ -1,6 +1,6 @@
 <template>
   <rect y="0" x="10" height="20" width="150" stroke="white" />
-  <circle cx="10" cy="10" r="5" fill="white" />
+  <circle cx="10" cy="10" :r="PORT_RADIUS" fill="white" />
   <text y="15" x="20" fill="white">{{ props.param }}</text>
   <g v-if="getToolParameters().length > 0" transform="translate(150 10)">
     <circle cx="0" cy="0" r="7" fill="red" stroke="white" stroke-width="2" class="circle-cursor" @click.stop.prevent="showParameters" />

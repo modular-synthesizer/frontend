@@ -8,7 +8,7 @@
     <circle r="8" :fill="fill()" stroke="white" stroke-width="2" />
     <circle r="8" fill="transparent" stroke="red" stroke-width="4" v-if="selected" />
     <template v-if="selected">
-      <circle :cx="cx()" :cy="0" r="5" fill="red" />
+      <circle :cx="cx()" :cy="0" :r="PORT_RADIUS" fill="red" />
     </template>
   </g>
 </template>

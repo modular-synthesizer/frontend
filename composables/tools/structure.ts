@@ -33,15 +33,9 @@ export function maxIndexFrom(node: InnerNode, tool: ITool): number {
 export function maxIndexTo(node: InnerNode, tool: ITool): number {
   return max([
     ...tool.links.filter((l: InnerLink) => l.to.node === node.name).map((l: InnerLink) => l.to.index + 1),
-    ...tool.ports.filter((p: IToolPort) => p.target === node.name&& p.kind === 'input').map((p: IToolPort) => p.index + 1)
+    ...tool.ports.filter((p: IToolPort) => p.target === node.name && p.kind === 'input').map((p: IToolPort) => p.index + 1)
   ]) || 0
 }
-
-export const TITLE_HEIGHT = 40;
-export const PARAM_HEIGHT = 30;
-export const PORT_HEIGHT = 20;
-
-export const NODE_WIDTH = 180;
 
 export function getNodeHeight(node: InnerNode, tool: ITool) {
   const np: number = parametersFor(node, tool).length
