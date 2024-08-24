@@ -3,8 +3,9 @@
     <svg @wheel="handleZoom">
       <tool-structure-background @move="seeMove" @start="selectItem(null, '', tool)" />
       <g :transform="`translate(${x} ${y}) scale(${scale} ${scale})`">
-        <tool-structure-link-list :tool="tool" />
         <tool-structure-node-list :tool="tool" @edit-port="editPort" />
+        <tool-structure-link-list :tool="tool" />
+        <tool-structure-port-list :ports="tool.ports" :tool="tool" @edit="editPort" />
       </g>
     </svg>
     <tool-structure-menu :tool="tool" />

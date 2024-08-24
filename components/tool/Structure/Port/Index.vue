@@ -2,7 +2,7 @@
   <g
     @click.stop.prevent="selectPort"
     @dblclick.stop.prevent="$emit('edit', port)"
-    v-if="isValidPort()" :transform="`translate(${x()} ${port.index * 20 + 20})`"
+    v-if="getNode() !== undefined" :transform="`translate(${getNode().x + x()} ${getNode().y + port.index * 20 + 20})`"
   >
     <path :d="path()" :stroke="selected ? 'red' : 'white'" stroke-width="3"/>
     <circle r="8" :fill="fill()" stroke="white" stroke-width="2" />
@@ -17,7 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { findIndex } from 'lodash';
 import IPort from '~~/lib/interfaces/IPort';
 import ITool, { InnerNode, IToolPort } from '~~/lib/interfaces/ITool';
 
@@ -51,7 +50,7 @@ function path() {
   return `M 0 0 L ${props.port.kind === 'input' ? OFFSET : -OFFSET} 0`
 }
 
-function isValidPort() {
-  return findIndex(props.tool.nodes, (n: InnerNode) => n.name === props.port.target) > -1
+function getNode() {
+  return props.tool.nodes.find((n: InnerNode) => n.name === props.port.target)
 }
 </script>
