@@ -8,10 +8,7 @@
     <circle r="8" :fill="fill()" stroke="white" stroke-width="2" />
     <circle r="8" fill="transparent" stroke="red" stroke-width="4" v-if="selected" />
     <template v-if="selected">
-      <circle :cx="cx()" :cy="0" r="5" fill="red" v-if="port.kind === 'output'" />
-      <g :transform="`translate(${OFFSET} 0)`" v-else>
-        <path d="M -7 -7 L 7 0 L -7 7" fill="red" />
-      </g>
+      <circle :cx="cx()" :cy="0" r="5" fill="red" />
     </template>
   </g>
 </template>

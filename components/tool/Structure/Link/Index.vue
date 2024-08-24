@@ -3,15 +3,11 @@
     <circle v-bind="circleCoords()" r="6" :fill="stroke" />
     <template v-if="hasNodeEnd(link)">
       <path :d="path()" fill="transparent" :stroke="stroke" :stroke-width="STROKE_WIDTH" />
-      <g :transform="arrowTransform(getEndCoords(link, tool))">
-        <path d="M -7 -7 L 7 0 L -7 7" :fill="stroke" />
-      </g>
+      <circle :cx="getEndCoords(link, tool).x" :cy="getEndCoords(link, tool).y" r="5" :fill="stroke" />
     </template>
     <template v-else>
       <path :d="paramPath()" fill="transparent" :stroke="stroke" :stroke-width="STROKE_WIDTH" />
-      <g :transform="arrowTransform(getParamCoords(link, tool))">
-        <path d="M -7 -7 L 7 0 L -7 7" :fill="stroke" />
-      </g>
+      <circle :cx="getParamCoords(link, tool).x" :cy="getParamCoords(link, tool).y" r="5" :fill="stroke" />
     </template>
   </g>
 </template>
@@ -63,11 +59,6 @@ function paramPath() {
     getParamCoords(props.link, props.tool)
   );
 }
-
-// async function deleteLink() {
-//   await api.auth_delete(`/tools/links/${props.link.id}`, { tool_id: props.tool.id });
-//   remove(props.tool.links, (l: InnerLink) => l.id === props.link.id)
-// }
 
 function handleClick() {
   props.selected ? emit('deselected') : emit('selected', props.link);
