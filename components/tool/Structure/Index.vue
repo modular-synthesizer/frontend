@@ -1,11 +1,15 @@
 <template>
   <div class="super-wrapper">
     <svg @wheel="handleZoom">
-      <tool-structure-background @move="seeMove" @start="selectItem(null, '', tool)" />
-      <g :transform="`translate(${x} ${y}) scale(${scale} ${scale})`">
-        <tool-structure-node-list :tool="tool" @edit-port="editPort" />
-        <tool-structure-link-list :tool="tool" />
-        <tool-structure-port-list :ports="tool.ports" :tool="tool" @edit="editPort" />
+      <g :transform="`scale(${scale} ${scale})`">
+        <g :transform="`translate(${x % BG_SIZE} ${y % BG_SIZE})`">
+          <tool-structure-background @move="seeMove" @start="selectItem(null, '', tool)" :scale="scale" />
+        </g>
+        <g :transform="`translate(${x} ${y})`">
+          <tool-structure-node-list :tool="tool" @edit-port="editPort" />
+          <tool-structure-link-list :tool="tool" />
+          <tool-structure-port-list :ports="tool.ports" :tool="tool" @edit="editPort" />
+        </g>
       </g>
     </svg>
     <tool-structure-menu :tool="tool" />
@@ -29,12 +33,13 @@ const { tool } = defineProps({
   tool: { type: Object as PropType<ITool>, required: true }
 });
 
-const x: Ref<number> = ref(100);
-const y: Ref<number> = ref(100);
+const x: Ref<number> = ref(0);
+const y: Ref<number> = ref(0);
 const scale: Ref<number> = ref(1)
 
 function seeMove(cx: number, cy: number) {
-  x.value = cx; y.value = cy;
+  x.value = cx / scale.value;
+  y.value = cy / scale.value;
 }
 
 const p: Ref<IToolPort|null> = ref(null);
