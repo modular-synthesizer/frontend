@@ -68,7 +68,7 @@
 
 <script lang="ts" setup>
 import useVuelidate from '@vuelidate/core';
-import { email, minLength, required, sameAs } from '@vuelidate/validators';
+import { email, minLength, required } from '@vuelidate/validators';
 import { api } from '~~/lib/api/Api';
 import IApiError from '~~/lib/interfaces/IApiError';
 
@@ -104,13 +104,11 @@ function hasEmptyFields() {
 async function register(_$event: Event) {
   await v$.value.$validate();
   if (hasEmptyFields()) return;
-  if (!v$.value.$error) {
-    api.post('/accounts', account)
-      .then(_response => registered.value = true)
-      .catch(error => {
-        const err: IApiError = error.response.data;
-        $externalResults.value = {[err.key]: err.message};
-      });
-  }
+  api.post('/accounts', account)
+    .then(_response => registered.value = true)
+    .catch(error => {
+      const err: IApiError = error.response.data;
+      $externalResults.value = {[err.key]: err.message};
+    });
 }
 </script>
