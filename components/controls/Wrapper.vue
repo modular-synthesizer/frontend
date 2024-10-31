@@ -10,7 +10,6 @@ import {
   ControlsMuteButton,
   ControlsPort,
   ControlsSmallKnob,
-  ControlsEnvelopeTrigger,
   ControlsAnalyser,
   ControlsFader,
 } from "#components"
@@ -26,7 +25,6 @@ export default {
     ControlsMuteButton,
     ControlsPort,
     ControlsSmallKnob,
-    ControlsEnvelopeTrigger,
     ControlsAnalyser,
     ControlsFader,
   },
