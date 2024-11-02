@@ -12,7 +12,7 @@
           <div class="tabs-holder"><tool-structure :tool="tool" /></div>
         </v-window-item>
         <v-window-item value="external">
-          <div class="tabs-holder"><tool-appearance /></div>
+          <div class="tabs-holder"><tool-appearance :tool="tool" /></div>
         </v-window-item>
       </v-window>
     </div>

@@ -64,7 +64,7 @@ function handleZoom(event: WheelEvent) {
 declareDeletionHandlers(window, onBeforeUnmount);
 </script>
 
-<style>
+<style scoped>
 .super-wrapper {
   border: 1px solid white;
   height: calc(100vh - 64px);
