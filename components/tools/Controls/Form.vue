@@ -41,6 +41,13 @@
 import { flatten } from 'lodash';
 import { PropType } from 'vue';
 import { IControl } from '~~/lib/interfaces/IControl';
+import axios from 'axios';
+
+const EXCLUDED = ['ControlsWrapper']
+
+const controls: string[] = (await axios.get('/json/controls.json')).data;
+const filtered: string[] = controls.filter((name: string) => EXCLUDED.indexOf(name) < 0);
+const components: string[] = filtered.map((name: string) => name.replace('Controls', ''));
 
 export default {
   props: {
@@ -53,11 +60,7 @@ export default {
       default: () => -1,
     }
   },
-  data: () => ({
-    components: [
-      'SmallKnob', 'LargeKnob', 'Knob', 'Port', 'MidiController', 'Analyser', 'Fader'
-    ],
-  }),
+  data: () => ({ components }),
   computed: {
     control() { return this.modelValue; },
     chips() {

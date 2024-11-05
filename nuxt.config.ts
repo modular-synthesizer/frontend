@@ -1,3 +1,6 @@
+import fs from 'fs'
+import { startsWith } from 'lodash'
+
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   modules: [
@@ -41,4 +44,13 @@ export default defineNuxtConfig({
       brotli: true,
     },
   },
+  hooks: {
+    'components:extend': (components: Component[]) => {
+      const filtered: Component[] = components.filter((c: any) => {
+        return startsWith(c.kebabName, 'controls-');
+      });
+      const mapped: string[] = filtered.map((c: any) => c.pascalName);
+      fs.writeFileSync ('public/json/controls.json', JSON.stringify(mapped));
+    }
+  }
 })
