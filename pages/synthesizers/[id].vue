@@ -1,13 +1,15 @@
 <template>
   <div class="wrapper synthesizer-wrapper">
-    <synthesizer-initializer v-if="!loaded" :id="id" />
-    <synthesizer-stage :id="id" />
-    <v-toolbar collapse density="compact" color="deep-purple darken-2">
-      <v-btn icon to="/synthesizers">
-        <v-icon>mdi-chevron-left</v-icon>
-      </v-btn>
-      <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
-    </v-toolbar>
+    <synthesizer-initializer v-if="!loaded" :loading="loading" @interacted="initialize" :id="id" />
+    <template v-else>
+      <synthesizer-stage :id="id" />
+      <v-toolbar collapse density="compact" color="deep-purple darken-2">
+        <v-btn icon to="/synthesizers">
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+        <module-creator v-if="synthesizer" :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
+      </v-toolbar>
+    </template>
   </div>
 </template>
 
@@ -26,8 +28,9 @@ definePageMeta({
 const id: string = useRoute().params.id as string;
 
 const loaded: Ref<Boolean> = ref(false);
+const loading: Ref<Boolean> = ref(false);
 const tools: ITool[] = await api_get('/tools');
-const synthesizer: Ref<Synthesizer> = ref(await api_get(`/synthesizers/${id}`));
+const synthesizer: Synthesizer = await api_get(`/synthesizers/${id}`);
 
 onBeforeUnmount(() => {
   eventbus.emit('synthesizers/quit')
@@ -46,6 +49,18 @@ onMounted(async () => {
 function insertModule(mod: Mod) {
   useModulesList().modules.push(mod);
   useSynthesizerDetails().synthesizer.place(mod.rack, mod.slot, mod);
+}
+
+async function initialize() {
+  loading.value = true;
+  await useAudioContext().initContext();
+  await loadProcessors(useAudioContext().context as AudioContext);
+  await useSynthesizerDetails().fetch(id);
+  await useModulesList().fetch(id);
+  useSynthesizerDetails().synthesizer.setModules(useModulesList().modules);
+  await useLinksList().fetch(id);
+  loading.value = false;
+  loaded.value = true;
 }
 </script>
 

@@ -13,7 +13,7 @@
           </div>
         </v-card-text>
       <v-card-actions>
-        <v-btn color="primary" :disabled="loading" variant="text" @click="click">
+        <v-btn color="primary" :disabled="loading" variant="text" @click="emit('interacted')">
           <div v-if="loading" class="text-center">
             <v-progress-circular indeterminate size="30" />
           </div>
@@ -24,41 +24,18 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useDisplay } from 'vuetify'
 
-export default {
-  props: {
-    id: {
-      type: String,
-      required: true,
-    }
-  },
-  data: () => ({
-    display: true,
-    loading: false,
-    mobile: false,
-  }),
-  methods: {
-    async click() {
-      console.log("Clicking on button")
-      this.loading = true;
-      await useAudioContext().initContext();
-      await loadProcessors(useAudioContext().context as AudioContext);
-      console.log("pouet pouet");
-      await useSynthesizerDetails().fetch(this.id);
-      await useModulesList().fetch(this.id);
-      console.log(useModulesList().modules)
-      useSynthesizerDetails().synthesizer.setModules(useModulesList().modules);
-      await useLinksList().fetch(this.id);
-      this.loading = false;
-      this.display = false;
-    }
-  },
-  mounted() {
-    this.mobile = useDisplay().mobile.value;
-  }
-}
+const props = defineProps({
+  id: { type: String, required: true },
+  loading: { type: Boolean, default: false },
+});
+
+const emit = defineEmits<{ interacted: []}>();
+
+const display: Ref<boolean> = ref(true);
+const mobile: Ref<boolean> = useDisplay().mobile;
 </script>
 
 <style>
