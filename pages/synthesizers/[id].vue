@@ -11,54 +11,41 @@
   </div>
 </template>
 
-<script lang="ts">
-import { mapState } from 'pinia';
+<script setup lang="ts">
 import ITool from '~~/lib/interfaces/ITool';
 import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 import Mod from '~~/lib/wrappers/Mod';
+import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 definePageMeta({
   layout: false,
   menu: false,
   middleware: ['websockets'],
 })
-export default {
-  data() {
-    return {
-      displayCreator: false,
-      generators: [] as string[],
-      displayInitModal: true,
-      loading: false,
-      loaded: false,
-      tools: [] as ITool[],
-    };
-  },
-  computed: {
-    id(): string {
-      return this.$route.params.id as string;
-    },
-    ...mapState(useSynthesizerDetails, ['synthesizer']),
-    ...mapState(useModulesList, ['modules']),
-  },
-  methods: {
-    insertModule(mod: Mod) {
-      this.modules.push(mod);
-      this.synthesizer.place(mod.rack, mod.slot, mod);
-    },
-  },
-  async mounted() {
-    await useAudioContext().context?.suspend();
-    this.tools = (await useLists().tools).all();
-  },
-  beforeUnmount() {
-    eventbus.emit('synthesizers/quit')
-    useSynthesizerDetails().reset();
-    usePorts().reset();
-    useModulesList().reset();
-    useLinksList().reset();
-    stopManagers();
-    useAudioContext().context?.suspend();
-  }
+
+const id: string = useRoute().params.id as string;
+
+const loaded: Ref<Boolean> = ref(false);
+const tools: ITool[] = []; // await api.auth_get('/tools');
+const synthesizer: Ref<Synthesizer> = ref(await make_get(`/synthesizers/${id}`));
+
+onBeforeUnmount(() => {
+  eventbus.emit('synthesizers/quit')
+  useSynthesizerDetails().reset();
+  usePorts().reset();
+  useModulesList().reset();
+  useLinksList().reset();
+  stopManagers();
+  useAudioContext().context?.suspend();
+});
+
+onMounted(async () => {
+  await useAudioContext().context?.suspend();
+});
+
+function insertModule(mod: Mod) {
+  useModulesList().modules.push(mod);
+  useSynthesizerDetails().synthesizer.place(mod.rack, mod.slot, mod);
 }
 </script>
 
