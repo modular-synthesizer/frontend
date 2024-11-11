@@ -14,8 +14,6 @@ export default class Api {
         .then(response => response.data);
     }
     catch(exception: any) {
-      console.log("TEST ERREUR ICI");
-      console.log(exception);
       throw createError({ statusCode: exception})
     }
   }

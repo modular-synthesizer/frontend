@@ -26,8 +26,8 @@ definePageMeta({
 const id: string = useRoute().params.id as string;
 
 const loaded: Ref<Boolean> = ref(false);
-const tools: ITool[] = []; // await api.auth_get('/tools');
-const synthesizer: Ref<Synthesizer> = ref(await make_get(`/synthesizers/${id}`));
+const tools: ITool[] = await api_get('/tools');
+const synthesizer: Ref<Synthesizer> = ref(await api_get(`/synthesizers/${id}`));
 
 onBeforeUnmount(() => {
   eventbus.emit('synthesizers/quit')

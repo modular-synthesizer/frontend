@@ -11,6 +11,7 @@ console.log(error);
 <template>
   <div>
     <h1>{{ error?.statusCode }}</h1>
+    <h3>{{ error?.message }}</h3>
     <NuxtLink to="/">Go back home</NuxtLink>
   </div>
 </template>
