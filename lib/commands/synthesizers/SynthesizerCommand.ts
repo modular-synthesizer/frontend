@@ -16,7 +16,7 @@ export default abstract class SynthesizerCommand extends Command<ControlEditPayl
   protected extractModule(): Mod|undefined {
     const synth: Synthesizer = useSynthesizer().synthesizer.value;
     if (!synth || synth?.id !== this.payload.synthesizer_id) return;
-    return useModulesList().modules.find(m => m.id === this.payload.module_id) as Mod;
+    return useSynthesizer().modules.value.find(m => m.id === this.payload.module_id) as Mod;
   }
 
   protected extractParameter(): Parameter|undefined {
