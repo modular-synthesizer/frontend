@@ -10,9 +10,12 @@ import Link from "~~/lib/wrappers/Link";
 import Mod from "~~/lib/wrappers/Mod";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 
-export const modules: Ref<Mod[]> = ref([]);
-
-export const links: Ref<Link[]> = ref([]);
+/** The currently displayed synthesizer, mainly used for position and zoom level */
+const synthesizer: Ref<Synthesizer|null> = ref(null);
+/** The list of currently displayed modules */
+const modules: Ref<Mod[]> = ref([]);
+/** The list of currently displayed links */
+const links: Ref<Link[]> = ref([]);
 
 export function useSynthesizerDetails() {
 
@@ -21,17 +24,22 @@ export function useSynthesizerDetails() {
    * @param id the unique UUID of the synthesizer to get informations from.
    * @returns a synthesizer class object instanciated from the details got in the API.
    */
-  async function fetch(id: string): Promise<Synthesizer> {
+  async function fetch(id: string): Promise<void> {
     const details: ISynthesizer = await api_get(`/synthesizers/${id}`);
     initializeManagers(details);
-    return new Synthesizer(details);
+    synthesizer.value = new Synthesizer(details);
   }
 
-  async function initialize(synthesizer: Synthesizer) {
+  /**
+   * Initializes the main components of a synthesizer : modules, links, and the corresponding audio resources,
+   * like processors for custom nodes, and the audio context to be able to start all web audio API nodes in it.
+   */
+  async function initialize(): Promise<void> {
+    if (synthesizer.value === null) return;
     await useAudioContext().initContext();
     await loadProcessors(useAudioContext().context as AudioContext);
-    const [ generators, imodules, ilinks ] = await fetchChildren(synthesizer.id);
-    await buildModules(imodules, synthesizer, generators);
+    const [ generators, imodules, ilinks ] = await fetchChildren(synthesizer.value.id);
+    await buildModules(imodules, synthesizer.value, generators);
     await buildLinks(ilinks);
   }
 
@@ -87,6 +95,6 @@ export function useSynthesizerDetails() {
   }
 
   return {
-    fetch, initialize, stop, modules, links
+    fetch, initialize, stop, modules, links, synthesizer
   }
 }

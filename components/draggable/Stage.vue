@@ -24,7 +24,6 @@ import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 type Dimensions = { width: number, height: number }
 
 const { position } = defineProps<{position: ScalablePosition}>();
-console.log(position);
 const emit = defineEmits(['zoom', 'move']);
 
 const dimensions = ref<Dimensions>({ width: 0, height: 0 });

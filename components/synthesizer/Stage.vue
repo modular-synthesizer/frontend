@@ -48,7 +48,6 @@ export default {
   methods: {
     ...mapActions(useStates, ['is']),
     save({ id, scale, x, y }: ISynthesizer) {
-      console.log(x, y)
       debounce('save', 500, () => api.auth_put(`/synthesizers/${id}`, { x, y, scale }))
     },
     equals

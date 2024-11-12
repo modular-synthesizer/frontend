@@ -2,7 +2,7 @@
   <div class="wrapper synthesizer-wrapper">
     <synthesizer-initializer v-if="!loaded" :loading="loading" @interacted="initialize" :id="id" />
     <template v-else>
-      <synthesizer-stage :synthesizer="synthesizer" :modules="modules" :links="links" />
+      <synthesizer-stage v-if="synthesizer !== null" :synthesizer="synthesizer" :modules="modules" :links="links" />
       <v-toolbar collapse density="compact" color="deep-purple darken-2">
         <v-btn icon to="/synthesizers">
           <v-icon>mdi-chevron-left</v-icon>
@@ -30,8 +30,8 @@ const id: string = useRoute().params.id as string;
 const loaded: Ref<Boolean> = ref(false);
 const loading: Ref<Boolean> = ref(false);
 const tools: ITool[] = await api_get('/tools');
-const synthesizer: Synthesizer = await useSynthesizerDetails().fetch(id);
-const { modules, links } = useSynthesizerDetails();
+await useSynthesizerDetails().fetch(id);
+const { modules, links, synthesizer } = useSynthesizerDetails();
 
 onBeforeUnmount(useSynthesizerDetails().stop);
 
@@ -40,13 +40,14 @@ onMounted(async () => {
 });
 
 function insertModule(mod: Mod) {
+  if(synthesizer.value === null) return;
   modules.value.push(mod);
-  synthesizer.place(mod.rack, mod.slot, mod);
+  synthesizer.value.place(mod.rack, mod.slot, mod);
 }
 
 async function initialize() {
   loading.value = true;
-  await useSynthesizerDetails().initialize(synthesizer);
+  await useSynthesizerDetails().initialize();
   loaded.value = true;
 }
 </script>
