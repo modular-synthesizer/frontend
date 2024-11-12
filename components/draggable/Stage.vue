@@ -1,7 +1,6 @@
 <template>
   <svg
     @mousedown.left.stop="dragStart(position, emit, $event)"
-    @mousedown.right.stop="hide"
     @mouseleave="triggerDragEnd($event); emit('move')"
     @mouseup="triggerDragEnd($event); emit('move')"
 
@@ -9,8 +8,6 @@
     @touchend.passive="triggerDragEnd($event.touches[0] as any); emit('move')"
 
     @wheel.passive.stop="setScale(position, $event); emit('zoom')"
-    @click.right.stop.prevent="displayContext"
-
     class="bg-grey-darken-1"
   >
     <synthesizer-background :position="position" />
@@ -27,6 +24,7 @@ import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 type Dimensions = { width: number, height: number }
 
 const { position } = defineProps<{position: ScalablePosition}>();
+console.log(position);
 const emit = defineEmits(['zoom', 'move']);
 
 const dimensions = ref<Dimensions>({ width: 0, height: 0 });

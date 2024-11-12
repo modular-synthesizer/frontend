@@ -36,6 +36,7 @@ export function dragStart(position: ScalablePosition, emit: Function, $event: Mo
 
   startDragEvent($event, {
     move: (x: number, y: number) => {
+      console.log(x, y)
       position.x += x - origin.x;
       position.y += y - origin.y;
       syncPosition(origin, { clientX: x, clientY: y } as MouseEvent);

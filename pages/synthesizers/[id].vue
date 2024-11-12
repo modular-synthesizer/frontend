@@ -2,20 +2,20 @@
   <div class="wrapper synthesizer-wrapper">
     <synthesizer-initializer v-if="!loaded" :loading="loading" @interacted="initialize" :id="id" />
     <template v-else>
-      <synthesizer-stage :id="id" />
+      <synthesizer-stage :synthesizer="synthesizer" :modules="modules" :links="links" />
       <v-toolbar collapse density="compact" color="deep-purple darken-2">
         <v-btn icon to="/synthesizers">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <module-creator v-if="synthesizer" :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
+        <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
       </v-toolbar>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useSynthesizerDetails } from '~~/composables/synthesizers/details';
 import ITool from '~~/lib/interfaces/ITool';
-import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
@@ -30,36 +30,23 @@ const id: string = useRoute().params.id as string;
 const loaded: Ref<Boolean> = ref(false);
 const loading: Ref<Boolean> = ref(false);
 const tools: ITool[] = await api_get('/tools');
-const synthesizer: Synthesizer = await api_get(`/synthesizers/${id}`);
+const synthesizer: Synthesizer = await useSynthesizerDetails().fetch(id);
+const { modules, links } = useSynthesizerDetails();
 
-onBeforeUnmount(() => {
-  eventbus.emit('synthesizers/quit')
-  useSynthesizerDetails().reset();
-  usePorts().reset();
-  useModulesList().reset();
-  useLinksList().reset();
-  stopManagers();
-  useAudioContext().context?.suspend();
-});
+onBeforeUnmount(useSynthesizerDetails().stop);
 
 onMounted(async () => {
   await useAudioContext().context?.suspend();
 });
 
 function insertModule(mod: Mod) {
-  useModulesList().modules.push(mod);
-  useSynthesizerDetails().synthesizer.place(mod.rack, mod.slot, mod);
+  modules.value.push(mod);
+  synthesizer.place(mod.rack, mod.slot, mod);
 }
 
 async function initialize() {
   loading.value = true;
-  await useAudioContext().initContext();
-  await loadProcessors(useAudioContext().context as AudioContext);
-  await useSynthesizerDetails().fetch(id);
-  await useModulesList().fetch(id);
-  useSynthesizerDetails().synthesizer.setModules(useModulesList().modules);
-  await useLinksList().fetch(id);
-  loading.value = false;
+  await useSynthesizerDetails().initialize(synthesizer);
   loaded.value = true;
 }
 </script>
