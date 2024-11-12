@@ -1,4 +1,4 @@
-import { find } from "lodash";
+import { find, remove } from "lodash";
 import ModulesFactory from "~~/lib/factories/ModulesFactory";
 import { IGenerator } from "~~/lib/interfaces/IGenerator";
 import ILink from "~~/lib/interfaces/ILink";
@@ -11,7 +11,7 @@ import Mod from "~~/lib/wrappers/Mod";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 
 /** The currently displayed synthesizer, mainly used for position and zoom level */
-const synthesizer: Ref<Synthesizer|null> = ref(null);
+let synthesizer!: Ref<Synthesizer>;
 /** The list of currently displayed modules */
 const modules: Ref<Mod[]> = ref([]);
 /** The list of currently displayed links */
@@ -27,7 +27,8 @@ export function useSynthesizerDetails() {
   async function fetch(id: string): Promise<void> {
     const details: ISynthesizer = await api_get(`/synthesizers/${id}`);
     initializeManagers(details);
-    synthesizer.value = new Synthesizer(details);
+    // @ts-ignore
+    synthesizer = ref(new Synthesizer(details));
   }
 
   /**
@@ -94,7 +95,15 @@ export function useSynthesizerDetails() {
     modules.value = [];
   }
 
+  async function removeLink(id: string) {
+    const found: Link|undefined = find(links.value, { id })
+    if (found === undefined) return;
+    found.disconnect();
+    remove(links.value, { id });
+    await api_delete(`/links/${id}`);
+  }
+
   return {
-    fetch, initialize, stop, modules, links, synthesizer
+    fetch, initialize, stop, modules, links, synthesizer, removeLink
   }
 }

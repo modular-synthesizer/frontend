@@ -1,18 +1,9 @@
-<script lang="ts">
-import { mapActions } from "pinia";
+<script setup lang="ts">
 import Link from "~~/lib/wrappers/Link";
 
-export default {
-  props: {
-    link: {
-      type: Link,
-      required: true
-    }
-  },
-  methods: {
-    ...mapActions(useLinksList, ['remove']),
-  }
-}
+const { link } = defineProps({
+  link: { type: Link, required: true }
+});
 </script>
 
 <template>
@@ -22,7 +13,7 @@ export default {
       :start-y="link.from.ay"
       :end-x="link.to.ax"
       :end-y="link.to.ay"
-      @click="remove(link.id)"
+      @click="useSynthesizerDetails().removeLink(link.id)"
     />
   </g>
 </template>

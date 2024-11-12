@@ -17,7 +17,6 @@
 import { useSynthesizerDetails } from '~~/composables/synthesizers/details';
 import ITool from '~~/lib/interfaces/ITool';
 import Mod from '~~/lib/wrappers/Mod';
-import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 definePageMeta({
   layout: false,

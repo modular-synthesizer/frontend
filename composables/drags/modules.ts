@@ -29,6 +29,7 @@ export const useModuleDrag = () => {
 
     const rack = getRack(x, y);
     const slot = getSlot(x, y);
+
     const delta = slot - clickedSlot;
 
     // The new place the module SHOULD go if it's free.

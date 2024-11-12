@@ -16,6 +16,10 @@ export async function api_post(uri: string, payload: any = {}): Promise<any> {
   return make_request('get', uri, { data: { ...payload, auth_token: token() }})
 }
 
+export async function api_delete(uri: string): Promise<any> {
+  return make_request('delete', uri, { data: { auth_token: token() }})
+}
+
 function token() {
   return localStorage.getItem("auth-token");
 }
