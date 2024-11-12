@@ -1,4 +1,4 @@
-import { find, remove } from "lodash";
+import { find, remove, uniqBy } from "lodash";
 import ModulesFactory from "~~/lib/factories/ModulesFactory";
 import { IGenerator } from "~~/lib/interfaces/IGenerator";
 import ILink from "~~/lib/interfaces/ILink";
@@ -103,7 +103,19 @@ export function useSynthesizer() {
     await api_delete(`/links/${id}`);
   }
 
+  async function removeModule(mod: Mod) {
+    disconnectModule(mod);
+    remove(modules.value, { id: mod.id });
+    await api_delete(`/modules/${mod.id}`);
+  }
+
+  async function disconnectModule(mod: Mod) {
+    mod.connections.forEach((link: Link) => {
+      useSynthesizer().removeLink(link.id);
+    })
+  }
+
   return {
-    fetch, initialize, stop, modules, links, synthesizer, removeLink
+    fetch, initialize, stop, modules, links, synthesizer, removeLink, disconnectModule, removeModule
   }
 }
