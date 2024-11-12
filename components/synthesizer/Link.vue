@@ -13,7 +13,7 @@ const { link } = defineProps({
       :start-y="link.from.ay"
       :end-x="link.to.ax"
       :end-y="link.to.ay"
-      @click="useSynthesizerDetails().removeLink(link.id)"
+      @click="useSynthesizer().removeLink(link.id)"
     />
   </g>
 </template>

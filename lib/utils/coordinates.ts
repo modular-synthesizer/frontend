@@ -13,7 +13,7 @@ interface ICoordinates {
  * @return An {x,y} object representing the coordinates in the synth.
  */
 export function relativePosition(ax: number, ay: number): ICoordinates {
-  const synth = useSynthesizerDetails().synthesizer.value;
+  const synth = useSynthesizer().synthesizer.value;
   if (synth === null) return { x: 0, y: 0 };
   return {
     x: (ax - synth.x) / synth.scale,

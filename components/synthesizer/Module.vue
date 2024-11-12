@@ -55,7 +55,7 @@ export default {
   methods: {
     ...mapActions(useModHover, ['mouseenter', 'mouseleave']),
     dragstart($event: MouseEvent) {
-      const synthesizer: Synthesizer|null = useSynthesizerDetails().synthesizer.value;
+      const synthesizer: Synthesizer|null = useSynthesizer().synthesizer.value;
       if (synthesizer === null) return;
       useModuleDrag().start($event, this.mod, synthesizer);
     },

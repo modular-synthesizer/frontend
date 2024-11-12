@@ -17,7 +17,7 @@ const modules: Ref<Mod[]> = ref([]);
 /** The list of currently displayed links */
 const links: Ref<Link[]> = ref([]);
 
-export function useSynthesizerDetails() {
+export function useSynthesizer() {
 
   /**
    * Fetches a synthesizer WITHOUT all the needed elements from it (modules, links, managers, etc.).

@@ -19,7 +19,7 @@ function setStartPort(port: Port) {
 }
 
 function setEndCoordinates({ x, y }: Coordinates) {
-  const { scale, x: sx, y: sy}: ISynthesizer = useSynthesizerDetails().synthesizer.value;
+  const { scale, x: sx, y: sy}: ISynthesizer = useSynthesizer().synthesizer.value;
   linkCreationState.value.end = { x: (x - sx) / scale, y: (y - sy) / scale }
 }
 
@@ -42,11 +42,11 @@ async function createLink() {
   const payload = {
     from: to.isInput() ? from.id : to.id,
     to: from.isInput() ? from.id : to.id,
-    synthesizer_id: useSynthesizerDetails().synthesizer.value.id,
+    synthesizer_id: useSynthesizer().synthesizer.value.id,
     color: 'red'
   }
   const response = await api.auth_post("/links", payload);
-  useSynthesizerDetails().links.value.push(new Link(response));
+  useSynthesizer().links.value.push(new Link(response));
   linkCreationState.value.display = false;
 }
 

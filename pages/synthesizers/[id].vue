@@ -14,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import { useSynthesizerDetails } from '~~/composables/synthesizers/details';
 import ITool from '~~/lib/interfaces/ITool';
 import Mod from '~~/lib/wrappers/Mod';
 
@@ -29,10 +28,10 @@ const id: string = useRoute().params.id as string;
 const loaded: Ref<Boolean> = ref(false);
 const loading: Ref<Boolean> = ref(false);
 const tools: ITool[] = await api_get('/tools');
-await useSynthesizerDetails().fetch(id);
-const { modules, links, synthesizer } = useSynthesizerDetails();
+await useSynthesizer().fetch(id);
+const { modules, links, synthesizer } = useSynthesizer();
 
-onBeforeUnmount(useSynthesizerDetails().stop);
+onBeforeUnmount(useSynthesizer().stop);
 
 onMounted(async () => {
   await useAudioContext().context?.suspend();
@@ -46,7 +45,7 @@ function insertModule(mod: Mod) {
 
 async function initialize() {
   loading.value = true;
-  await useSynthesizerDetails().initialize();
+  await useSynthesizer().initialize();
   loaded.value = true;
 }
 </script>

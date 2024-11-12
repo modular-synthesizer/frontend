@@ -15,7 +15,7 @@ export const useModulesList = defineStore('modulesList', {
   }),
   getters: {
     synth(): Synthesizer {
-      return useSynthesizerDetails().synthesizer as Synthesizer
+      return useSynthesizer().synthesizer.value
     }
   },
   actions: {
@@ -43,7 +43,7 @@ export const useModulesList = defineStore('modulesList', {
     },
     disconnect(mod: Mod) {
       mod.connections.forEach((link: Link) => {
-        useLinksList().delete(link.id);
+        useSynthesizer().removeLink(link.id);
       })
     },
     reset() {
