@@ -45,9 +45,11 @@ import axios from 'axios';
 
 const EXCLUDED = ['ControlsWrapper']
 
-const controls: string[] = (await axios.get('/json/controls.json')).data;
-const filtered: string[] = controls.filter((name: string) => EXCLUDED.indexOf(name) < 0);
-const components: string[] = filtered.map((name: string) => name.replace('Controls', ''));
+async function fetchComponents() {
+  const controls: string[] = (await axios.get('/json/controls.json')).data;
+  const filtered: string[] = controls.filter((name: string) => EXCLUDED.indexOf(name) < 0);
+  return filtered.map((name: string) => name.replace('Controls', ''));
+}
 
 export default {
   props: {
@@ -60,7 +62,7 @@ export default {
       default: () => -1,
     }
   },
-  data: () => ({ components }),
+  data: () => ({ components: await fetchComponents() }),
   computed: {
     control() { return this.modelValue; },
     chips() {
