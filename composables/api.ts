@@ -13,11 +13,15 @@ export async function api_get(uri: string, payload: any = {}): Promise<any> {
 }
 
 export async function api_post(uri: string, payload: any = {}): Promise<any> {
-  return make_request('get', uri, { data: { ...payload, auth_token: token() }})
+  return make_request('post', uri, { data: { ...payload, auth_token: token() }})
 }
 
 export async function api_delete(uri: string): Promise<any> {
-  return make_request('delete', uri, { data: { auth_token: token() }})
+  return make_request('delete', uri, { params: { auth_token: token() }})
+}
+
+export async function api_put(uri: string, payload: any = {}): Promise<any> {
+  return make_request('put', uri, { data: { ...payload, auth_token: token() }})
 }
 
 function token() {

@@ -15,25 +15,24 @@
 </template>
 
 <script lang="ts" setup>
-import _ from 'lodash';
-import { api } from '~~/lib/api/Api';
-import ISynth from '~~/lib/interfaces/synthesizers/ISynthesizer';
+import _, { remove } from 'lodash';
+import ISynthesizer from '~~/lib/interfaces/synthesizers/ISynthesizer';
 import Synth from '~~/lib/wrappers/Synthesizer';import { useDisplay } from 'vuetify'
+import { repositories } from '~~/lib/repositories';
 
+const { synthesizers: repository } = repositories;
 const { mobile } = useDisplay()
-const rawList: ISynth[] = await api.auth_get("/synthesizers");
-const synthesizers: Ref<Synth[]> = ref(rawList.map((details: ISynth): Synth => new Synth(details)));
+const synthesizers: Ref<Synth[]> = ref(await repository.list());
 const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
 const name: string = useAuthentication().session.username;
 const sorted = computed(() => _.sortBy(synthesizers.value, (s: Synth) => order[s.membershipType(name)]));
 
 async function deleteSynthesizer(id: string) {
-  const index: number = synthesizers.value.findIndex((synth: Synth) => synth.id === id);
-  await api.auth_delete(`/synthesizers/${id}`)
-  synthesizers.value.splice(index, 1)
+  remove(synthesizers.value, { id });
+  await repository.delete(id);
 }
 
-async function createSynthesizer(details: ISynth) {
-  synthesizers.value.push(new Synth(await api.auth_post("/synthesizers", details)));
+async function createSynthesizer(details: ISynthesizer) {
+  synthesizers.value.push(await repository.create(details));
 }
 </script>
