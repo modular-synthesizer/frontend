@@ -13,7 +13,8 @@ interface ICoordinates {
  * @return An {x,y} object representing the coordinates in the synth.
  */
 export function relativePosition(ax: number, ay: number): ICoordinates {
-  const synth = useSynthesizerDetails().synthesizer;
+  const synth = useSynthesizer().synthesizer.value;
+  if (synth === null) return { x: 0, y: 0 };
   return {
     x: (ax - synth.x) / synth.scale,
     y: (ay - synth.y) / synth.scale
@@ -29,9 +30,8 @@ export function relativePosition(ax: number, ay: number): ICoordinates {
  *   cursor currently is.
  */
 export function getRack(x: number, y: number): number {
-  const synth = useSynthesizerDetails().synthesizer;
-   const position: ICoordinates = relativePosition(x, y);
-   return Math.floor(position.y/ RACK_HEIGHT);
+  const position: ICoordinates = relativePosition(x, y);
+  return Math.floor(position.y/ RACK_HEIGHT);
 }
 
 /**
@@ -45,7 +45,6 @@ export function getRack(x: number, y: number): number {
  *   to directly access the rack property.
  */
 export function getSlot(x: number, y: number): number {
-  const synth = useSynthesizerDetails().synthesizer;
   const position: ICoordinates = relativePosition(x, y);
   return Math.floor(position.x / SLOT_SIZE);
 }

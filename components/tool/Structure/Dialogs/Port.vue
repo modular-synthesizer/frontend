@@ -42,8 +42,6 @@ const props = defineProps({
   tool: { type: Object as PropType<ITool>, required: true }
 });
 
-console.log(props);
-
 const emit = defineEmits<{ cancelled: [], validated: [IToolPort] }>();
 
 function getItems() {

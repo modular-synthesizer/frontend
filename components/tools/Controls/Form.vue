@@ -4,7 +4,7 @@
       <v-row no-gutters>
         <v-col cols="2">
           <v-select
-          v-model="control.component"
+          v-model="modelValue.component"
           density="comfortable"
           label="composant"
           variant="outlined"
@@ -16,7 +16,7 @@
             v-model="chips"
             chips
             :multiple="true"
-            @update:model-value="setPayloadValue"
+            @update:model-value="updateChips"
             closable-chips
             :density="chips.length === 0 ? 'comfortable' : 'compact'"
             variant="outlined"
@@ -37,60 +37,49 @@
   </v-col>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { flatten } from 'lodash';
 import { PropType } from 'vue';
 import { IControl } from '~~/lib/interfaces/IControl';
-import axios from 'axios';
+import { useControls } from '~~/composables/components/useControls';
 
-const EXCLUDED = ['ControlsWrapper']
+const components: string[] = await useControls().fetch();
 
-const controls: string[] = (await axios.get('/json/controls.json')).data;
-const filtered: string[] = controls.filter((name: string) => EXCLUDED.indexOf(name) < 0);
-const components: string[] = filtered.map((name: string) => name.replace('Controls', ''));
+const props = defineProps({
+  modelValue: { type: Object as PropType<IControl>, required: true },
+  index: { type: Number, default: -1 },
+});
 
-export default {
-  props: {
-    modelValue: {
-      type: Object as PropType<IControl>,
-      default: () => []
-    },
-    index: {
-      type: Number,
-      default: () => -1,
-    }
-  },
-  data: () => ({ components }),
-  computed: {
-    control() { return this.modelValue; },
-    chips() {
-      return Object.entries(this.control.payload).map((entry: [string, any]) => {
-        return `${entry[0]}=${entry[1]}`
-      })
-    }
-  },
-  methods: {
-    setPayloadValue(value: any) {
-      this.updateChips(value);
-    },
-    updateChips(values: string[]) {
-      const filtered: string[] = values.filter((v: string) => /^[a-zA-z]+\=.+$/.test(v));
-      const mapped = flatten(filtered.map((v: string) => v.split(" ")))
+type EmitDefinition = {
+  created: [ control: IControl ],
+  updated: [ control: IControl ],
+  reset: [  ],
+};
+const emit = defineEmits<EmitDefinition>();
 
-      const parsedValues = mapped.map(v => {
-        const splitted = v.split("=");
-        const value = /^[0-9]+$/.test(splitted[1]) ? Number(splitted[1]) : splitted[1];
-        return [splitted[0], value]
-      })
-      this.control.payload = Object.fromEntries(parsedValues);
-    },
-    validate() {
-      this.$emit(!this.control.id ? "created" : "updated", this.control);
-    },
-    reset() {
-      this.$emit("reset");
-      this.chips = [];
-    }
-  }
+const chips = computed(() => {
+  return Object.entries(props.modelValue.payload).map((entry: [string, any]) => {
+    return `${entry[0]}=${entry[1]}`
+  });
+});
+
+function updateChips(values: string[]) {
+  const filtered: string[] = values.filter((v: string) => /^[a-zA-z]+\=.+$/.test(v));
+  const mapped = flatten(filtered.map((v: string) => v.split(" ")))
+
+  const parsedValues = mapped.map(v => {
+    const splitted = v.split("=");
+    const value = /^[0-9]+$/.test(splitted[1]) ? Number(splitted[1]) : splitted[1];
+    return [splitted[0], value]
+  })
+  props.modelValue.payload = Object.fromEntries(parsedValues);
+}
+
+function validate() {
+  props.modelValue.id ? emit('created', props.modelValue) : emit("updated", props.modelValue);
+}
+
+function reset() {
+  emit("reset");
 }
 </script>

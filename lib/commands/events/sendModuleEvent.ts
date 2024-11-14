@@ -5,7 +5,7 @@ export default function(operation: string, mod: Mod): void {
   sendEvent({
     resource: 'synthesizer',
     operation,
-    synthesizer_id: useSynthesizerDetails().synthesizer.id,
+    synthesizer_id: useSynthesizer().synthesizer.value.id,
     rack: mod.rack,
     slot: mod.slot,
     module_id: mod.id,

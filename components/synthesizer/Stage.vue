@@ -13,15 +13,26 @@ import { v4 as uuid } from 'uuid';
 import { api } from '~~/lib/api/Api';
 import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
 import { equals } from '~~/lib/interfaces/common/Identifiable';
+import Link from '~~/lib/wrappers/Link';
+import Mod from '~~/lib/wrappers/Mod';
+import Synthesizer from '~~/lib/wrappers/Synthesizer';
 import { useModHover } from '~~/stores/mods/hover';
 import { useStates } from '~~/stores/synthesizers/states';
 
 export default {
   props: {
-    id: {
-      type: String,
-      required: true,
+    synthesizer: {
+      type: Object as PropType<Synthesizer>,
+      required: true
     },
+    modules: {
+      type: Array<Mod>,
+      default: () => []
+    },
+    links: {
+      type: Array<Link>,
+      default: () => []
+    }
   },
   data: function() {
     return {
@@ -30,9 +41,6 @@ export default {
   },
   computed: {
     ...mapState(useModHover, { hovered: 'current' }),
-    ...mapState(useSynthesizerDetails, ['synthesizer']),
-    ...mapState(useModulesList, ['modules']),
-    ...mapState(useLinksList, ['links']),
     synthesizerKey() {
       return `${this.key}--${this.synthesizer.id}`
     }
@@ -45,7 +53,6 @@ export default {
     equals
   },
   unmounted() {
-    useSynthesizerDetails().reset();
     stopManagers();
   },
   async mounted() {

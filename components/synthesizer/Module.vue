@@ -31,7 +31,6 @@ import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { mapActions } from 'pinia';
 import Mod from '~~/lib/wrappers/Mod';
 import { useModHover } from '~~/stores/mods/hover';
-import { useModulesLinks } from '~~/stores/mods/links';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 export default {
@@ -55,13 +54,15 @@ export default {
   methods: {
     ...mapActions(useModHover, ['mouseenter', 'mouseleave']),
     dragstart($event: MouseEvent) {
-      useModuleDrag().start($event, this.mod, useSynthesizerDetails().synthesizer as Synthesizer);
+      const synthesizer: Synthesizer|null = useSynthesizer().synthesizer.value;
+      if (synthesizer === null) return;
+      useModuleDrag().start($event, this.mod, synthesizer);
     },
     showMenu(mod: Mod, $event: MouseEvent) {
       useContexts().display($event, {
         items: [
-          {label: "unlink", action: useModulesLinks().disconnect},
-          {label: "remove", action: useModulesList().remove}
+          {label: "unlink", action: useSynthesizer().disconnectModule},
+          {label: "remove", action: useSynthesizer().removeModule}
         ],
         payload: mod
       });

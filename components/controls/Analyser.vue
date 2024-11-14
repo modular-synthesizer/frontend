@@ -19,8 +19,8 @@
 
 <script lang="ts">
 import { times } from 'lodash';
-import { mapState } from 'pinia';
 import Mod from '~~/lib/wrappers/Mod';
+import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 const WIDTH = 280;
 const HEIGHT = 180;
@@ -35,7 +35,9 @@ export default {
     analyser: { type: String, required: true },
   },
   computed: {
-    ...mapState(useSynthesizerDetails, ['synthesizer']),
+    synthesizer(): Synthesizer {
+      return useSynthesizer().synthesizer.value;
+    },
     width(): number { return WIDTH },
     height(): number { return HEIGHT },
     time() { return this.mod.param("time").value; },

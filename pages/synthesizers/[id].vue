@@ -1,20 +1,20 @@
 <template>
   <div class="wrapper synthesizer-wrapper">
-    <synthesizer-initializer v-if="!loaded" :id="id" />
-    <synthesizer-stage :id="id" />
-    <v-toolbar collapse density="compact" color="deep-purple darken-2">
-      <v-btn icon to="/synthesizers">
-        <v-icon>mdi-chevron-left</v-icon>
-      </v-btn>
-      <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
-    </v-toolbar>
+    <synthesizer-initializer v-if="!loaded" :loading="loading" @interacted="initialize" :id="id" />
+    <template v-else>
+      <synthesizer-stage v-if="synthesizer !== null" :synthesizer="synthesizer" :modules="modules" :links="links" />
+      <v-toolbar collapse density="compact" color="deep-purple darken-2">
+        <v-btn icon to="/synthesizers">
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+        <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
+      </v-toolbar>
+    </template>
   </div>
 </template>
 
-<script lang="ts">
-import { mapState } from 'pinia';
+<script setup lang="ts">
 import ITool from '~~/lib/interfaces/ITool';
-import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 import Mod from '~~/lib/wrappers/Mod';
 
 definePageMeta({
@@ -22,43 +22,31 @@ definePageMeta({
   menu: false,
   middleware: ['websockets'],
 })
-export default {
-  data() {
-    return {
-      displayCreator: false,
-      generators: [] as string[],
-      displayInitModal: true,
-      loading: false,
-      loaded: false,
-      tools: [] as ITool[],
-    };
-  },
-  computed: {
-    id(): string {
-      return this.$route.params.id as string;
-    },
-    ...mapState(useSynthesizerDetails, ['synthesizer']),
-    ...mapState(useModulesList, ['modules']),
-  },
-  methods: {
-    insertModule(mod: Mod) {
-      this.modules.push(mod);
-      this.synthesizer.place(mod.rack, mod.slot, mod);
-    },
-  },
-  async mounted() {
-    await useAudioContext().context?.suspend();
-    this.tools = (await useLists().tools).all();
-  },
-  beforeUnmount() {
-    eventbus.emit('synthesizers/quit')
-    useSynthesizerDetails().reset();
-    usePorts().reset();
-    useModulesList().reset();
-    useLinksList().reset();
-    stopManagers();
-    useAudioContext().context?.suspend();
-  }
+
+const id: string = useRoute().params.id as string;
+
+const loaded: Ref<Boolean> = ref(false);
+const loading: Ref<Boolean> = ref(false);
+const tools: ITool[] = await api_get('/tools');
+await useSynthesizer().fetch(id);
+const { modules, links, synthesizer } = useSynthesizer();
+
+onBeforeUnmount(useSynthesizer().stop);
+
+onMounted(async () => {
+  await useAudioContext().context?.suspend();
+});
+
+function insertModule(mod: Mod) {
+  if(synthesizer.value === null) return;
+  modules.value.push(mod);
+  synthesizer.value.place(mod.rack, mod.slot, mod);
+}
+
+async function initialize() {
+  loading.value = true;
+  await useSynthesizer().initialize();
+  loaded.value = true;
 }
 </script>
 

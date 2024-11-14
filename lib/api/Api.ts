@@ -9,8 +9,13 @@ export default class Api {
   }
 
   public get(uri: string, payload: any = {}): Promise<any> {
-    return axios.get(`${this.uri}${uri}`, {params: payload})
-      .then(response => response.data)
+    try {
+      return axios.get(`${this.uri}${uri}`, {params: payload})
+        .then(response => response.data);
+    }
+    catch(exception: any) {
+      throw createError({ statusCode: exception})
+    }
   }
 
   public auth_get(uri: string, payload: any = {}): Promise<any> {
