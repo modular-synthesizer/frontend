@@ -32,15 +32,21 @@ export class Repository<T extends Identifiable> {
     return await api_post([this.BASE_URI, this.resource].join('/'), payload);
   }
 
-  public async update(payload: T) {
+  public async update(payload: T): Promise<T> {
     const uri: string = [this.BASE_URI, this.resource, payload.id].join('/')
     return await api_put(uri, payload);
   }
 
-  public remove(list: T[]) {
+  public remove(list: T[]): (id: string) => Promise<void> {
     return async (id: string) => {
       remove(list, (element: T) => (element.id === id));
       this.delete(id);
     }
+  }
+
+  public add(list: T[]): (details: T) => Promise<void> {
+    return async (details: T) => {
+      list.push(await this.create(details));
+    };
   }
 }
