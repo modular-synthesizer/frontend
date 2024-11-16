@@ -1,6 +1,7 @@
+import { Identifiable } from "../interfaces/common/Identifiable";
 import { Repository } from "./Repository";
 
-export class WrappedRepository<It, T extends It> extends Repository<It> {
+export class WrappedRepository<It extends Identifiable, T extends It> extends Repository<It> {
 
   private wrapper: any = null;
   

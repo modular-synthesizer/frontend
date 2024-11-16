@@ -42,7 +42,7 @@
               </v-row>
               <v-row v-if="synthesizer.members.length">
                 <v-col cols="12">
-                  <synthesizer-card-members-list :synthesizer="synthesizer" @delete="deleteMember" />
+                  <synthesizer-card-members-list :synthesizer="synthesizer" @delete="remove" />
                 </v-col>
               </v-row>
             </v-card-text>
@@ -63,9 +63,11 @@
 </template>
 
 <script lang="ts" setup>
+import { remove } from 'lodash';
 import { api } from '~~/lib/api/Api';
 import IAccount from '~~/lib/interfaces/IAccount';
 import IMembership from '~~/lib/interfaces/synthesizers/IMembership';
+import { repositories } from '~~/lib/repositories';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 const props = defineProps({
@@ -91,20 +93,12 @@ const filteredResults = computed((): IAccount[] => {
 })
 
 async function addMember(account_id: string, username: string, type: string) {
-  const params = { account_id, synthesizer_id: props.synthesizer.id, type };
+  const params: IMembership = { account_id, synthesizer_id: props.synthesizer.id, type, id: '', username };
   const membership: any = await api.auth_post('/memberships', params);
   props.synthesizer.members.push({ ...membership, account_id, username } as IMembership);
 }
 
-async function deleteMember(id: string) {
-  try {
-    await api.auth_delete(`/memberships/${id}`)
-  }
-  finally {
-    const index = props.synthesizer.members.findIndex((m: IMembership) => m.id === id);
-    props.synthesizer.members.splice(index, 1);
-  }
-}
+const remove: (id: string) => Promise<void> = repositories.memberships.remove(props.synthesizer.members);
 
 const isReadOnly = computed(() => {
   return props.synthesizer?.isReadonly(useAuthentication()?.session.username);

@@ -1,3 +1,4 @@
+import { find, remove } from "lodash";
 import { Identifiable } from "../interfaces/common/Identifiable";
 
 /**
@@ -15,6 +16,7 @@ export class Repository<T extends Identifiable> {
   }
 
   public async list(): Promise<T[]> {
+    console.log(this.BASE_URI, this.resource);
     return await api_get([this.BASE_URI, this.resource].join('/'));
   }
 
@@ -22,8 +24,8 @@ export class Repository<T extends Identifiable> {
     return await api_get([this.BASE_URI, this.resource, id].join('/'));
   }
 
-  public async delete(id: string): Promise<void> {
-    return await api_delete([this.BASE_URI, this.resource, id].join('/'));
+  public async delete(id: string, payload: any = {}): Promise<void> {
+    return await api_delete([this.BASE_URI, this.resource, id].join('/'), payload);
   }
 
   public async create(payload: T): Promise<T> {
@@ -33,5 +35,12 @@ export class Repository<T extends Identifiable> {
   public async update(payload: T) {
     const uri: string = [this.BASE_URI, this.resource, payload.id].join('/')
     return await api_put(uri, payload);
+  }
+
+  public remove(list: T[]) {
+    return async (id: string) => {
+      remove(list, (element: T) => (element.id === id));
+      this.delete(id);
+    }
   }
 }

@@ -27,7 +27,7 @@ const id: string = useRoute().params.id as string;
 
 const loaded: Ref<Boolean> = ref(false);
 const loading: Ref<Boolean> = ref(false);
-const tools: ITool[] = await api_get('/tools');
+const tools: ITool[] = await api_get('/proxy/tools');
 await useSynthesizer().fetch(id);
 const { modules, links, synthesizer } = useSynthesizer();
 

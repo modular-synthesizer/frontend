@@ -17,15 +17,16 @@
 <script lang="ts" setup>
 import _, { remove } from 'lodash';
 import ISynthesizer from '~~/lib/interfaces/synthesizers/ISynthesizer';
-import Synth from '~~/lib/wrappers/Synthesizer';import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify'
 import { repositories } from '~~/lib/repositories';
+import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 const { synthesizers: repository } = repositories;
 const { mobile } = useDisplay()
-const synthesizers: Ref<Synth[]> = ref(await repository.list());
+const synthesizers: Ref<Synthesizer[]> = ref(await repository.list());
 const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
 const name: string = useAuthentication().session.username;
-const sorted = computed(() => _.sortBy(synthesizers.value, (s: Synth) => order[s.membershipType(name)]));
+const sorted = computed(() => _.sortBy(synthesizers.value, (s: Synthesizer) => order[s.membershipType(name)]));
 
 async function deleteSynthesizer(id: string) {
   remove(synthesizers.value, { id });

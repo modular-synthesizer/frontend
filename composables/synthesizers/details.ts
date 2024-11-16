@@ -25,7 +25,7 @@ export function useSynthesizer() {
    * @returns a synthesizer class object instanciated from the details got in the API.
    */
   async function fetch(id: string): Promise<void> {
-    const details: ISynthesizer = await api_get(`/synthesizers/${id}`);
+    const details: ISynthesizer = await api_get(`/proxy/synthesizers/${id}`);
     initializeManagers(details);
     // @ts-ignore
     synthesizer = ref(new Synthesizer(details));
@@ -46,9 +46,9 @@ export function useSynthesizer() {
 
   async function fetchChildren(synthesizer_id: string): Promise<any> {
     return await Promise.all<[IModule[], ILink[]]>([
-      api_get('/generators'),
-      api_get('/modules', { synthesizer_id }),
-      api_get('/links', { synthesizer_id })
+      api_get('/proxy/generators'),
+      api_get('/proxy/modules', { synthesizer_id }),
+      api_get('/proxy/links', { synthesizer_id })
     ]);
   }
 
@@ -100,13 +100,13 @@ export function useSynthesizer() {
     if (found === undefined) return;
     found.disconnect();
     remove(links.value, { id });
-    await api_delete(`/links/${id}`);
+    await api_delete(`/proxy/links/${id}`);
   }
 
   async function removeModule(mod: Mod) {
     disconnectModule(mod);
     remove(modules.value, { id: mod.id });
-    await api_delete(`/modules/${mod.id}`);
+    await api_delete(`/proxy/modules/${mod.id}`);
   }
 
   async function disconnectModule(mod: Mod) {
