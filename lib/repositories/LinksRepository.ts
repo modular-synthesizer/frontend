@@ -1,5 +1,5 @@
 import ILink from "../interfaces/ILink";
-import ISynthesizer from "../interfaces/ISynthesizer";
+import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import { Repository } from "./Repository";
 
 export default class LinksRepository extends Repository<ILink> {

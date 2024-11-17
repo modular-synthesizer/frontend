@@ -1,5 +1,5 @@
-import IModule from "../interfaces/IModule";
-import ISynthesizer from "../interfaces/ISynthesizer";
+import IModule from "../interfaces/modules/IModule";
+import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import { Repository } from "./Repository";
 
 type CreationPayload = { tool_id: string, synthesizer_id: string, rack: number, slot: number };

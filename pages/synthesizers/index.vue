@@ -19,10 +19,11 @@ import { useDisplay } from 'vuetify'
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 import { repositories } from '~~/lib/repositories';
 import { sortBy } from 'lodash';
+import ISynthesizer from '~~/lib/interfaces/synthesizers/ISynthesizer';
 
 const { synthesizers: repository } = repositories;
 const { mobile } = useDisplay()
-const synthesizers: Ref<Synthesizer[]> = ref(await repository.list());
+const synthesizers: Ref<ISynthesizer[]> = ref(await repository.list());
 
 // Gets the list of memberships of the current account in the correct order.
 const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
