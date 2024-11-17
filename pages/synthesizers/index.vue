@@ -15,9 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import _, { remove } from 'lodash';
 import { useDisplay } from 'vuetify'
-import { repositories } from '~~/lib/repositories';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 import { repositories } from '~~/lib/repositories';
 import { sortBy } from 'lodash';
