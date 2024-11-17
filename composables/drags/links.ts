@@ -1,5 +1,6 @@
-import { api } from "~~/lib/api/Api";
+import ILink from "~~/lib/interfaces/ILink";
 import ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
+import { repositories } from "~~/lib/repositories";
 import { Coordinates } from "~~/lib/types/Coordinates"
 import Link from "~~/lib/wrappers/Link";
 import Port from "~~/lib/wrappers/Port";
@@ -40,12 +41,13 @@ async function createLink() {
   const { startPort: from, endPort: to } = linkCreationState.value;
   if (!from || !to) return
   const payload = {
+    id: '',
     from: to.isInput() ? from.id : to.id,
     to: from.isInput() ? from.id : to.id,
     synthesizer_id: useSynthesizer().synthesizer.value.id,
     color: 'red'
   }
-  const response = await api.auth_post("/links", payload);
+  const response: ILink = await repositories.links.create(payload);
   useSynthesizer().links.value.push(new Link(response));
   linkCreationState.value.display = false;
 }
