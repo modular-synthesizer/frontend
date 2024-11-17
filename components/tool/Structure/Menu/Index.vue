@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar density="compact">
+  <v-toolbar density="compact">
     <v-btn to="/tools" icon>
       <v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent" location="bottom">Retour à la liste</v-tooltip>
@@ -22,7 +22,7 @@
         <tool-structure-create-parameter @created="createParameter" :tool="tool" />
       </v-list>
     </v-menu>
-  </v-app-bar>
+  </v-toolbar>
 </template>
 
 <script lang="ts" setup>

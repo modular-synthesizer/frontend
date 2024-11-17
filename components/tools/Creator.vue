@@ -1,93 +1,50 @@
 <template>
-  <v-row no-gutters>
-    <v-col id="preview" cols="4" class="bg-grey-lighten-2 scroll-y">
-      <tools-preview v-model="tool" />
-      <div class="d-flex justify-space-between flex-grow-1 bottom-liner">
-        <v-btn color="green" @click="saveTool">Sauvegarder</v-btn>
-        <v-btn color="blue-grey" to="/tools">Retour</v-btn>
-      </div>
-    </v-col>
-    <v-col id="steps" cols="8" class="overflow-hidden d-flex flex-column">
-      <div class="flex-grow-0 d-flex flex-column">
-        <v-tabs align-tabs="center" v-model="currentTab">
-          <v-tab value="informations">Informations</v-tab>
-          <v-tab value="nodes">Noeuds</v-tab>
-          <v-tab value="links">Liens</v-tab>
-          <v-tab value="ports">Ports</v-tab>
-          <v-tab value="parameters">Paramètres</v-tab>
-          <v-tab value="controls">Contrôles</v-tab>
-          <v-tab value="graph">Graphe</v-tab>
-        </v-tabs>
-        <v-window v-model="currentTab">
-          <v-window-item value="informations">
-            <tools-informations v-model="tool" />
-          </v-window-item>
-          <v-window-item value="nodes">
-            <tools-nodes :tool="tool" :creation-mode="creationMode" />
-          </v-window-item>
-          <v-window-item value="links">
-            <tools-links v-model="tool.links" :tool="tool" :creation-mode="creationMode" />
-          </v-window-item>
-          <v-window-item value="ports">
-            <tools-ports v-model="tool" :creation-mode="creationMode" />
-          </v-window-item>
-          <v-window-item value="parameters">
-            <tools-parameters v-model="tool.parameters" :tool="tool" :creation-mode="creationMode" />
-          </v-window-item>
-          <v-window-item value="controls">
-            <tools-controls v-model="tool.controls" :tool="tool" :creation-mode="creationMode" />
-          </v-window-item>
-          <v-window-item value="graph" v-if="tool">
-            <tools-graph :tool="tool" />
-          </v-window-item>
-        </v-window>
-      </div>
-    </v-col>
-  </v-row>
+  <v-container fluid class="main-wrapper">
+  <v-tabs v-model="tab" align-tabs="center" color="secondary">
+    <v-tab value="internal">Internal structure</v-tab>
+    <v-tab value="external">External appearance</v-tab>
+  </v-tabs>
+  <div class="wrapper">
+  </div>
+    <div class="pt-2" v-if="tool">
+      <v-window v-model="tab">
+        <v-window-item value="internal">
+          <div class="tabs-holder"><tool-structure :tool="tool" /></div>
+        </v-window-item>
+        <v-window-item value="external">
+          <div class="tabs-holder"><tool-appearance :tool="tool" /></div>
+        </v-window-item>
+      </v-window>
+    </div>
+  </v-container>
 </template>
 
-<script lang="ts">
-import { PropType } from "vue";
-import ITool from "~~/lib/interfaces/ITool"
-import { equals } from "~~/lib/interfaces/common/Identifiable";
+<script lang="ts" setup>
+import ITool from '~~/lib/interfaces/ITool';
 
-export default {
-  props: {
-    modelValue: {
-      type: Object as PropType<ITool>,
-      required: true
-    },
-  },
-  emits: ['update:modelValue'],
-  data: () => ({
-    currentTab: "informations"
-  }),
-  computed: {
-    tool() { return this.modelValue },
-    creationMode() { return equals(this.tool, { id: '' }) }
-  },
-  methods: {
-    saveTool() {
-      this.$emit('update:modelValue', this.modelValue)
-    }
-  }
-}
+const props = defineProps({
+  tool: { type: Object as PropType<ITool>, required: true },
+})
+
+const tab: Ref<string> = ref('internal');
+const tool: Ref<ITool> = ref(props.tool);
 </script>
 
 <style scoped>
-.scroll-y {
-  overflow-y: scroll;
+.main-wrapper {
+  padding: 0px 20px;
 }
-#preview {
-  margin: 0px;
-  padding: 0px;
-  overflow: hidden;
-  border-right: 2px solid #BBBBBB;
+.tabs-holder {
+  height: calc(100vh - 56px);
+  overflow-y: hidden;
 }
-.bottom-liner {
-  padding: 10px;
+.wrapper {
+  height: 100vh;
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
-#steps {
-  padding: 10px;
+.menu-wrapper {
+  position: absolute;
 }
 </style>

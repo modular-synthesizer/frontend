@@ -1,5 +1,6 @@
 <template>
   <div class="super-wrapper">
+    <tool-structure-menu :tool="tool" />
     <svg @wheel="handleZoom">
       <g :transform="`scale(${scale} ${scale})`">
         <g :transform="`translate(${x % BG_SIZE} ${y % BG_SIZE})`">
@@ -12,7 +13,6 @@
         </g>
       </g>
     </svg>
-    <tool-structure-menu :tool="tool" />
     <tool-structure-dialogs-port
       v-if="p !== null"
       :port="p"
@@ -68,6 +68,7 @@ declareDeletionHandlers(window, onBeforeUnmount);
 .super-wrapper {
   border: 1px solid white;
   height: calc(100vh - 64px);
+  overflow: hidden;
 }
 
 .super-wrapper > header {
