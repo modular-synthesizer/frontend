@@ -15,9 +15,9 @@ export class Repository<T extends Identifiable> {
     this.resource = resource;
   }
 
-  public async list(): Promise<T[]> {
+  public async list(payload: any = {}): Promise<T[]> {
     console.log(this.BASE_URI, this.resource);
-    return await api_get([this.BASE_URI, this.resource].join('/'));
+    return await api_get([this.BASE_URI, this.resource].join('/'), payload);
   }
 
   public async get(id: string): Promise<T> {
