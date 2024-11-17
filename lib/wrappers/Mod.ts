@@ -1,4 +1,4 @@
-import Port, { InputPort, OutputPort } from "./Port";
+import Port from "./Port";
 import Parameter from "./Parameter";
 import { find, flatten, some } from 'lodash';
 import Link from "./Link";
@@ -7,9 +7,12 @@ import IPort from "../interfaces/IPort";
 import Channel from "./Channel";
 import IParameter from "../interfaces/IParameter";
 import InnerAudioNode from "./InnerAudioNode";
-import { equals } from "../interfaces/common/Identifiable";
+import IModule from "../interfaces/modules/IModule";
+import { InnerLink, InnerNode } from "../interfaces/ITool";
 
-export default class Mod {
+type Payload = IModule & { channels: Channel[] }
+
+export default class Mod implements IModule {
   public readonly id: string;
   public rack: number;
   public slot: number;
@@ -20,8 +23,11 @@ export default class Mod {
   public readonly category: string;
   public readonly controls: IControl[] = [];
   public readonly channels: Channel[];
+  public readonly links: InnerLink[] = [];
+  public readonly nodes: InnerNode[] = [];
+  
 
-  constructor({ id, rack, slot, slots, type, ports, parameters, category, controls, channels }: any) {
+  constructor({ id, rack, slot, slots, type, ports, parameters, category, controls, channels, links, nodes }: Payload) {
     this.id = id;
     this.rack = rack;
     this.slot = slot;
@@ -30,9 +36,11 @@ export default class Mod {
     this.category = category;
     this.controls = controls;
     this.channels = channels;
+    this.links = links;
+    this.nodes = nodes;
     
     this.ports = ports.map((iport: IPort) => {
-      return iport.kind === "input" ? new InputPort(iport, this) : new OutputPort(iport, this);
+      return new Port(iport, this);
     });
 
     this.parameters = parameters.map((p: IParameter) => new Parameter(p, this));
@@ -81,9 +89,8 @@ export default class Mod {
     this.param(name).watch(callback);
   }
 
-  public crosses(rack: number, slot: number, slots: number, id: string) {
+  public intersects({ slot, rack, slots }: { slot: number, rack: number, slots: number}) {
     if (this.rack !== rack) return false;
-    if (equals(this, { id })) return false;
     const [ begin, end ]: [ number, number ] = [ slot, slot + slots ];
     if (this.rack !== rack) return false;
     if (end <= this.slot) return false;

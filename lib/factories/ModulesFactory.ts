@@ -1,11 +1,12 @@
-import IModule from "../interfaces/IModule";
+import IModule from "../interfaces/modules/IModule";
 import Channel from "../wrappers/Channel";
 import Mod from "../wrappers/Mod";
 import InnerNodesFactory from "./InnerNodes"
 import InnerLinksFactory from "./InnerLinks"
-import ISynthesizer from "../interfaces/ISynthesizer";
+import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import Synthesizer from "../wrappers/Synthesizer";
 import { IGenerator } from "../interfaces/IGenerator";
+import IPlacableModule from "../interfaces/modules/IPlacableModule";
 
 export class ModulesFactory {
   public empty(): IModule {
@@ -21,6 +22,9 @@ export class ModulesFactory {
       parameters: [],
       category: "",
       controls: [],
+      intersects(_module: IPlacableModule) {
+        return false;
+      }
     }
   }
   public async build(details: IModule, synthesizer: ISynthesizer|Synthesizer, generators: IGenerator[]) {

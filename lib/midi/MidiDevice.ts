@@ -1,7 +1,7 @@
 import { difference, findIndex, indexOf, last } from "lodash";
 import { POLYPHONY_CHANNELS } from "../utils/constants";
 import { eventbus } from "../utils/eventbus/EventBus";
-import ISynthesizer from "../interfaces/ISynthesizer";
+import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import Synthesizer from "../wrappers/Synthesizer";
 import { v4 as uuid } from "uuid";
 
@@ -9,16 +9,13 @@ export default class MidiDevice {
 
   private midichannel: number;
 
-  private pressed: number[] = []
-
-  private id: string;
+  private pressed: number[] = [];
 
   // All polyphony channels are marked as empty at first, signaled by -1
   private channels = Array.from(Array(POLYPHONY_CHANNELS)).map(_ => -1);
 
   constructor(midichannel: number) {
     this.midichannel = midichannel;
-    this.id = uuid();
   }
 
   public setSynthesizer(synthesizer: Synthesizer|ISynthesizer) {

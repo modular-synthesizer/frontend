@@ -11,7 +11,7 @@
 import { mapState, mapActions } from 'pinia';
 import { v4 as uuid } from 'uuid';
 import { api } from '~~/lib/api/Api';
-import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
+import ISynthesizer from '~~/lib/interfaces/synthesizers/ISynthesizer';
 import { equals } from '~~/lib/interfaces/common/Identifiable';
 import Link from '~~/lib/wrappers/Link';
 import Mod from '~~/lib/wrappers/Mod';

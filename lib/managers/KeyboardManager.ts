@@ -4,7 +4,7 @@ import { useKeyboard } from "~~/stores/common/keyboard";
 import keyboard from './keyboard.json'
 import MidiDevice from "~~/lib/midi/MidiDevice";
 import Synthesizer from "../wrappers/Synthesizer";
-import ISynthesizer from "../interfaces/ISynthesizer";
+import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 
 /**
  * This class helps us trate the keyboard as a separated MIDI device. The difference with a classical MIDI device is

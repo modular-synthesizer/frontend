@@ -9,10 +9,10 @@ const { link } = defineProps({
 <template>
   <g>
     <Connection
-      :start-x="link.from.ax"
-      :start-y="link.from.ay"
-      :end-x="link.to.ax"
-      :end-y="link.to.ay"
+      :start-x="link.origin.ax"
+      :start-y="link.origin.ay"
+      :end-x="link.destination.ax"
+      :end-y="link.destination.ay"
       @click="useSynthesizer().removeLink(link.id)"
     />
   </g>

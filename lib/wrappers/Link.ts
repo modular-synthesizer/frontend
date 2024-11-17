@@ -1,18 +1,25 @@
 import ILink from "../interfaces/ILink";
+import IPort from "../interfaces/IPort";
 import { equals } from "../interfaces/common/Identifiable";
 import Port from "./Port";
 
-export default class Link {
-  public readonly from: Port;
-  public readonly to: Port;
+export default class Link implements ILink {
+  public readonly from: string;
+  public readonly to: string;
   public readonly color: string;
   public readonly id: string;
 
-  constructor({ id, from, to, color }: ILink) {
-    const ports: Port[] = usePorts().ports as Port[];
+  public readonly origin!: Port;
+  public readonly destination!: Port;
 
-    this.from = ports.find(port => equals(port, { id: from })) as Port;
-    this.to = ports.find(port => equals(port, { id: to })) as Port;
+  constructor({ id, from, to, color }: ILink) {
+    const ports: IPort[] = usePorts().ports;
+
+    this.from = from;
+    this.to = to;
+
+    this.origin = ports.find(port => equals(port, { id: from })) as Port;
+    this.destination = ports.find(port => equals(port, { id: to })) as Port;
 
     this.color = color;
     this.id = id;
@@ -21,10 +28,10 @@ export default class Link {
   }
 
   public connect() {
-    this.to.connect(this.from, this);
+    this.destination.connect(this.origin, this);
   }
 
   public disconnect() {
-    this.to.disconnect(this.from);
+    this.destination.disconnect(this.origin);
   }
 }

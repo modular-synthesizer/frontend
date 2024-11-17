@@ -4,7 +4,6 @@
 
 <script lang="ts">
 import Mod from '~~/lib/wrappers/Mod';
-import Envelope from '~~/lib/signal/envelope';
 import Parameter from '~~/lib/wrappers/Parameter';
 import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
@@ -20,7 +19,6 @@ export default {
   data: function() {
     return {
       inputs: [] as MIDIInput[],
-      envelopes: [] as Envelope[],
       keysCount: 0,
       midichannel: -1,
     }

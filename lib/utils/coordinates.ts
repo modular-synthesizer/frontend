@@ -1,4 +1,3 @@
-import { clamp } from "lodash"
 import { RACK_HEIGHT, SLOT_SIZE } from "~~/lib/utils/constants";
 
 interface ICoordinates {

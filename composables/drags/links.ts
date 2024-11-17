@@ -1,5 +1,5 @@
 import { api } from "~~/lib/api/Api";
-import ISynthesizer from "~~/lib/interfaces/ISynthesizer";
+import ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { Coordinates } from "~~/lib/types/Coordinates"
 import Link from "~~/lib/wrappers/Link";
 import Port from "~~/lib/wrappers/Port";

@@ -6,7 +6,7 @@ import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 import Channel from "./Channel";
 import InnerAudioNode from "./InnerAudioNode";
 
-export default abstract class Port implements IPort {
+export default class Port implements IPort {
   id: string;
   index: number;
   name: string;
@@ -25,7 +25,9 @@ export default abstract class Port implements IPort {
     this.kind = kind;
   }
 
-  abstract isInput(): boolean;
+  public isInput(): boolean {
+    return this.kind === 'input';
+  }
 
   public connectableTo(port: Port) {
     return this.isInput() === !port.isInput();
