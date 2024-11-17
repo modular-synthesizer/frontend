@@ -1,5 +1,5 @@
 <template>
-  <knob-wrapper :parameter="mod.param(target)" :x="x" :y="y" :r="25" :label="label" :control="control" />
+  <knob-wrapper v-if="parameter" :parameter="parameter" :x="x" :y="y" :r="25" :label="label" :control="control" />
 </template>
 
 <script setup lang="ts">
@@ -14,4 +14,6 @@ const { x, y, target, label, mod, control } = defineProps({
   mod: { type: Mod, required: true },
   control: { type: Object as PropType<IControl>, required: true },
 });
+
+const parameter = computed(() => mod.param(target))
 </script>

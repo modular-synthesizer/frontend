@@ -1,5 +1,5 @@
 <template>
-  <knob-events :parameter="parameter" :control=control>
+  <knob-events v-if="parameter" :parameter="parameter" :control=control>
     <knob-label :x="x" :y="y - r - 6" :label="label" />
     <knob-background :x="x" :y="y" :radius="r" :editing="control.editing" />
     <knob-gauge :x="x" :y="y" :radius="r - 4" :startAngle="30" :endAngle="330" :parameter="parameter" />

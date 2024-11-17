@@ -1,5 +1,5 @@
 <template>
-  <knob-wrapper :x="x" :y="y" :parameter=mod.param(target) :r="14" :label="label" :control="control" v-slot="{ value }" :small="true">
+  <knob-wrapper :x="x" :y="y" v-if="parameter" :parameter="parameter" :r="14" :label="label" :control="control" v-slot="{ value }" :small="true">
     {{ isMidi ? midiLabel(value): value }}
   </knob-wrapper>
 </template>
@@ -23,4 +23,6 @@ const isMidi = midi === 'true';
 function midiLabel(value: number): String {
   return value === -1 ? 'KBD' : `${value + 1}`;
 }
+
+const parameter = computed(() => mod.param(target))
 </script>
