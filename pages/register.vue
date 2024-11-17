@@ -69,12 +69,15 @@
 <script lang="ts" setup>
 import useVuelidate from '@vuelidate/core';
 import { email, minLength, required } from '@vuelidate/validators';
+import { split } from 'lodash';
 import { api } from '~~/lib/api/Api';
 import IApiError from '~~/lib/interfaces/IApiError';
+import { repositories } from '~~/lib/repositories';
 
 definePageMeta({ middleware: ['already-logged'], layout: 'anonymous' });
 
 const account = reactive({
+  id: '',
   username: '',
   password: '',
   password_confirmation: '',
@@ -104,11 +107,13 @@ function hasEmptyFields() {
 async function register(_$event: Event) {
   await v$.value.$validate();
   if (hasEmptyFields()) return;
-  api.post('/accounts', account)
-    .then(_response => registered.value = true)
-    .catch(error => {
-      const err: IApiError = error.response.data;
-      $externalResults.value = {[err.key]: err.message};
-    });
+  try {
+    await repositories.accounts.create(account);
+    registered.value = true
+  }
+  catch (error: any) {
+    const [ key, message ] = split(error.statusMessage, '.');
+    $externalResults.value = {[key]: message};
+  }
 }
 </script>

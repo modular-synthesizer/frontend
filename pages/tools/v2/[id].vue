@@ -20,16 +20,12 @@
 </template>
 
 <script lang="ts" setup>
-import { api } from '~~/lib/api/Api';
 import ITool from '~~/lib/interfaces/ITool';
+import { repositories } from '~~/lib/repositories';
 
 definePageMeta({ layout: 'empty' });
 const tab: Ref<string> = ref('internal');
-const tool: Ref<ITool> = ref(await api.auth_get(`/tools/${useRoute().params.id}`));
-
-async function save() {
-  tool.value = await api.auth_put(`/tools/${useRoute().params.id}`, tool.value)
-}
+const tool: Ref<ITool> = ref(await repositories.tools.get(useRoute().params.id as string));
 </script>
 
 <style scoped>

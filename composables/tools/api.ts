@@ -1,6 +1,7 @@
 import { curry } from "lodash";
 import { api } from "~~/lib/api/Api";
 import ITool, { InnerLink, InnerNode, IToolParameter, IToolPort } from "~~/lib/interfaces/ITool";
+import { repositories } from "~~/lib/repositories";
 
 type ToolElement = IToolPort|IToolParameter|InnerNode|InnerLink;
 
@@ -22,5 +23,5 @@ export const updateElement = curry(async function (uri: string, tool: ITool, ele
 })
 
 export async function updateTool(tool: ITool) {
-  return await api.auth_put(`/tools/${tool.id}`, tool);
+  return await repositories.tools.update(tool);
 }

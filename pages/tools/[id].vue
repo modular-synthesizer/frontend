@@ -5,22 +5,14 @@
 </template>
 
 <script lang="ts">
-import { api } from "~~/lib/api/Api"
 import ITool from "~~/lib/interfaces/ITool";
 import { pick } from 'lodash';
+import { repositories } from "~~/lib/repositories";
 
-export default {
-  data: () => ({
-    tool: null as unknown as ITool
-  }),
-  async mounted() {
-    this.tool = await api.auth_get(`/tools/${this.$route.params.id}`)
-  },
-  methods: {
-    save() {
-      const fields: string[] = ['name', 'slots', 'categoryId', 'experimental'];
-      api.auth_put(`/tools/${this.tool.id}`, pick(this.tool, fields));
-    }
-  }
+const tool: Ref<ITool> = ref(await repositories.tools.get(useRoute().params.id as string));
+
+function save() {
+  const fields: string[] = ['id', 'name', 'slots', 'categoryId', 'experimental'];
+  repositories.tools.update(pick(tool.value, fields) as ITool);
 }
 </script>

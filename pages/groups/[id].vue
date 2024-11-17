@@ -38,9 +38,10 @@
 import { api } from "~~/lib/api/Api"
 import IRight from "~~/lib/interfaces/permissions/IRight";
 import IGroup from "~~/lib/interfaces/permissions/IGroup";
+import { repositories } from "~~/lib/repositories";
 
-const group: Ref<IGroup> = ref(await api.auth_get(`/groups/${useRoute().params.id}`));
-const rights: IRight[] = await api.auth_get("/rights");
+const group: Ref<IGroup> = ref(await repositories.groups.get(useRoute().params.id as string));
+const rights: IRight[] = await repositories.rights.list();
 const selected: Ref<string[]> = ref(group.value.scopes.map((s: IRight) => s.id))
 const form: Ref<any> = ref();
 
