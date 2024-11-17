@@ -6,6 +6,7 @@ import InnerLinksFactory from "./InnerLinks"
 import ISynthesizer from "../interfaces/ISynthesizer";
 import Synthesizer from "../wrappers/Synthesizer";
 import { IGenerator } from "../interfaces/IGenerator";
+import IPlacableModule from "../interfaces/synthesizers/IPlacableModule";
 
 export class ModulesFactory {
   public empty(): IModule {
@@ -21,6 +22,9 @@ export class ModulesFactory {
       parameters: [],
       category: "",
       controls: [],
+      intersects(_module: IPlacableModule) {
+        return false;
+      }
     }
   }
   public async build(details: IModule, synthesizer: ISynthesizer|Synthesizer, generators: IGenerator[]) {
