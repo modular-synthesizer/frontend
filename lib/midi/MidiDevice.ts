@@ -9,16 +9,13 @@ export default class MidiDevice {
 
   private midichannel: number;
 
-  private pressed: number[] = []
-
-  private id: string;
+  private pressed: number[] = [];
 
   // All polyphony channels are marked as empty at first, signaled by -1
   private channels = Array.from(Array(POLYPHONY_CHANNELS)).map(_ => -1);
 
   constructor(midichannel: number) {
     this.midichannel = midichannel;
-    this.id = uuid();
   }
 
   public setSynthesizer(synthesizer: Synthesizer|ISynthesizer) {
