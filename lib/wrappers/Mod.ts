@@ -7,7 +7,7 @@ import IPort from "../interfaces/IPort";
 import Channel from "./Channel";
 import IParameter from "../interfaces/IParameter";
 import InnerAudioNode from "./InnerAudioNode";
-import IModule from "../interfaces/IModule";
+import IModule from "../interfaces/modules/IModule";
 import { InnerLink, InnerNode } from "../interfaces/ITool";
 
 type Payload = IModule & { channels: Channel[] }

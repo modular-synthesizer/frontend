@@ -6,8 +6,8 @@ import IGroup from "~~/lib/interfaces/permissions/IGroup";
 import IRight from "~~/lib/interfaces/permissions/IRight";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import IAccount from "~~/lib/interfaces/IAccount";
-import IMembership from "~~/lib/interfaces/IMembership";
-import ISynthesizer from "~~/lib/interfaces/ISynthesizer";
+import IMembership from "~~/lib/interfaces/synthesizers/IMembership";
+import ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import ITool from "~~/lib/interfaces/ITool";
 
 const lists = {

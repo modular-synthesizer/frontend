@@ -65,7 +65,7 @@
 <script lang="ts" setup>
 import { api } from '~~/lib/api/Api';
 import IAccount from '~~/lib/interfaces/IAccount';
-import IMembership from '~~/lib/interfaces/IMembership';
+import IMembership from '~~/lib/interfaces/synthesizers/IMembership';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 const props = defineProps({

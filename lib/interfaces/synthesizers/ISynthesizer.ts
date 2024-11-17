@@ -1,5 +1,5 @@
 import IMembership from "./IMembership";
-import { Identifiable } from "./common/Identifiable";
+import { Identifiable } from "../common/Identifiable";
 
 export default interface ISynthesizer extends Identifiable {
   creator?: IMembership,

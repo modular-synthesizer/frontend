@@ -1,7 +1,7 @@
 import IManager from "~~/lib/interfaces/IManager";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import MidiDevice from "~~/lib/midi/MidiDevice";
-import ISynthesizer from "../interfaces/ISynthesizer";
+import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import Synthesizer from "../wrappers/Synthesizer";
 
 /**

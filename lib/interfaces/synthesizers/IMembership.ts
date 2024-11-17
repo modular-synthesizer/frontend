@@ -1,4 +1,4 @@
-import { Identifiable } from "./common/Identifiable";
+import { Identifiable } from "../common/Identifiable";
 
 export default interface IMembership extends Identifiable {
   username: string;

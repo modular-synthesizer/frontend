@@ -1,4 +1,4 @@
-import ISynthesizer from "~~/lib/interfaces/ISynthesizer";
+import ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 
 /**
  * Creates an empty synthesizer with all the needed fields initialized with

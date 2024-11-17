@@ -17,7 +17,7 @@
 <script lang="ts" setup>
 import _ from 'lodash';
 import { api } from '~~/lib/api/Api';
-import ISynth from '~~/lib/interfaces/ISynthesizer';
+import ISynth from '~~/lib/interfaces/synthesizers/ISynthesizer';
 import Synth from '~~/lib/wrappers/Synthesizer';import { useDisplay } from 'vuetify'
 
 const { mobile } = useDisplay()

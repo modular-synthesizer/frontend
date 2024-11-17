@@ -49,7 +49,7 @@ import { mapState } from 'pinia';
 import { api } from '~~/lib/api/Api';
 import ModulesFactory from '~~/lib/factories/ModulesFactory';
 import { IGenerator } from '~~/lib/interfaces/IGenerator';
-import IModule from '~~/lib/interfaces/IModule';
+import IModule from '~~/lib/interfaces/modules/IModule';
 import ITool from '~~/lib/interfaces/ITool';
 import Tool from '~~/lib/interfaces/ITool';
 import Mod from '~~/lib/wrappers/Mod';

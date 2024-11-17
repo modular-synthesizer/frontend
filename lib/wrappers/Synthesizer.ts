@@ -1,7 +1,7 @@
-import ISynthesizer from "../interfaces/ISynthesizer";
+import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import Mod from "./Mod";
 import ICoordinates from "../interfaces/ICoordinates";
-import IMembership from "../interfaces/IMembership";
+import IMembership from "../interfaces/synthesizers/IMembership";
 
 /**
  * A synthesizer is the main object of the application. It is materialized

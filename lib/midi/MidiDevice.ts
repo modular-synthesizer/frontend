@@ -1,7 +1,7 @@
 import { difference, findIndex, indexOf, last } from "lodash";
 import { POLYPHONY_CHANNELS } from "../utils/constants";
 import { eventbus } from "../utils/eventbus/EventBus";
-import ISynthesizer from "../interfaces/ISynthesizer";
+import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import Synthesizer from "../wrappers/Synthesizer";
 import { v4 as uuid } from "uuid";
 

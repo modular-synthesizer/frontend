@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { boundaries, minlength, required } from '@/lib/rules';
 import { useI18n } from 'vue-i18n';
-import ISynthesizer from '~~/lib/interfaces/ISynthesizer';
+import ISynthesizer from '~~/lib/interfaces/synthesizers/ISynthesizer';
 
 let synthesizer: Ref<ISynthesizer> = ref(createEmptySynthesizer());
 
