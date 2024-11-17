@@ -32,7 +32,7 @@ export default class Mod {
     this.channels = channels;
     
     this.ports = ports.map((iport: IPort) => {
-      return iport.kind === "input" ? new InputPort(iport, this) : new OutputPort(iport, this);
+      return new Port(iport, this);
     });
 
     this.parameters = parameters.map((p: IParameter) => new Parameter(p, this));
