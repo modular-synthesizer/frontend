@@ -21,8 +21,8 @@ export const repositories = {
   categories: new Repository<ICategory>('categories'),
   generators: new Repository<IGenerator>('generators'),
   groups: new Repository<IGroup>('groups'),
-  memberships: new Repository<IMembership>('memberships'),
   links: new LinksRepository('links'),
+  memberships: new Repository<IMembership>('memberships'),
   modules: new ModulesRepository('modules'),
   tool: {
     controls: new Repository<IControl>('tools/controls'),
