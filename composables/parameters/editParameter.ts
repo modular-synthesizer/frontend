@@ -1,9 +1,9 @@
 import Parameter from "~~/lib/wrappers/Parameter";
 import sendParamEvent from '~~/lib/commands/events/sendParamEvent'
-import { api } from "~~/lib/api/Api";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import { Strategies } from "./editionStrategy";
 import { IControl } from "~~/lib/interfaces/IControl";
+import { repositories } from "~~/lib/repositories";
 
 const strategy: Ref<Strategies> = ref(Strategies.DECORRELATED);
 
@@ -42,11 +42,6 @@ export function endParameterSetting() {
 }
 
 export async function saveParameter(param: Parameter): Promise<any> {
-  const auth_token: string = useAuthentication().session.token;
-  const payload = {
-    auth_token,
-    parameters: [{id: param.id, value: param.value}]
-  }
-  await api.put(`/modules/${param.mod.id}`, payload);
+  repositories.modules.updateParameter(param);
   eventbus.emit(`parameters/update/${param.mod.id}/channel`, { value: param.value });
 }

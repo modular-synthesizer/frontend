@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { api } from '~~/lib/api/Api';
+import { repositories } from '~~/lib/repositories';
 import Mod from '~~/lib/wrappers/Mod';
 
 export default {
@@ -34,11 +34,7 @@ export default {
     trigger() {
       this.muted = !this.muted;
       this.parameter.setValue(this.muted ? 0 : 1);
-      const payload = {
-        auth_token: useAuthentication().session.token,
-        parameters: [{id: this.parameter.id, value: this.parameter.value}]
-      }
-      api.put(`/modules/${this.parameter.mod.id}`, payload)
+      repositories.modules.updateParameter(this.parameter);
     }
   }
 }
