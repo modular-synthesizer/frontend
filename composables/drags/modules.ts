@@ -1,7 +1,5 @@
 // import ICoordinates from "~~/lib/interfaces/ICoordinates";
 import { getRack, getSlot } from "~~/lib/utils/coordinates";
-import { clamp } from 'lodash'
-import { api } from "~~/lib/api/Api";
 import Mod from "~~/lib/wrappers/Mod";
 import sendModuleEvent from "~~/lib/commands/events/sendModuleEvent";
 // import { SynthState, useStates } from "../synthesizers/states";
@@ -47,7 +45,7 @@ export const useModuleDrag = () => {
   }
   
   function end() {
-    api.auth_put(`/modules/${mod.id}`, { slot: mod.slot, rack: mod.rack });
+    api_put(`/modules/${mod.id}`, { slot: mod.slot, rack: mod.rack });
     useModHover().unblock();
     useStates().unblock()
     sendModuleEvent('endDrag', mod);

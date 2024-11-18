@@ -19,7 +19,6 @@
 </template>
 
 <script lang="ts" setup>
-import { api } from '~~/lib/api/Api';
 import ITool, { IToolPort } from '~~/lib/interfaces/ITool';
 
 const { tool } = defineProps({
@@ -50,7 +49,7 @@ function handleKeyPress (event: KeyboardEvent) {
   }
   const id = selected.value.item.id;
   timer.value = window.setTimeout(async () => {
-    await api.auth_put(`/tools/nodes/${id}`, { ...selected.value.item, tool_id: tool.id });
+    await api_put(`/tools/nodes/${id}`, { ...selected.value.item, tool_id: tool.id });
   }, 200);
 }
 window.addEventListener('keydown', handleKeyPress);

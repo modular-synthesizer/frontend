@@ -35,7 +35,6 @@
 </template>
 
 <script lang="ts" setup>
-import { api } from "~~/lib/api/Api"
 import IRight from "~~/lib/interfaces/permissions/IRight";
 import IGroup from "~~/lib/interfaces/permissions/IGroup";
 import { repositories } from "~~/lib/repositories";
@@ -46,7 +45,7 @@ const selected: Ref<string[]> = ref(group.value.scopes.map((s: IRight) => s.id))
 const form: Ref<any> = ref();
 
 async function save() {
-  group.value = await api.auth_put(`/groups/${useRoute().params.id}`, {
+  group.value = await api_put(`/groups/${useRoute().params.id}`, {
     slug: group.value.slug,
     scopes: selected.value,
   });

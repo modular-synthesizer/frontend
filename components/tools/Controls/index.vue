@@ -7,7 +7,6 @@
 
 <script lang="ts">
 import { cloneDeep } from 'lodash';
-import { api } from '~~/lib/api/Api';
 import ToolsFactory from '~~/lib/factories/ToolsFactory';
 import { IControl } from '~~/lib/interfaces/IControl';
 import ITool from '~~/lib/interfaces/ITool';
@@ -37,12 +36,12 @@ export default {
   },
   methods: {
     async created(result: IControl) {
-      const response: IControl = await api.auth_post('/tools/controls', { ...result, tool_id: this.tool.id });
+      const response: IControl = await api_post('/tools/controls', { ...result, tool_id: this.tool.id });
       this.controls.push(response);
       this.reset();
     },
     async updated(result: IControl) {
-      const response: IControl = await api.auth_put(`/tools/controls/${result.id}`, result);
+      const response: IControl = await api_put(`/tools/controls/${result.id}`, result);
       this.controls[this.index] = response;
       this.reset();
     },
