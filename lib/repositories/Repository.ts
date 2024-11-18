@@ -16,6 +16,8 @@ export class Repository<T extends Identifiable> {
   }
 
   public async list(payload: any = {}): Promise<T[]> {
+    console.log("dans la liste de Repository");
+    console.log(payload);
     return await api_get(this.uri(), payload);
   }
 
@@ -25,7 +27,7 @@ export class Repository<T extends Identifiable> {
   }
 
   public async get(id: string): Promise<T> {
-    return await api_get(this.uri());
+    return await api_get(this.uri(id));
   }
 
   public async delete(id: string, payload: any = {}): Promise<void> {
