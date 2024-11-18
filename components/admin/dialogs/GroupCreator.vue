@@ -31,11 +31,11 @@
 </template>
 
 <script lang="ts" setup>
-import { api } from '~~/lib/api/Api';
 import IGroup from '~~/lib/interfaces/permissions/IGroup';
+import { repositories } from '~~/lib/repositories';
 
 const emit = defineEmits(['submitted']);
-const rights = ref(await api.auth_get('/rights'));
+const rights = ref(await repositories.rights.list());
 const group: Ref<IGroup> = ref({ id: "", slug: "", scopes: [], is_default: false });
 const dialog = ref(false);
 const validity = ref(true);

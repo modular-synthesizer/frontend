@@ -52,6 +52,7 @@ import { IGenerator } from '~~/lib/interfaces/IGenerator';
 import IModule from '~~/lib/interfaces/modules/IModule';
 import ITool from '~~/lib/interfaces/ITool';
 import Tool from '~~/lib/interfaces/ITool';
+import { repositories } from '~~/lib/repositories';
 import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
@@ -74,22 +75,20 @@ export default {
       this.loading = false;
       this.display = false;
     },
-    select(tool: ITool) {
+    async select(tool: ITool) {
       this.loading = true;
       const payload = {
-        auth_token: this.session.token,
         tool_id: tool.id,
         synthesizer_id: this.synthesizer.id,
         rack: 0,
         slot: this.synthesizer.firstFreeSlot(tool.slots),
       };
-      api.post('/modules', payload).then(async (response: IModule) => {
-        const generators: IGenerator[] = await api.auth_get("/generators");
-        ModulesFactory.build(response, this.synthesizer, generators).then((mod: Mod) => {
-          this.$emit('selected', mod);
-          this.close();
-        })
-      })
+      const response: IModule = await repositories.modules.createInSynthesizer(payload)
+      const generators: IGenerator[] = await repositories.generators.list();
+      ModulesFactory.build(response, this.synthesizer, generators).then((mod: Mod) => {
+        this.$emit('selected', mod);
+        this.close();
+      });
     },
     categories(tools: Tool[]) {
       return groupBy(tools, tool => tool.category.name);

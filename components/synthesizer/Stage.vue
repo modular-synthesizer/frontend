@@ -1,5 +1,5 @@
 <template>
-  <draggable-stage :key="synthesizerKey" :position="synthesizer" @move="save(synthesizer)" @zoom="save(synthesizer)" v-if="synthesizer">
+  <draggable-stage :key="synthesizerKey" :position="synthesizer" @move="save()" @zoom="save()" v-if="synthesizer">
     <synthesizer-module v-for="mod in modules" :mod="mod" :hovered="hovered !== null && equals(hovered, mod)" />
     <synthesizer-link v-for="link in links" :link="link" />
     <LinkCreator />
@@ -10,9 +10,8 @@
 <script lang="ts">
 import { mapState, mapActions } from 'pinia';
 import { v4 as uuid } from 'uuid';
-import { api } from '~~/lib/api/Api';
-import ISynthesizer from '~~/lib/interfaces/synthesizers/ISynthesizer';
 import { equals } from '~~/lib/interfaces/common/Identifiable';
+import { repositories } from '~~/lib/repositories';
 import Link from '~~/lib/wrappers/Link';
 import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
@@ -36,7 +35,8 @@ export default {
   },
   data: function() {
     return {
-      key: uuid()
+      key: uuid(),
+      repository: repositories.synthesizers,
     };
   },
   computed: {
@@ -47,8 +47,8 @@ export default {
   },
   methods: {
     ...mapActions(useStates, ['is']),
-    save({ id, scale, x, y }: ISynthesizer) {
-      debounce('save', 500, () => api.auth_put(`/synthesizers/${id}`, { x, y, scale }))
+    save() {
+      debounce('save', 500, () => this.repository.update(this.synthesizer))
     },
     equals
   },

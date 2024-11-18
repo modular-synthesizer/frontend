@@ -16,8 +16,8 @@
 
 <script setup lang="ts">
 import { max, remove } from 'lodash';
-import { api } from '~~/lib/api/Api';
 import ITool, { InnerNode, IToolParameter } from '~~/lib/interfaces/ITool';
+import { repositories } from '~~/lib/repositories';
 
 const props = defineProps({
   param: { type: String, required: true },
@@ -39,8 +39,8 @@ function showParameters() {
 }
 
 async function removeParameter(p: IToolParameter) {
-  await api.auth_delete(`/tools/parameters/${p.id}`, { tool_id: props.tool.id });
-  remove(props.tool.parameters, (i: IToolParameter) => i.id === p.id);
+  await repositories.tool.parameters.delete(p.id, { tool_id: props.tool.id });
+  remove(props.tool.parameters, { id: p.id });
 }
 
 function getRectWidth() {
