@@ -16,8 +16,6 @@ export class Repository<T extends Identifiable> {
   }
 
   public async list(payload: any = {}): Promise<T[]> {
-    console.log("dans la liste de Repository");
-    console.log(payload);
     return await api_get(this.uri(), payload);
   }
 

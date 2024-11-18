@@ -10,8 +10,6 @@ export class ModulesRepository extends Repository<IModule> {
   }
 
   public async list(synthesizer: ISynthesizer): Promise<IModule[]> {
-    console.log("dans la liste de ModulesRepository")
-    console.log(synthesizer)
     return super.list({ synthesizer_id: synthesizer.id});
   }
 }
