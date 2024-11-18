@@ -1,4 +1,4 @@
-import { find, remove } from "lodash";
+import { find, map, remove } from "lodash";
 import { Identifiable } from "../interfaces/common/Identifiable";
 
 /**
@@ -16,25 +16,34 @@ export class Repository<T extends Identifiable> {
   }
 
   public async list(payload: any = {}): Promise<T[]> {
-    console.log(this.BASE_URI, this.resource);
-    return await api_get([this.BASE_URI, this.resource].join('/'), payload);
+    return await api_get(this.uri(), payload);
+  }
+
+  public async wrap(wrapper: any, payload: any = {}) {
+    const list: T[] = await this.list(payload);
+    return map(list, (item: T) => new wrapper(item));
   }
 
   public async get(id: string): Promise<T> {
-    return await api_get([this.BASE_URI, this.resource, id].join('/'));
+    return await api_get(this.uri());
   }
 
   public async delete(id: string, payload: any = {}): Promise<void> {
-    return await api_delete([this.BASE_URI, this.resource, id].join('/'), payload);
+    return await api_delete(this.uri(id), payload);
   }
 
   public async create(payload: T): Promise<T> {
-    return await api_post([this.BASE_URI, this.resource].join('/'), payload);
+    return await api_post(this.uri(), payload);
   }
 
   public async update(payload: T): Promise<T> {
-    const uri: string = [this.BASE_URI, this.resource, payload.id].join('/')
-    return await api_put(uri, payload);
+    return await api_put(this.uri(payload.id), payload);
+  }
+
+  protected uri(appended: string = ''): string {
+    const resource: string[] = this.resource === '' ? [] : [ this.resource ];
+    const ending: string[] = appended === '' ? [] : [ appended ];
+    return [ this.BASE_URI, ...resource, ...ending ].join('/');
   }
 
   public remove(list: T[]): (id: string) => Promise<void> {

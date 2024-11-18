@@ -9,4 +9,6 @@ export default interface ISynthesizer extends Identifiable {
   y: number;
   scale: number;
   voices: number;
+
+  membershipType(username: string): string;
 }

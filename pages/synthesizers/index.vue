@@ -23,12 +23,12 @@ import ISynthesizer from '~~/lib/interfaces/synthesizers/ISynthesizer';
 
 const { synthesizers: repository } = repositories;
 const { mobile } = useDisplay()
-const synthesizers: Ref<ISynthesizer[]> = ref(await repository.list());
+const synthesizers: Ref<Synthesizer[]> = ref(await repository.wrap(Synthesizer));
 
 // Gets the list of memberships of the current account in the correct order.
 const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
 const name: string = useAuthentication().session.username;
-const sorted = computed(() => sortBy(synthesizers.value, (s: Synthesizer) => order[s.membershipType(name)]));
+const sorted = computed(() => sortBy(synthesizers.value, (s: ISynthesizer) => order[s.membershipType(name)]));
 
 const remove = repositories.synthesizers.remove(synthesizers.value);
 const create = repositories.synthesizers.add(synthesizers.value);
