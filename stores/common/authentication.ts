@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { api } from "~~/lib/api/Api";
 import ISession from "~~/lib/interfaces/ISession";
+import { repositories } from "~~/lib/repositories";
 
 export const useAuthentication = defineStore('authentication', {
   state: (): IAuthenticationState => ({
@@ -32,11 +32,10 @@ export const useAuthentication = defineStore('authentication', {
      * @return The promise for the login form to handle errors.
      */
     async login(username: string, password: string): Promise<any> {
-      const session: ISession & HasRights = await api.post("/sessions", { username, password })
-      await this.storage.set("auth-token", session.token);
-      await this.storage.set("session", JSON.stringify(session));
-      this.session = session;
-      setRights(session.rights)
+      this.session = await repositories.sessions.auth(username, password);
+      await this.storage.set("auth-token", this.session.token);
+      await this.storage.set("session", JSON.stringify(this.session));
+      setRights(this.session.rights)
       navigateTo("/");
     },
     /**
@@ -47,7 +46,7 @@ export const useAuthentication = defineStore('authentication', {
      */
     async logout(): Promise<void> {
       if (!this.token) return;
-      api.delete(`/sessions/${this.token}`, {auth_token: this.token})
+      repositories.sessions.delete(this.token);
       this.storage.remove("auth-token");
       this.storage.remove("session");
       closeWebsocket();
@@ -63,9 +62,8 @@ export const useAuthentication = defineStore('authentication', {
     async refresh(): Promise<ISession|undefined> {
       if (!this.token) return;
       try {
-        const session: ISession & HasRights = await api.get(`/sessions/${this.token}`, {auth_token: this.token});
-        this.session = session;
-        setRights(session.rights)
+        this.session = await repositories.sessions.get(this.token);;
+        setRights(this.session.rights)
         return this.session
       }
       catch (exception: any) {
@@ -75,10 +73,6 @@ export const useAuthentication = defineStore('authentication', {
   }
 });
 
-interface HasRights {
-  rights: string[];
-}
-
 interface IAuthenticationState {
   session: ISession;
   storage: any;
@@ -86,10 +80,12 @@ interface IAuthenticationState {
 
 function emptySession(): ISession {
   return {
+    id: "",
     token: "",
     username: "",
     email: "",
     admin: false,
-    account_id: ""
+    account_id: "",
+    rights: []
   }
 }

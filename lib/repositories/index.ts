@@ -12,6 +12,7 @@ import ICategory from "../interfaces/ICategory"
 import AccountsRepository from "./AccountsRepository"
 import { IControl } from "../interfaces/IControl"
 import { ToolPortsRepository } from "./ToolPortsRepository"
+import SessionsRepository from "./SessionsRepository"
 
 export type Repositories = { [key: string]: Repository<any> }
 
@@ -30,6 +31,7 @@ export const repositories = {
     ports: new ToolPortsRepository('tools/ports'),
   },
   rights: new Repository<IRight>('rights'),
+  sessions: new SessionsRepository('sessions'),
   synthesizers: new Repository<ISynthesizer>('synthesizers'),
   tools: new Repository<ITool>('tools'),
 }
