@@ -8,11 +8,15 @@ import IRight from "../interfaces/permissions/IRight"
 import LinksRepository from "./LinksRepository"
 import { ModulesRepository } from "./ModulesRepository"
 import { Repository } from "./Repository"
+import IApplication from "../interfaces/IApplication"
+import ICategory from "../interfaces/ICategory"
 
 export type Repositories = { [key: string]: Repository<any> }
 
 export const repositories = {
   accounts: new Repository<IAccount>('accounts'),
+  applications: new Repository<IApplication>('applications'),
+  categories: new Repository<ICategory>('categories'),
   generators: new Repository<IGenerator>('generators'),
   groups: new Repository<IGroup>('groups'),
   memberships: new Repository<IMembership>('memberships'),

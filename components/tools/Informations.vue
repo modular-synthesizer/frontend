@@ -11,19 +11,17 @@
   </v-row>
   <v-row>
     <v-col cols="4">
-      <data-fetcher url="/categories">
-        <template v-slot="{ items: categories}">
-          <v-select
-            :items="categories"
-            variant="outlined"
-            density="comfortable"
-            label="Catégorie"
-            v-model="tool.categoryId"
-            item-title="name"
-            item-value="id"
-          />
-        </template>
-      </data-fetcher>
+      <template v-if="categories">
+        <v-select
+          :items="categories"
+          variant="outlined"
+          density="comfortable"
+          label="Catégorie"
+          v-model="tool.categoryId"
+          item-title="name"
+          item-value="id"
+        />
+      </template>
     </v-col>
   </v-row>
   <v-row>
@@ -33,25 +31,15 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { PropType } from 'vue';
 import ICategory from '~~/lib/interfaces/ICategory';
 import ITool from '~~/lib/interfaces/ITool';
+import { repositories } from '~~/lib/repositories';
 
-export default {
-  props: {
-    modelValue: {
-      type: Object as PropType<ITool>,
-        required: true
-    }
-  },
-  data() {
-    return {
-      selectableCategories: [] as any[],
-    };
-  },
-  computed: {
-    tool() { return this.modelValue }
-  }
-}
+const { modelValue: tool } = defineProps({
+  modelValue: { type: Object as PropType<ITool>, required: true },
+});
+
+const categories: Ref<ICategory[]> = ref(await repositories.categories.list());
 </script>
