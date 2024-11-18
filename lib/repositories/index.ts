@@ -10,6 +10,7 @@ import { Repository } from "./Repository"
 import IApplication from "../interfaces/IApplication"
 import ICategory from "../interfaces/ICategory"
 import AccountsRepository from "./AccountsRepository"
+import { IControl } from "../interfaces/IControl"
 
 export type Repositories = { [key: string]: Repository<any> }
 
@@ -23,6 +24,7 @@ export const repositories = {
   links: new LinksRepository('links'),
   modules: new ModulesRepository('modules'),
   tool: {
+    controls: new Repository<IControl>('tools/controls'),
     parameters: new Repository<IToolParameter>('tools/parameters'),
   },
   rights: new Repository<IRight>('rights'),

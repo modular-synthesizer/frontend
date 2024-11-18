@@ -26,7 +26,7 @@
             <v-btn
               size="small"
               variant="plain"
-              @click="remove(control, idx)"
+              @click="remove(control.id)"
               icon="mdi-delete"
             />
             <v-btn
@@ -50,37 +50,29 @@
   </v-col>
 </template>
 
-<script lang="ts">
-import { omit, remove } from 'lodash';
-import { api } from '~~/lib/api/Api';
+<script setup lang="ts">
+import { omit } from 'lodash';
 import { IControl } from '~~/lib/interfaces/IControl';
+import { repositories } from '~~/lib/repositories';
 
-export default {
-  props: {
-    controls: {
-      type: Array<IControl>,
-      default: () => []
-    },
-    creationMode: {
-      type: Boolean,
-      default: () => false
-    }
-  },
-  methods: {
-    shift(index: number, difference: number) {
-      const item: IControl = this.controls.splice(index, 1)[0];
-      this.controls.splice(index + difference, 0, item);
-    },
-    async remove(control: IControl, index: number) {
-      await api.auth_delete(`/tools/controls/${control.id}`)
-      remove(this.controls, this.controls[index]);
-    },
-    startEdit(control: IControl, index: number) {
-      this.$emit("edition", { control, index });
-    },
-    removePayloadValue(control: IControl, value: string) {
-      control.payload = omit(control.payload, value);
-    }
-  }
+const { controls, creationMode } = defineProps({
+  controls: { type: Array<IControl>, default: () => [] },
+  creationMode: { type: Boolean, default: () => false }
+});
+
+type EditionPayload = { control: IControl, index: number };
+const emit = defineEmits<{ edition: [ EditionPayload ]}>();
+
+function shift(index: number, difference: number) {
+  const item: IControl = controls.splice(index, 1)[0];
+  controls.splice(index + difference, 0, item);
+}
+const remove = repositories.tool.controls.remove(controls)
+
+function startEdit(control: IControl, index: number) {
+  emit("edition", { control, index });
+}
+function removePayloadValue(control: IControl, value: string) {
+  control.payload = omit(control.payload, value);
 }
 </script>
