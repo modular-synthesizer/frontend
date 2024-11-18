@@ -1,4 +1,3 @@
-import { curry } from "lodash";
 import { api } from "~~/lib/api/Api";
 import ITool, { InnerLink, InnerNode, IToolParameter, IToolPort } from "~~/lib/interfaces/ITool";
 import { repositories } from "~~/lib/repositories";
@@ -14,13 +13,6 @@ export function createElement(uri: string, tool: ITool) {
     getCollection(tool, uri).push(await api.auth_post(`/tools/${uri}`, { ...element, tool_id: tool.id }));
   }
 };
-
-export const updateElement = curry(async function (uri: string, tool: ITool, element: ToolElement) {
-  const updatedPort: IToolPort = await api.auth_put(`/tools/${uri}/${element.id}`, { ...element, tool_id: tool.id });
-  const collection: ToolElement[] = getCollection(tool, uri);
-  const index: number = collection.findIndex((e: ToolElement) => e.id === element.id);
-  if (index > -1) collection[index] = updatedPort;
-})
 
 export async function updateTool(tool: ITool) {
   return await repositories.tools.update(tool);

@@ -28,6 +28,7 @@
 import { ZOOM_RATIO, MAX_ZOOM_OUT, MAX_ZOOM_IN } from '~~/lib/utils/constants';
 import { cloneDeep } from 'lodash';
 import ITool, { IToolPort } from '~~/lib/interfaces/ITool';
+import { repositories } from '~~/lib/repositories';
 
 const { tool } = defineProps({
   tool: { type: Object as PropType<ITool>, required: true }
@@ -51,7 +52,7 @@ function editPort(port: IToolPort) {
 }
 
 async function validateEditPort(port: IToolPort) {
-  await updateElement('ports', tool, port)
+  await repositories.tool.ports.updateInTool(port, tool);
   p.value = null;
   dialog.value = false;
 }

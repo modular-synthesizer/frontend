@@ -11,6 +11,7 @@ import IApplication from "../interfaces/IApplication"
 import ICategory from "../interfaces/ICategory"
 import AccountsRepository from "./AccountsRepository"
 import { IControl } from "../interfaces/IControl"
+import { ToolPortsRepository } from "./ToolPortsRepository"
 
 export type Repositories = { [key: string]: Repository<any> }
 
@@ -26,6 +27,7 @@ export const repositories = {
   tool: {
     controls: new Repository<IControl>('tools/controls'),
     parameters: new Repository<IToolParameter>('tools/parameters'),
+    ports: new ToolPortsRepository('tools/ports'),
   },
   rights: new Repository<IRight>('rights'),
   synthesizers: new Repository<ISynthesizer>('synthesizers'),
