@@ -29,13 +29,13 @@
 
 <script setup lang="ts">
 import { clone, sortBy } from 'lodash';
-import { api } from '~~/lib/api/Api';
 import { IGenerator } from '~~/lib/interfaces/IGenerator';
 import { InnerNode } from '~~/lib/interfaces/ITool';
+import { repositories } from '~~/lib/repositories';
 
 const emit = defineEmits<{ created: [ node: InnerNode]}>();
 
-const generators: IGenerator[] = sortBy(await api.auth_get('/generators'), "name");
+const generators: IGenerator[] = sortBy(await repositories.generators.list(), "name");
 const node: Ref<InnerNode> = ref(createEmptyNode());
 function createEmptyNode(): InnerNode {
   return {

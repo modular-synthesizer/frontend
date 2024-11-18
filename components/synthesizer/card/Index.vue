@@ -63,7 +63,6 @@
 </template>
 
 <script lang="ts" setup>
-import { api } from '~~/lib/api/Api';
 import IAccount from '~~/lib/interfaces/IAccount';
 import IMembership from '~~/lib/interfaces/synthesizers/IMembership';
 import { repositories } from '~~/lib/repositories';
@@ -84,7 +83,7 @@ const account_ids = computed((): string[] => {
 let results: Ref<IAccount[]> = ref([]);
 
 async function searchAccounts(username: string) {
-  results.value = await api.auth_get("/accounts/search", { query: username });
+  results.value = await repositories.accounts.search(username);
 }
 
 const filteredResults = computed((): IAccount[] => {
@@ -93,8 +92,7 @@ const filteredResults = computed((): IAccount[] => {
 
 async function addMember(account_id: string, username: string, type: string) {
   const params: IMembership = { account_id, synthesizer_id: props.synthesizer.id, type, id: '', username };
-  const membership: any = await api.auth_post('/memberships', params);
-  props.synthesizer.members.push({ ...membership, account_id, username } as IMembership);
+  await repositories.memberships.add(props.synthesizer.members)(params);
 }
 
 const remove: (id: string) => Promise<void> = repositories.memberships.remove(props.synthesizer.members);

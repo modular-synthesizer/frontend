@@ -1,4 +1,3 @@
-import IAccount from "../interfaces/IAccount"
 import { IGenerator } from "../interfaces/IGenerator"
 import IMembership from "../interfaces/synthesizers/IMembership"
 import ISynthesizer from "../interfaces/synthesizers/ISynthesizer"
@@ -10,11 +9,12 @@ import { ModulesRepository } from "./ModulesRepository"
 import { Repository } from "./Repository"
 import IApplication from "../interfaces/IApplication"
 import ICategory from "../interfaces/ICategory"
+import AccountsRepository from "./AccountsRepository"
 
 export type Repositories = { [key: string]: Repository<any> }
 
 export const repositories = {
-  accounts: new Repository<IAccount>('accounts'),
+  accounts: new AccountsRepository('accounts'),
   applications: new Repository<IApplication>('applications'),
   categories: new Repository<ICategory>('categories'),
   generators: new Repository<IGenerator>('generators'),
