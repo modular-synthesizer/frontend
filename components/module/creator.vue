@@ -43,7 +43,6 @@
 
 <script lang="ts">
 import { groupBy } from 'lodash';
-import { mapState } from 'pinia';
 import ModulesFactory from '~~/lib/factories/ModulesFactory';
 import { IGenerator } from '~~/lib/interfaces/IGenerator';
 import IModule from '~~/lib/interfaces/modules/IModule';

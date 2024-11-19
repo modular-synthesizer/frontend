@@ -8,7 +8,6 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapActions } from 'pinia';
 import { v4 as uuid } from 'uuid';
 import { equals } from '~~/lib/interfaces/common/Identifiable';
 import { repositories } from '~~/lib/repositories';

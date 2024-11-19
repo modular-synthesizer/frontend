@@ -12,7 +12,6 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
 import { ContextItem } from '~~/stores/common/contexts';
 
 const WIDTH = 200;
