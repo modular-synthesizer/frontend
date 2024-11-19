@@ -6,9 +6,7 @@ interface Payload {
   blocked: boolean;
 }
 
-const state: Ref<Payload> = useState<Payload>(() => {
-  return { current: null, next: null, blocked: false };
-});
+const state: Ref<Payload> = ref({ current: null, next: null, blocked: false });
 
 export function useHover() {
   return {

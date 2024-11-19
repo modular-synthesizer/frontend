@@ -13,13 +13,13 @@ type State = {
   x: number, y: number, visible: boolean, items: any[], payload: any
 }
 
-const state: Ref<State> = useState<State>('useContexts', () => ({
+const state: Ref<State> = ref({
   x: 0,
   y: 0,
   visible: false,
   items: [] as any[],
   payload: null as any,
-}));
+});
 
 export function useContexts() {
   return {

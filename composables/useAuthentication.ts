@@ -18,10 +18,10 @@ function emptySession(): ISession {
   }
 }
 
-const state: Ref<Payload> = useState<Payload>('useAuthentication', () => ({
+const state: Ref<Payload> = ref({
   session: emptySession() as ISession,
   storage: useStorage()
-}));
+});
 
 export function useAuthentication() {
   return {

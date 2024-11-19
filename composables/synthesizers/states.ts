@@ -42,11 +42,11 @@ export const isBlocking: BlockMapping = {
 [SynthState.DRAGGING]: true,
 }
 
-const state: Ref<Payload> = useState<Payload>('synthesizerState', () => ({
+const state: Ref<Payload> = ref({
   current: SynthState.NONE,
   next: SynthState.NONE,
   blocked: false,
-}));
+});
 
 /**
  * This store holds the logic for the states a synthesizer can be in, and what state can be safely

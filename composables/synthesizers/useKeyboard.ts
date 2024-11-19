@@ -1,5 +1,5 @@
 type State = { shift: boolean };
-const state: Ref<State> = useState<State>('useKeyboard', () => ({ shift: false }));
+const state: Ref<State> = ref({ shift: false });
 
 export function useKeyboard() {
   return {

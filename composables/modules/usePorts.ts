@@ -2,7 +2,7 @@ import Port from "~~/lib/wrappers/Port";
 
 type State = { ports: Port[] }
 
-const state: Ref<State> = useState<State>('usePorts', () => ({ ports: [] }))
+const state: Ref<State> = ref({ ports: [] })
 
 export function usePorts() {
   return {

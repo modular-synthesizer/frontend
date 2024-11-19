@@ -9,11 +9,6 @@ import ITool from '~~/lib/interfaces/ITool';
 const tool: Ref<ITool> = ref(ToolsFactory.empty());
 
 definePageMeta({ layout: 'empty' });
-  
-// async function save() {
-//   await repositories.tools.create(tool.value);
-//   useRouter().push('/tools');
-// }
 
 onMounted(() => {
   const content = localStorage.getItem("import-json");

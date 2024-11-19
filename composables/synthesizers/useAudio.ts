@@ -1,6 +1,6 @@
 type Payload = { context: AudioContext | null };
 
-const state = useState<Payload>(() => ({ context: null }))
+const state: Ref<Payload> = ref({ context: null });
 
 export function useAudio() {
   return {

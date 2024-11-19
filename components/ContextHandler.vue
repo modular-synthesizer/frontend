@@ -2,7 +2,7 @@
   <div class="main-menu-wrapper" :style="coordinates" v-show="useContexts().visible">
     <div class="background-shadow"></div>
     <div class="items-wrapper">
-      <template v-for="item in useContexts().items">
+      <template v-for="item in items">
         <a @click="triggerAction(item)" v-if="item.action" class="item-wrapper">{{ t(item) }}</a>
         <a :href="item.url" v-else-if="item.url" class="item-wrapper" target="_blank">{{ t(item) }}</a>
         <div v-else class="item-wrapper">{{ t(item) }}</div>
@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     height(): number {
-      return 25 * useContexts().items.length;
+      return 25 * this.items.length;
     },
     invertedX() {
       return useContexts().x + WIDTH > window.innerWidth
@@ -48,6 +48,9 @@ export default {
     coordinates(): { [key: string]: string } {
       return { top: this.yCoord, left: this.xCoord }
     },
+    items(): any[] {
+      return useContexts().state.value.items;
+    }
   }
 }
 </script>
