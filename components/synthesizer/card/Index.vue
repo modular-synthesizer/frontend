@@ -98,10 +98,10 @@ async function addMember(account_id: string, username: string, type: string) {
 const remove: (id: string) => Promise<void> = repositories.memberships.remove(props.synthesizer.members);
 
 const isReadOnly = computed(() => {
-  return props.synthesizer?.isReadonly(useAuthentication()?.session.username);
+  return props.synthesizer?.isReadonly(useAuthentication().username);
 });
 
 const isCreator = computed(() => {
-  return props.synthesizer?.isCreator(useAuthentication()?.session.username);
+  return props.synthesizer?.isCreator(useAuthentication().username);
 });
 </script>

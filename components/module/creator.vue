@@ -66,7 +66,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(useAuthentication, ['session']),
+    session(): ISession {
+      return useAuthentication().session;
+    }
   },
   methods: {
     close() {
