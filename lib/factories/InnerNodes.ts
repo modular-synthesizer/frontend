@@ -2,6 +2,7 @@ import { find } from "lodash";
 import { IGenerator } from "../interfaces/IGenerator";
 import { InnerNode } from "../interfaces/ITool";
 import InnerAudioNode from "../wrappers/InnerAudioNode";
+import { useAudio } from "~~/composables/synthesizers/useAudio";
 
 class InnerNodesFactory {
     /**
@@ -12,7 +13,7 @@ class InnerNodesFactory {
      *   the corresponding Web Audio API node(s).
      */
     public async create(list: InnerNode[], generators: IGenerator[]): Promise<InnerAudioNode[]> {
-        const ctx: AudioContext = useAudioContext().context as AudioContext;
+        const ctx: AudioContext = useAudio().context;
         const results: InnerAudioNode[] = [];
 
         for(let innerNode of list) {

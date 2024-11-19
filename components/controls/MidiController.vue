@@ -86,7 +86,7 @@ export default {
   },
   computed: {
     ctx(): AudioContext {
-      return useAudioContext().context as AudioContext;
+      return useAudio().context;
     },
   }
 }
