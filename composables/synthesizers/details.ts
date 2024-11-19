@@ -66,10 +66,9 @@ export function useSynthesizer() {
   }
 
   async function buildLinks(list: ILink[]) {
-    const { ports } = usePorts();
     list.filter((ilink: ILink) => {
-      return find(ports, {id: ilink.from}) !== undefined
-          && find(ports, {id: ilink.to}) !== undefined
+      return find(usePorts().ports, {id: ilink.from}) !== undefined
+          && find(usePorts().ports, {id: ilink.to}) !== undefined
     })
     .forEach((ilink: ILink) => links.value.push(new Link(ilink)));
   }
