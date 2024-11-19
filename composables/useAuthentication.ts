@@ -67,8 +67,9 @@ export function useAuthentication() {
      * will be considered deleted anyway.
      */
     async logout(): Promise<void> {
-      if (!this.token) return;
-      repositories.sessions.delete(this.token);
+      const token: string = state.value.session.token
+      if (!token) return;
+      repositories.sessions.delete(token);
       state.value.storage.remove("auth-token");
       state.value.storage.remove("session");
       closeWebsocket();
