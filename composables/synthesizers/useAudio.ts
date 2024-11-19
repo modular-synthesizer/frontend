@@ -6,10 +6,11 @@ export function useAudio() {
   return {
     state,
     get context(): AudioContext {
+      if (!state.value.context) state.value.context = new AudioContext();
       return state.value.context as AudioContext;
     },
     async initContext() {
-      if (state.value.context === null) state.value.context = await new AudioContext();
+      if (!state.value.context) return;
       await state.value.context.resume();
     }
   }
