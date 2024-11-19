@@ -4,6 +4,7 @@ import { clamp } from "lodash"
 import Channel from "./Channel";
 import { IControl } from "../interfaces/IControl";
 import { WatcherCallback } from "../types/Parameters";
+import { useAudio } from "~~/composables/synthesizers/useAudio";
 
 export default class Parameter implements IParameter {
   
@@ -30,7 +31,7 @@ export default class Parameter implements IParameter {
     this.precision = details.precision;
     this.targets = details.targets;
     this.mod = mod;
-    this.ctx = useAudioContext().context as AudioContext;
+    this.ctx = useAudio().context;
     this.field = details.field;
     this.setValue(this.value);
   }

@@ -52,9 +52,10 @@ const rules = computed(() => ({
 const v$ = useVuelidate(rules, account, { $externalResults });
 
 async function submitLogin() {
+  const { username, password } = account;
   await v$.value.$validate();
-  if (account.username === '' || account.password === '') return;
-  useAuthentication().login(account.username, account.password)
+  if (username === '' || password === '') return;
+  useAuthentication().login(username, password)
     .catch((error: any) => {
         const err: IApiError = error.response.data;
         $externalResults.value = { [err.key]: err.message };

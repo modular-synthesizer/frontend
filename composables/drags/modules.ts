@@ -1,8 +1,6 @@
-// import ICoordinates from "~~/lib/interfaces/ICoordinates";
 import { getRack, getSlot } from "~~/lib/utils/coordinates";
 import Mod from "~~/lib/wrappers/Mod";
 import sendModuleEvent from "~~/lib/commands/events/sendModuleEvent";
-// import { SynthState, useStates } from "../synthesizers/states";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 
 /**
@@ -46,7 +44,7 @@ export const useModuleDrag = () => {
   
   function end() {
     api_put(`/modules/${mod.id}`, { slot: mod.slot, rack: mod.rack });
-    useModHover().unblock();
+    useHover().unblock();
     useStates().unblock()
     sendModuleEvent('endDrag', mod);
   }

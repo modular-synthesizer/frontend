@@ -1,6 +1,5 @@
 import { find } from "lodash";
 import IManager from "~~/lib/interfaces/IManager";
-import { useKeyboard } from "~~/stores/common/keyboard";
 import keyboard from './keyboard.json'
 import MidiDevice from "~~/lib/midi/MidiDevice";
 import Synthesizer from "../wrappers/Synthesizer";

@@ -8,14 +8,12 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapActions } from 'pinia';
 import { v4 as uuid } from 'uuid';
 import { equals } from '~~/lib/interfaces/common/Identifiable';
 import { repositories } from '~~/lib/repositories';
 import Link from '~~/lib/wrappers/Link';
 import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
-import { useModHover } from '~~/stores/mods/hover';
 import { useStates } from '~~/stores/synthesizers/states';
 
 export default {
@@ -40,15 +38,18 @@ export default {
     };
   },
   computed: {
-    ...mapState(useModHover, { hovered: 'current' }),
+    hovered() {
+      return useHover().state.value.current;
+    },
     synthesizerKey() {
       return `${this.key}--${this.synthesizer.id}`
     }
   },
   methods: {
-    ...mapActions(useStates, ['is']),
     save() {
-      debounce('save', 500, () => this.repository.update(this.synthesizer))
+      debounce('save', 500, () => {
+        this.repository.update(this.synthesizer);
+      })
     },
     equals
   },

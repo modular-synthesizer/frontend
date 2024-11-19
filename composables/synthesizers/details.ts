@@ -10,6 +10,7 @@ import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import Link from "~~/lib/wrappers/Link";
 import Mod from "~~/lib/wrappers/Mod";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
+import { useAudio } from "./useAudio";
 
 /** The currently displayed synthesizer, mainly used for position and zoom level */
 let synthesizer!: Ref<Synthesizer>;
@@ -38,8 +39,8 @@ export function useSynthesizer() {
    */
   async function initialize(): Promise<void> {
     if (synthesizer.value === null) return;
-    await useAudioContext().initContext();
-    await loadProcessors(useAudioContext().context as AudioContext);
+    await useAudio().initContext();
+    await loadProcessors(useAudio().context as AudioContext);
     const [ generators, imodules, ilinks ] = await fetchChildren(synthesizer.value);
     await buildModules(imodules, synthesizer.value, generators);
     await buildLinks(ilinks);
@@ -65,10 +66,9 @@ export function useSynthesizer() {
   }
 
   async function buildLinks(list: ILink[]) {
-    const { ports } = usePorts();
     list.filter((ilink: ILink) => {
-      return find(ports, {id: ilink.from}) !== undefined
-          && find(ports, {id: ilink.to}) !== undefined
+      return find(usePorts().ports, {id: ilink.from}) !== undefined
+          && find(usePorts().ports, {id: ilink.to}) !== undefined
     })
     .forEach((ilink: ILink) => links.value.push(new Link(ilink)));
   }
@@ -88,7 +88,7 @@ export function useSynthesizer() {
     links.value = []
     stopModules();
     stopManagers();
-    useAudioContext().context?.suspend();
+    useAudio().context?.suspend();
   }
 
   function stopModules() {

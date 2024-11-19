@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     '@nuxtjs/robots'
   ],
   imports: {
-    dirs: ['stores/**', 'composables/**'],
+    dirs: ['composables/**'],
   },
   ssr: false,
   css: [

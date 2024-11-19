@@ -13,6 +13,7 @@ import AccountsRepository from "./AccountsRepository"
 import { IControl } from "../interfaces/IControl"
 import { ToolPortsRepository } from "./ToolPortsRepository"
 import SessionsRepository from "./SessionsRepository"
+import SynthesizersRepository from "./SynthesizersRepository"
 
 export type Repositories = { [key: string]: Repository<any> }
 
@@ -32,6 +33,6 @@ export const repositories = {
   },
   rights: new Repository<IRight>('rights'),
   sessions: new SessionsRepository('sessions'),
-  synthesizers: new Repository<ISynthesizer>('synthesizers'),
+  synthesizers: new SynthesizersRepository('synthesizers'),
   tools: new Repository<ITool>('tools'),
 }

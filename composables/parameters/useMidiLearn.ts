@@ -1,14 +1,23 @@
-import { defineStore } from "pinia";
 import sendParamEvent from "~~/lib/commands/events/sendParamEvent";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import Parameter from "~~/lib/wrappers/Parameter";
 
-export const useMidiLearn = defineStore('midiLearn', {
-  state: () => ({
-    handlers: {} as {[key: string]: {[key: string]: Function}},
-    timeout: -1,
-  }),
-  actions: {
+type Handlers = {[key: string]: {[key: string]: Function}};
+
+type State = {
+  handlers: Handlers,
+  timeout: number,
+}
+
+const state: Ref<State> = useState<State>('useMidiLearn', () => ({
+  handlers: {}, timeout: -1,
+}))
+
+export function useMidiLearn() {
+  return {
+    state,
+    get handlers(): Handlers { return state.value.handlers; },
+    get timeout(): number { return state.value.timeout; },
     learn(parameter: Parameter) {
       const fct = ({ knob }: any) => {
         eventbus.unsubscribe("midi/generalpurpose", fct);
@@ -34,10 +43,10 @@ export const useMidiLearn = defineStore('midiLearn', {
         const flooredValue: number = Math.floor(value / step) * step
         parameter.setValue(flooredValue);
         
-        this.timeout = window.setTimeout(() => {
+        state.value.timeout = window.setTimeout(() => {
           saveParameter(parameter);
           sendParamEvent('endEdit', parameter);
-          this.timeout = -1;
+          state.value.timeout = -1;
         }, 250);
       }
     },
@@ -50,4 +59,4 @@ export const useMidiLearn = defineStore('midiLearn', {
       })
     }
   }
-})
+}

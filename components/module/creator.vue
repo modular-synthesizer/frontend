@@ -43,7 +43,6 @@
 
 <script lang="ts">
 import { groupBy } from 'lodash';
-import { mapState } from 'pinia';
 import ModulesFactory from '~~/lib/factories/ModulesFactory';
 import { IGenerator } from '~~/lib/interfaces/IGenerator';
 import IModule from '~~/lib/interfaces/modules/IModule';
@@ -66,7 +65,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(useAuthentication, ['session']),
+    session(): ISession {
+      return useAuthentication().session;
+    }
   },
   methods: {
     close() {

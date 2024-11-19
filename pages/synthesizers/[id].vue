@@ -35,7 +35,7 @@ const { modules, links, synthesizer } = useSynthesizer();
 onBeforeUnmount(useSynthesizer().stop);
 
 onMounted(async () => {
-  await useAudioContext().context?.suspend();
+  await useAudio().context?.suspend();
 });
 
 function insertModule(mod: Mod) {
