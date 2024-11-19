@@ -47,7 +47,9 @@ export default {
   },
   methods: {
     save() {
-      debounce('save', 500, () => this.repository.update(this.synthesizer))
+      debounce('save', 500, () => {
+        this.repository.update(this.synthesizer);
+      })
     },
     equals
   },
