@@ -8,8 +8,8 @@
   <g :transform="`translate(${x} ${y})`"
     @mousedown.left.stop="dragstart"
     @click.right.stop.prevent="showMenu(mod, $event)"
-    @mouseenter="mouseenter(mod)"
-    @mouseleave="mouseleave()"
+    @mouseenter="useHover().mouseenter(mod)"
+    @mouseleave="useHover().mouseleave()"
   >
     <rect
       :width="width"
@@ -28,9 +28,7 @@
 <script lang="ts">
 import { PropType } from 'vue';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
-import { mapActions } from 'pinia';
 import Mod from '~~/lib/wrappers/Mod';
-import { useModHover } from '~~/stores/mods/hover';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 export default {
@@ -52,7 +50,6 @@ export default {
     height() { return RACK_HEIGHT }
   },
   methods: {
-    ...mapActions(useModHover, ['mouseenter', 'mouseleave']),
     dragstart($event: MouseEvent) {
       const synthesizer: Synthesizer|null = useSynthesizer().synthesizer.value;
       if (synthesizer === null) return;

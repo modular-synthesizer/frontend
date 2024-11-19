@@ -1,8 +1,6 @@
 // This composable holds the logic to generally declare drag'n'drop events handlers. It provides utility functions
 // to tell the application what should be done when moving during or cancelling/finishing a drag.
 
-import { SynthState } from "@/stores/synthesizers/states"
-
 export type DragMoveCallback = (x: number, y: number) => void;
 
 export type DragEndCallback = () => void;

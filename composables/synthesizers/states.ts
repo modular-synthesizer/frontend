@@ -1,5 +1,3 @@
-import { defineStore } from "pinia";
-
 export enum SynthState {
   // The user is currently dragging a node
   DRAGGING_MODULE = 'DRAGGING_MODULE',
@@ -44,45 +42,45 @@ export const isBlocking: BlockMapping = {
 [SynthState.DRAGGING]: true,
 }
 
+const state: Ref<Payload> = useState<Payload>('synthesizerState', () => ({
+  current: SynthState.NONE,
+  next: SynthState.NONE,
+  blocked: false,
+}));
+
 /**
  * This store holds the logic for the states a synthesizer can be in, and what state can be safely
  * transitioned to another. It furthermore says which state is "blocking" (a blocking state is a state
  * from which no new state can be set before it unblocks).
  */
-export const useStates = defineStore("states", {
-  state(): Payload {
-    return {
-      current: SynthState.NONE,
-      next: SynthState.NONE,
-      blocked: false,
-    }
-  },
-  actions: {
-    setState(state: SynthState): void {
-      this.next = state;
-      if (!this.blocked) this.processNext();
+export function useStates() {
+  return {
+    state,
+    setState(s: SynthState): void {
+      state.value.next = s;
+      if (!state.value.blocked) this.processNext();
     },
     unblock(): void {
-      useModHover().update();
+      useHover().update();
       this.processNext();
-      this.blocked = false;
+      state.value.blocked = false;
     },
-    is(state: SynthState): Boolean {
-      return this.current === state;
+    is(s: SynthState): Boolean {
+      return state.value.current === s;
     },
     isNot(state: SynthState): Boolean {
       return !this.is(state);
     },
     among(...states: SynthState[]): Boolean {
-      return states.indexOf(this.current) >= 0;
+      return states.indexOf(state.value.current) >= 0;
     },
     notAmong(...states: SynthState[]) {
       return !this.among(...states);
     },
     processNext(): void {
-      this.current = this.next;
-      this.next = SynthState.NONE;
-      if (isBlocking[this.current]) this.blocked = true;
-    },
-  },
-});
+      state.value.current = state.value.next;
+      state.value.next = SynthState.NONE;
+      if (isBlocking[state.value.current]) state.value.blocked = true;
+    }
+  };
+};
