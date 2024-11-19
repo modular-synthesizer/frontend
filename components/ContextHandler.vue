@@ -1,8 +1,8 @@
 <template>
-  <div class="main-menu-wrapper" :style="coordinates" v-show="visible">
+  <div class="main-menu-wrapper" :style="coordinates" v-show="useContexts().visible">
     <div class="background-shadow"></div>
     <div class="items-wrapper">
-      <template v-for="item in items">
+      <template v-for="item in useContexts().items">
         <a @click="triggerAction(item)" v-if="item.action" class="item-wrapper">{{ t(item) }}</a>
         <a :href="item.url" v-else-if="item.url" class="item-wrapper" target="_blank">{{ t(item) }}</a>
         <div v-else class="item-wrapper">{{ t(item) }}</div>
@@ -29,23 +29,22 @@ export default {
     },
   },
   computed: {
-    ...mapState(useContexts, ['x', 'y', 'visible', 'items']),
     height(): number {
-      return 25 * this.items.length;
+      return 25 * useContexts().items.length;
     },
     invertedX() {
-      return this.x + WIDTH > window.innerWidth
+      return useContexts().x + WIDTH > window.innerWidth
     },
     invertedY(): boolean {
-      return this.y + this.height > window.innerHeight
+      return useContexts().y + this.height > window.innerHeight
     },
     xCoord(): string {
       if (this.invertedX) return `${Math.min(this.x, window.innerWidth) - WIDTH}px`;
-      return `${this.x}px`;
+      return `${useContexts().x}px`;
     },
     yCoord(): string {
       if (this.invertedY) return `${Math.min(this.y, window.innerHeight) - this.height}px`;
-      return `${this.y}px`;
+      return `${useContexts().y}px`;
     },
     coordinates(): { [key: string]: string } {
       return { top: this.yCoord, left: this.xCoord }
