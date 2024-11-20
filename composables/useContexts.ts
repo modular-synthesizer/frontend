@@ -42,11 +42,14 @@ export function useContexts() {
     get y() {
       return state.value.y;
     },
-    get itemsx() {
+    get items() {
       return state.value.items;
     },
     get visible() {
       return state.value.visible;
+    },
+    get payload() {
+      return state.value.payload;
     }
   }
 }
