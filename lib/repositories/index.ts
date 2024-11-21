@@ -1,7 +1,6 @@
 import { IGenerator } from "../interfaces/IGenerator"
 import IMembership from "../interfaces/synthesizers/IMembership"
-import ISynthesizer from "../interfaces/synthesizers/ISynthesizer"
-import ITool, { IToolParameter } from "../interfaces/ITool"
+import { IToolParameter } from "../interfaces/ITool"
 import IGroup from "../interfaces/permissions/IGroup"
 import IRight from "../interfaces/permissions/IRight"
 import LinksRepository from "./LinksRepository"
@@ -14,6 +13,7 @@ import { IControl } from "../interfaces/IControl"
 import { ToolPortsRepository } from "./ToolPortsRepository"
 import SessionsRepository from "./SessionsRepository"
 import SynthesizersRepository from "./SynthesizersRepository"
+import ToolsRepository from "./toolsRepository"
 
 export type Repositories = { [key: string]: Repository<any> }
 
@@ -34,5 +34,5 @@ export const repositories = {
   rights: new Repository<IRight>('rights'),
   sessions: new SessionsRepository('sessions'),
   synthesizers: new SynthesizersRepository('synthesizers'),
-  tools: new Repository<ITool>('tools'),
+  tools: new ToolsRepository('tools'),
 }

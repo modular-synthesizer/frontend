@@ -1,8 +1,6 @@
 <template>
-  <v-row>
-    <tools-controls-form v-model="control" :index="index" @created="created" @updated="updated" @reset="reset" />
-    <tools-controls-list :controls="controls" :creation-mode="creationMode" @edition="startEdit" />
-  </v-row>
+  <tools-controls-form v-model="control" :index="index" @created="created" @updated="updated" @reset="reset" />
+  <tools-controls-list :controls="controls" :creation-mode="creationMode" @edition="startEdit" />
 </template>
 
 <script lang="ts">

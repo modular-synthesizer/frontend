@@ -1,5 +1,5 @@
 <template>
-  <draggable-stage :position="position">
+  <draggable-stage :position="position" v-if="tool">
     <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
     <module-screws :slots="tool.slots" />
     <template v-for="control in tool.controls">
@@ -9,38 +9,25 @@
   </draggable-stage>
 </template>
 
-<script lang="ts">import { PropType } from 'vue';
+<script setup lang="ts">
+import { PropType } from 'vue';
 import ModulesFactory from '~~/lib/factories/ModulesFactory';
 import ITool from '~~/lib/interfaces/ITool';
+import IModule from '~~/lib/interfaces/modules/IModule';
+import { ScalablePosition } from '~~/lib/types/ScalablePosition';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { FakeModule } from '~~/lib/wrappers/FakeModule';
-import Knob from "../controls/Knob.vue";
-import SmallKnob from "../controls/SmallKnob.vue";
-import LargeKnob from "../controls/LargeKnob.vue";
-import MuteButton from "../controls/MuteButton.vue";
-import Port from "../controls/Port.vue";
-import { ScalablePosition } from '~~/lib/types/ScalablePosition';
+const props = defineProps({
+  modelValue: { type: Object as PropType<ITool>, required: true },
+});
 
-export default {
-  components: { Knob, LargeKnob, MuteButton, SmallKnob, Port },
-  props: {
-    modelValue: {
-      type: Object as PropType<ITool>,
-      required: true
-    },
-  },
-  data() {
-    return {
-      mod: new FakeModule(ModulesFactory.empty()),
-      position: { x: 100, y: 50, scale: 1.5 } as ScalablePosition
-    }
-  },
-  computed: {
-    tool() { return this.modelValue; },
-    modHeight() { return RACK_HEIGHT; },
-    modWidth() { return SLOT_SIZE * this.tool.slots; },
-  }
-}
+const tool: ComputedRef<ITool> = computed(() => props.modelValue);
+
+const mod: IModule = new FakeModule({ ...ModulesFactory.empty(), channels: [] });
+const position: ScalablePosition = { x: 100, y: 50, scale: 1.5 } as ScalablePosition
+
+const modHeight: number = RACK_HEIGHT;
+const modWidth: number = SLOT_SIZE * tool.value.slots;
 </script>
 
 <style scoped>

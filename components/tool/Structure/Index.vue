@@ -1,27 +1,24 @@
 <template>
-  <div class="super-wrapper">
-    <tool-structure-menu :tool="tool" />
-    <svg @wheel="handleZoom">
-      <g :transform="`scale(${scale} ${scale})`">
-        <g :transform="`translate(${x % BG_SIZE} ${y % BG_SIZE})`">
-          <tool-structure-background @move="seeMove" @start="selectItem(null, '', tool)" :scale="scale" />
-        </g>
-        <g :transform="`translate(${x} ${y})`">
-          <tool-structure-node-list :tool="tool" @edit-port="editPort" />
-          <tool-structure-link-list :tool="tool" />
-          <tool-structure-port-list :ports="tool.ports" :tool="tool" @edit="editPort" />
-        </g>
+  <svg @wheel="handleZoom">
+    <g :transform="`scale(${scale} ${scale})`">
+      <g :transform="`translate(${x % BG_SIZE} ${y % BG_SIZE})`">
+        <tool-structure-background @move="seeMove" @start="selectItem(null, '', tool)" :scale="scale" />
       </g>
-    </svg>
-    <tool-structure-dialogs-port
-      v-if="p !== null"
-      :port="p"
-      :tool="tool"
-      v-model="dialog"
-      @cancelled="dialog = false"
-      @validated="validateEditPort"
-    />
-  </div>
+      <g :transform="`translate(${x} ${y})`">
+        <tool-structure-node-list :tool="tool" @edit-port="editPort" />
+        <tool-structure-link-list :tool="tool" />
+        <tool-structure-port-list :ports="tool.ports" :tool="tool" @edit="editPort" />
+      </g>
+    </g>
+  </svg>
+  <tool-structure-dialogs-port
+    v-if="p !== null"
+    :port="p"
+    :tool="tool"
+    v-model="dialog"
+    @cancelled="dialog = false"
+    @validated="validateEditPort"
+  />
 </template>
 
 <script setup lang="ts">
@@ -66,19 +63,13 @@ declareDeletionHandlers(window, onBeforeUnmount);
 </script>
 
 <style scoped>
-.super-wrapper {
-  border: 1px solid white;
-  height: calc(100vh - 64px);
-  overflow: hidden;
-}
-
 .super-wrapper > header {
   border: 1px solid white;
   border-bottom: none;
 }
 
 svg {
-  height: 100%;
+  height: calc(100vh - 48px);
   width: 100%;
 }
 </style>
