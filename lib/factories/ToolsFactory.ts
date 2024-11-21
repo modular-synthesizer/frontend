@@ -11,7 +11,7 @@ export class ToolsFactory {
       links: [],
       ports: [],
       parameters: [],
-      slots: 1,
+      slots: 2,
       controls: [],
       experimental: true,
     }

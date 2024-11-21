@@ -1,10 +1,10 @@
 <template>
-  <v-row class="main-row no-gutters">
+  <v-row class="main-row no-gutters" v-if="props.tool">
     <v-col cols="4">
       <tools-preview v-model="props.tool" />
     </v-col>
     <v-col cols="8">
-      <tools-controls v-model="props.tool.controls" :tool="props.tool" />
+      <tools-controls v-model="props.tool.controls" :tool="props.tool" :creation-mode="props.creationMode" />
     </v-col>
   </v-row>
 </template>
@@ -12,7 +12,10 @@
 <script setup lang="ts">
 import ITool from '~~/lib/interfaces/ITool';
 
-const props = defineProps({ tool: { type: Object as PropType<ITool>, required: true }})
+const props = defineProps({
+  tool: { type: Object as PropType<ITool>, required: true },
+  creationMode: { type: Boolean, default: false },
+});
 </script>
 
 <style scoped lang="scss">
