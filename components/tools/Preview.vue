@@ -17,7 +17,6 @@ import IModule from '~~/lib/interfaces/modules/IModule';
 import { ScalablePosition } from '~~/lib/types/ScalablePosition';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { FakeModule } from '~~/lib/wrappers/FakeModule';
-
 const props = defineProps({
   modelValue: { type: Object as PropType<ITool>, required: true },
 });

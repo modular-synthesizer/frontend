@@ -1,7 +1,7 @@
 <template>
-  <v-row class="mt-5">
+  <v-row class="mt-5" v-if=tool>
     <v-col cols="4">
-      <v-text-field v-model="tool.name" variant="outlined" label="Name" density="comfortable" />
+      <v-text-field v-model="tool.name" variant="outlined" label="Name" density="comfortable" :rules="rules.name" />
     </v-col>
   </v-row>
   <v-row>
@@ -37,9 +37,17 @@ import ICategory from '~~/lib/interfaces/ICategory';
 import ITool from '~~/lib/interfaces/ITool';
 import { repositories } from '~~/lib/repositories';
 
-const { modelValue: tool } = defineProps({
+
+type Rules = {[key: string]: Function[]}
+
+const props = defineProps({
   modelValue: { type: Object as PropType<ITool>, required: true },
+    rules: { type: Object as PropType<Rules>, default: () =>({})}
 });
+
+console.log(props.rules);
+
+const tool = computed(() => props.modelValue);
 
 const categories: Ref<ICategory[]> = ref(await repositories.categories.list());
 </script>
