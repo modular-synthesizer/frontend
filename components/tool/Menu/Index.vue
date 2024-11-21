@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar density="compact">
+  <v-app-bar density="compact">
     <v-btn to="/tools" icon>
       <v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent" location="bottom">Retour à la liste</v-tooltip>
@@ -22,16 +22,23 @@
         <tool-structure-create-parameter @created="createParameter" :tool="tool" />
       </v-list>
     </v-menu>
-  </v-toolbar>
+    <v-spacer></v-spacer>
+    <v-btn @click="emit('modeChanged', 'infos')">Infos</v-btn>
+    <v-btn @click="emit('modeChanged', 'structure')">Structure</v-btn>
+    <v-btn @click="emit('modeChanged', 'appearance')">Appearance</v-btn>
+  </v-app-bar>
 </template>
 
 <script lang="ts" setup>
 import { createElement } from '~~/composables/tools/api';
 import ITool from '~~/lib/interfaces/ITool';
+import { ToolTabs } from '~~/lib/types/ToolTabs';
 
 const { tool } = defineProps({
   tool: { type: Object as PropType<ITool>, required: true },
 });
+
+const emit = defineEmits<{ modeChanged: [ ToolTabs ]}>();
 
 const open = ref([]);
 

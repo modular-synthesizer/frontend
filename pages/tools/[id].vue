@@ -1,5 +1,5 @@
 <template>
-  <tools-creator :tool="tool" />
+  <tool-creator :tool="tool" />
 </template>
 
 <script lang="ts" setup>

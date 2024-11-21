@@ -1,6 +1,5 @@
 <template>
   <div class="super-wrapper">
-    <tool-structure-menu :tool="tool" />
     <svg @wheel="handleZoom">
       <g :transform="`scale(${scale} ${scale})`">
         <g :transform="`translate(${x % BG_SIZE} ${y % BG_SIZE})`">
