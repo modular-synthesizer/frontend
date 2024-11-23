@@ -1,5 +1,5 @@
 import IAccount from "../interfaces/IAccount";
-import { Repository } from "./Repository";
+import { Repository } from "./utils/Repository";
 
 export default class AccountsRepository extends Repository<IAccount> {
   public async search(username: string): Promise<IAccount[]> {

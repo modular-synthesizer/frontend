@@ -32,8 +32,8 @@
 </template>
 
 <script lang="ts" setup>
-import { createElement } from '~~/composables/tools/api';
-import ITool from '~~/lib/interfaces/ITool';
+import ITool, { InnerLink, InnerNode, IToolParameter, IToolPort } from '~~/lib/interfaces/ITool';
+import { repositories } from '~~/lib/repositories';
 import { ToolTabs } from '~~/lib/types/ToolTabs';
 
 const { tool } = defineProps({
@@ -45,8 +45,16 @@ const emit = defineEmits<{ modeChanged: [ ToolTabs ], save: [] }>();
 
 const open = ref([]);
 
-const createPort = createElement('ports', tool);
-const createParameter = createElement('parameters', tool);
-const createLink = createElement('links', tool);
-const createNode = createElement('nodes', tool);
+async function createPort(port: IToolPort) {
+  tool.ports.push(await repositories.tool.ports.create(tool, port))
+}
+async function createParameter(parameter: IToolParameter) {
+  tool.parameters.push(await repositories.tool.parameters.create(tool, parameter))
+}
+async function createNode(node: InnerNode) {
+  tool.nodes.push(await repositories.tool.nodes.create(tool, node));
+}
+async function createLink(link: InnerLink) {
+  tool.links.push(await repositories.tool.links.create(tool, link));
+}
 </script>

@@ -1,6 +1,6 @@
 import { pick } from "lodash";
 import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
-import { Repository } from "./Repository";
+import { Repository } from "./utils/Repository";
 
 export default class SynthesizersRepository extends Repository<ISynthesizer> {
   public async update(synthesizer: ISynthesizer): Promise<ISynthesizer> {

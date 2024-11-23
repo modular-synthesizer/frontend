@@ -49,7 +49,7 @@ function editPort(port: IToolPort) {
 }
 
 async function validateEditPort(port: IToolPort) {
-  await repositories.tool.ports.updateInTool(port, tool);
+  await repositories.tool.ports.update(tool, tool.ports, port);
   p.value = null;
   dialog.value = false;
 }

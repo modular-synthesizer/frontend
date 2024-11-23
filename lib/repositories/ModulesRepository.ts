@@ -3,7 +3,7 @@ import IParameter from "../interfaces/IParameter";
 import IModule from "../interfaces/modules/IModule";
 import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import Parameter from "../wrappers/Parameter";
-import { Repository } from "./Repository";
+import { Repository } from "./utils/Repository";
 
 type CreationPayload = { tool_id: string, synthesizer_id: string, rack: number, slot: number };
 

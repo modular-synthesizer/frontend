@@ -1,5 +1,5 @@
 import ISession from "../interfaces/ISession";
-import { Repository } from "./Repository";
+import { Repository } from "./utils/Repository";
 
 export default class SessionsRepository extends Repository<ISession> {
   public async auth(username: string, password: string): Promise<ISession> {

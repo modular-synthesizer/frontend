@@ -39,7 +39,7 @@ function showParameters() {
 }
 
 async function removeParameter(p: IToolParameter) {
-  await repositories.tool.parameters.delete(p.id, { tool_id: props.tool.id });
+  await repositories.tool.parameters.delete(props.tool, p);
   remove(props.tool.parameters, { id: p.id });
 }
 
