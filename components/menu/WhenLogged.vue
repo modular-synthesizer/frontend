@@ -20,7 +20,6 @@
     </template>
     <template v-slot:append>
       <template v-if="hasRight('resources::admin')">
-        <v-btn to="/admin/sandbox" aria-label="sandbox link">{{ $t('menus.sandbox') }}</v-btn>
         <v-btn to="/tools" aria-label="tools link">{{ $t('menus.tools') }}</v-btn>
         <v-menu>
           <template v-slot:activator="{ props }">
