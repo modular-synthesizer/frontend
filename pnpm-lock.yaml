@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@growthbunker/vueflags':
-    specifier: ^0.1.14
-    version: 0.1.14
   '@nuxtjs/robots':
     specifier: ^3.0.0
     version: 3.0.0
@@ -26,9 +23,6 @@ dependencies:
   axios:
     specifier: ^1.1.2
     version: 1.6.8
-  click-outside-vue3:
-    specifier: ^4.0.1
-    version: 4.0.1
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
@@ -990,10 +984,6 @@ packages:
   /@fastify/busboy@2.1.1:
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
-    dev: false
-
-  /@growthbunker/vueflags@0.1.14:
-    resolution: {integrity: sha512-iw0r5QIHV9j2YDLf71m0RsZPIueVwGyBlYfqtzHZUtXJq+uBYERSmpZeTeGh6XhwFR63aIvOITvq6hRHBxdXLw==}
     dev: false
 
   /@intlify/core-base@9.13.1:
@@ -2559,11 +2549,6 @@ packages:
     resolution: {integrity: sha512-tskPPKEs8D2KPafUypv2gxwJP8h/OaJmC82QQGGDQcHvXX43xF2VDACcJVmZ0EuSxkpO9Kc4MlrA3q0+FG58AQ==}
     dependencies:
       consola: 3.2.3
-    dev: false
-
-  /click-outside-vue3@4.0.1:
-    resolution: {integrity: sha512-sbplNecrup5oGqA3o4bo8XmvHRT6q9fvw21Z67aDbTqB9M6LF7CuYLTlLvNtOgKU6W3zst5H5zJuEh4auqA34g==}
-    engines: {node: '>=6'}
     dev: false
 
   /clipboardy@4.0.0:
