@@ -1,5 +1,5 @@
 <template>
-  <tool-creator :tool="tool" :creation-mode="true" />
+  <tool-creator v-model="tool" :creation-mode="true" />
 </template>
 
 <script setup lang="ts">

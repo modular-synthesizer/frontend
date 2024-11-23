@@ -4,7 +4,7 @@
       <v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent" location="bottom">Retour à la liste</v-tooltip>
     </v-btn>
-    <v-btn icon @click="emit('save')">
+    <v-btn icon @click="emit('save', tool)">
       <v-icon>mdi-content-save-outline</v-icon>
       <v-tooltip activator="parent" location="bottom">Sauvegarder</v-tooltip>
     </v-btn>
@@ -41,20 +41,24 @@ const { tool } = defineProps({
   creationMode: { type: Boolean, default: false }
 });
 
-const emit = defineEmits<{ modeChanged: [ ToolTabs ], save: [] }>();
+const emit = defineEmits<{ modeChanged: [ ToolTabs ], save: [ ITool ] }>();
 
 const open = ref([]);
 
 async function createPort(port: IToolPort) {
-  tool.ports.push(await repositories.tool.ports.create(tool, port))
+  tool.ports.push(await repositories.tool.ports.create(tool, port));
+  emit('save', tool)
 }
 async function createParameter(parameter: IToolParameter) {
-  tool.parameters.push(await repositories.tool.parameters.create(tool, parameter))
+  tool.parameters.push(await repositories.tool.parameters.create(tool, parameter));
+  emit('save', tool)
 }
 async function createNode(node: InnerNode) {
   tool.nodes.push(await repositories.tool.nodes.create(tool, node));
+  emit('save', tool)
 }
 async function createLink(link: InnerLink) {
   tool.links.push(await repositories.tool.links.create(tool, link));
+  emit('save', tool)
 }
 </script>

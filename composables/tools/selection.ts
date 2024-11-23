@@ -23,7 +23,7 @@ export async function deleteSelectedItem() {
   if (item === null || tool === null) return;
   remove(tool[uri as keyof ITool] as unknown as any[], (i: any) => i.id === item.id);
   selectItem(null);
-  return await api_delete(`/tools/${uri}/${item.id}`, { tool_id: tool.id, ...item })
+  return await api_delete(`/proxy/tools/${uri}/${item.id}`, { tool_id: tool.id, ...item })
 }
 
 function handleKeydown(event: KeyboardEvent) {
