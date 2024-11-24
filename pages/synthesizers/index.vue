@@ -31,5 +31,8 @@ const name: string = useAuthentication().username;
 const sorted = computed(() => sortBy(synthesizers.value, (s: ISynthesizer) => order[s.membershipType(name)]));
 
 const remove = repositories.synthesizers.remove(synthesizers.value);
-const create = repositories.synthesizers.add(synthesizers.value);
+async function create(details: ISynthesizer) {
+  const creation: ISynthesizer = await repositories.synthesizers.create(details);
+  synthesizers.value.push(new Synthesizer(creation));
+}
 </script>
