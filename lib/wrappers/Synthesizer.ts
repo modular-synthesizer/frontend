@@ -42,7 +42,7 @@ export default class Synthesizer implements ISynthesizer {
 
   public hasRoom(rack: number, slot: number, slots: number, id: string): boolean {
     for (let mod of this.modules) {
-      if (mod.intersects({ rack, slot, slots })) return false;
+      if (mod.intersects({ rack, slot, slots, id: id })) return false;
     }
     return true;
   }

@@ -89,10 +89,10 @@ export default class Mod implements IModule {
     this.param(name).watch(callback);
   }
 
-  public intersects({ slot, rack, slots }: { slot: number, rack: number, slots: number}) {
-    if (this.rack !== rack) return false;
+  public intersects({ slot, rack, slots, id }: { slot: number, rack: number, slots: number, id: string }) {
     const [ begin, end ]: [ number, number ] = [ slot, slot + slots ];
     if (this.rack !== rack) return false;
+    if (id === this.id) return false;
     if (end <= this.slot) return false;
     if (begin >= this.slot + this.slots) return false;
     return true;
