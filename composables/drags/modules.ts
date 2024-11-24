@@ -2,6 +2,7 @@ import { getRack, getSlot } from "~~/lib/utils/coordinates";
 import Mod from "~~/lib/wrappers/Mod";
 import sendModuleEvent from "~~/lib/commands/events/sendModuleEvent";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
+import { repositories } from "~~/lib/repositories";
 
 /**
  * This composable holds the logic for the drag and drop of a module in the racks and slots.
@@ -43,7 +44,7 @@ export const useModuleDrag = () => {
   }
   
   function end() {
-    api_put(`/modules/${mod.id}`, { slot: mod.slot, rack: mod.rack });
+    repositories.modules.update(mod)
     useHover().unblock();
     useStates().unblock()
     sendModuleEvent('endDrag', mod);

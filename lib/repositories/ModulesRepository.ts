@@ -16,6 +16,10 @@ export class ModulesRepository extends Repository<IModule> {
     return super.list({ synthesizer_id: synthesizer.id});
   }
 
+  public async update(payload: IModule): Promise<IModule> {
+    return await api_put(this.uri(payload.id), pick(payload, 'slot', 'rack'));
+  }
+
   public async updateParameter(parameter: Parameter): Promise<IParameter> {
     await api_put(this.uri(parameter.mod.id), { parameters: [pick(parameter, 'id', 'value')] });
     return parameter;
