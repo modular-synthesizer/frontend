@@ -76,7 +76,7 @@ function updateChips(values: string[]) {
 }
 
 function validate() {
-  props.modelValue.id ? emit('created', props.modelValue) : emit("updated", props.modelValue);
+  props.modelValue.id === '' ? emit('created', props.modelValue) : emit("updated", props.modelValue);
 }
 
 function reset() {

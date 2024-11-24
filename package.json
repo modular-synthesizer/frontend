@@ -26,5 +26,8 @@
     "vue-router": "^4.3.2",
     "vue3-country-flag-icon": "^0.1.2",
     "vuetify": "3.5.12"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "^1.6.1"
   }
 }

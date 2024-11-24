@@ -26,7 +26,7 @@
             <v-btn
               size="small"
               variant="plain"
-              @click="remove(control.id)"
+              @click="remove"
               icon="mdi-delete"
             />
             <v-btn
@@ -53,21 +53,26 @@
 <script setup lang="ts">
 import { omit } from 'lodash';
 import { IControl } from '~~/lib/interfaces/IControl';
+import ITool from '~~/lib/interfaces/ITool';
 import { repositories } from '~~/lib/repositories';
 
-const { controls, creationMode } = defineProps({
-  controls: { type: Array<IControl>, default: () => [] },
+const { tool, creationMode } = defineProps({
+  tool: { type: Object as PropType<ITool>, required: true },
   creationMode: { type: Boolean, default: () => false }
 });
+
+const controls = computed(() => tool.controls)
 
 type EditionPayload = { control: IControl, index: number };
 const emit = defineEmits<{ edition: [ EditionPayload ]}>();
 
 function shift(index: number, difference: number) {
-  const item: IControl = controls.splice(index, 1)[0];
-  controls.splice(index + difference, 0, item);
+  const item: IControl = controls.value.splice(index, 1)[0];
+  controls.value.splice(index + difference, 0, item);
 }
-const remove = repositories.tool.controls.remove(controls)
+function remove(control: IControl) {
+  return repositories.tool.controls.remove(tool, tool.controls, control);
+}
 
 function startEdit(control: IControl, index: number) {
   emit("edition", { control, index });

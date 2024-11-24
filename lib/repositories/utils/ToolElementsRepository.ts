@@ -1,3 +1,4 @@
+import { remove } from "lodash";
 import { Identifiable } from "../../interfaces/common/Identifiable";
 import ITool from "../../interfaces/ITool";
 import { BaseRepository } from "./BaseRepository";
@@ -25,5 +26,10 @@ export class ToolElementsRepository<T extends Identifiable> extends BaseReposito
 
   public async delete(tool: ITool, element: T): Promise<void> {
     return await api_delete(this.uri(element.id), { tool_id: tool.id });
+  }
+
+  public async remove(tool: ITool, list: T[], element: T): Promise<void> {
+    await this.delete(tool, element);
+    remove(list, (i: T) => i.id === element.id);
   }
 }

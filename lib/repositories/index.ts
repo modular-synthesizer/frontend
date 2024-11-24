@@ -27,7 +27,7 @@ export const repositories = {
   memberships: new Repository<IMembership>('memberships'),
   modules: new ModulesRepository('modules'),
   tool: {
-    controls: new Repository<IControl>('controls'),
+    controls: new ToolElementsRepository<IControl>('controls'),
     links: new ToolElementsRepository<InnerLink>('links'),
     nodes: new ToolElementsRepository<InnerNode>('nodes'),
     parameters: new ToolElementsRepository<IToolParameter>('parameters'),
