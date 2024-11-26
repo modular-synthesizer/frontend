@@ -26,6 +26,7 @@ const props = defineProps({
 
   .v-col {
     margin: 0px;
+    padding: 0px;
   }
 
 }
