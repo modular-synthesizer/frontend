@@ -1,7 +1,6 @@
 <template>
   <tool-menu :tool="tool" @mode-changed="changeMode" @save="onSaveRequest" :creation-mode="createMode" />
   <div class="global-wrapper" v-if="modelValue">
-    <div>{{ createMode }}</div>
     <v-form v-model="valid" ref="form" v-if="mode === 'infos'" @submit.prevent.stop>
       <tools-informations v-model="tool" :rules="rules" />
     </v-form>
