@@ -1,7 +1,7 @@
 <template>
   <v-row class="main-row no-gutters" v-if="props.tool">
     <v-col cols="4">
-      <tools-preview v-model="props.tool" />
+      <tool-preview v-model="props.tool" />
     </v-col>
     <v-col cols="8">
       <tools-controls v-model="props.tool.controls" :tool="props.tool" :creation-mode="props.creationMode" />
