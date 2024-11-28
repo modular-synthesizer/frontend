@@ -1,7 +1,7 @@
 <template>
   <svg>
     <circle cx="50" cy="50" r="25" fill="white" stroke="red" stroke-width="2" class="mode-switch" @click="moveMode = !moveMode" />
-    <g :transform="`scale(${scale} ${scale}) translate(${x} ${y})`">
+    <draggable-tool-stage :x="x" :y="y" :scale="scale">
       <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
       <module-screws :slots="tool.slots" />
       <template v-if="!moveMode">
@@ -14,7 +14,7 @@
       <template v-else>
         <tool-controls-move :control="control" v-for="control in tool.controls" />
       </template>
-    </g>
+    </draggable-tool-stage>
   </svg>
 </template>
 
