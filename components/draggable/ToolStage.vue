@@ -1,8 +1,9 @@
 <template>
   <div
     @mousemove="moveControl"
-    @mouseleave.stop.prevent="useControlSelection().reset()"
-    @mouseup.stop.prevent="useControlSelection().reset()"
+    @mouseleave.stop.prevent="useControlSelection().reset(tool)"
+    @mouseup.stop.prevent="useControlSelection().reset(tool)"
+    @click.stop="showCoordinates"
   >
   <svg>
     <g :transform="`scale(${scale} ${scale}) translate(${x} ${y})`">
@@ -18,18 +19,36 @@
 
 <script setup lang="ts">
 import { IControl } from '~~/lib/interfaces/IControl';
+import ITool from '~~/lib/interfaces/ITool';
 
 const { x, y, scale } = defineProps({
   x: { type: Number, default: 0 },
   y: { type: Number, default: 0 },
   scale: { type: Number, default: 1 },
+  tool: {type: Object as PropType<ITool>, required: true }
 });
 
 const selection = computed(() => useControlSelection().selected.value);
 
-function moveControl() {
+function roundBy(value: number, round: number) {
+  const v: number = Math.floor(value);
+  return value - value % round;
+}
+
+function moveControl($event: MouseEvent) {
   const control: IControl|undefined = useControlSelection().selected.value;
   if (control === undefined) return;
+  const { ax, ay } = { ax: $event.offsetX, ay: $event.offsetY }
+  control.payload.x = roundBy((ax / scale) - x, 5)
+  control.payload.y = roundBy((ay / scale) - y, 5)
+}
+
+function showCoordinates($event: MouseEvent) {
+  const { ax, ay } = { ax: $event.offsetX, ay: $event.offsetY }
+    console.log({
+      x: Math.floor((ax / scale) - x),
+      y: Math.floor((ay / scale) - y),
+    })
 }
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <draggable-tool-stage :x="x" :y="y" :scale="scale">
+  <draggable-tool-stage :x="x" :y="y" :scale="scale" :tool=tool>
     <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
     <module-screws :slots="tool.slots" />
     <template v-if="!moveMode">
@@ -27,7 +27,7 @@ const props = defineProps({
 const tool: ComputedRef<ITool> = computed(() => props.modelValue);
 
 const mod: IModule = new FakeModule({ ...ModulesFactory.empty(), channels: [] });
-const { x, y, scale }: ScalablePosition = { x: 100, y: 50, scale: 1.5 } as ScalablePosition;
+const { x, y, scale }: ScalablePosition = { x: 50, y: 50, scale: 1.5 } as ScalablePosition;
 const moveMode: Ref<boolean> = ref(false);
 
 const modHeight: number = RACK_HEIGHT;
