@@ -1,17 +1,15 @@
 <template>
-  <svg>
-    <draggable-tool-stage :x="x" :y="y" :scale="scale">
-      <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
-      <module-screws :slots="tool.slots" />
-      <template v-if="!moveMode">
-        <g @wheel.capture.stop @click.capture.stop @click.right.capture.stop @mousedown.right.capture.stop>
-          <g v-for="control in tool.controls" @mousedown.left.capture.stop="useControlSelection().selectControl(control)">
-            <controls-wrapper :mod="mod" :control="control" />
-          </g>
+  <draggable-tool-stage :x="x" :y="y" :scale="scale">
+    <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
+    <module-screws :slots="tool.slots" />
+    <template v-if="!moveMode">
+      <g @wheel.capture.stop @click.capture.stop @click.right.capture.stop @mousedown.right.capture.stop @mouseout.capture.stop>
+        <g v-for="control in tool.controls" @mousedown.left.capture.stop="useControlSelection().selectControl(control)">
+          <controls-wrapper :mod="mod" :control="control" />
         </g>
-      </template>
-    </draggable-tool-stage>
-  </svg>
+      </g>
+    </template>
+  </draggable-tool-stage>
 </template>
 
 <script setup lang="ts">
@@ -35,13 +33,3 @@ const moveMode: Ref<boolean> = ref(false);
 const modHeight: number = RACK_HEIGHT;
 const modWidth: number = SLOT_SIZE * tool.value.slots;
 </script>
-
-<style scoped>
-svg {
-  height: calc(100vh - 140px);
-  width: 100%;
-}
-.mode-switch {
-  cursor: pointer;
-}
-</style>
