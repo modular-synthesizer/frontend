@@ -1,6 +1,5 @@
 <template>
   <svg>
-    <circle cx="50" cy="50" r="25" fill="white" stroke="red" stroke-width="2" class="mode-switch" @click="moveMode = !moveMode" />
     <draggable-tool-stage :x="x" :y="y" :scale="scale">
       <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
       <module-screws :slots="tool.slots" />
@@ -10,9 +9,6 @@
             <controls-wrapper :mod="mod" :control="control" />
           </g>
         </g>
-      </template>
-      <template v-else>
-        <tool-controls-move :control="control" v-for="control in tool.controls" />
       </template>
     </draggable-tool-stage>
   </svg>
