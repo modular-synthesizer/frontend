@@ -5,12 +5,15 @@
       <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
       <module-screws :slots="tool.slots" />
       <template v-if="!moveMode">
-        <controls-wrapper :mod="mod" :control="control" v-for="control in tool.controls" />
+        <g @wheel.capture.stop @click.capture.stop @click.right.capture.stop @mousedown.right.capture.stop>
+          <g v-for="control in tool.controls" @mousedown.left.capture.stop="useControlSelection().selectControl(control)">
+            <controls-wrapper :mod="mod" :control="control" />
+          </g>
+        </g>
       </template>
       <template v-else>
         <tool-controls-move :control="control" v-for="control in tool.controls" />
       </template>
-      <rect :width="modWidth" :height="modHeight" fill="transparent" v-if="!moveMode" />
     </g>
   </svg>
 </template>
