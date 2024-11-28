@@ -18,7 +18,10 @@ const { control } = defineProps({
   control: { type: Object as PropType<IControl>, required: true },
 });
 
-const chips: ComputedRef<string[]> = computed((): string[] => Object.keys(control.payload).sort());
+const chips: ComputedRef<string[]> = computed((): string[] => {
+  const keys: string[] = Object.keys(control.payload).sort();
+  return keys.filter((k: string) => !['x', 'y'].includes(k));
+});
 
 const emit = defineEmits<{ closed: [ control: IControl, key: string ]}>();
 </script>
