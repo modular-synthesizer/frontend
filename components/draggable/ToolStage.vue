@@ -18,10 +18,12 @@
 </template>
 
 <script setup lang="ts">
+import { clamp } from 'lodash';
 import { IControl } from '~~/lib/interfaces/IControl';
 import ITool from '~~/lib/interfaces/ITool';
+import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 
-const { x, y, scale } = defineProps({
+const { x, y, scale, tool } = defineProps({
   x: { type: Number, default: 0 },
   y: { type: Number, default: 0 },
   scale: { type: Number, default: 1 },
@@ -30,17 +32,17 @@ const { x, y, scale } = defineProps({
 
 const selection = computed(() => useControlSelection().selected.value);
 
-function roundBy(value: number, round: number) {
+function roundBy(value: number, round: number, max: number) {
   const v: number = Math.floor(value);
-  return value - value % round;
+  return clamp(v - v % round, 0, max);
 }
 
 function moveControl($event: MouseEvent) {
   const control: IControl|undefined = useControlSelection().selected.value;
   if (control === undefined) return;
   const { ax, ay } = { ax: $event.offsetX, ay: $event.offsetY }
-  control.payload.x = roundBy((ax / scale) - x, 5)
-  control.payload.y = roundBy((ay / scale) - y, 5)
+  control.payload.x = roundBy((ax / scale) - x, 5, tool.slots * SLOT_SIZE)
+  control.payload.y = roundBy((ay / scale) - y, 5, RACK_HEIGHT)
 }
 
 function showCoordinates($event: MouseEvent) {

@@ -4,17 +4,27 @@
     <module-screws :slots="tool.slots" />
     <template v-if="!moveMode">
       <g @wheel.capture.stop @click.capture.stop @click.right.capture.stop @mousedown.right.capture.stop @mouseout.capture.stop>
-        <g v-for="control in tool.controls" @mousedown.left.capture.stop="useControlSelection().selectControl(control)">
+        <g
+          v-for="control in tool.controls"
+          @mousedown.left.capture.stop="useControlSelection().selectControl(control)"
+          @dblclick.capture.stop="startEdit(control)"
+        >
           <controls-wrapper :mod="mod" :control="control" />
         </g>
       </g>
     </template>
   </draggable-tool-stage>
+  <v-dialog max-width="500" v-model="displayEdition">
+    <v-card>
+      {{ edited?.id }}
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
 import { PropType } from 'vue';
 import ModulesFactory from '~~/lib/factories/ModulesFactory';
+import { IControl } from '~~/lib/interfaces/IControl';
 import ITool from '~~/lib/interfaces/ITool';
 import IModule from '~~/lib/interfaces/modules/IModule';
 import { ScalablePosition } from '~~/lib/types/ScalablePosition';
@@ -32,4 +42,11 @@ const moveMode: Ref<boolean> = ref(false);
 
 const modHeight: number = RACK_HEIGHT;
 const modWidth: number = SLOT_SIZE * tool.value.slots;
+
+const displayEdition = ref(false);
+const edited: Ref<IControl | undefined> = ref(undefined);
+function startEdit(control: IControl) {
+  displayEdition.value = true;
+  edited.value = control
+}
 </script>
