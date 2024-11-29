@@ -9,7 +9,7 @@ type State = {
 const state: Ref<State> = ref({
   displayed: false,
   get creating(): boolean {
-    return state.value.control?.id !== '';
+    return state.value.control?.id === '';
   }
 });
 

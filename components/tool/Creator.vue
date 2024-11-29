@@ -1,5 +1,5 @@
 <template>
-  <tool-menu :tool="tool" @mode-changed="changeMode" @save="onSaveRequest" :creation-mode="createMode" />
+  <tool-menu :tool="tool" @mode-changed="changeMode" @save="onSaveRequest" :creation-mode="createMode" :mode="mode" />
   <div class="global-wrapper" v-if="modelValue">
     <v-form v-model="valid" ref="form" v-if="mode === 'infos'" @submit.prevent.stop>
       <tools-informations v-model="tool" :rules="rules" />

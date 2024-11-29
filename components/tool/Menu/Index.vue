@@ -4,11 +4,11 @@
       <v-icon>mdi-chevron-left</v-icon>
       <v-tooltip activator="parent" location="bottom">Retour à la liste</v-tooltip>
     </v-btn>
-    <v-btn icon @click="emit('save', tool)">
+    <v-btn icon @click="emit('save', tool)" v-if="mode === 'infos'">
       <v-icon>mdi-content-save-outline</v-icon>
       <v-tooltip activator="parent" location="bottom">Sauvegarder</v-tooltip>
     </v-btn>
-    <v-menu v-if="!creationMode" :close-on-content-click="false">
+    <v-menu v-if="!creationMode && mode === 'structure'" :close-on-content-click="false">
       <template v-slot:activator="{ props }">
         <v-btn v-bind="props" icon>
           <v-icon>mdi-plus</v-icon>
@@ -22,6 +22,9 @@
         <tool-structure-create-parameter @created="createParameter" :tool="tool" />
       </v-list>
     </v-menu>
+    <v-btn v-if="mode === 'appearance'" @click="useControlEdition().startEdit({ id: '', payload: { x: 0, y: 0 }, editing: true, component: 'Knob'})" icon>
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
     <v-spacer></v-spacer>
     <template v-if="!creationMode">
       <v-btn @click="emit('modeChanged', 'infos')">Infos</v-btn>
@@ -36,9 +39,10 @@ import ITool, { InnerLink, InnerNode, IToolParameter, IToolPort } from '~~/lib/i
 import { repositories } from '~~/lib/repositories';
 import { ToolTabs } from '~~/lib/types/ToolTabs';
 
-const { tool } = defineProps({
+const { tool, mode, creationMode } = defineProps({
   tool: { type: Object as PropType<ITool>, required: true },
-  creationMode: { type: Boolean, default: false }
+  creationMode: { type: Boolean, default: false },
+  mode: { type: String as PropType<ToolTabs>, default: 'infos' }
 });
 
 const emit = defineEmits<{ modeChanged: [ ToolTabs ], save: [ ITool ] }>();
