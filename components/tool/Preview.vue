@@ -14,12 +14,7 @@
       </g>
     </template>
   </draggable-tool-stage>
-  <v-dialog max-width="500" v-model="useControlEdition().state.value.displayed">
-    <v-card>
-      <v-card-title>{{ useControlEdition().state.value.creating ? 'creation' : 'edition' }}</v-card-title>
-      {{ useControlEdition().state.value.control?.id }}
-    </v-card>
-  </v-dialog>
+  <control-edition-dialog />
 </template>
 
 <script setup lang="ts">
