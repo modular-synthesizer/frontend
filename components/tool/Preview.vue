@@ -7,16 +7,17 @@
         <g
           v-for="control in tool.controls"
           @mousedown.left.capture.stop="useControlSelection().selectControl(control)"
-          @dblclick.capture.stop="startEdit(control)"
+          @dblclick.capture.stop="useControlEdition().startEdit(control)"
         >
           <controls-wrapper :mod="mod" :control="control" />
         </g>
       </g>
     </template>
   </draggable-tool-stage>
-  <v-dialog max-width="500" v-model="displayEdition">
+  <v-dialog max-width="500" v-model="useControlEdition().state.value.displayed">
     <v-card>
-      {{ edited?.id }}
+      <v-card-title>{{ useControlEdition().state.value.creating ? 'creation' : 'edition' }}</v-card-title>
+      {{ useControlEdition().state.value.control?.id }}
     </v-card>
   </v-dialog>
 </template>
@@ -24,12 +25,12 @@
 <script setup lang="ts">
 import { PropType } from 'vue';
 import ModulesFactory from '~~/lib/factories/ModulesFactory';
-import { IControl } from '~~/lib/interfaces/IControl';
 import ITool from '~~/lib/interfaces/ITool';
 import IModule from '~~/lib/interfaces/modules/IModule';
 import { ScalablePosition } from '~~/lib/types/ScalablePosition';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { FakeModule } from '~~/lib/wrappers/FakeModule';
+
 const props = defineProps({
   modelValue: { type: Object as PropType<ITool>, required: true },
 });
@@ -42,11 +43,4 @@ const moveMode: Ref<boolean> = ref(false);
 
 const modHeight: number = RACK_HEIGHT;
 const modWidth: number = SLOT_SIZE * tool.value.slots;
-
-const displayEdition = ref(false);
-const edited: Ref<IControl | undefined> = ref(undefined);
-function startEdit(control: IControl) {
-  displayEdition.value = true;
-  edited.value = control
-}
 </script>
