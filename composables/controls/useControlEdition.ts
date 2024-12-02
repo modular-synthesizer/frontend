@@ -1,12 +1,12 @@
 import { IControl } from "~~/lib/interfaces/IControl";
 
-type State = {
+export type ControlEditionState = {
   control?: IControl,
   displayed: boolean,
   get creating(): boolean,
 }
 
-const state: Ref<State> = ref({
+const state: Ref<ControlEditionState> = ref({
   displayed: false,
   get creating(): boolean {
     return state.value.control?.id === '';
@@ -18,6 +18,11 @@ function startEdit(control: IControl) {
   state.value.displayed = true;
 }
 
+function reset() {
+  state.value.control = undefined;
+  state.value.displayed = false;
+}
+
 export function useControlEdition() {
-  return { startEdit, state };
+  return { reset, startEdit, state };
 }
