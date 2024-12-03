@@ -2,7 +2,7 @@
   <tool-menu :tool="tool" @mode-changed="changeMode" @save="onSaveRequest" :creation-mode="createMode" :mode="mode" />
   <div class="global-wrapper" v-if="modelValue">
     <v-form v-model="valid" ref="form" v-if="mode === 'infos'" @submit.prevent.stop>
-      <tools-informations v-model="tool" :rules="rules" />
+      <tool-informations v-model="tool" :rules="rules" />
     </v-form>
     <tool-structure v-else-if="mode === 'structure'" :tool="tool" />
     <tool-appearance v-else :tool="tool" :creation-mode="createMode" />
