@@ -7,19 +7,21 @@
         <g
           v-for="control in tool.controls"
           @mousedown.left.capture.stop="useControlSelection().selectControl(control)"
-          @dblclick.capture.stop="useControlEdition().startEdit(control)"
+          @dblclick.capture.stop="console.log(control); useControlEdition().startEdit(control)"
         >
           <controls-wrapper :mod="mod" :control="control" />
         </g>
       </g>
     </template>
   </draggable-tool-stage>
-  <control-edition-dialog />
+  <control-edition-dialog @save="setControl" />
 </template>
 
 <script setup lang="ts">
+import { findIndex } from 'lodash';
 import { PropType } from 'vue';
 import ModulesFactory from '~~/lib/factories/ModulesFactory';
+import { IControl } from '~~/lib/interfaces/IControl';
 import ITool from '~~/lib/interfaces/ITool';
 import IModule from '~~/lib/interfaces/modules/IModule';
 import { ScalablePosition } from '~~/lib/types/ScalablePosition';
@@ -38,4 +40,11 @@ const moveMode: Ref<boolean> = ref(false);
 
 const modHeight: number = RACK_HEIGHT;
 const modWidth: number = SLOT_SIZE * tool.value.slots;
+
+function setControl(control: IControl) {
+  const index: number = findIndex(props.modelValue.controls, { id: control.id });
+  if (index <= -1 ) return;
+  props.modelValue.controls[index] = control;
+  console.log(props.modelValue);
+}
 </script>
