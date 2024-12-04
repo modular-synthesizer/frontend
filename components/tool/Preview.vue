@@ -3,11 +3,11 @@
     <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
     <module-screws :slots="tool.slots" />
     <template v-if="!moveMode">
-      <g @wheel.capture.stop @click.capture.stop @click.right.capture.stop @mousedown.right.capture.stop @mouseout.capture.stop>
+      <g @wheel.capture.stop  @mousedown.right.capture.stop @mouseout.capture.stop>
         <g
           v-for="control in tool.controls"
+          @click.right.capture.stop.prevent="showMenu(control, $event)"
           @mousedown.left.capture.stop="useControlSelection().selectControl(control)"
-          @dblclick.capture.stop="console.log(control); useControlEdition().startEdit(control)"
         >
           <controls-wrapper :mod="mod" :control="control" />
         </g>
@@ -46,5 +46,15 @@ function setControl(control: IControl) {
   if (index <= -1 ) return;
   props.modelValue.controls[index] = control;
   console.log(props.modelValue);
+}
+
+function showMenu(control: IControl, $event: MouseEvent) {
+  console.log("passage ici ?");
+  useContexts().display($event, {
+    items: [
+      { label: 'controls.edit', action: useControlEdition().startEdit }
+    ],
+    payload: control,
+  });
 }
 </script>

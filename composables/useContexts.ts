@@ -31,6 +31,7 @@ export function useContexts() {
       state.value.items = options.items;
       state.value.payload = options.payload;
       state.value.visible = true;
+      console.log(state);
     },
     hide(unblock = false) {
       if (unblock) useStates().unblock();

@@ -3,7 +3,7 @@
     @mousemove="moveControl"
     @mouseleave.stop.prevent="useControlSelection().reset(tool)"
     @mouseup.stop.prevent="useControlSelection().reset(tool)"
-    @click.stop="showCoordinates"
+    @click="useContexts().hide()"
   >
   <svg>
     <g :transform="`scale(${scale} ${scale}) translate(${x} ${y})`">
@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import { clamp } from 'lodash';
+import { useContext } from 'unctx/index';
 import { IControl } from '~~/lib/interfaces/IControl';
 import ITool from '~~/lib/interfaces/ITool';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
@@ -47,10 +48,10 @@ function moveControl($event: MouseEvent) {
 
 function showCoordinates($event: MouseEvent) {
   const { ax, ay } = { ax: $event.offsetX, ay: $event.offsetY }
-    console.log({
-      x: Math.floor((ax / scale) - x),
-      y: Math.floor((ay / scale) - y),
-    })
+    // console.log({
+    //   x: Math.floor((ax / scale) - x),
+    //   y: Math.floor((ay / scale) - y),
+    // })
 }
 </script>
 

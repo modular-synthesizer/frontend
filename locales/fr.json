@@ -49,6 +49,9 @@
   },
   "contexts": {
     "bind": "Lier un bouton MIDI",
+    "controls": {
+      "edit": "Editer le contrôle"
+    },
     "remove": "Supprimer",
     "resetPosition": "Réinitialiser la position",
     "resetZoom": "Réinitialiser le niveau de zoom",

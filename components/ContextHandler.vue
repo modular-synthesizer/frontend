@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { ContextItem } from '~~/stores/common/contexts';
+import { ContextItem } from '~~/composables/useContexts';
 
 const WIDTH = 200;
 
@@ -28,6 +28,12 @@ export default {
     },
   },
   computed: {
+    x() {
+      return useContexts().x
+    },
+    y() {
+      return useContexts().y
+    },
     height(): number {
       return 25 * this.items.length;
     },

@@ -22,7 +22,7 @@ const props = defineProps({
 });
 
 const tool = ref(props.modelValue);
-const mode: Ref<ToolTabs> = ref('infos');
+const mode: Ref<ToolTabs> = ref('appearance');
 const valid: Ref<boolean|null> = ref(null);
 const form = ref<HTMLFormElement|null>(null);
 const createMode: Ref<boolean> = ref(props.creationMode);
