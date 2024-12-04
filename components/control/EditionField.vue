@@ -1,5 +1,5 @@
 <template>
-  <v-text-field :label="name" v-model="value" @update:modelValue="emit('updated', name, value)" />
+  <v-text-field density="compact" variant="outlined" :label="name" v-model="value" @update:modelValue="emit('updated', name, value)" />
 </template>
 
 <script setup lang="ts">
