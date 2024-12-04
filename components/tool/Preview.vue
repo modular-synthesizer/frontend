@@ -7,7 +7,7 @@
         <g
           v-for="control in tool.controls"
           @click.right.capture.stop.prevent="showMenu(control, $event)"
-          @mousedown.left.capture.stop="useControlSelection().selectControl(control)"
+          @mousedown.left.capture.stop="useControlSelection().selectControl(control, $event)"
         >
           <controls-wrapper :mod="mod" :control="control" />
         </g>

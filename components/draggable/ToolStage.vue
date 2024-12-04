@@ -19,7 +19,6 @@
 
 <script setup lang="ts">
 import { clamp } from 'lodash';
-import { useContext } from 'unctx/index';
 import { IControl } from '~~/lib/interfaces/IControl';
 import ITool from '~~/lib/interfaces/ITool';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
@@ -41,9 +40,10 @@ function roundBy(value: number, round: number, max: number) {
 function moveControl($event: MouseEvent) {
   const control: IControl|undefined = useControlSelection().selected.value;
   if (control === undefined) return;
-  const { ax, ay } = { ax: $event.offsetX, ay: $event.offsetY }
-  control.payload.x = roundBy((ax / scale) - x, 5, tool.slots * SLOT_SIZE)
-  control.payload.y = roundBy((ay / scale) - y, 5, RACK_HEIGHT)
+  const { ax, ay } = { ax: $event.layerX, ay: $event.layerY };
+  const { x: ox, y: oy } = useControlSelection().origin.value;
+  control.payload.x = roundBy(ax - ox, 5, tool.slots * SLOT_SIZE);
+  control.payload.y = roundBy(ay - oy, 5, RACK_HEIGHT);
 }
 </script>
 

@@ -1,11 +1,16 @@
 import { IControl } from "~~/lib/interfaces/IControl";
+import ICoordinates from "~~/lib/interfaces/ICoordinates";
 import ITool from "~~/lib/interfaces/ITool";
 import { repositories } from "~~/lib/repositories";
 
 const selected: Ref<IControl|undefined> = ref();
 
-function selectControl(control: IControl) {
+const origin: Ref<ICoordinates> = ref({ x: 0, y: 0 })
+
+function selectControl(control: IControl, $event: MouseEvent) {
   selected.value = control;
+  origin.value.x = $event.layerX - control.payload.x;
+  origin.value.y = $event.layerY - control.payload.y;
 }
 
 function reset(tool: ITool) {
@@ -16,5 +21,5 @@ function reset(tool: ITool) {
 }
 
 export function useControlSelection() {
-  return { reset, selected, selectControl };
+  return { origin, reset, selected, selectControl };
 }
