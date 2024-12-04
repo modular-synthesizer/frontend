@@ -50,7 +50,8 @@
   "contexts": {
     "bind": "MIDI learn",
     "controls": {
-      "edit": "Editer le contrôle"
+      "delete": "Delete control",
+      "edit": "Edit control"
     },
     "remove": "Delete",
     "resetPosition": "Reset position",

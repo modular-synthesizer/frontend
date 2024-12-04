@@ -43,16 +43,35 @@ const modHeight: number = RACK_HEIGHT;
 const modWidth: number = SLOT_SIZE * tool.value.slots;
 
 async function setControl(control: IControl) {
+  console.log(control)
+  if (control.id === '') await createControl(control);
+  else await editControl(control);
+}
+
+async function createControl(control: IControl) {
+  tool.value.controls.push(await repositories.tool.controls.create(tool.value, control));
+}
+
+async function editControl(control: IControl) {
   const index: number = findIndex(props.modelValue.controls, { id: control.id });
   if (index <= -1 ) return;
-  props.modelValue.controls[index] = control;
+  props.modelValue.controls[index] = control; 
   await repositories.tool.controls.update(tool.value, tool.value.controls, control);
 }
 
 function showMenu(control: IControl, $event: MouseEvent) {
   useContexts().display($event, {
     items: [
-      { label: 'controls.edit', action: useControlEdition().startEdit }
+      {
+        label: 'controls.edit',
+        action: useControlEdition().startEdit
+      },
+      {
+        label: 'controls.delete',
+        action: async (control: IControl) => {
+          await repositories.tool.controls.remove(tool.value, tool.value.controls, control);
+        }
+      }
     ],
     payload: control,
   });

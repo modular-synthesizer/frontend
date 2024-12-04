@@ -3,6 +3,11 @@
     <v-card>
       <v-card-title>{{ state.creating ? 'creation' : 'edition' }}</v-card-title>
       <v-card-text>
+        <template v-if="state.control?.id === ''">
+          <control-component-selector :control="state.control" @updated="setComponent" />
+          <control-edition-field :control="state.control" name="x" @updated="savePayload" />
+          <control-edition-field :control="state.control" name="y" @updated="savePayload" />
+        </template>
         <div v-for="(_, name) in payload">
           <control-edition-field :control="state.control" :name="name" @updated="savePayload" />
         </div>
@@ -42,6 +47,11 @@ function savePayload(name: string, value: any) {
     if (state.value.control === undefined) return;
     state.value.control.payload[name] = value;
   });
+}
+
+function setComponent(component: string) {
+  if (state.value.control === undefined) return;
+  state.value.control.component = component;
 }
 
 function save() {

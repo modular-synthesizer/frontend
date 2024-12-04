@@ -50,6 +50,7 @@
   "contexts": {
     "bind": "Lier un bouton MIDI",
     "controls": {
+      "delete": "Supprimer le contrôle",
       "edit": "Editer le contrôle"
     },
     "remove": "Supprimer",
