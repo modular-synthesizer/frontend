@@ -24,6 +24,7 @@ import ModulesFactory from '~~/lib/factories/ModulesFactory';
 import { IControl } from '~~/lib/interfaces/IControl';
 import ITool from '~~/lib/interfaces/ITool';
 import IModule from '~~/lib/interfaces/modules/IModule';
+import { repositories } from '~~/lib/repositories';
 import { ScalablePosition } from '~~/lib/types/ScalablePosition';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { FakeModule } from '~~/lib/wrappers/FakeModule';
@@ -41,10 +42,11 @@ const moveMode: Ref<boolean> = ref(false);
 const modHeight: number = RACK_HEIGHT;
 const modWidth: number = SLOT_SIZE * tool.value.slots;
 
-function setControl(control: IControl) {
+async function setControl(control: IControl) {
   const index: number = findIndex(props.modelValue.controls, { id: control.id });
   if (index <= -1 ) return;
   props.modelValue.controls[index] = control;
+  await repositories.tool.controls.update(tool.value, tool.value.controls, control);
 }
 
 function showMenu(control: IControl, $event: MouseEvent) {
