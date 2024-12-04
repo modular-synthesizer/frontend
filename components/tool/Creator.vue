@@ -36,7 +36,6 @@ function changeMode(m: ToolTabs) {
 }
 
 async function onSaveRequest(t: ITool) {
-  console.log(t);
   tool.value = t;
   await form.value?.validate();
   if (valid.value) save();

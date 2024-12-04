@@ -45,11 +45,9 @@ function setControl(control: IControl) {
   const index: number = findIndex(props.modelValue.controls, { id: control.id });
   if (index <= -1 ) return;
   props.modelValue.controls[index] = control;
-  console.log(props.modelValue);
 }
 
 function showMenu(control: IControl, $event: MouseEvent) {
-  console.log("passage ici ?");
   useContexts().display($event, {
     items: [
       { label: 'controls.edit', action: useControlEdition().startEdit }

@@ -45,14 +45,6 @@ function moveControl($event: MouseEvent) {
   control.payload.x = roundBy((ax / scale) - x, 5, tool.slots * SLOT_SIZE)
   control.payload.y = roundBy((ay / scale) - y, 5, RACK_HEIGHT)
 }
-
-function showCoordinates($event: MouseEvent) {
-  const { ax, ay } = { ax: $event.offsetX, ay: $event.offsetY }
-    // console.log({
-    //   x: Math.floor((ax / scale) - x),
-    //   y: Math.floor((ay / scale) - y),
-    // })
-}
 </script>
 
 <style scoped>
