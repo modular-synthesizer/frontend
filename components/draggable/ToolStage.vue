@@ -30,6 +30,8 @@ const { x, y, scale, tool } = defineProps({
   tool: {type: Object as PropType<ITool>, required: true }
 });
 
+const emit = defineEmits<{ move: [ IControl ]}>();
+
 const selection = computed(() => useControlSelection().selected.value);
 
 function roundBy(value: number, round: number, max: number) {
@@ -47,6 +49,7 @@ function moveControl($event: MouseEvent) {
   const { x: ox, y: oy } = useControlSelection().origin.value;
   control.payload.x = roundBy(ax - ox, 5, tool.slots * SLOT_SIZE);
   control.payload.y = roundBy(ay - oy, 5, RACK_HEIGHT);
+  emit('move', control);
 }
 </script>
 

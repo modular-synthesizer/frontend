@@ -1,5 +1,5 @@
 <template>
-  <draggable-tool-stage :x="x" :y="y" :scale="scale" :tool=tool>
+  <draggable-tool-stage :x="x" :y="y" :scale="scale" :tool=tool @move="updateInList">
     <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
     <module-screws :slots="tool.slots" />
     <template v-if="!moveMode">
@@ -56,8 +56,14 @@ async function createControl(control: IControl) {
 async function editControl(control: IControl) {
   const index: number = findIndex(props.modelValue.controls, { id: control.id });
   if (index <= -1 ) return;
-  props.modelValue.controls[index] = control; 
+  props.modelValue.controls[index] = control;
   await repositories.tool.controls.update(tool.value, tool.value.controls, control);
+}
+
+function updateInList(control: IControl) {
+  const index: number = findIndex(props.modelValue.controls, { id: control.id });
+  if (index <= -1 ) return;
+  props.modelValue.controls[index] = control
 }
 
 function showMenu(control: IControl, $event: MouseEvent) {
