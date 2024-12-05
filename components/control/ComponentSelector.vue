@@ -10,8 +10,6 @@ const { control } = defineProps({
   control: { type: Object as PropType<IControl>, required: true }
 });
 
-console.log(control);
-
 const emit = defineEmits<{ updated: [ string ]}>();
 
 const value: Ref<string> = ref(control.component);

@@ -9,8 +9,8 @@ const origin: Ref<ICoordinates> = ref({ x: 0, y: 0 })
 
 function selectControl(control: IControl, $event: MouseEvent) {
   selected.value = control;
-  origin.value.x = $event.layerX - control.payload.x;
-  origin.value.y = $event.layerY - control.payload.y;
+  origin.value.x = ($event.clientX / 1.5 - 50) - control.payload.x;
+  origin.value.y = (($event.clientY - 48) / 1.5 - 50) - control.payload.y;
 }
 
 function reset(tool: ITool) {

@@ -3,14 +3,15 @@
     <rect :width="modWidth" :height="modHeight" stroke="black" fill="#A3A3A3" />
     <module-screws :slots="tool.slots" />
     <template v-if="!moveMode">
-      <g @wheel.capture.stop  @mousedown.right.capture.stop @mouseout.capture.stop>
-        <g
-          v-for="control in tool.controls"
-          @click.right.capture.stop.prevent="showMenu(control, $event)"
-          @mousedown.left.capture.stop="useControlSelection().selectControl(control, $event)"
-        >
-          <controls-wrapper :mod="mod" :control="control" />
-        </g>
+      <g
+        v-for="control in tool.controls"
+        @click.right.capture.stop.prevent="showMenu(control, $event)"
+        @mousedown.left.capture.stop="useControlSelection().selectControl(control, $event)"
+        @wheel.capture.stop 
+        @mousedown.right.capture.stop
+        @mouseout.capture.stop
+      >
+        <controls-wrapper :mod="mod" :control="control" />
       </g>
     </template>
   </draggable-tool-stage>
@@ -43,13 +44,13 @@ const modHeight: number = RACK_HEIGHT;
 const modWidth: number = SLOT_SIZE * tool.value.slots;
 
 async function setControl(control: IControl) {
-  console.log(control)
   if (control.id === '') await createControl(control);
   else await editControl(control);
 }
 
 async function createControl(control: IControl) {
-  tool.value.controls.push(await repositories.tool.controls.create(tool.value, control));
+  const creation: IControl = await repositories.tool.controls.create(tool.value, control);
+  tool.value.controls.push(creation);
 }
 
 async function editControl(control: IControl) {

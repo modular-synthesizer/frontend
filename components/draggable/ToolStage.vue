@@ -40,7 +40,10 @@ function roundBy(value: number, round: number, max: number) {
 function moveControl($event: MouseEvent) {
   const control: IControl|undefined = useControlSelection().selected.value;
   if (control === undefined) return;
-  const { ax, ay } = { ax: $event.layerX, ay: $event.layerY };
+  const { ax, ay } = {
+    ax: ($event.clientX / 1.5 - 50),
+    ay: (($event.clientY - 48) / 1.5 - 50),
+  };
   const { x: ox, y: oy } = useControlSelection().origin.value;
   control.payload.x = roundBy(ax - ox, 5, tool.slots * SLOT_SIZE);
   control.payload.y = roundBy(ay - oy, 5, RACK_HEIGHT);
