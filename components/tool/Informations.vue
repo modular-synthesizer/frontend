@@ -45,8 +45,6 @@ const props = defineProps({
     rules: { type: Object as PropType<Rules>, default: () =>({})}
 });
 
-console.log(props.rules);
-
 const tool = computed(() => props.modelValue);
 
 const categories: Ref<ICategory[]> = ref(await repositories.categories.list());

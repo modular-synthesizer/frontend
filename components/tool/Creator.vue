@@ -1,9 +1,8 @@
 <template>
-  <tool-menu :tool="tool" @mode-changed="changeMode" @save="onSaveRequest" :creation-mode="createMode" />
+  <tool-menu :tool="tool" @mode-changed="changeMode" @save="onSaveRequest" :creation-mode="createMode" :mode="mode" />
   <div class="global-wrapper" v-if="modelValue">
-    <div>{{ createMode }}</div>
     <v-form v-model="valid" ref="form" v-if="mode === 'infos'" @submit.prevent.stop>
-      <tools-informations v-model="tool" :rules="rules" />
+      <tool-informations v-model="tool" :rules="rules" />
     </v-form>
     <tool-structure v-else-if="mode === 'structure'" :tool="tool" />
     <tool-appearance v-else :tool="tool" :creation-mode="createMode" />
@@ -23,7 +22,7 @@ const props = defineProps({
 });
 
 const tool = ref(props.modelValue);
-const mode: Ref<ToolTabs> = ref('infos');
+const mode: Ref<ToolTabs> = ref('appearance');
 const valid: Ref<boolean|null> = ref(null);
 const form = ref<HTMLFormElement|null>(null);
 const createMode: Ref<boolean> = ref(props.creationMode);
@@ -37,7 +36,6 @@ function changeMode(m: ToolTabs) {
 }
 
 async function onSaveRequest(t: ITool) {
-  console.log(t);
   tool.value = t;
   await form.value?.validate();
   if (valid.value) save();

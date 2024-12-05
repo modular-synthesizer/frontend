@@ -49,6 +49,10 @@
   },
   "contexts": {
     "bind": "MIDI learn",
+    "controls": {
+      "delete": "Delete control",
+      "edit": "Edit control"
+    },
     "remove": "Delete",
     "resetPosition": "Reset position",
     "resetZoom": "Reset zoom",
