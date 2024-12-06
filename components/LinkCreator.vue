@@ -13,6 +13,7 @@
 
 <script lang="ts" setup>
 const state = reactive(linkCreationState);
+const color = ref('red')
 </script>
 
 <style scoped>

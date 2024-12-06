@@ -7,7 +7,7 @@ export default class Link implements ILink {
   public readonly from: string;
   public readonly to: string;
   public readonly color: string;
-  public readonly id: string;
+  public id: string;
 
   public readonly origin!: Port;
   public readonly destination!: Port;

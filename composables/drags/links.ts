@@ -1,4 +1,3 @@
-import ILink from "~~/lib/interfaces/ILink";
 import ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { repositories } from "~~/lib/repositories";
 import { Coordinates } from "~~/lib/types/Coordinates"
@@ -40,6 +39,8 @@ function end() {
 async function createLink() {
   const { startPort: from, endPort: to } = linkCreationState.value;
   if (!from || !to) return
+  const insertion: Link = new Link({ id: '', from: from.id, to: to.id, color: 'red' });
+  useSynthesizer().links.value.push(insertion);
   const payload = {
     id: '',
     from: to.isInput() ? from.id : to.id,
@@ -47,9 +48,8 @@ async function createLink() {
     synthesizer_id: useSynthesizer().synthesizer.value.id,
     color: 'red'
   }
-  const response: ILink = await repositories.links.create(payload);
-  useSynthesizer().links.value.push(new Link(response));
   linkCreationState.value.display = false;
+  insertion.id = (await repositories.links.create(payload)).id;
 }
 
 function canLinkTo(port: Port): boolean {
