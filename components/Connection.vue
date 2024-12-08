@@ -6,6 +6,7 @@
       stroke-width="7"
       :class="[{ 'no-events': noEvents, path: true, entered }, 'stroke-purple-darken-3']"
       @click.prevent="click(true)"
+      v-if="showCable"
     />
     <circle
       :class="[{ 'no-events': noEvents }, 'stroke-purple-darken-3 fill-shades-white']"
@@ -41,6 +42,7 @@ export default {
     color: { type: String, default: '#5E35B1' },
     opacity: { type: Number, default: 0.3 },
     noEvents: { type: Boolean },
+    showCable: { type: Boolean, default: true },
   },
   data: function () {
     return {

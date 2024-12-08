@@ -3,12 +3,15 @@
     <synthesizer-initializer v-if="!loaded" :loading="loading" @interacted="initialize" :id="id" />
     <template v-else>
       <synthesizer-stage v-if="synthesizer !== null" :synthesizer="synthesizer" :modules="modules" :links="links" />
-      <v-toolbar collapse density="compact" color="deep-purple darken-2">
+      <v-btn-group divided class="position-absolute menu-btn-group" color="deep-purple darken-2" rounded="pill">
         <v-btn icon to="/synthesizers">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
         <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
-      </v-toolbar>
+        <v-btn icon @click="useLinksDisplay().toggle()">
+          <v-icon>{{ useLinksDisplay().displayed.value ? 'mdi-eye-outline' : 'mdi-eye-off-outline' }}</v-icon>
+        </v-btn>
+      </v-btn-group>
     </template>
   </div>
 </template>
@@ -26,8 +29,8 @@ definePageMeta({
 
 const id: string = useRoute().params.id as string;
 
-const loaded: Ref<Boolean> = ref(false);
-const loading: Ref<Boolean> = ref(false);
+const loaded: Ref<boolean> = ref(false);
+const loading: Ref<boolean> = ref(false);
 const tools: ITool[] = await repositories.tools.list();
 await useSynthesizer().fetch(id);
 const { modules, links, synthesizer } = useSynthesizer();
@@ -84,5 +87,10 @@ body, #__nuxt {
 #__nuxt {
   z-index: 2;
   overscroll-behavior: none;
+}
+
+.menu-btn-group {
+  top: 30px;
+  left: 30px;
 }
 </style>

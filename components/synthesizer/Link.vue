@@ -14,6 +14,7 @@ const { link } = defineProps({
       :end-x="link.destination.ax"
       :end-y="link.destination.ay"
       @click="useSynthesizer().removeLink(link.id)"
+      :show-cable="useLinksDisplay().displayed.value"
     />
   </g>
 </template>
