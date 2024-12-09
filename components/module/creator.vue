@@ -1,14 +1,7 @@
 <template>
   <v-dialog v-model="display" fullscreen>
     <template v-slot:activator="{ props }">
-      <v-tooltip location="bottom">
-        <template #activator="{ props: tooltipProps }">
-          <v-btn v-bind="{ ... props, ...tooltipProps }" icon>
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </template>
-        <span>Ajouter de nouveaux modules</span>
-      </v-tooltip>
+      <sp-button-with-tooltip v-bind="props" label="modules.add" />
     </template>
     <v-card>
       <v-toolbar>

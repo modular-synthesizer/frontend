@@ -33,6 +33,7 @@
     "actions": "Actions",
     "add": "Ajouter",
     "admin": "Administration",
+    "back": "Retour",
     "close": "Fermer",
     "create": "Créer",
     "delete": "Supprimer",
@@ -130,6 +131,10 @@
     "tools": "Outils"
   },
   "modules": {
+    "add": "Ajouter des modules",
+    "creator": {
+      "title": "Ajout de module"
+    },
     "filters": {
       "delay": {
         "short": "Délai",
@@ -185,9 +190,6 @@
         "title": "Sortie audio",
         "description": "Une sortie audio simple envoyant le patch sur votre sortie audio par défaut."
       }
-    },
-    "creator": {
-      "title": "Ajout de module"
     },
     "utilities": {
       "analyser": {
@@ -297,6 +299,11 @@
     "title": "Inscription"
   },
   "synthesizers": {
+    "cables": {
+      "hide": "Cacher les câbles",
+      "show": "Afficher les câbles"
+    },
+    "center": "Recentrer la vue",
     "create": {
       "labels": {
         "name": "Nom du synthétiseur",

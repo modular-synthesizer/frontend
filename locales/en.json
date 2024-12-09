@@ -33,6 +33,7 @@
     "actions": "Actions",
     "add": "Add",
     "admin": "Administration",
+    "back": "Back",
     "close": "Close",
     "create": "Create",
     "delete": "Delete",
@@ -130,6 +131,7 @@
     "tools": "Toolbox"
   },
   "modules": {
+    "add": "Add new modules",
     "creator": {
       "title": "Add module"
     },
@@ -297,6 +299,11 @@
     "title": "Registration"
   },
   "synthesizers": {
+    "cables": {
+      "hide": "Hide cables",
+      "show": "Show cables"
+    },
+    "center": "Recenter the view",
     "create": {
       "labels": {
         "name": "Synthesizer name",
