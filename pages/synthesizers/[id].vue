@@ -4,13 +4,32 @@
     <template v-else>
       <synthesizer-stage v-if="synthesizer !== null" :synthesizer="synthesizer" :modules="modules" :links="links" />
       <v-btn-group divided class="position-absolute menu-btn-group" color="deep-purple darken-2" rounded="pill">
-        <v-btn icon to="/synthesizers">
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
+        <v-tooltip location="bottom">
+          <template #activator="{ props }">
+            <v-btn icon to="/synthesizers" v-bind="props">
+              <v-icon>mdi-chevron-left</v-icon>
+            </v-btn>
+          </template>
+          <span>Revenir à la liste</span>
+        </v-tooltip>
         <module-creator :tools="tools" :synthesizer="synthesizer" @selected="insertModule" />
-        <v-btn icon @click="useLinksDisplay().toggle()">
-          <v-icon>{{ useLinksDisplay().displayed.value ? 'mdi-eye-outline' : 'mdi-eye-off-outline' }}</v-icon>
-        </v-btn>
+        <v-tooltip location="bottom">
+          <template #activator="{ props }">
+            <v-btn icon @click="useLinksDisplay().toggle()" v-bind="props">
+              <v-icon>{{ useLinksDisplay().displayed.value ? 'mdi-eye-outline' : 'mdi-eye-off-outline' }}</v-icon>
+            </v-btn>
+          </template>
+          <span v-if="useLinksDisplay().displayed.value">Cacher les cables</span>
+          <span v-else>Afficher les cables</span>
+        </v-tooltip>
+        <v-tooltip location="bottom">
+          <template #activator="{ props }">
+            <v-btn icon @click="useSynthesizer().resetReference()" v-bind="props">
+              <v-icon>mdi-compass-outline</v-icon>
+            </v-btn>
+          </template>
+          <span>Revenir à l'origine</span>
+        </v-tooltip>
       </v-btn-group>
     </template>
   </div>

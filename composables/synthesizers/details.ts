@@ -116,7 +116,13 @@ export function useSynthesizer() {
     })
   }
 
+  async function resetReference() {
+    synthesizer.value.x = 0;
+    synthesizer.value.y = 0;
+    synthesizer.value.scale = 1.0;
+  }
+
   return {
-    fetch, initialize, stop, modules, links, synthesizer, removeLink, disconnectModule, removeModule
+    fetch, initialize, stop, modules, links, synthesizer, removeLink, disconnectModule, removeModule, resetReference
   }
 }

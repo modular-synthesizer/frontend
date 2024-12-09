@@ -1,9 +1,14 @@
 <template>
   <v-dialog v-model="display" fullscreen>
     <template v-slot:activator="{ props }">
-      <v-btn v-bind="props" icon>
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
+      <v-tooltip location="bottom">
+        <template #activator="{ props: tooltipProps }">
+          <v-btn v-bind="{ ... props, ...tooltipProps }" icon>
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </template>
+        <span>Ajouter de nouveaux modules</span>
+      </v-tooltip>
     </template>
     <v-card>
       <v-toolbar>
@@ -62,11 +67,6 @@ export default {
     synthesizer: {
       type: Synthesizer,
       required: true
-    }
-  },
-  computed: {
-    session(): ISession {
-      return useAuthentication().session;
     }
   },
   methods: {
