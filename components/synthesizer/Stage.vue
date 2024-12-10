@@ -1,5 +1,5 @@
 <template>
-  <draggable-stage :key="synthesizerKey" :position="synthesizer" @move="save()" @zoom="save()" v-if="synthesizer">
+  <draggable-stage :position="synthesizer" @move="save()" @zoom="save()" v-if="synthesizer">
     <synthesizer-module v-for="mod in modules" :mod="mod" :hovered="hovered !== null && equals(hovered, mod)" />
     <synthesizer-link v-for="link in links" :link="link" />
     <LinkCreator />
@@ -8,13 +8,11 @@
 </template>
 
 <script lang="ts">
-import { v4 as uuid } from 'uuid';
 import { equals } from '~~/lib/interfaces/common/Identifiable';
 import { repositories } from '~~/lib/repositories';
 import Link from '~~/lib/wrappers/Link';
 import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
-import { useStates } from '~~/stores/synthesizers/states';
 
 export default {
   props: {
@@ -33,7 +31,6 @@ export default {
   },
   data: function() {
     return {
-      key: uuid(),
       repository: repositories.synthesizers,
     };
   },
@@ -41,9 +38,6 @@ export default {
     hovered() {
       return useHover().state.value.current;
     },
-    synthesizerKey() {
-      return `${this.key}--${this.synthesizer.id}`
-    }
   },
   methods: {
     save() {
