@@ -23,6 +23,7 @@
     "vuetify": "3.5.12"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^1.6.1"
+    "@nuxt/devtools": "^1.6.1",
+    "unctx": "^2.4.0"
   }
 }
