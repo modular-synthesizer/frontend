@@ -28,9 +28,10 @@ function syncPosition(position: Coordinates, { clientX, clientY }: MouseEvent) {
 
 /**
  * Sets the origin of a drag'n'drop where the user clicks and indicates he's currently dragging it.
+ * @param position the position that will be modified during the drag.
  * @param $event the mouse button down event that contains the coordinates where the drag starts.
  */
-export function dragStart(position: ScalablePosition, emit: Function, $event: MouseEvent) {
+export function dragStart(position: ScalablePosition, $event: MouseEvent) {
   useStates().setState(SynthState.DRAGGING_VIEW);
   syncPosition(origin, $event);
 

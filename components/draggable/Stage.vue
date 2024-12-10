@@ -1,10 +1,10 @@
 <template>
   <svg
-    @mousedown.left.stop="dragStart(position, emit, $event)"
+    @mousedown.left.stop="dragStart(position, $event)"
     @mouseleave="triggerDragEnd($event); emit('move')"
     @mouseup="triggerDragEnd($event); emit('move')"
 
-    @touchstart.passive="dragStart(position, emit, $event.touches[0] as any)"
+    @touchstart.passive="dragStart(position, $event.touches[0] as any)"
     @touchend.passive="triggerDragEnd($event.touches[0] as any); emit('move')"
 
     @wheel.passive.stop="setScale(position, $event); emit('zoom')"
