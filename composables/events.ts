@@ -40,6 +40,5 @@ export function dragStart(position: ScalablePosition, emit: Function, $event: Mo
       position.y += y - origin.y;
       syncPosition(origin, { clientX: x, clientY: y } as MouseEvent);
     },
-    end: () => emit("dragend"),
   });
 }

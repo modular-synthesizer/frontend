@@ -14,12 +14,12 @@ let dragEndCallback: DragEndCallback|null = null;
  * @param $event the mouse event triggering the drag (mouse button down).
  * @param callbacks the callbacks to call when moving with the mouse click pressed, or when ending the drag. 
  */
-export function startDragEvent($event: MouseEvent, { end, move }: { end: DragEndCallback | null, move: DragMoveCallback }) {
+export function startDragEvent($event: MouseEvent, { end, move }: { end?: DragEndCallback, move: DragMoveCallback }) {
   useContexts().hide();
   useStates().unblock();
   useStates().setState(SynthState.DRAGGING);
   declareDragMove(move);
-  if (end !== null) declareDragEnd(end);
+  if (end !== undefined) declareDragEnd(end);
   triggerDragMove($event);
 }
 
