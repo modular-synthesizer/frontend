@@ -26,7 +26,8 @@
       "common": "Modules génériques",
       "filters": "Noeuds de traitement du signal",
       "inputs": "Noeuds de génération de signaux",
-      "outputs": "Noeuds de sortie"
+      "outputs": "Noeuds de sortie",
+      "utilities": "Modules utilitaires"
     }
   },
   "common": {
@@ -132,6 +133,12 @@
   },
   "modules": {
     "add": "Ajouter des modules",
+    "common": {
+      "constant_source": {
+        "description": "Permet l'émission d'un signal constant, réglable via un bouton dédié.",
+        "title": "Signal constant"
+      }
+    },
     "creator": {
       "title": "Ajout de module"
     },
@@ -145,11 +152,6 @@
         "short": "Délai analogique",
         "title": "Délai analogique",
         "description": "Un effet de délai analogique pour donner du corps et du volume à vos compositions."
-      },
-      "Envelope": {
-        "short": "ADSR",
-        "title": "Enveloppe (ADSR)",
-        "description": "Un noeud de contrôle du volume pour des montées et descentes plus maîtrisées."
       },
       "VCA": {
         "short": "VCA",
@@ -167,6 +169,11 @@
         "short": "LFO",
         "title": "Oscillateur basse fréquence (LFO)",
         "description": "Un oscillateur basse fréquence principalement utilisé pour orchestrer les paramètres d'autres noeuds dans le temps."
+      },
+      "microphone": {
+        "short": "Mic",
+        "title": "Microphone",
+        "description": "Un accès direct au microphone connecté à votre ordinateur."
       },
       "MidiKeyboard": {
         "short": "MIDI",
@@ -192,6 +199,11 @@
       }
     },
     "utilities": {
+      "adsr": {
+        "short": "ADSR",
+        "title": "Enveloppe (ADSR)",
+        "description": "Un noeud de contrôle du volume pour des montées et descentes plus maîtrisées."
+      },
       "analyser": {
         "short": "Oscilloscope",
         "title": "Oscilloscope",

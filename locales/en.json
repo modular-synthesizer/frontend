@@ -26,7 +26,8 @@
       "common": "Common modules",
       "filters": "Filtering modules",
       "inputs": "Generating modules",
-      "outputs": "Outputing modules"
+      "outputs": "Outputing modules",
+      "utilities": "Utility modules"
     }
   },
   "common": {
@@ -132,6 +133,12 @@
   },
   "modules": {
     "add": "Add new modules",
+    "common": {
+      "constant_source": {
+        "description": "Emits a constant signal you can set the value of",
+        "title": "Constant source"
+      }
+    },
     "creator": {
       "title": "Add module"
     },
@@ -145,11 +152,6 @@
         "short": "Analog delay",
         "title": "Analog delay",
         "description": "An analog delay effect to give some space to your sound."
-      },
-      "Envelope": {
-        "short": "ADSR",
-        "title": "Envelope (ADSR)",
-        "description": "A volume control node for it to go up and down mort smoothly when playing."
       },
       "VCA": {
         "short": "VCA",
@@ -167,6 +169,11 @@
         "short": "LFO",
         "title": "Low-frequency Oscillator (LFO)",
         "description": "A simple modulation oscillator piloting and automating other parameters."
+      },
+      "microphone": {
+        "short": "Mic",
+        "title": "Microphone",
+        "description": "A node used to directly access the microphone on your browser."
       },
       "MidiKeyboard": {
         "short": "MIDI",
@@ -192,6 +199,11 @@
       }
     },
     "utilities": {
+      "adsr": {
+        "short": "ADSR",
+        "title": "Envelope (ADSR)",
+        "description": "A volume control node for it to go up and down mort smoothly when playing."
+      },
       "analyser": {
         "short": "Oscilloscope",
         "title": "Oscilloscope",
