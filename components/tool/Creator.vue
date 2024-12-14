@@ -14,7 +14,7 @@ import { useI18n } from 'vue-i18n';
 import ITool from '~~/lib/interfaces/ITool';
 import { repositories } from '~~/lib/repositories';
 import { required } from '~~/lib/rules';
-import { ToolTabs } from '~~/lib/types/ToolTabs';
+import type { ToolTabs } from '~~/lib/types/ToolTabs';
 
 const props = defineProps({
   modelValue: { type: Object as PropType<ITool>, required: true },
@@ -22,7 +22,7 @@ const props = defineProps({
 });
 
 const tool = ref(props.modelValue);
-const mode: Ref<ToolTabs> = ref('appearance');
+const mode: Ref<ToolTabs> = ref(tool.value.id === '' ? 'infos': 'appearance');
 const valid: Ref<boolean|null> = ref(null);
 const form = ref<HTMLFormElement|null>(null);
 const createMode: Ref<boolean> = ref(props.creationMode);

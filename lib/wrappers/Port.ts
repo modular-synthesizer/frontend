@@ -46,6 +46,7 @@ export default class Port implements IPort {
     this.mod.channels.forEach((channel: Channel) => {
       const fromNode: InnerAudioNode = origin.mod.channel(channel.index).getNode(origin.target) as InnerAudioNode
       const toNode: InnerAudioNode = channel.getNode(this.target) as InnerAudioNode;
+      console.log(fromNode.node, toNode.node)
       fromNode.node.connect(toNode.node, origin.index, this.index);
     });
   }

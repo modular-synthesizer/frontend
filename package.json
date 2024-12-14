@@ -2,25 +2,25 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "COMPATIBILITY_DATE=2024-12-11 nuxt dev",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@mdi/font": "^7.4.47",
-    "@types/lodash": "^4.17.0",
-    "@vuelidate/core": "^2.0.3",
-    "@vuelidate/validators": "^2.0.4",
-    "axios": "^1.6.8",
-    "lodash": "^4.17.21",
-    "nuxt": "3.2.2",
-    "sass": "^1.75.0",
-    "vue": "3.4.25",
-    "vue-i18n": "^9.13.1",
-    "vue-router": "^4.3.2",
-    "vuetify": "3.5.12"
+    "@mdi/font": "7.4.47",
+    "@types/lodash": "4.17.13",
+    "@vuelidate/core": "2.0.3",
+    "@vuelidate/validators": "2.0.4",
+    "axios": "1.7.9",
+    "lodash": "4.17.21",
+    "nuxt": "3.14.1592",
+    "sass": "1.82.0",
+    "vue": "3.5.13",
+    "vue-i18n": "10.0.5",
+    "vue-router": "4.5.0",
+    "vuetify": "3.7.5"
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.6.1",
