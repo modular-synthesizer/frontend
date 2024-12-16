@@ -1,7 +1,8 @@
 import { IControl } from "../IControl";
 import IParameter from "../IParameter";
 import IPort from "../IPort";
-import { InnerLink, InnerNode } from "../ITool";
+import type { InnerNode } from "~/types/tools/InnerNode";
+import type { InnerLink } from "~/types/tools/InnerLink";
 import { Identifiable } from "../common/Identifiable";
 import IPlacableModule from "./IPlacableModule";
 

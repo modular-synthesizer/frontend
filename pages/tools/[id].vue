@@ -3,10 +3,10 @@
 </template>
 
 <script lang="ts" setup>
-import ITool from '~~/lib/interfaces/ITool';
+import type { Tool } from '~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
 
 definePageMeta({ layout: 'empty' });
 
-const tool: ITool = await repositories.tools.get(useRoute().params.id as string);
+const tool: Tool = await repositories.tools.get(useRoute().params.id as string);
 </script>
