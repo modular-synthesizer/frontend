@@ -32,10 +32,10 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
-import ICategory from '~~/lib/interfaces/ICategory';
+import type { PropType } from 'vue';
 import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
+import type { Category } from '~/types/tools/Category';
 
 
 type Rules = {[key: string]: Function[]}
@@ -47,5 +47,5 @@ const props = defineProps({
 
 const tool = computed(() => props.modelValue);
 
-const categories: Ref<ICategory[]> = ref(await repositories.categories.list());
+const categories: Ref<Category[]> = ref(await repositories.categories.list());
 </script>

@@ -45,12 +45,12 @@
 </template>
 
 <script lang="ts" setup>
-import ICategory from '~~/lib/interfaces/ICategory';
+import type { Category } from '~/types/tools/Category';
 import { repositories } from '~~/lib/repositories';
 
 const { categories: repo } = repositories;
-const category: Ref<ICategory> = ref({ id: "", name: "" });
-const categories: Ref<ICategory[]> = ref(await repo.list());
+const category: Ref<Category> = ref({ id: "", name: "" });
+const categories: Ref<Category[]> = ref(await repo.list());
 const add = repo.add(categories.value);
 const remove = repo.remove(categories.value);
 </script>

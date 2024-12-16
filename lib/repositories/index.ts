@@ -10,20 +10,20 @@ import LinksRepository from "./LinksRepository"
 import { ModulesRepository } from "./ModulesRepository"
 import { Repository } from "./utils/Repository"
 import IApplication from "../interfaces/IApplication"
-import ICategory from "../interfaces/ICategory"
 import AccountsRepository from "./AccountsRepository"
 import { IControl } from "../interfaces/IControl"
 import SessionsRepository from "./SessionsRepository"
 import SynthesizersRepository from "./SynthesizersRepository"
 import ToolsRepository from "./toolsRepository"
 import { ToolElementsRepository } from "./utils/ToolElementsRepository"
+import type { Category } from "~/types/tools/Category";
 
 export type Repositories = { [key: string]: Repository<any> }
 
 export const repositories = {
   accounts: new AccountsRepository('accounts'),
   applications: new Repository<IApplication>('applications'),
-  categories: new Repository<ICategory>('categories'),
+  categories: new Repository<Category>('categories'),
   generators: new Repository<IGenerator>('generators'),
   groups: new Repository<IGroup>('groups'),
   links: new LinksRepository('links'),
