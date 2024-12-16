@@ -1,6 +1,6 @@
 import { find } from "lodash";
 import { IGenerator } from "../interfaces/IGenerator";
-import { InnerNode } from "../interfaces/ITool";
+import type { InnerNode } from '~~/types/tools/InnerNode';
 import InnerAudioNode from "../wrappers/InnerAudioNode";
 import { useAudio } from "~~/composables/synthesizers/useAudio";
 

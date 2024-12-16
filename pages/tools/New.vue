@@ -4,10 +4,11 @@
 
 <script setup lang="ts">
 import ToolsFactory from '~~/lib/factories/ToolsFactory';
-import ITool from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
 
-const tool: Ref<ITool> = ref(ToolsFactory.empty());
+const tool: Ref<Tool> = ref(ToolsFactory.empty());
 
+  // @ts-ignore
 definePageMeta({ layout: 'empty' });
 
 onMounted(() => {

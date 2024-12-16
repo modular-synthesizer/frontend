@@ -35,25 +35,29 @@
 </template>
 
 <script lang="ts" setup>
-import ITool, { InnerLink, InnerNode, IToolParameter, IToolPort } from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
+import type { InnerLink } from '~~/types/tools/InnerLink';
+import type { InnerNode } from '~~/types/tools/InnerNode';
+import type { ToolParameter } from '~~/types/tools/Parameter';
+import type { ToolPort } from '~~/types/tools/Port';
 import { repositories } from '~~/lib/repositories';
 import { ToolTabs } from '~~/lib/types/ToolTabs';
 
 const { tool, mode, creationMode } = defineProps({
-  tool: { type: Object as PropType<ITool>, required: true },
+  tool: { type: Object as PropType<Tool>, required: true },
   creationMode: { type: Boolean, default: false },
   mode: { type: String as PropType<ToolTabs>, default: 'infos' }
 });
 
-const emit = defineEmits<{ modeChanged: [ ToolTabs ], save: [ ITool ] }>();
+const emit = defineEmits<{ modeChanged: [ ToolTabs ], save: [ Tool ] }>();
 
 const open = ref([]);
 
-async function createPort(port: IToolPort) {
+async function createPort(port: ToolPort) {
   tool.ports.push(await repositories.tool.ports.create(tool, port));
   emit('save', tool)
 }
-async function createParameter(parameter: IToolParameter) {
+async function createParameter(parameter: ToolParameter) {
   tool.parameters.push(await repositories.tool.parameters.create(tool, parameter));
   emit('save', tool)
 }

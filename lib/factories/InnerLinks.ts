@@ -1,4 +1,4 @@
-import { InnerLink } from "../interfaces/ITool";
+import type { InnerLink } from '~~/types/tools/InnerLink';
 import InnerAudioNode from "../wrappers/InnerAudioNode";
 import { find } from "lodash"
 

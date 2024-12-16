@@ -15,13 +15,15 @@
 <script setup lang="ts">
 import { findIndex } from 'lodash';
 import ICoordinates from '~~/lib/interfaces/ICoordinates';
-import ITool, { InnerLink, InnerNode } from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
+import type { InnerLink } from '~~/types/tools/InnerLink';
+import type { InnerNode } from '~~/types/tools/InnerNode';
 
 const STROKE_WIDTH = 4;
 
 const props = defineProps({
   link: { type: Object as PropType<InnerLink>, required: true },
-  tool: { type: Object as PropType<ITool>, required: true },
+  tool: { type: Object as PropType<Tool>, required: true },
   selected: { type: Boolean, default: false }
 });
 
@@ -31,10 +33,6 @@ const emit = defineEmits<{ selected: [link: InnerLink], deselected: [] }>();
 
 function hasNodeEnd(link: InnerLink): boolean {
   return !link.to.node.includes('.');
-}
-
-function arrowTransform(coords: ICoordinates) {
-  return `translate(${coords.x} ${coords.y})`
 }
 
 function circleCoords() {

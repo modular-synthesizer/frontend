@@ -34,14 +34,14 @@
 <script setup lang="ts">
 import { PropType } from 'vue';
 import ICategory from '~~/lib/interfaces/ICategory';
-import ITool from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
 
 
 type Rules = {[key: string]: Function[]}
 
 const props = defineProps({
-  modelValue: { type: Object as PropType<ITool>, required: true },
+  modelValue: { type: Object as PropType<Tool>, required: true },
     rules: { type: Object as PropType<Rules>, default: () =>({})}
 });
 

@@ -8,7 +8,8 @@ import Channel from "./Channel";
 import IParameter from "../interfaces/IParameter";
 import InnerAudioNode from "./InnerAudioNode";
 import IModule from "../interfaces/modules/IModule";
-import { InnerLink, InnerNode } from "../interfaces/ITool";
+import type { InnerLink } from '~~/types/tools/InnerLink';
+import type { InnerNode } from '~~/types/tools/InnerNode';
 
 type Payload = IModule & { channels: Channel[] }
 

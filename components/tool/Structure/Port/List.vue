@@ -11,16 +11,17 @@
 </template>
 
 <script lang="ts" setup>
-import ITool, { IToolPort } from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
+import type { ToolPort } from '~~/types/tools/Port';
 
 const { tool } = defineProps({
-  ports: { type: Array<IToolPort>, default: [] },
-  tool: { type: Object as PropType<ITool>, required: true }
+  ports: { type: Array<ToolPort>, default: [] },
+  tool: { type: Object as PropType<Tool>, required: true }
 })
 
-const emit = defineEmits<{ edit: [ item: IToolPort ] }>()
+const emit = defineEmits<{ edit: [ item: ToolPort ] }>()
 
-function editPort(port: IToolPort) {
+function editPort(port: ToolPort) {
   emit('edit', port)
 }
 </script>

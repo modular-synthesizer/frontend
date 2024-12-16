@@ -1,4 +1,5 @@
 import type { Identified } from "../utils/Identified";
+import type { Category } from "./Category";
 import type { Control } from "./Control";
 import type { InnerLink } from "./InnerLink";
 import type { InnerNode } from "./InnerNode";
@@ -12,6 +13,8 @@ import type { ToolPort } from "./Port";
 export type Tool = Identified & {
     // The unique identifier of the catgory this tool is placed into.
     categoryId: string;
+    // The instanciated category to be used in the interface.
+    category: Category;
     // The number of slots the tool is taken when instanciated as a module.
     slots: number;
     // The name of the tool, used as a translation key.

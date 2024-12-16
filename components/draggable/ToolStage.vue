@@ -19,18 +19,18 @@
 
 <script setup lang="ts">
 import { clamp } from 'lodash';
-import { IControl } from '~~/lib/interfaces/IControl';
-import ITool from '~~/lib/interfaces/ITool';
+import type { Tool } from "~~/types/tools/Tool";
+import type { Control } from "~~/types/tools/Control";
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 
 const { x, y, scale, tool } = defineProps({
   x: { type: Number, default: 0 },
   y: { type: Number, default: 0 },
   scale: { type: Number, default: 1 },
-  tool: {type: Object as PropType<ITool>, required: true }
+  tool: {type: Object as PropType<Tool>, required: true }
 });
 
-const emit = defineEmits<{ move: [ IControl ]}>();
+const emit = defineEmits<{ move: [ Control ]}>();
 
 const selection = computed(() => useControlSelection().selected.value);
 
@@ -40,7 +40,7 @@ function roundBy(value: number, round: number, max: number) {
 }
 
 function moveControl($event: MouseEvent) {
-  const control: IControl|undefined = useControlSelection().selected.value;
+  const control: Control|undefined = useControlSelection().selected.value;
   if (control === undefined) return;
   const { ax, ay } = {
     ax: ($event.clientX / 1.5 - 50),

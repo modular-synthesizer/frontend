@@ -21,18 +21,20 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue';
-import ITool, { InnerNode, IToolPort } from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
+import type { ToolPort } from '~~/types/tools/Port';
+import type { InnerNode } from '~~/types/tools/InnerNode';
 
 const props = defineProps({
   node: { type: Object as PropType<InnerNode>, required: true },
   selected: { type: Boolean, default: false},
-  tool: { type: Object as PropType<ITool>, required: true }
+  tool: { type: Object as PropType<Tool>, required: true }
 })
 
 const emit = defineEmits<{
   select: [item: InnerNode],
   moveSelected: [x: number, y: number],
-  editPort: [ item: IToolPort ]
+  editPort: [ item: ToolPort ]
 }>();
 </script>
 

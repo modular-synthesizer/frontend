@@ -37,12 +37,14 @@
 </template>
 
 <script lang="ts" setup>
-import ITool, { InnerLink, InnerNode } from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
+import type { InnerLink } from '~~/types/tools/InnerLink';
+import type { InnerNode } from '~~/types/tools/InnerNode';
 
 const form: Ref = ref();
 
 const props = defineProps({
-  tool: { type: Object as PropType<ITool>, required: true }
+  tool: { type: Object as PropType<Tool>, required: true }
 })
 
 function createEmptyLink(): InnerLink {
@@ -61,7 +63,7 @@ function getItems() {
   return props.tool.nodes.filter((n: InnerNode) => n.inputs > 0).map((n: InnerNode) => n.name)
 }
 
-function nodeExists(tool: ITool, name: string) {
+function nodeExists(tool: Tool, name: string) {
   return tool.nodes.findIndex((n: InnerNode) => n.name === name) > -1
 }
 

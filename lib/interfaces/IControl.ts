@@ -4,5 +4,4 @@ import { Identifiable } from "./common/Identifiable";
 export interface IControl extends Identifiable {
   component: ComponentNames;
   payload: any;
-  editing: boolean;
 }

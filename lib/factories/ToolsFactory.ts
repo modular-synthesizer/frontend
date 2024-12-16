@@ -1,7 +1,7 @@
-import ITool from "../interfaces/ITool"
+import type { Tool } from '~~/types/tools/Tool';
 
 export class ToolsFactory {
-  public empty(): ITool {
+  public empty(): Tool {
     return {
       id: "",
       name: "",

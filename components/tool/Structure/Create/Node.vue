@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { clone, sortBy } from 'lodash';
 import { IGenerator } from '~~/lib/interfaces/IGenerator';
-import { InnerNode } from '~~/lib/interfaces/ITool';
+import type { InnerNode } from '~~/types/tools/InnerNode';
 import { repositories } from '~~/lib/repositories';
 
 const emit = defineEmits<{ created: [ node: InnerNode]}>();

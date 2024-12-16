@@ -7,10 +7,10 @@
 </template>
 
 <script setup lang="ts">
-import ITool from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
 
 const props = defineProps({
-  tool: { type: Object as PropType<ITool>, required: true },
+  tool: { type: Object as PropType<Tool>, required: true },
   creationMode: { type: Boolean, default: false },
 });
 </script>

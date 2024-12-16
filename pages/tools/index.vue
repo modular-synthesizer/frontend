@@ -49,9 +49,9 @@
 </template>
 
 <script setup lang="ts">
-import ITool from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
 
-const tools: Ref<ITool[]> = ref(await repositories.tools.list());
+const tools: Ref<Tool[]> = ref(await repositories.tools.list());
 const remove = repositories.tools.remove(tools.value);
 </script>

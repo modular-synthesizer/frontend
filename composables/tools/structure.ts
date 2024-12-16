@@ -1,43 +1,47 @@
 import { max, uniq } from "lodash"
-import ICoordinates from "~~/lib/interfaces/ICoordinates"
-import ITool, { InnerLink, InnerNode, IToolParameter, IToolPort } from "~~/lib/interfaces/ITool"
+import type { Tool } from '~~/types/tools/Tool';
+import type { ToolPort } from '~~/types/tools/Port';
+import type { ToolParameter } from '~~/types/tools/Parameter';
+import type { InnerLink } from '~~/types/tools/InnerLink';
+import type { InnerNode } from '~~/types/tools/InnerNode';
+import type { Coordinates } from "~/types/utils/Coordinates";
 
-export function parametersFor(node: InnerNode, tool: ITool): string[] {
+export function parametersFor(node: InnerNode, tool: Tool): string[] {
   return uniq([
     ...parametersFromLinks(node, tool),
     ...parametersFromParams(node, tool)
   ]);
 }
 
-export function parametersFromLinks(node: InnerNode, tool: ITool) {
+export function parametersFromLinks(node: InnerNode, tool: Tool) {
   return tool.links.filter((link: InnerLink) => {
     return link.to.node.includes('.') && link.to.node.split('.')[0] === node.name;
   })
   .map((l: InnerLink) =>l.to.node.split('.')[1]);
 }
 
-export function parametersFromParams(node: InnerNode, tool: ITool) {
-  return tool.parameters.filter((p: IToolParameter) => {
+export function parametersFromParams(node: InnerNode, tool: Tool) {
+  return tool.parameters.filter((p: ToolParameter) => {
     return p.targets.includes(node.name)
   })
-  .map((p: IToolParameter) => p.field)
+  .map((p: ToolParameter) => p.field)
 }
 
-export function maxIndexFrom(node: InnerNode, tool: ITool): number {
+export function maxIndexFrom(node: InnerNode, tool: Tool): number {
   return max([
     ...tool.links.filter((l: InnerLink) => l.from.node === node.name).map((l: InnerLink) => l.from.index + 1),
-    ...tool.ports.filter((p: IToolPort) => p.target === node.name && p.kind === 'output').map((p: IToolPort) => p.index + 1)
+    ...tool.ports.filter((p: ToolPort) => p.target === node.name && p.kind === 'output').map((p: ToolPort) => p.index + 1)
   ]) || 0
 }
 
-export function maxIndexTo(node: InnerNode, tool: ITool): number {
+export function maxIndexTo(node: InnerNode, tool: Tool): number {
   return max([
     ...tool.links.filter((l: InnerLink) => l.to.node === node.name).map((l: InnerLink) => l.to.index + 1),
-    ...tool.ports.filter((p: IToolPort) => p.target === node.name && p.kind === 'input').map((p: IToolPort) => p.index + 1)
+    ...tool.ports.filter((p: ToolPort) => p.target === node.name && p.kind === 'input').map((p: ToolPort) => p.index + 1)
   ]) || 0
 }
 
-export function getNodeHeight(node: InnerNode, tool: ITool) {
+export function getNodeHeight(node: InnerNode, tool: Tool) {
   const np: number = parametersFor(node, tool).length
   const paramsHeight: number = TITLE_HEIGHT + np * PARAM_HEIGHT;
   const fromPortsHeight: number = PORT_HEIGHT * maxIndexFrom(node, tool) + 15;
@@ -45,7 +49,7 @@ export function getNodeHeight(node: InnerNode, tool: ITool) {
   return max([paramsHeight, fromPortsHeight, toPortsHeight]);
 }
 
-export function getStartCoords(link: InnerLink, tool: ITool): ICoordinates {
+export function getStartCoords(link: InnerLink, tool: Tool): Coordinates {
   const node: InnerNode = getStartNode(link, tool);
   return {
     x: node.x + NODE_WIDTH,
@@ -53,7 +57,7 @@ export function getStartCoords(link: InnerLink, tool: ITool): ICoordinates {
   }
 }
 
-export function getEndCoords(link: InnerLink, tool: ITool): ICoordinates {
+export function getEndCoords(link: InnerLink, tool: Tool): Coordinates {
   const node: InnerNode = getEndNode(link, tool);
   return {
     x: node.x,
@@ -61,15 +65,15 @@ export function getEndCoords(link: InnerLink, tool: ITool): ICoordinates {
   }
 }
 
-export function getStartNode(link: InnerLink, tool: ITool): InnerNode {
+export function getStartNode(link: InnerLink, tool: Tool): InnerNode {
   return tool.nodes.find((n: InnerNode) => n.name === link.from.node);
 }
 
-export function getEndNode(link: InnerLink, tool: ITool): InnerNode {
+export function getEndNode(link: InnerLink, tool: Tool): InnerNode {
   return tool.nodes.find((n: InnerNode) => n.name === link.to.node);
 }
 
-export function getParamCoords(link: InnerLink, tool: ITool) {
+export function getParamCoords(link: InnerLink, tool: Tool) {
   const [ nodeName, paramName ]: string[] = link.to.node.split('.');
   const node: InnerNode = tool.nodes.find((n: InnerNode) => n.name === nodeName);
   const idx: number = parametersFor(node, tool).indexOf(paramName);

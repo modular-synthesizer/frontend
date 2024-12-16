@@ -1,6 +1,9 @@
 import { IGenerator } from "../interfaces/IGenerator"
 import IMembership from "../interfaces/synthesizers/IMembership"
-import { InnerLink, InnerNode, IToolParameter, IToolPort } from "../interfaces/ITool"
+import type { ToolPort } from '~~/types/tools/Port';
+import type { ToolParameter } from '~~/types/tools/Parameter';
+import type { InnerLink } from '~~/types/tools/InnerLink';
+import type { InnerNode } from '~~/types/tools/InnerNode';
 import IGroup from "../interfaces/permissions/IGroup"
 import IRight from "../interfaces/permissions/IRight"
 import LinksRepository from "./LinksRepository"
@@ -30,8 +33,8 @@ export const repositories = {
     controls: new ToolElementsRepository<IControl>('controls'),
     links: new ToolElementsRepository<InnerLink>('links'),
     nodes: new ToolElementsRepository<InnerNode>('nodes'),
-    parameters: new ToolElementsRepository<IToolParameter>('parameters'),
-    ports: new ToolElementsRepository<IToolPort>('ports'),
+    parameters: new ToolElementsRepository<ToolParameter>('parameters'),
+    ports: new ToolElementsRepository<ToolPort>('ports'),
   },
   rights: new Repository<IRight>('rights'),
   sessions: new SessionsRepository('sessions'),
