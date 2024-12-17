@@ -9,12 +9,12 @@
 </template>
 
 <script setup lang="ts">
-import IAccount from '@/lib/interfaces/IAccount'
+import type { Account } from '~/types/Account'
 
 const { tooltip, role, account, icon } = defineProps({
   tooltip: { type: String, required: true },
   role: { type: String, default: 'read' },
-  account: { type: Object as PropType<IAccount>, required: true },
+  account: { type: Object as PropType<Account>, required: true },
   icon: { type: String, default: 'plus' }
 });
 
