@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { createEmptyTool } from '~/utils/functions/tools';
+import { createEmptyTool } from '~/utils/factories/tools';
 import type { Tool } from '~~/types/tools/Tool';
 
 const tool: Ref<Tool> = ref(createEmptyTool());

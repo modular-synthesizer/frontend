@@ -11,7 +11,7 @@ import Mod from "~~/lib/wrappers/Mod";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { useAudio } from "./useAudio";
 import type { Cable } from "~/types/Cable";
-import { createCable } from "~/utils/factories/CableFactory";
+import { createCable } from "~/utils/factories/cables";
 
 /** The currently displayed synthesizer, mainly used for position and zoom level */
 let synthesizer!: Ref<Synthesizer>;

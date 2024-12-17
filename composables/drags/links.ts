@@ -1,6 +1,6 @@
 import type { Cable } from "~/types/Cable";
 import type { Coordinates } from "~/types/utils/Coordinates";
-import { createCable } from "~/utils/factories/CableFactory";
+import { createCable } from "~/utils/factories/cables";
 import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { repositories } from "~~/lib/repositories";
 import Port from "~~/lib/wrappers/Port";
