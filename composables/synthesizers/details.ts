@@ -1,23 +1,24 @@
 import { find, remove, uniqBy } from "lodash";
 import ModulesFactory from "~~/lib/factories/ModulesFactory";
-import { IGenerator } from "~~/lib/interfaces/IGenerator";
-import ILink from "~~/lib/interfaces/ILink";
-import IModule from "~~/lib/interfaces/modules/IModule";
-import ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
+import type { IGenerator } from "~~/lib/interfaces/IGenerator";
+import type ILink from "~~/lib/interfaces/ILink";
+import type IModule from "~~/lib/interfaces/modules/IModule";
+import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { managers } from "~~/lib/managers";
 import { repositories } from "~~/lib/repositories";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
-import Link from "~~/lib/wrappers/Link";
 import Mod from "~~/lib/wrappers/Mod";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { useAudio } from "./useAudio";
+import type { Cable } from "~/types/Cable";
+import { createCable } from "~/utils/factories/CableFactory";
 
 /** The currently displayed synthesizer, mainly used for position and zoom level */
 let synthesizer!: Ref<Synthesizer>;
 /** The list of currently displayed modules */
 const modules: Ref<Mod[]> = ref([]);
 /** The list of currently displayed links */
-const links: Ref<Link[]> = ref([]);
+const links: Ref<Cable[]> = ref([]);
 
 export function useSynthesizer() {
 
@@ -70,7 +71,11 @@ export function useSynthesizer() {
       return find(usePorts().ports, {id: ilink.from}) !== undefined
           && find(usePorts().ports, {id: ilink.to}) !== undefined
     })
-    .forEach((ilink: ILink) => links.value.push(new Link(ilink)));
+    .forEach((link: ILink) => {
+      const cable: Cable = createCable(link.id, link.from, link.to, link.color);
+      cable.to.connect(cable.from, cable);
+      links.value.push(cable);
+    });
   }
 
   /**
@@ -96,12 +101,10 @@ export function useSynthesizer() {
     modules.value = [];
   }
 
-  async function removeLink(id: string) {
-    const found: Link|undefined = find(links.value, { id })
-    if (found === undefined) return;
-    found.disconnect();
-    remove(links.value, { id });
-    await repositories.links.delete(id);
+  async function removeLink(cable: Cable) {
+    cable.to.disconnect(cable.from);
+    remove(links.value, cable);
+    await repositories.links.delete(cable.id);
   }
 
   async function removeModule(mod: Mod) {
@@ -111,9 +114,7 @@ export function useSynthesizer() {
   }
 
   async function disconnectModule(mod: Mod) {
-    mod.connections.forEach((link: Link) => {
-      useSynthesizer().removeLink(link.id);
-    })
+    mod.connections.forEach(useSynthesizer().removeLink);
   }
 
   async function resetReference() {

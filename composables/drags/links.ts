@@ -1,7 +1,8 @@
-import ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
+import type { Coordinates } from "~/lib/types/Coordinates";
+import type { Cable } from "~/types/Cable";
+import { createCable } from "~/utils/factories/CableFactory";
+import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { repositories } from "~~/lib/repositories";
-import { Coordinates } from "~~/lib/types/Coordinates"
-import Link from "~~/lib/wrappers/Link";
 import Port from "~~/lib/wrappers/Port";
 
 type StateType = {
@@ -39,7 +40,7 @@ function end() {
 async function createLink() {
   const { startPort: from, endPort: to } = linkCreationState.value;
   if (!from || !to) return
-  const insertion: Link = new Link({ id: '', from: from.id, to: to.id, color: 'red' });
+  const insertion: Cable = createCable('', from.id, to.id, 'red');
   useSynthesizer().links.value.push(insertion);
   const payload = {
     id: '',

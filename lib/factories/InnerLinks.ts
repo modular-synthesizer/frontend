@@ -1,6 +1,4 @@
 import type { InnerLink } from '~~/types/tools/InnerLink';
-import InnerAudioNode from "../wrappers/InnerAudioNode";
-import { find } from "lodash"
 import type { ChannelNodes } from '~/types/modules/Channel';
 
 class InnerLinksFactory {

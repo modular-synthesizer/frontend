@@ -29,7 +29,6 @@
 </template>
 
 <script lang="ts">
-import { startLinkCreation } from '~~/composables/drags/links';
 import { PORT_RADIUS } from '~~/lib/utils/constants';
 import Mod from '~~/lib/wrappers/Mod';
 import Port from '~~/lib/wrappers/Port';

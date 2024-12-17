@@ -1,9 +1,9 @@
 import type IPort from "../interfaces/IPort";
-import Link from "./Link";
 import Mod from "./Mod";
 import type { IControl } from "../interfaces/IControl";
 import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 import type { Channel } from "~/types/modules/Channel";
+import type { Cable } from "~/types/Cable";
 
 export default class Port implements IPort {
   id: string;
@@ -13,7 +13,7 @@ export default class Port implements IPort {
   mod: Mod;
   kind: string;
 
-  public link: Link|null = null;
+  public link: Cable|null = null;
 
   constructor({id, index, name, target, kind}: IPort, mod: Mod) {
     this.id = id;
@@ -38,7 +38,7 @@ export default class Port implements IPort {
    * input ports (destinations), eg parameters ports and module input ports.
    * @param inputPort 
    */
-  public connect(origin: Port, via: Link) {
+  public connect(origin: Port, via: Cable) {
     this.link = via;
     origin.link = via;
 
@@ -76,7 +76,7 @@ export default class Port implements IPort {
     return this.control.payload.y + this.mod.rack * RACK_HEIGHT;
   }
 
-  public get links(): Link[] {
+  public get links(): Cable[] {
     return !this.link ? [] : [this.link];
   }
 }

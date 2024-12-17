@@ -1,7 +1,6 @@
 import Port from "./Port";
 import Parameter from "./Parameter";
 import { find, flatten, some } from 'lodash';
-import Link from "./Link";
 import { type IControl } from "../interfaces/IControl";
 import type IPort from "../interfaces/IPort";
 import type IParameter from "../interfaces/IParameter";
@@ -9,6 +8,7 @@ import type IModule from "../interfaces/modules/IModule";
 import type { InnerLink } from '~~/types/tools/InnerLink';
 import type { InnerNode } from '~~/types/tools/InnerNode';
 import type { Channel } from "~/types/modules/Channel";
+import type { Cable } from "~/types/Cable";
 
 type Payload = IModule & { channels: Channel[] }
 
@@ -60,7 +60,7 @@ export default class Mod implements IModule {
     return this.parameters.find((p: Parameter) => p.name === name) as Parameter;
   }
 
-  public get connections(): Link[] {
+  public get connections(): Cable[] {
     return flatten(this.ports.map((port: Port) => port.links))
   }
 
