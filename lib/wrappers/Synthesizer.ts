@@ -1,7 +1,7 @@
-import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
+import type ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import Mod from "./Mod";
-import ICoordinates from "../interfaces/ICoordinates";
-import IMembership from "../interfaces/synthesizers/IMembership";
+import type IMembership from "../interfaces/synthesizers/IMembership";
+import type { Coordinates } from "~/types/utils/Coordinates";
 
 /**
  * A synthesizer is the main object of the application. It is materialized
@@ -64,7 +64,7 @@ export default class Synthesizer implements ISynthesizer {
     return "[" + this.id + " " + this.name + "]";
   }
 
-  public get coordinates(): ICoordinates {
+  public get coordinates(): Coordinates {
     return { x: this.x, y: this.y };
   }
 

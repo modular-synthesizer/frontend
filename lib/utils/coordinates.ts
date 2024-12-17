@@ -1,9 +1,5 @@
+import type { Coordinates } from "~/types/utils/Coordinates";
 import { RACK_HEIGHT, SLOT_SIZE } from "~~/lib/utils/constants";
-
-interface ICoordinates {
-  x: number;
-  y: number;
-}
 
 /**
  * Gets the position of the cursor inside the current synthesizer's racks.
@@ -11,7 +7,7 @@ interface ICoordinates {
  *   on the whole page.
  * @return An {x,y} object representing the coordinates in the synth.
  */
-export function relativePosition(ax: number, ay: number): ICoordinates {
+export function relativePosition(ax: number, ay: number): Coordinates {
   const synth = useSynthesizer().synthesizer.value;
   if (synth === null) return { x: 0, y: 0 };
   return {
@@ -29,7 +25,7 @@ export function relativePosition(ax: number, ay: number): ICoordinates {
  *   cursor currently is.
  */
 export function getRack(x: number, y: number): number {
-  const position: ICoordinates = relativePosition(x, y);
+  const position: Coordinates = relativePosition(x, y);
   return Math.floor(position.y/ RACK_HEIGHT);
 }
 
@@ -44,6 +40,6 @@ export function getRack(x: number, y: number): number {
  *   to directly access the rack property.
  */
 export function getSlot(x: number, y: number): number {
-  const position: ICoordinates = relativePosition(x, y);
+  const position: Coordinates = relativePosition(x, y);
   return Math.floor(position.x / SLOT_SIZE);
 }
