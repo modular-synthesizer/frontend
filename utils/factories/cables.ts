@@ -8,6 +8,9 @@ export function createCable(id: string, origin: string, dest: string, color: str
   
   const from = ports.find(port => equals(port, { id: origin })) as Port;
   const to = ports.find(port => equals(port, { id: dest })) as Port;
+  
+  const cable: Cable = { id, color, from, to };
+  cable.to.connect(cable.from, cable);
 
-  return { id, color, from, to }
+  return cable
 }

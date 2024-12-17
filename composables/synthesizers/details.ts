@@ -72,9 +72,7 @@ export function useSynthesizer() {
           && find(usePorts().ports, {id: ilink.to}) !== undefined
     })
     .forEach((link: ILink) => {
-      const cable: Cable = createCable(link.id, link.from, link.to, link.color);
-      cable.to.connect(cable.from, cable);
-      links.value.push(cable);
+      links.value.push(createCable(link.id, link.from, link.to, link.color));
     });
   }
 

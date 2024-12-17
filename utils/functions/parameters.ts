@@ -14,7 +14,7 @@ export function setValue(param: Parameter, value: number): void {
   param.value = clamp(value, param.minimum, param.maximum);
   param.targets.forEach((target: string) => {
     param.mod.channels.forEach((channel: Channel) => {
-      const audioParam: AudioParam|undefined = extractAudioParam(channel, target, param.field);
+      const audioParam: AudioParam|undefined = extractAudioParam(channel.nodes[target], param.field);
       if (audioParam === undefined) return;
       audioParam.setValueAtTime(param.value, useAudio().context.currentTime);
     })
@@ -39,8 +39,7 @@ export function getControls(param: Parameter): Array<Control> {
   return param.mod.controls.filter((c: Control) => c.payload.target === param.name);
 }
 
-function extractAudioParam(channel: Channel, target: string, field: string): AudioParam|undefined {
-  const node: AudioNode = channel.nodes[target];
+export function extractAudioParam(node: AudioNode, field: string): AudioParam|undefined {
   if (node instanceof AudioWorkletNode) return node.parameters.get(field);
   return node[field as keyof AudioNode] as unknown as AudioParam;
 }

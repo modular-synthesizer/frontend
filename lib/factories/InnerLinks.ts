@@ -1,5 +1,6 @@
 import type { InnerLink } from '~~/types/tools/InnerLink';
 import type { ChannelNodes } from '~/types/modules/Channel';
+import { extractAudioParam } from '~/utils/functions/parameters';
 
 class InnerLinksFactory {
     /**
@@ -35,13 +36,9 @@ class InnerLinksFactory {
         const to = nodes[nodeName];
     
         if (from !== undefined && to !== undefined) {
-            if (to instanceof AudioWorkletNode) {
-                const n = to as AudioWorkletNode;
-                from.connect(n.parameters.get(paramName) as unknown as AudioParam);
-            }
-            else {
-                from.connect(to[paramName as keyof AudioNode] as unknown as AudioParam)
-            }
+            const param: AudioParam | undefined = extractAudioParam(to, paramName);
+            console.log(to, paramName, param)
+            if (param !== undefined) from.connect(param);
         }
         return link;
     }
