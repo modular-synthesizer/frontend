@@ -1,10 +1,9 @@
-import IPort from "../interfaces/IPort";
+import type IPort from "../interfaces/IPort";
 import Link from "./Link";
 import Mod from "./Mod";
-import { IControl } from "../interfaces/IControl";
+import type { IControl } from "../interfaces/IControl";
 import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
-import Channel from "./Channel";
-import InnerAudioNode from "./InnerAudioNode";
+import type { Channel } from "~/types/modules/Channel";
 
 export default class Port implements IPort {
   id: string;
@@ -44,10 +43,9 @@ export default class Port implements IPort {
     origin.link = via;
 
     this.mod.channels.forEach((channel: Channel) => {
-      const fromNode: InnerAudioNode = origin.mod.channel(channel.index).getNode(origin.target) as InnerAudioNode
-      const toNode: InnerAudioNode = channel.getNode(this.target) as InnerAudioNode;
-      console.log(fromNode.node, toNode.node)
-      fromNode.node.connect(toNode.node, origin.index, this.index);
+      const fromNode: AudioNode = origin.mod.channel(channel.index).nodes[origin.target]
+      const toNode: AudioNode = channel.nodes[this.target];
+      fromNode.connect(toNode, origin.index, this.index);
     });
   }
 
@@ -60,8 +58,8 @@ export default class Port implements IPort {
     origin.link = null;
 
     this.mod.channels.forEach((channel: Channel) => {
-      const fromNode: AudioNode = origin.mod.channel(channel.index).getNode(origin.target)?.node as AudioNode;
-      const toNode: AudioNode = channel.getNode(this.target)?.node as AudioNode;
+      const fromNode: AudioNode = origin.mod.channel(channel.index).nodes[origin.target];
+      const toNode: AudioNode = channel.nodes[this.target];
 
       fromNode.disconnect(toNode);
     });
@@ -84,13 +82,13 @@ export default class Port implements IPort {
 }
 
 export class InputPort extends Port {
-  public isInput(): boolean {
+  public override isInput(): boolean {
     return true;
   }
 }
 
 export class OutputPort extends Port {
-  public isInput(): boolean {
+  public override isInput(): boolean {
     return false;
   }
 }

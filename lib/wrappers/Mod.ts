@@ -2,14 +2,13 @@ import Port from "./Port";
 import Parameter from "./Parameter";
 import { find, flatten, some } from 'lodash';
 import Link from "./Link";
-import { IControl } from "../interfaces/IControl";
-import IPort from "../interfaces/IPort";
-import Channel from "./Channel";
-import IParameter from "../interfaces/IParameter";
-import InnerAudioNode from "./InnerAudioNode";
-import IModule from "../interfaces/modules/IModule";
+import { type IControl } from "../interfaces/IControl";
+import type IPort from "../interfaces/IPort";
+import type IParameter from "../interfaces/IParameter";
+import type IModule from "../interfaces/modules/IModule";
 import type { InnerLink } from '~~/types/tools/InnerLink';
 import type { InnerNode } from '~~/types/tools/InnerNode';
+import type { Channel } from "~/types/modules/Channel";
 
 type Payload = IModule & { channels: Channel[] }
 
@@ -78,10 +77,10 @@ export default class Mod implements IModule {
 
   public stop() {
     this.channels.forEach((ch: Channel) => {
-      ch.nodes
-        .filter((nd: InnerAudioNode) => (nd.node instanceof OscillatorNode))
-        .forEach((nd: InnerAudioNode) => {
-          (nd.node as OscillatorNode).stop();
+      Object.values(ch.nodes)
+        .filter((anode: AudioNode) => (anode instanceof OscillatorNode))
+        .forEach((anode: AudioNode) => {
+          (anode as OscillatorNode).stop();
         })
     })
   }

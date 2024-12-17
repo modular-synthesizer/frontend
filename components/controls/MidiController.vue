@@ -7,7 +7,7 @@ import Mod from '~~/lib/wrappers/Mod';
 import Parameter from '~~/lib/wrappers/Parameter';
 import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
-import Channel from '~~/lib/wrappers/Channel';
+import type { Channel } from '~/types/modules/Channel';
 
 export default {
   props: {
@@ -38,7 +38,7 @@ export default {
     noteTrigger({ note, channel }: any) {
       const c = this.mod.channel(channel);
       if (c === undefined) return;
-      const gate: ConstantSourceNode = c.getNode(this.envelope)?.node as ConstantSourceNode
+      const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode
       gate.offset.setValueAtTime(1, this.ctx.currentTime);
       this.noteChange({ note, channel })
     },
@@ -46,20 +46,20 @@ export default {
       const voltage: number = (note - 69) / 12;
       const c = this.mod.channel(channel);
       if (!c) return;
-      const pitch: ConstantSourceNode = c.getNode(this.pitch)?.node as ConstantSourceNode
+      const pitch: ConstantSourceNode = c.nodes[this.pitch] as ConstantSourceNode
       pitch.offset.cancelScheduledValues(this.ctx.currentTime);
       pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
     },
     noteRelease({ channel }: any) {
       const c = this.mod.channel(channel);
       if (c === undefined) return;
-      const gate: ConstantSourceNode = c.getNode(this.envelope)?.node as ConstantSourceNode
+      const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode
       gate.offset.cancelScheduledValues(this.ctx.currentTime);
       gate.offset.setValueAtTime(0, this.ctx.currentTime);
     },
     modWheel({ amount }: any) {
       this.mod.channels.forEach((channel: Channel) => {
-        const modnode: ConstantSourceNode = channel.getNode(this.modwheel)?.node as ConstantSourceNode;
+        const modnode: ConstantSourceNode = channel.nodes[this.modwheel] as ConstantSourceNode;
         modnode.offset.setValueAtTime(amount, this.ctx.currentTime);
       });
     },
@@ -71,7 +71,7 @@ export default {
       for (let i = 0; i < POLYPHONY_CHANNELS; ++i) {
         const c = this.mod.channel(i);
         if (c === undefined) continue;
-        const gate: ConstantSourceNode = c.getNode(this.envelope)?.node as ConstantSourceNode;
+        const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode;
         if (gate === undefined) continue;
         gate.offset.setValueAtTime(0, this.ctx.currentTime);
       }

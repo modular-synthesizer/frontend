@@ -1,6 +1,7 @@
 import type { InnerLink } from '~~/types/tools/InnerLink';
 import InnerAudioNode from "../wrappers/InnerAudioNode";
 import { find } from "lodash"
+import type { ChannelNodes } from '~/types/modules/Channel';
 
 class InnerLinksFactory {
     /**
@@ -11,7 +12,7 @@ class InnerLinksFactory {
      * @param links the links we have to creat between said nodes.
      * @returns the same list of links to be affected later in the module.
      */
-    public link(nodes: InnerAudioNode[], links: InnerLink[]): InnerLink[] {
+    public link(nodes: ChannelNodes, links: InnerLink[]): InnerLink[] {
         return links.map(link => {
             if (/^[a-zA-Z]+\.[a-zA-Z]+$/.test(link.to.node)) {
                 return this.linkToParameter(nodes, link)
@@ -22,28 +23,26 @@ class InnerLinksFactory {
         });
     }
 
-    public linkToOtherNode(nodes: InnerAudioNode[], link: InnerLink) {
-        const from = find(nodes, {name: link.from.node});
-        const to = find(nodes, {name: link.to.node});
+    public linkToOtherNode(nodes: ChannelNodes, link: InnerLink) {
+        const from = nodes[link.from.node];
+        const to = nodes[link.to.node];
     
-        if (from !== undefined && to !== undefined) {
-            from.node.connect(to.node, link.from.index, link.to.index)
-        }
+        if (!!from && !!to) from.connect(to, link.from.index, link.to.index);
         return link;
     }
 
-    public linkToParameter(nodes: InnerAudioNode[], link: InnerLink) {
+    public linkToParameter(nodes: ChannelNodes, link: InnerLink) {
         const [nodeName, paramName] = link.to.node.split(".")
-        const from = find(nodes, {name: link.from.node});
-        const to = find(nodes, {name: nodeName});
+        const from = nodes[link.from.node];
+        const to = nodes[nodeName];
     
         if (from !== undefined && to !== undefined) {
-            if (to.node instanceof AudioWorkletNode) {
-                const n = to.node as AudioWorkletNode;
-                from.node.connect(n.parameters.get(paramName) as unknown as AudioParam);
+            if (to instanceof AudioWorkletNode) {
+                const n = to as AudioWorkletNode;
+                from.connect(n.parameters.get(paramName) as unknown as AudioParam);
             }
             else {
-                from.node.connect(to.node[paramName as keyof AudioNode] as unknown as AudioParam)
+                from.connect(to[paramName as keyof AudioNode] as unknown as AudioParam)
             }
         }
         return link;

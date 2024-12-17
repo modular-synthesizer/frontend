@@ -1,10 +1,10 @@
 import IParameter from "~~/lib/interfaces/IParameter"
 import Mod from "./Mod";
 import { clamp } from "lodash"
-import Channel from "./Channel";
 import { IControl } from "../interfaces/IControl";
 import { WatcherCallback } from "../types/Parameters";
 import { useAudio } from "~~/composables/synthesizers/useAudio";
+import type { Channel } from "~/types/modules/Channel";
 
 export default class Parameter implements IParameter {
   
@@ -44,7 +44,7 @@ export default class Parameter implements IParameter {
     this.value = clamp(val, this.minimum, this.maximum);
     this.targets.forEach((target: string) => {
       this.mod.channels.forEach((channel: Channel) => {
-        const node: AudioNode = channel.getNode(target)!.node;
+        const node: AudioNode = channel.nodes[target];
         const param: AudioParam|undefined = this.audioParam(node);
         if (param !== undefined) param.setValueAtTime(this.value, this.ctx.currentTime);
       })
