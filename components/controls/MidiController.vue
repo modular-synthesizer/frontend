@@ -4,10 +4,10 @@
 
 <script lang="ts">
 import Mod from '~~/lib/wrappers/Mod';
-import Parameter from '~~/lib/wrappers/Parameter';
 import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
 import type { Channel } from '~/types/modules/Channel';
+import type { Parameter } from '~/types/modules/Parameter';
 
 export default {
   props: {

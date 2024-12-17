@@ -1,9 +1,9 @@
-import Parameter from "~~/lib/wrappers/Parameter";
 import sendParamEvent from '~~/lib/commands/events/sendParamEvent'
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import { Strategies } from "./editionStrategy";
-import { IControl } from "~~/lib/interfaces/IControl";
+import type { IControl } from "~~/lib/interfaces/IControl";
 import { repositories } from "~~/lib/repositories";
+import type { Parameter } from '~/types/modules/Parameter';
 
 const strategy: Ref<Strategies> = ref(Strategies.DECORRELATED);
 

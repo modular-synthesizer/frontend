@@ -51,10 +51,10 @@
 
 <script lang="ts">
 import { round } from 'lodash';
-import { IControl } from '~~/lib/interfaces/IControl';
+import type { Parameter } from '~/types/modules/Parameter';
+import type { IControl } from '~~/lib/interfaces/IControl';
 import { DEFAULT_FADER_HEIGHT } from '~~/lib/utils/constants';
 import Mod from '~~/lib/wrappers/Mod';
-import Parameter from '~~/lib/wrappers/Parameter';
 
 const KNOB_SIZE = 26;
 

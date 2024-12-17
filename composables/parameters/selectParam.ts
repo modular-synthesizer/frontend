@@ -1,6 +1,6 @@
-import { IControl } from '~~/lib/interfaces/IControl';
-import ICoordinates from '~~/lib/interfaces/ICoordinates';
-import Parameter from '~~/lib/wrappers/Parameter';
+import type { Parameter } from '~/types/modules/Parameter';
+import type { IControl } from '~~/lib/interfaces/IControl';
+import type ICoordinates from '~~/lib/interfaces/ICoordinates';
 
 // This composable holds the logic to know which parameter is currently being edited.
 // It does not handle the edition itself, the value or the coordinates.

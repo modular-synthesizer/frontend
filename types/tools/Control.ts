@@ -7,4 +7,6 @@ export type Control = Identified & {
   component: ComponentNames;
   // The payload containing all informations regarding the control.
   payload: Record<string, string|number>;
+  // This indicates if the control is currently being edited by the user (TRUE) or not (FALSE).
+  editing?: boolean;
 }

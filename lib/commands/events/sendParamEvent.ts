@@ -1,4 +1,4 @@
-import Parameter from '~~/lib/wrappers/Parameter';
+import type { Parameter } from '~/types/modules/Parameter';
 import sendEvent from './sendEvent';
 
 export default function(operation: string, parameter: Parameter): void {
