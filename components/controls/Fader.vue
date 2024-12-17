@@ -52,7 +52,7 @@
 <script lang="ts">
 import { round } from 'lodash';
 import type { Parameter } from '~/types/modules/Parameter';
-import type { IControl } from '~~/lib/interfaces/IControl';
+import type { Control } from '~/types/tools/Control';
 import { DEFAULT_FADER_HEIGHT } from '~~/lib/utils/constants';
 import Mod from '~~/lib/wrappers/Mod';
 
@@ -66,7 +66,7 @@ export default {
     target: { type: String, required: true },
     label: { type: String, default: "" },
     mod: { type: Mod, required: true },
-    control: { type: Object as PropType<IControl>, required: true },
+    control: { type: Object as PropType<Control>, required: true },
   },
   computed: {
     knobSize(): number {

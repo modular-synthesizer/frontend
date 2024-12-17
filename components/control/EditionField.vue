@@ -3,14 +3,14 @@
 </template>
 
 <script setup lang="ts">
-import { IControl } from '~~/lib/interfaces/IControl';
+import type { Control } from '~/types/tools/Control';
 
 const { control, name } = defineProps({
-  control: { type: Object as PropType<IControl>, required: true },
+  control: { type: Object as PropType<Control>, required: true },
   name: { type: String, required: true }
 });
 
 const emit = defineEmits<{ updated: [ string, any ]}>();
 
-const value: Ref<String> = ref(control.payload[name]);
+const value: Ref<String|Number> = ref(control.payload[name]);
 </script>

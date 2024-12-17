@@ -1,9 +1,9 @@
 import type IPort from "../interfaces/IPort";
 import Mod from "./Mod";
-import type { IControl } from "../interfaces/IControl";
 import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 import type { Channel } from "~/types/modules/Channel";
 import type { Cable } from "~/types/Cable";
+import type { Control } from "~/types/tools/Control";
 
 export default class Port implements IPort {
   id: string;
@@ -65,15 +65,15 @@ export default class Port implements IPort {
     });
   }
 
-  public get control(): IControl {
-    return this.mod.controls.find(c => c.payload.target === this.name && c.component === 'Port') as IControl;
+  public get control(): Control {
+    return this.mod.controls.find(c => c.payload.target === this.name && c.component === 'Port') as Control;
   }
 
   public get ax() {
-    return this.control.payload.x + this.mod.slot * SLOT_SIZE;
+    return +this.control.payload.x + this.mod.slot * SLOT_SIZE;
   }
   public get ay() {
-    return this.control.payload.y + this.mod.rack * RACK_HEIGHT;
+    return +this.control.payload.y + this.mod.rack * RACK_HEIGHT;
   }
 
   public get links(): Cable[] {

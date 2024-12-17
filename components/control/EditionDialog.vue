@@ -9,7 +9,7 @@
           <control-edition-field :control="state.control" name="y" @updated="savePayload" />
         </template>
         <div v-for="(_, name) in payload">
-          <control-edition-field :control="state.control" :name="name" @updated="savePayload" />
+          <control-edition-field v-if="state.control" :control="state.control" :name="`${name}`" @updated="savePayload" />
         </div>
       </v-card-text>
       <v-card-actions>
@@ -28,9 +28,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ControlEditionState } from '~~/composables/controls/useControlEdition';
-import { IControl } from '~~/lib/interfaces/IControl';
-import { ComponentNames, controlsPayloads } from '~~/lib/types/controls';
+import type { Control } from '~/types/tools/Control';
+import type { ControlEditionState } from '~~/composables/controls/useControlEdition';
+import { type ComponentNames, controlsPayloads } from '~~/lib/types/controls';
 
 const state: Ref<ControlEditionState> = useControlEdition().state;
 
@@ -40,7 +40,7 @@ const payload = computed(() => {
   return controlsPayloads[component as ComponentNames];
 });
 
-const emit = defineEmits<{ save: [ IControl ]}>()
+const emit = defineEmits<{ save: [ Control ]}>()
 
 function savePayload(name: string, value: any) {
   debounce('save', 500, () => {
@@ -49,7 +49,7 @@ function savePayload(name: string, value: any) {
   });
 }
 
-function setComponent(component: string) {
+function setComponent(component: ComponentNames) {
   if (state.value.control === undefined) return;
   state.value.control.component = component;
 }

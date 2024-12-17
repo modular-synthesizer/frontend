@@ -1,8 +1,8 @@
-import { IControl } from "~~/lib/interfaces/IControl";
+import type { Control } from "~/types/tools/Control";
 import SynthesizerCommand from "./SynthesizerCommand";
 
 export default class SynthesizerStartEdit extends SynthesizerCommand {
-  public runOnControl(control: IControl) {
+  public override runOnControl(control: Control) {
     control.editing = true;
   }
 }

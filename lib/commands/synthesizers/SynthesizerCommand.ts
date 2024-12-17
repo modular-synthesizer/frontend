@@ -1,9 +1,9 @@
-import type { IControl } from "~~/lib/interfaces/IControl";
 import Command from "../Command";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import Mod from "~~/lib/wrappers/Mod";
 import type { Parameter } from '~/types/modules/Parameter';
 import { getControls } from "~/utils/functions/parameters";
+import type { Control } from "~/types/tools/Control";
 
 export interface ControlEditPayload {
   module_id: string;
@@ -41,5 +41,5 @@ export default abstract class SynthesizerCommand extends Command<ControlEditPayl
     return this.extractParameter();
   }
 
-  public runOnControl(control: IControl): void {}
+  public runOnControl(control: Control): void {}
 }

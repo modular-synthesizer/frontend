@@ -1,6 +1,5 @@
 import Port from "./Port";
 import { find, flatten, some } from 'lodash';
-import { type IControl } from "../interfaces/IControl";
 import type IPort from "../interfaces/IPort";
 import type IModule from "../interfaces/modules/IModule";
 import type { InnerLink } from '~~/types/tools/InnerLink';
@@ -9,6 +8,7 @@ import type { Channel } from "~/types/modules/Channel";
 import type { Cable } from "~/types/Cable";
 import type { Parameter } from "~/types/modules/Parameter";
 import { setValue } from "~/utils/functions/parameters";
+import type { Control } from "~/types/tools/Control";
 
 type Payload = IModule & { channels: Channel[] }
 
@@ -21,7 +21,7 @@ export default class Mod implements IModule {
   public readonly ports: Port[] = [];
   public readonly parameters: Parameter[];
   public readonly category: string;
-  public readonly controls: IControl[] = [];
+  public readonly controls: Control[] = [];
   public readonly channels: Channel[];
   public readonly links: InnerLink[] = [];
   public readonly nodes: InnerNode[] = [];
