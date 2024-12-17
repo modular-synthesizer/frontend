@@ -80,15 +80,3 @@ export default class Port implements IPort {
     return !this.link ? [] : [this.link];
   }
 }
-
-export class InputPort extends Port {
-  public override isInput(): boolean {
-    return true;
-  }
-}
-
-export class OutputPort extends Port {
-  public override isInput(): boolean {
-    return false;
-  }
-}
