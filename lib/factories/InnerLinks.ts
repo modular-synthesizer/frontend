@@ -37,7 +37,6 @@ class InnerLinksFactory {
     
         if (from !== undefined && to !== undefined) {
             const param: AudioParam | undefined = extractAudioParam(to, paramName);
-            console.log(to, paramName, param)
             if (param !== undefined) from.connect(param);
         }
         return link;

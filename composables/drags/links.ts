@@ -40,7 +40,7 @@ function end() {
 async function createLink() {
   const { startPort: from, endPort: to } = linkCreationState.value;
   if (!from || !to) return
-  const insertion: Cable = createCable('', from.id, to.id, 'red');
+  const insertion: Cable = createCable('', from.id, to.id, 'red', usePorts().ports);
   useSynthesizer().links.value.push(insertion);
   const payload = {
     id: '',

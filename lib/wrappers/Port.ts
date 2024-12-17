@@ -38,7 +38,7 @@ export default class Port implements IPort {
    * input ports (destinations), eg parameters ports and module input ports.
    * @param inputPort 
    */
-  public connect(origin: Port, via: Cable) {
+  public connect(origin: Port, via: Cable): Cable {
     this.link = via;
     origin.link = via;
 
@@ -47,6 +47,7 @@ export default class Port implements IPort {
       const toNode: AudioNode = channel.nodes[this.target];
       fromNode.connect(toNode, origin.index, this.index);
     });
+    return via;
   }
 
   public get free(): boolean {
