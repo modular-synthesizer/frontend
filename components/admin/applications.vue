@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import IApplication from '~~/lib/interfaces/IApplication';
+import type { Application } from '~/types/Application';
 import { repositories } from '~~/lib/repositories';
 const application = { id: "", name: "" }
 
@@ -36,6 +36,6 @@ const headers = useHeaders(useI18n, [
   {title: 'common.name', key: 'name'}
 ]);
 
-const applications: Ref<IApplication[]> = ref(await repositories.applications.list());
+const applications: Ref<Application[]> = ref(await repositories.applications.list());
 const add = repositories.applications.add(applications.value);
 </script>

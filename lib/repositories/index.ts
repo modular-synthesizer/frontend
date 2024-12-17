@@ -9,7 +9,7 @@ import type IRight from "../interfaces/permissions/IRight"
 import LinksRepository from "./LinksRepository"
 import { ModulesRepository } from "./ModulesRepository"
 import { Repository } from "./utils/Repository"
-import type IApplication from "../interfaces/IApplication"
+import type { Application } from "../../types/Application"
 import AccountsRepository from "./AccountsRepository"
 import SessionsRepository from "./SessionsRepository"
 import SynthesizersRepository from "./SynthesizersRepository"
@@ -22,7 +22,7 @@ export type Repositories = { [key: string]: Repository<any> }
 
 export const repositories = {
   accounts: new AccountsRepository('accounts'),
-  applications: new Repository<IApplication>('applications'),
+  applications: new Repository<Application>('applications'),
   categories: new Repository<Category>('categories'),
   generators: new Repository<Generator>('generators'),
   groups: new Repository<IGroup>('groups'),
