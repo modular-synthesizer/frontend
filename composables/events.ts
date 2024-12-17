@@ -1,5 +1,5 @@
-import { Coordinates } from "~~/lib/types/Coordinates";
-import { ScalablePosition } from "~~/lib/types/ScalablePosition";
+import type { Coordinates } from "~/types/utils/Coordinates";
+import type { ScalablePosition } from "~~/lib/types/ScalablePosition";
 import { MAX_ZOOM_IN, MAX_ZOOM_OUT, ZOOM_RATIO } from "~~/lib/utils/constants";
 
 /**

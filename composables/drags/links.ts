@@ -1,5 +1,5 @@
-import type { Coordinates } from "~/lib/types/Coordinates";
 import type { Cable } from "~/types/Cable";
+import type { Coordinates } from "~/types/utils/Coordinates";
 import { createCable } from "~/utils/factories/CableFactory";
 import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { repositories } from "~~/lib/repositories";
