@@ -24,11 +24,12 @@
 <script setup lang="ts">
 import { ZOOM_RATIO, MAX_ZOOM_OUT, MAX_ZOOM_IN } from '~~/lib/utils/constants';
 import { cloneDeep } from 'lodash';
-import ITool, { IToolPort } from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
+import type { ToolPort } from '~~/types/tools/Port';
 import { repositories } from '~~/lib/repositories';
 
 const { tool } = defineProps({
-  tool: { type: Object as PropType<ITool>, required: true }
+  tool: { type: Object as PropType<Tool>, required: true }
 });
 
 const x: Ref<number> = ref(0);
@@ -40,15 +41,15 @@ function seeMove(cx: number, cy: number) {
   y.value = cy / scale.value;
 }
 
-const p: Ref<IToolPort|null> = ref(null);
+const p: Ref<ToolPort|null> = ref(null);
 const dialog: Ref<boolean> = ref(false);
 
-function editPort(port: IToolPort) {
+function editPort(port: ToolPort) {
   p.value = cloneDeep(port)
   dialog.value = true;
 }
 
-async function validateEditPort(port: IToolPort) {
+async function validateEditPort(port: ToolPort) {
   await repositories.tool.ports.update(tool, tool.ports, port);
   p.value = null;
   dialog.value = false;

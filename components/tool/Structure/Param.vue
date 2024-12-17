@@ -16,17 +16,19 @@
 
 <script setup lang="ts">
 import { max, remove } from 'lodash';
-import ITool, { InnerNode, IToolParameter } from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
+import type { InnerNode } from '~~/types/tools/InnerNode';
+import type { ToolParameter } from '~~/types/tools/Parameter';
 import { repositories } from '~~/lib/repositories';
 
 const props = defineProps({
   param: { type: String, required: true },
-  tool: { type: Object as PropType<ITool>, required: true },
+  tool: { type: Object as PropType<Tool>, required: true },
   node: { type: Object as PropType<InnerNode>, required: true }
 })
 
-function getToolParameters(): IToolParameter[] {
-  return props.tool.parameters.filter((p: IToolParameter) => {
+function getToolParameters(): ToolParameter[] {
+  return props.tool.parameters.filter((p: ToolParameter) => {
     return p.field === props.param && p.targets.includes(props.node.name)
   });
 }
@@ -38,7 +40,7 @@ function showParameters() {
   shown.value = !shown.value
 }
 
-async function removeParameter(p: IToolParameter) {
+async function removeParameter(p: ToolParameter) {
   await repositories.tool.parameters.delete(props.tool, p);
   remove(props.tool.parameters, { id: p.id });
 }

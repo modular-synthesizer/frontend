@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import ICoordinates from '~~/lib/interfaces/ICoordinates';
+import type { Coordinates } from '~/types/utils/Coordinates';
 
 const DOT_SIZE = 2;
 
@@ -26,11 +26,11 @@ const { scale } = defineProps({
   scale: { type: Number, default: 1 }
 })
 
-const offset: Ref<ICoordinates> = ref({ x: 0, y: 0 });
+const offset: Ref<Coordinates> = ref({ x: 0, y: 0 });
 
-const start: Ref<ICoordinates> = ref({ x: 0, y: 0 });
+const start: Ref<Coordinates> = ref({ x: 0, y: 0 });
 
-const coords: Ref<ICoordinates> = ref({ x: 0, y: 0 });
+const coords: Ref<Coordinates> = ref({ x: 0, y: 0 });
 
 const dragged: Ref<boolean> = ref(false);
 

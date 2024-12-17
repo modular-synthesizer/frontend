@@ -14,14 +14,16 @@
 
 <script setup lang="ts">
 import { findIndex } from 'lodash';
-import ICoordinates from '~~/lib/interfaces/ICoordinates';
-import ITool, { InnerLink, InnerNode } from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
+import type { InnerLink } from '~~/types/tools/InnerLink';
+import type { InnerNode } from '~~/types/tools/InnerNode';
+import type { Coordinates } from '~/types/utils/Coordinates';
 
 const STROKE_WIDTH = 4;
 
 const props = defineProps({
   link: { type: Object as PropType<InnerLink>, required: true },
-  tool: { type: Object as PropType<ITool>, required: true },
+  tool: { type: Object as PropType<Tool>, required: true },
   selected: { type: Boolean, default: false }
 });
 
@@ -33,12 +35,8 @@ function hasNodeEnd(link: InnerLink): boolean {
   return !link.to.node.includes('.');
 }
 
-function arrowTransform(coords: ICoordinates) {
-  return `translate(${coords.x} ${coords.y})`
-}
-
 function circleCoords() {
-  const coords: ICoordinates = getStartCoords(props.link, props.tool);
+  const coords: Coordinates = getStartCoords(props.link, props.tool);
   return { cx: coords.x, cy: coords.y }
 }
 
@@ -64,9 +62,9 @@ function handleClick() {
   props.selected ? emit('deselected') : emit('selected', props.link);
 }
 
-function pathFrom(s: ICoordinates, e: ICoordinates) {
+function pathFrom(s: Coordinates, e: Coordinates) {
   if (s.x > e.x) {
-    const m: ICoordinates = { x: (s.x + e.x) / 2, y: (s.y + e.y) / 2 };
+    const m: Coordinates = { x: (s.x + e.x) / 2, y: (s.y + e.y) / 2 };
     //return `M ${s.x} ${s.y} L ${m.x} ${m.y}`
     return `M ${s.x} ${s.y} C ${s.x + 100} ${s.y} ${m.x + 100} ${m.y} ${m.x} ${m.y} C ${m.x - 100} ${m.y} ${e.x - 100} ${e.y} ${e.x} ${e.y}`
   }

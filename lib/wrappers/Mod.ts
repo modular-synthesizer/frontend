@@ -1,14 +1,14 @@
 import Port from "./Port";
-import Parameter from "./Parameter";
 import { find, flatten, some } from 'lodash';
-import Link from "./Link";
-import { IControl } from "../interfaces/IControl";
-import IPort from "../interfaces/IPort";
-import Channel from "./Channel";
-import IParameter from "../interfaces/IParameter";
-import InnerAudioNode from "./InnerAudioNode";
-import IModule from "../interfaces/modules/IModule";
-import { InnerLink, InnerNode } from "../interfaces/ITool";
+import type IPort from "../interfaces/IPort";
+import type IModule from "../interfaces/modules/IModule";
+import type { InnerLink } from '~~/types/tools/InnerLink';
+import type { InnerNode } from '~~/types/tools/InnerNode';
+import type { Channel } from "~/types/modules/Channel";
+import type { Cable } from "~/types/Cable";
+import type { Parameter } from "~/types/modules/Parameter";
+import { setValue } from "~/utils/functions/parameters";
+import type { Control } from "~/types/tools/Control";
 
 type Payload = IModule & { channels: Channel[] }
 
@@ -21,7 +21,7 @@ export default class Mod implements IModule {
   public readonly ports: Port[] = [];
   public readonly parameters: Parameter[];
   public readonly category: string;
-  public readonly controls: IControl[] = [];
+  public readonly controls: Control[] = [];
   public readonly channels: Channel[];
   public readonly links: InnerLink[] = [];
   public readonly nodes: InnerNode[] = [];
@@ -43,7 +43,11 @@ export default class Mod implements IModule {
       return new Port(iport, this);
     });
 
-    this.parameters = parameters.map((p: IParameter) => new Parameter(p, this));
+    this.parameters = parameters.map((p: Parameter) => {
+      p.mod = this;
+      setValue(p, p.value);
+      return p;
+    });
 
     usePorts().addPorts(this.ports);
   }
@@ -60,7 +64,7 @@ export default class Mod implements IModule {
     return this.parameters.find((p: Parameter) => p.name === name) as Parameter;
   }
 
-  public get connections(): Link[] {
+  public get connections(): Cable[] {
     return flatten(this.ports.map((port: Port) => port.links))
   }
 
@@ -77,16 +81,12 @@ export default class Mod implements IModule {
 
   public stop() {
     this.channels.forEach((ch: Channel) => {
-      ch.nodes
-        .filter((nd: InnerAudioNode) => (nd.node instanceof OscillatorNode))
-        .forEach((nd: InnerAudioNode) => {
-          (nd.node as OscillatorNode).stop();
+      Object.values(ch.nodes)
+        .filter((anode: AudioNode) => (anode instanceof OscillatorNode))
+        .forEach((anode: AudioNode) => {
+          (anode as OscillatorNode).stop();
         })
     })
-  }
-
-  public watch(name: string, callback: (v: number) => void) {
-    this.param(name).watch(callback);
   }
 
   public intersects({ slot, rack, slots, id }: { slot: number, rack: number, slots: number, id: string }) {

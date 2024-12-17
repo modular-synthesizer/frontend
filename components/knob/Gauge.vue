@@ -10,8 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
-import IParameter from '~~/lib/interfaces/IParameter';
+import type { Parameter } from '~/types/modules/Parameter';
 
 const { x, y, startAngle, endAngle, radius, parameter } = defineProps({
   x: { type: Number, default: 0 },
@@ -19,7 +18,7 @@ const { x, y, startAngle, endAngle, radius, parameter } = defineProps({
   radius: { type: Number, required: true },
   startAngle: { type: Number, required: true },
   endAngle: { type: Number, required: true },
-  parameter: { type: Object as PropType<IParameter>, required: true },
+  parameter: { type: Object as PropType<Parameter>, required: true },
 });
 
 const angle: ComputedRef<number> = computed(() => {

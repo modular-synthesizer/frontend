@@ -17,7 +17,7 @@
           variant="outlined"
           density="comfortable"
           label="Catégorie"
-          v-model="tool.categoryId"
+          v-model="tool.category.id"
           item-title="name"
           item-value="id"
         />
@@ -32,20 +32,20 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
-import ICategory from '~~/lib/interfaces/ICategory';
-import ITool from '~~/lib/interfaces/ITool';
+import type { PropType } from 'vue';
+import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
+import type { Category } from '~/types/tools/Category';
 
 
 type Rules = {[key: string]: Function[]}
 
 const props = defineProps({
-  modelValue: { type: Object as PropType<ITool>, required: true },
+  modelValue: { type: Object as PropType<Tool>, required: true },
     rules: { type: Object as PropType<Rules>, default: () =>({})}
 });
 
 const tool = computed(() => props.modelValue);
 
-const categories: Ref<ICategory[]> = ref(await repositories.categories.list());
+const categories: Ref<Category[]> = ref(await repositories.categories.list());
 </script>

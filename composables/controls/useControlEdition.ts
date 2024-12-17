@@ -1,7 +1,7 @@
-import { IControl } from "~~/lib/interfaces/IControl";
+import type { Control } from "~/types/tools/Control";
 
 export type ControlEditionState = {
-  control?: IControl,
+  control?: Control,
   displayed: boolean,
   get creating(): boolean,
 }
@@ -13,7 +13,7 @@ const state: Ref<ControlEditionState> = ref({
   }
 });
 
-function startEdit(control: IControl) {
+function startEdit(control: Control) {
   state.value.control = control;
   state.value.displayed = true;
 }

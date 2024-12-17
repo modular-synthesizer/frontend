@@ -43,7 +43,6 @@ import { useDisplay } from 'vuetify';
 
 const items = [
   ...(!useAuthentication().admin ? [] : [
-    { label: 'menus.sandbox', url: '/admin/sandbox' },
     { label: 'menus.tools', url: '/tools' },
     { label: 'common.admin', url: '/admin' },
   ]),

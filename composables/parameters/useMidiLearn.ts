@@ -1,6 +1,7 @@
+import type { Parameter } from "~/types/modules/Parameter";
+import { setValue } from "~/utils/functions/parameters";
 import sendParamEvent from "~~/lib/commands/events/sendParamEvent";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
-import Parameter from "~~/lib/wrappers/Parameter";
 
 type Handlers = {[key: string]: {[key: string]: Function}};
 
@@ -29,7 +30,7 @@ export function useMidiLearn() {
       const value: number = parameter.minimum + (gap * ratio);
       const step: number = parameter.step * 10
       const flooredValue: number = Math.floor(value / step) * step
-      parameter.setValue(flooredValue);
+      setValue(parameter, flooredValue);
       
       state.value.timeout = window.setTimeout(() => {
         saveParameter(parameter);

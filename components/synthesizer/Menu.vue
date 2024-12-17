@@ -8,12 +8,12 @@
 </template>
 
 <script lang="ts" setup>
-import ITool from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
 import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 const { tools, synthesizer } = defineProps({
-  tools: { type: Array<ITool>, default: () => [] },
+  tools: { type: Array<Tool>, default: () => [] },
   synthesizer: { type: Synthesizer, required: true },
 });
 

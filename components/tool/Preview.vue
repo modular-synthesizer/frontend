@@ -20,21 +20,20 @@
 
 <script setup lang="ts">
 import { findIndex } from 'lodash';
-import { PropType } from 'vue';
 import ModulesFactory from '~~/lib/factories/ModulesFactory';
-import { IControl } from '~~/lib/interfaces/IControl';
-import ITool from '~~/lib/interfaces/ITool';
-import IModule from '~~/lib/interfaces/modules/IModule';
+import type { Tool } from '~~/types/tools/Tool';
+import type { Control } from '~~/types/tools/Control';
+import type IModule from '~~/lib/interfaces/modules/IModule';
 import { repositories } from '~~/lib/repositories';
-import { ScalablePosition } from '~~/lib/types/ScalablePosition';
+import type { ScalablePosition } from '~~/lib/types/ScalablePosition';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { FakeModule } from '~~/lib/wrappers/FakeModule';
 
 const props = defineProps({
-  modelValue: { type: Object as PropType<ITool>, required: true },
+  modelValue: { type: Object as PropType<Tool>, required: true },
 });
 
-const tool: ComputedRef<ITool> = computed(() => props.modelValue);
+const tool: ComputedRef<Tool> = computed(() => props.modelValue);
 
 const mod: IModule = new FakeModule({ ...ModulesFactory.empty(), channels: [] });
 const { x, y, scale }: ScalablePosition = { x: 50, y: 50, scale: 1.5 } as ScalablePosition;
@@ -43,30 +42,30 @@ const moveMode: Ref<boolean> = ref(false);
 const modHeight: number = RACK_HEIGHT;
 const modWidth: number = SLOT_SIZE * tool.value.slots;
 
-async function setControl(control: IControl) {
+async function setControl(control: Control) {
   if (control.id === '') await createControl(control);
   else await editControl(control);
 }
 
-async function createControl(control: IControl) {
-  const creation: IControl = await repositories.tool.controls.create(tool.value, control);
+async function createControl(control: Control) {
+  const creation: Control = await repositories.tool.controls.create(tool.value, control);
   tool.value.controls.push(creation);
 }
 
-async function editControl(control: IControl) {
+async function editControl(control: Control) {
   const index: number = findIndex(props.modelValue.controls, { id: control.id });
   if (index <= -1 ) return;
   props.modelValue.controls[index] = control;
   await repositories.tool.controls.update(tool.value, tool.value.controls, control);
 }
 
-function updateInList(control: IControl) {
+function updateInList(control: Control) {
   const index: number = findIndex(props.modelValue.controls, { id: control.id });
   if (index <= -1 ) return;
   props.modelValue.controls[index] = control
 }
 
-function showMenu(control: IControl, $event: MouseEvent) {
+function showMenu(control: Control, $event: MouseEvent) {
   useContexts().display($event, {
     items: [
       {
@@ -75,7 +74,7 @@ function showMenu(control: IControl, $event: MouseEvent) {
       },
       {
         label: 'controls.delete',
-        action: async (control: IControl) => {
+        action: async (control: Control) => {
           await repositories.tool.controls.remove(tool.value, tool.value.controls, control);
         }
       }

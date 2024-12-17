@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import Link from "~~/lib/wrappers/Link";
+import type { Cable } from "~/types/Cable";
 
 const { link } = defineProps({
-  link: { type: Link, required: true }
+  link: { type: Object as PropType<Cable>, required: true }
 });
 </script>
 
 <template>
   <g>
     <Connection
-      :start-x="link.origin.ax"
-      :start-y="link.origin.ay"
-      :end-x="link.destination.ax"
-      :end-y="link.destination.ay"
-      @click="useSynthesizer().removeLink(link.id)"
+      :start-x="link.from.ax"
+      :start-y="link.from.ay"
+      :end-x="link.to.ax"
+      :end-y="link.to.ay"
+      @click="useSynthesizer().removeLink(link)"
       :show-cable="useLinksDisplay().displayed.value"
     />
   </g>

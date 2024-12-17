@@ -10,17 +10,17 @@
 </template>
 
 <script setup lang="ts">
-import Parameter from '~~/lib/wrappers/Parameter';
-import { IControl } from '~~/lib/interfaces/IControl';
+import type { Parameter } from '~/types/modules/Parameter';
 import { round } from 'lodash';
+import type { Control } from '~/types/tools/Control';
 
 const { x, y, parameter, r, label, control } = defineProps({
   x: { type: Number, default: 0 },
   y: { type: Number, default: 0 },
-  parameter: { type: Parameter, required: true },
+  parameter: { type: Object as PropType<Parameter>, required: true },
   r: { type: Number, default: 20 },
   label: { type: String, default: "" },
-  control: { type: Object as PropType<IControl>, required: true },
+  control: { type: Object as PropType<Control>, required: true },
   small: { type: Boolean, default: false },
 });
 

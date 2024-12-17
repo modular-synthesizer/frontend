@@ -9,10 +9,11 @@
 </template>
 
 <script setup lang="ts">
-import ITool from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
 import Mod from '~~/lib/wrappers/Mod';
 
+// @ts-ignore
 definePageMeta({
   layout: false,
   menu: false,
@@ -23,7 +24,7 @@ const id: string = useRoute().params.id as string;
 
 const loaded: Ref<boolean> = ref(false);
 const loading: Ref<boolean> = ref(false);
-const tools: ITool[] = await repositories.tools.list();
+const tools: Tool[] = await repositories.tools.list();
 await useSynthesizer().fetch(id);
 const { modules, links, synthesizer } = useSynthesizer();
 

@@ -51,23 +51,25 @@
 </template>
 
 <script lang="ts" setup>
-import ITool, { InnerNode, IToolParameter } from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
+import type { InnerNode } from '~~/types/tools/InnerNode';
+import type { ToolParameter } from '~~/types/tools/Parameter';
 
 const form: Ref = ref();
 
 const props = defineProps({
-  tool: { type: Object as PropType<ITool>, required: true }
+  tool: { type: Object as PropType<Tool>, required: true }
 })
 
-function createEmptyParameter(): IToolParameter {
+function createEmptyParameter(): ToolParameter {
   return {
     targets: [], name: '', field: '', default: 50, step: 1, precision: 0, minimum: 0, maximum: 100, id: ''
   }
 }
 
-const emit = defineEmits<{ created: [ link: IToolParameter]}>();
+const emit = defineEmits<{ created: [ link: ToolParameter]}>();
 
-const param: Ref<IToolParameter> = ref(createEmptyParameter());
+const param: Ref<ToolParameter> = ref(createEmptyParameter());
 
 function cancel(activeFlag: { value: boolean }) {
   activeFlag.value = false;

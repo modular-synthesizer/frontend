@@ -15,15 +15,17 @@
 
 <script setup lang="ts">
 import IPort from '~~/lib/interfaces/IPort';
-import ITool, { InnerNode, IToolPort } from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
+import type { ToolPort } from '~~/types/tools/Port';
+import type { InnerNode } from '~~/types/tools/InnerNode';
 
 const props = defineProps({
   port: { type: Object as PropType<IPort>, required: true },
-  tool: { type: Object as PropType<ITool>, required: true },
+  tool: { type: Object as PropType<Tool>, required: true },
   selected: { type: Boolean, default: false },
 });
 
-const emit = defineEmits<{ select: [ item: IToolPort ], unselect: [], edit: [ item: IToolPort ]}>();
+const emit = defineEmits<{ select: [ item: ToolPort ], unselect: [], edit: [ item: ToolPort ]}>();
 
 const OFFSET = 30
 

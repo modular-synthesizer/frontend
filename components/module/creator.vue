@@ -44,8 +44,7 @@ import { groupBy } from 'lodash';
 import ModulesFactory from '~~/lib/factories/ModulesFactory';
 import { IGenerator } from '~~/lib/interfaces/IGenerator';
 import IModule from '~~/lib/interfaces/modules/IModule';
-import ITool from '~~/lib/interfaces/ITool';
-import Tool from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
 import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
@@ -54,7 +53,7 @@ export default {
   data: () => ({
     display: false,
     loading: false,
-    tools: [] as ITool[],
+    tools: [] as Tool[],
   }),
   props: {
     synthesizer: {
@@ -67,7 +66,7 @@ export default {
       this.loading = false;
       this.display = false;
     },
-    async select(tool: ITool) {
+    async select(tool: Tool) {
       this.loading = true;
       const payload = {
         tool_id: tool.id,

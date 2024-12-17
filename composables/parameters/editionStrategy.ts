@@ -1,7 +1,7 @@
-import { clamp } from "lodash";
+import type { Parameter } from "~/types/modules/Parameter";
+import { moveValue, setValue } from "~/utils/functions/parameters";
 import { DEFAULT_FADER_HEIGHT } from "~~/lib/utils/constants";
 import { relativePosition } from "~~/lib/utils/coordinates";
-import Parameter from "~~/lib/wrappers/Parameter";
 
 export enum Strategies {
   LINEAR = 'linear',
@@ -28,16 +28,16 @@ function editAsLinear({ clientY: y, clientX: x }: MouseEvent) {
   const currentY = Math.round(relativePosition(x, y).y);
   const ratio = (yMax - currentY) / (yMax - yMin);
 
-  const value: number = clamp((p.maximum - p.minimum) * ratio, p.minimum, p.maximum);
+  const value: number = (p.maximum - p.minimum) * ratio
 
-  p.setValue(value);
+  setValue(p, value);
 }
 
 function editAsDecorrelated({ clientY: y, clientX: x }: MouseEvent) {
   if (selectedParameter === null) return;
   const delta = y - parameterOrigin.y;
   if (Math.abs(delta) >= 5) {
-    selectedParameter.moveValue(- (delta / 5) * selectedParameter.step);
+    moveValue(selectedParameter, - (delta / 5) * selectedParameter.step);
     resetOrigin({ x, y });
   }
 }

@@ -8,9 +8,9 @@
 </template>
 
 <script lang="ts">
+import type { Cable } from '~/types/Cable';
 import { equals } from '~~/lib/interfaces/common/Identifiable';
 import { repositories } from '~~/lib/repositories';
-import Link from '~~/lib/wrappers/Link';
 import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
@@ -25,7 +25,7 @@ export default {
       default: () => []
     },
     links: {
-      type: Array<Link>,
+      type: Array<Cable>,
       default: () => []
     }
   },

@@ -1,8 +1,9 @@
-import { IControl } from "~~/lib/interfaces/IControl";
 import Command from "../Command";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import Mod from "~~/lib/wrappers/Mod";
-import Parameter from "~~/lib/wrappers/Parameter";
+import type { Parameter } from '~/types/modules/Parameter';
+import { getControls } from "~/utils/functions/parameters";
+import type { Control } from "~/types/tools/Control";
 
 export interface ControlEditPayload {
   module_id: string;
@@ -25,14 +26,14 @@ export default abstract class SynthesizerCommand extends Command<ControlEditPayl
     return mod.parameters.find(p => p.id === this.payload.parameter_id);
   }
 
-  public validate(): boolean {
+  public override validate(): boolean {
     return this.required("module_id", "parameter_id", "synthesizer_id");
   }
 
   public run() {
     const parameter: Parameter|undefined = this.extractParameter();
     if (!!parameter) {
-      parameter.controls.forEach(c => this.runOnControl(c));
+      getControls(parameter).forEach(c => this.runOnControl(c));
     }
   }
 
@@ -40,5 +41,5 @@ export default abstract class SynthesizerCommand extends Command<ControlEditPayl
     return this.extractParameter();
   }
 
-  public runOnControl(control: IControl): void {}
+  public runOnControl(control: Control): void {}
 }

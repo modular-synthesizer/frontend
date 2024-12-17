@@ -3,16 +3,16 @@
 </template>
 
 <script setup lang="ts">
-import { IControl } from '~~/lib/interfaces/IControl';
+import type { ComponentNames, Control } from '~/types/tools/Control';
 import { controlsPayloads } from '~~/lib/types/controls';
 
 const { control } = defineProps({
-  control: { type: Object as PropType<IControl>, required: true }
+  control: { type: Object as PropType<Control>, required: true }
 });
 
-const emit = defineEmits<{ updated: [ string ]}>();
+const emit = defineEmits<{ updated: [ ComponentNames ]}>();
 
-const value: Ref<string> = ref(control.component);
+const value: Ref<ComponentNames> = ref(control.component);
 
 const components = Object.keys(controlsPayloads)
 </script>

@@ -3,11 +3,12 @@
 </template>
 
 <script setup lang="ts">
-import ToolsFactory from '~~/lib/factories/ToolsFactory';
-import ITool from '~~/lib/interfaces/ITool';
+import { createEmptyTool } from '~/utils/functions/tools';
+import type { Tool } from '~~/types/tools/Tool';
 
-const tool: Ref<ITool> = ref(ToolsFactory.empty());
+const tool: Ref<Tool> = ref(createEmptyTool());
 
+  // @ts-ignore
 definePageMeta({ layout: 'empty' });
 
 onMounted(() => {

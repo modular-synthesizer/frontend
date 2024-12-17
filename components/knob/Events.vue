@@ -11,16 +11,17 @@
 
 <script setup lang="ts">
 import sendParamEvent from '~~/lib/commands/events/sendParamEvent';
-import { IControl } from '~~/lib/interfaces/IControl';
-import IParameter from '~~/lib/interfaces/IParameter';
-import Parameter from '~~/lib/wrappers/Parameter';
+import type { Parameter } from '~/types/modules/Parameter';
+import { moveValue } from '~/utils/functions/parameters';
+import type { Control } from '~/types/tools/Control';
 
 const { control, parameter } = defineProps({
-  parameter: { type: Parameter, required: true },
-  control: { type: Object as PropType<IControl>, required: true },
+  parameter: { type: Object as PropType<Parameter>, required: true },
+  control: { type: Object as PropType<Control>, required: true },
 });
 
-function onRightClick(parameter: IParameter, $event: MouseEvent) {
+
+function onRightClick(parameter: Parameter, $event: MouseEvent) {
   useContexts().display($event, {
     items: [
       {label: 'bind', action: useMidiLearn().learn},
@@ -55,7 +56,7 @@ function fireWheelEvent({ deltaY }: WheelEvent) {
   const ratio = useKeyboard().shift ? 10 : 1;
 
   const sign = - deltaY / Math.abs(deltaY)
-  parameter.moveValue(sign * parameter.step * ratio);
+  moveValue(parameter, sign * parameter.step * ratio);
 }
 
 function onWheel($event: WheelEvent): void {

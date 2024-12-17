@@ -17,9 +17,9 @@
 </template>
 
 <script lang="ts" setup>
-import ITool from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
 
 const { tool } = defineProps({
-  tool: { type: Object as PropType<ITool>, required: true }
+  tool: { type: Object as PropType<Tool>, required: true }
 });
 </script>

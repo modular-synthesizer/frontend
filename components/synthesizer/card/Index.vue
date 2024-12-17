@@ -63,8 +63,8 @@
 </template>
 
 <script lang="ts" setup>
-import IAccount from '~~/lib/interfaces/IAccount';
-import IMembership from '~~/lib/interfaces/synthesizers/IMembership';
+import type { Account } from '~/types/authentication/Account'
+import type IMembership from '~~/lib/interfaces/synthesizers/IMembership';
 import { repositories } from '~~/lib/repositories';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
@@ -80,14 +80,14 @@ const account_ids = computed((): string[] => {
   return props.synthesizer.members.map((m: IMembership) => m.account_id);
 });
 
-let results: Ref<IAccount[]> = ref([]);
+let results: Ref<Account[]> = ref([]);
 
 async function searchAccounts(username: string) {
   results.value = await repositories.accounts.search(username);
 }
 
-const filteredResults = computed((): IAccount[] => {
-  return results.value.filter((acc: IAccount) => !account_ids.value.includes(acc.id));
+const filteredResults = computed((): Account[] => {
+  return results.value.filter((acc: Account) => !account_ids.value.includes(acc.id));
 })
 
 async function addMember(account_id: string, username: string, type: string) {

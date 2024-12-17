@@ -7,14 +7,12 @@ import {
   ControlsKnob,
   ControlsLargeKnob,
   ControlsMidiController,
-  ControlsMuteButton,
   ControlsPort,
   ControlsSmallKnob,
-  ControlsAnalyser,
   ControlsFader,
 } from "#components"
+import type { Control } from "~/types/tools/Control";
 
-import { IControl } from "~~/lib/interfaces/IControl";
 import Mod from "~~/lib/wrappers/Mod";
 
 export default {
@@ -22,15 +20,13 @@ export default {
     ControlsKnob,
     ControlsLargeKnob,
     ControlsMidiController,
-    ControlsMuteButton,
     ControlsPort,
     ControlsSmallKnob,
-    ControlsAnalyser,
     ControlsFader,
   },
   props: {
     control: {
-      type: Object as PropType<IControl>,
+      type: Object as PropType<Control>,
       required: true,
     },
     mod: {

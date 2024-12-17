@@ -11,13 +11,13 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import ITool from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
 import { required } from '~~/lib/rules';
 import type { ToolTabs } from '~~/lib/types/ToolTabs';
 
 const props = defineProps({
-  modelValue: { type: Object as PropType<ITool>, required: true },
+  modelValue: { type: Object as PropType<Tool>, required: true },
   creationMode: { type: Boolean, default: false },
 });
 
@@ -35,7 +35,7 @@ function changeMode(m: ToolTabs) {
   mode.value = m;
 }
 
-async function onSaveRequest(t: ITool) {
+async function onSaveRequest(t: Tool) {
   tool.value = t;
   await form.value?.validate();
   if (valid.value) save();
@@ -43,7 +43,7 @@ async function onSaveRequest(t: ITool) {
 
 async function save() {
   if (props.creationMode) {
-    const creation: ITool = await repositories.tools.create(props.modelValue);
+    const creation: Tool = await repositories.tools.create(props.modelValue);
     props.modelValue.id = creation.id;
     createMode.value = false;
   }

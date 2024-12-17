@@ -32,17 +32,19 @@
 </template>
 
 <script lang="ts" setup>
-import ITool, { InnerNode, IToolPort } from '~~/lib/interfaces/ITool';
+import type { Tool } from '~~/types/tools/Tool';
+import type { InnerNode } from '~~/types/tools/InnerNode';
+import type { ToolPort } from '~~/types/tools/Port';
 
 const form: Ref = ref();
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
-  port: { type: Object as PropType<IToolPort>, required: true },
-  tool: { type: Object as PropType<ITool>, required: true }
+  port: { type: Object as PropType<ToolPort>, required: true },
+  tool: { type: Object as PropType<Tool>, required: true }
 });
 
-const emit = defineEmits<{ cancelled: [], validated: [IToolPort] }>();
+const emit = defineEmits<{ cancelled: [], validated: [ToolPort] }>();
 
 function getItems() {
   if (props.port.target === '') props.port.target = props.tool.nodes[0].name
