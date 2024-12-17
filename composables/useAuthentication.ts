@@ -1,25 +1,23 @@
-import ISession from "~~/lib/interfaces/ISession";
+import type { Session } from "~/types/authentication/Session";
 import { repositories } from "~~/lib/repositories";
 
 interface Payload {
-  session: ISession;
+  session: Session;
   storage: any;
 }
 
-function emptySession(): ISession {
+function emptySession(): Session {
   return {
     id: "",
     token: "",
-    username: "",
-    email: "",
     admin: false,
-    account_id: "",
-    rights: []
+    rights: [],
+    account: { username: '', email: '', id: '' }
   }
 }
 
 const state: Ref<Payload> = ref({
-  session: emptySession() as ISession,
+  session: emptySession() as Session,
   storage: useStorage()
 });
 
@@ -36,11 +34,11 @@ export function useAuthentication() {
       if(this.session?.token !== '') return this.session.token;
       return state.value.storage.get('auth-token');
     },
-    get session(): ISession {
+    get session(): Session {
       return state.value.session
     },
     get username(): string {
-      return this.session.username;
+      return this.session.account.username;
     },
     /**
      * Authenticates a user on the API given their credentials. If the request
@@ -53,7 +51,7 @@ export function useAuthentication() {
      * 
      * @return The promise for the login form to handle errors.
      */
-    async login(username: string, password: string): Promise<any> {
+    async login(username: string, password: string): Promise<void> {
       state.value.session = await repositories.sessions.auth(username, password);
       await state.value.storage.set("auth-token", this.session.token);
       await state.value.storage.set("session", JSON.stringify(this.session));
@@ -82,10 +80,10 @@ export function useAuthentication() {
      * recreating the session object in this storage so that the user does not
      * have to login again in the application when its session is still valid.
      */
-    async refresh(): Promise<ISession|undefined> {
+    async refresh(): Promise<Session|void> {
       if (!this.token) return;
       try {
-        state.value.session = await repositories.sessions.get(this.token);;
+        state.value.session = await repositories.sessions.get(this.token);
         setRights(this.session.rights)
         return this.session
       }

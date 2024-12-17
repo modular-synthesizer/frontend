@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Account } from '~/types/Account'
+import type { Account } from '~/types/authentication/Account'
 import type IMembership from '~~/lib/interfaces/synthesizers/IMembership';
 import { repositories } from '~~/lib/repositories';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';

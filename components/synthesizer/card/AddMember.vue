@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Account } from '~/types/Account'
+import type { Account } from '~/types/authentication/Account'
 
 const { tooltip, role, account, icon } = defineProps({
   tooltip: { type: String, required: true },
