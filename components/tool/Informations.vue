@@ -17,7 +17,7 @@
           variant="outlined"
           density="comfortable"
           label="Catégorie"
-          v-model="tool.categoryId"
+          v-model="tool.category.id"
           item-title="name"
           item-value="id"
         />

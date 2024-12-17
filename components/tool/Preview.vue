@@ -20,13 +20,12 @@
 
 <script setup lang="ts">
 import { findIndex } from 'lodash';
-import { PropType } from 'vue';
 import ModulesFactory from '~~/lib/factories/ModulesFactory';
 import type { Tool } from '~~/types/tools/Tool';
 import type { Control } from '~~/types/tools/Control';
-import IModule from '~~/lib/interfaces/modules/IModule';
+import type IModule from '~~/lib/interfaces/modules/IModule';
 import { repositories } from '~~/lib/repositories';
-import { ScalablePosition } from '~~/lib/types/ScalablePosition';
+import type { ScalablePosition } from '~~/lib/types/ScalablePosition';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import { FakeModule } from '~~/lib/wrappers/FakeModule';
 

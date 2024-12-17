@@ -6,15 +6,12 @@ import type { InnerNode } from "./InnerNode";
 import type { ToolParameter } from "./Parameter";
 import type { ToolPort } from "./Port";
 
+
 /**
  * This type represents the whole structure of a tool in the synple application.
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
-export type Tool = Identified & {
-    // The unique identifier of the catgory this tool is placed into.
-    categoryId: string;
-    // The instanciated category to be used in the interface.
-    category: Category;
+export type UncategorizedTool = Identified & {
     // The number of slots the tool is taken when instanciated as a module.
     slots: number;
     // The name of the tool, used as a translation key.
@@ -31,4 +28,9 @@ export type Tool = Identified & {
     ports: Array<ToolPort>;
     // The controls offered to the user to pilot the modules.
     controls: Array<Control>;
+}
+
+export type Tool = UncategorizedTool & {
+    // The category this tool belongs to, used to sort tools by it.
+    category: Category;
 }
