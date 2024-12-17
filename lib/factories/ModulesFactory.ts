@@ -1,11 +1,11 @@
-import IModule from "../interfaces/modules/IModule";
+import type IModule from "../interfaces/modules/IModule";
 import Mod from "../wrappers/Mod";
 import InnerNodesFactory from "./InnerNodes"
 import InnerLinksFactory from "./InnerLinks"
-import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
+import type ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import Synthesizer from "../wrappers/Synthesizer";
-import { IGenerator } from "../interfaces/IGenerator";
-import IPlacableModule from "../interfaces/modules/IPlacableModule";
+import type { Generator } from "../../types/Generator";
+import type IPlacableModule from "../interfaces/modules/IPlacableModule";
 import type { Channel } from "~/types/modules/Channel";
 import type { InnerLink } from "~/types/tools/InnerLink";
 
@@ -28,7 +28,7 @@ export class ModulesFactory {
       }
     }
   }
-  public async build(details: IModule, synthesizer: ISynthesizer|Synthesizer, generators: IGenerator[]) {
+  public async build(details: IModule, synthesizer: ISynthesizer|Synthesizer, generators: Generator[]) {
     const channels: Channel[] = [];
     for (let i = 0 ; i < synthesizer.voices ; ++i) {
       const nodes: Record<string, AudioNode> = await InnerNodesFactory.create(details.nodes, generators);

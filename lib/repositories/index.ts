@@ -1,4 +1,4 @@
-import type { IGenerator } from "../interfaces/IGenerator"
+import type { Generator } from "../../types/Generator"
 import type IMembership from "../interfaces/synthesizers/IMembership"
 import type { ToolPort } from '~~/types/tools/Port';
 import type { ToolParameter } from '~~/types/tools/Parameter';
@@ -24,7 +24,7 @@ export const repositories = {
   accounts: new AccountsRepository('accounts'),
   applications: new Repository<IApplication>('applications'),
   categories: new Repository<Category>('categories'),
-  generators: new Repository<IGenerator>('generators'),
+  generators: new Repository<Generator>('generators'),
   groups: new Repository<IGroup>('groups'),
   links: new LinksRepository('links'),
   memberships: new Repository<IMembership>('memberships'),

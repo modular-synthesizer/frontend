@@ -9,7 +9,7 @@
 import { useI18n } from 'vue-i18n'
 import GeneratorCreator from './dialogs/GeneratorCreator.vue';
 import { repositories } from '~~/lib/repositories';
-import { IGenerator } from '~~/lib/interfaces/IGenerator';
+import type { Generator } from '~/types/Generator';
 
 const headers = useHeaders(useI18n, [
   { 'title': 'common.uuid', key: 'id' },
@@ -18,6 +18,6 @@ const headers = useHeaders(useI18n, [
 ]);
 
 const { generators: repo } = repositories;
-const generators: Ref<IGenerator[]> = ref(await repo.list());
+const generators: Ref<Generator[]> = ref(await repo.list());
 const add = repo.add(generators.value);
 </script>

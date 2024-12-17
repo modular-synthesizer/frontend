@@ -33,11 +33,11 @@
 </template>
 
 <script lang="ts" setup>
-import { IGenerator } from '~~/lib/interfaces/IGenerator';
+import type { Generator } from '~/types/Generator';
 
-const emit = defineEmits<{ submitted: [generator: IGenerator]}>()
+const emit = defineEmits<{ submitted: [generator: Generator]}>()
 
-const generator: Ref<IGenerator> = ref({name: "", code: "", id: ""});
+const generator: Ref<Generator> = ref({name: "", code: "", id: ""});
 const creationDialog: Ref<boolean> = ref(false);
 const validForm: Ref<boolean> = ref(true);
 

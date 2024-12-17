@@ -1,5 +1,5 @@
 import { find } from "lodash";
-import type { IGenerator } from "../interfaces/IGenerator";
+import type { Generator } from "../../types/Generator";
 import type { InnerNode } from '~~/types/tools/InnerNode';
 import { useAudio } from "~~/composables/synthesizers/useAudio";
 
@@ -11,12 +11,12 @@ class InnerNodesFactory {
      * @return the list of instanciated inner nodes with a :node field containing
      *   the corresponding Web Audio API node(s).
      */
-    public async create(list: InnerNode[], generators: IGenerator[]): Promise<Record<string, AudioNode>> {
+    public async create(list: InnerNode[], generators: Generator[]): Promise<Record<string, AudioNode>> {
         const ctx: AudioContext = useAudio().context;
         const results: Record<string, AudioNode> = {}
 
         for(let innerNode of list) {
-            const gen: IGenerator = find(generators, {name: innerNode.generator}) as IGenerator;
+            const gen: Generator = find(generators, {name: innerNode.generator}) as Generator;
 
             if (gen !== undefined) {
                 const executor = {func: async function(_ctx: AudioContext, _payload: any) {}};

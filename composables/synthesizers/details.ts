@@ -1,6 +1,6 @@
 import { find, remove, uniqBy } from "lodash";
 import ModulesFactory from "~~/lib/factories/ModulesFactory";
-import type { IGenerator } from "~~/lib/interfaces/IGenerator";
+import type { Generator } from "~/types/Generator";
 import type ILink from "~~/lib/interfaces/ILink";
 import type IModule from "~~/lib/interfaces/modules/IModule";
 import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
@@ -55,7 +55,7 @@ export function useSynthesizer() {
     ]);
   }
 
-  async function buildModules(list: IModule[], synthesizer: Synthesizer, generators: IGenerator[]) {
+  async function buildModules(list: IModule[], synthesizer: Synthesizer, generators: Generator[]) {
     const mods: Mod[] = await Promise.all(list.map((imod: IModule) => {
       return ModulesFactory.build(imod as unknown as IModule, synthesizer, generators);
     }))
