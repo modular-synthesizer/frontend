@@ -43,7 +43,7 @@ export default class Port implements IPort {
     origin.link = via;
 
     this.mod.channels.forEach((channel: Channel) => {
-      const fromNode: AudioNode = origin.mod.channel(channel.index).nodes[origin.target]
+      const fromNode: AudioNode = channel.nodes[origin.target]
       const toNode: AudioNode = channel.nodes[this.target];
       fromNode.connect(toNode, origin.index, this.index);
     });
@@ -59,7 +59,7 @@ export default class Port implements IPort {
     origin.link = null;
 
     this.mod.channels.forEach((channel: Channel) => {
-      const fromNode: AudioNode = origin.mod.channel(channel.index).nodes[origin.target];
+      const fromNode: AudioNode = channel.nodes[origin.target];
       const toNode: AudioNode = channel.nodes[this.target];
 
       fromNode.disconnect(toNode);

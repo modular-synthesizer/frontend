@@ -13,6 +13,7 @@ import { useAudio } from "./useAudio";
 import type { Cable } from "~/types/Cable";
 import { createCable } from "~/utils/factories/cables";
 import { stopChannels } from "~/utils/functions/channels";
+import { getCables } from "~/utils/functions/modules";
 
 /** The currently displayed synthesizer, mainly used for position and zoom level */
 let synthesizer!: Ref<Synthesizer>;
@@ -113,7 +114,7 @@ export function useSynthesizer() {
   }
 
   async function disconnectModule(mod: Mod) {
-    mod.connections.forEach(useSynthesizer().removeLink);
+    getCables(mod).forEach(useSynthesizer().removeLink);
   }
 
   async function resetReference() {
