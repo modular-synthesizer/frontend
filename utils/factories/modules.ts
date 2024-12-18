@@ -1,5 +1,5 @@
 import type IModule from "~/lib/interfaces/modules/IModule";
-import type { AudioModule } from "~/types/modules/AudioModule";
+import type { AudioModule, ModulePayload } from "~/types/modules/AudioModule";
 import type { Channel } from "~/types/modules/Channel";
 import type { InnerLink } from "~/types/tools/InnerLink";
 import InnerNodesFactory from '~~/lib/factories/InnerNodes';
@@ -9,7 +9,6 @@ import type Synthesizer from "~/lib/wrappers/Synthesizer";
 import { initParameters } from "../functions/parameters";
 import type IPort from "~/lib/interfaces/IPort";
 import Port from "~/lib/wrappers/Port";
-import type { ModulePayload } from "~/lib/repositories/ModulesRepository";
 
 export async function createModule(details: ModulePayload, generators: Array<Generator>, synthesizer: Synthesizer): Promise<AudioModule> {
   const module: AudioModule = {
@@ -21,7 +20,8 @@ export async function createModule(details: ModulePayload, generators: Array<Gen
     controls: details.controls,
     parameters: {},
     ports: [],
-    channels: await createChannels(details, generators, synthesizer.voices)
+    channels: await createChannels(details, generators, synthesizer.voices),
+    category: details.category,
   }
   module.parameters = initParameters(module, details.parameters);
   module.ports = details.ports.map((ip: IPort) => new Port(ip, module));

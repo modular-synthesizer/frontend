@@ -1,7 +1,11 @@
 import { flatten } from "lodash";
+import { repositories } from "~/lib/repositories";
 import type Port from "~/lib/wrappers/Port";
-import type { ModuleCoordinates } from "~/types/modules/AudioModule";
+import type Synthesizer from "~/lib/wrappers/Synthesizer";
+import type { AudioModule, ModuleCoordinates, ModulePayload } from "~/types/modules/AudioModule";
 import type { Identified } from "~/types/utils/Identified";
+import { createModule } from "../factories/modules";
+import type { Generator } from "~/types/Generator";
 
 type Intersectable = ModuleCoordinates & Identified
 
@@ -36,4 +40,8 @@ function overlap(a: ModuleCoordinates, b: ModuleCoordinates): boolean {
  */
 export function getCables({ ports }: { ports: Array<Port> }) {
   return flatten(ports.map((p: Port) => p.links));
+}
+
+export async function fetchModules(results: Array<ModulePayload>, synthesizer: Synthesizer, generators: Array<Generator>): Promise<Array<AudioModule>> {
+  return Promise.all(results.map((details: ModulePayload) => createModule(details, generators, synthesizer)));
 }

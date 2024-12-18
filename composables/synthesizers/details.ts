@@ -13,7 +13,8 @@ import type { Cable } from "~/types/Cable";
 import { createCable } from "~/utils/factories/cables";
 import { stopChannels } from "~/utils/functions/channels";
 import { getCables } from "~/utils/functions/modules";
-import type { AudioModule } from "~/types/modules/AudioModule";
+import type { AudioModule, ModulePayload } from "~/types/modules/AudioModule";
+import { createModule } from "~/utils/factories/modules";
 
 /** The currently displayed synthesizer, mainly used for position and zoom level */
 let synthesizer!: Ref<Synthesizer>;
@@ -58,10 +59,8 @@ export function useSynthesizer() {
     ]);
   }
 
-  async function buildModules(list: IModule[], synthesizer: Synthesizer, generators: Generator[]) {
-    const mods: AudioModule[] = await Promise.all(list.map((imod: IModule) => {
-      return ModulesFactory.build(imod as unknown as IModule, synthesizer, generators);
-    }))
+  async function buildModules(list: Array<ModulePayload>, synthesizer: Synthesizer, generators: Generator[]) {
+    const mods: Array<AudioModule> = await Promise.all(list.map((details: ModulePayload) => createModule(details, generators, synthesizer)));
     mods.forEach((mod: AudioModule) => {
       synthesizer.place(mod.rack, mod.slot, mod);
       modules.value.push(mod);

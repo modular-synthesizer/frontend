@@ -1,9 +1,7 @@
-import type IModule from "../interfaces/modules/IModule";
 import Synthesizer from "../wrappers/Synthesizer";
 import type { Generator } from "../../types/Generator";
 import { createModule } from "~/utils/factories/modules";
-import type { AudioModule } from "~/types/modules/AudioModule";
-import type { ModulePayload } from "../repositories/ModulesRepository";
+import type { AudioModule, ModulePayload } from "~/types/modules/AudioModule";
 
 export class ModulesFactory {
   public empty(): AudioModule {
