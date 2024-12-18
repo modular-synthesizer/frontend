@@ -9,6 +9,9 @@ import type { Cable } from "~/types/Cable";
 import type { Parameter } from "~/types/modules/Parameter";
 import { setValue } from "~/utils/functions/parameters";
 import type { Control } from "~/types/tools/Control";
+import { freeChannel, intersect } from "~/utils/functions/modules";
+import type { ModuleCoordinates } from "~/types/modules/AudioModule";
+import type { Identified } from "~/types/utils/Identified";
 
 type Payload = IModule & { channels: Channel[] }
 
@@ -73,10 +76,7 @@ export default class Mod implements IModule {
   }
 
   public freeChannel(): Channel {
-    if (some(this.channels, {used: false})) {
-      return find(this.channels, {used: false}) as Channel;
-    }
-    return this.channels[0];
+    return freeChannel(this);
   }
 
   public stop() {
@@ -89,12 +89,7 @@ export default class Mod implements IModule {
     })
   }
 
-  public intersects({ slot, rack, slots, id }: { slot: number, rack: number, slots: number, id: string }) {
-    const [ begin, end ]: [ number, number ] = [ slot, slot + slots ];
-    if (this.rack !== rack) return false;
-    if (id === this.id) return false;
-    if (end <= this.slot) return false;
-    if (begin >= this.slot + this.slots) return false;
-    return true;
+  public intersects(other: ModuleCoordinates & Identified): boolean {
+    return intersect(this, other);
   }
 }
