@@ -47,3 +47,9 @@ export function createChannels(details: ModulePayload, generators: Array<Generat
     return { index, used: false, nodes, links}
   }));
 }
+
+export function createEmptyModule(): AudioModule {
+  return {
+    id: '', type: '', category: '', slot: 0, rack: 0, slots: 2, channels: [], ports: [], parameters: {}, controls: []
+  }
+}

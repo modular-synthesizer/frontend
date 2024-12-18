@@ -1,8 +1,6 @@
 import { find, remove, uniqBy } from "lodash";
-import ModulesFactory from "~~/lib/factories/ModulesFactory";
 import type { Generator } from "~/types/Generator";
 import type ILink from "~~/lib/interfaces/ILink";
-import type IModule from "~~/lib/interfaces/modules/IModule";
 import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { managers } from "~~/lib/managers";
 import { repositories } from "~~/lib/repositories";

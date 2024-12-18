@@ -41,13 +41,11 @@
 
 <script lang="ts">
 import { groupBy } from 'lodash';
-import ModulesFactory from '~~/lib/factories/ModulesFactory';
 import type { Generator } from '~/types/Generator';
-import type IModule from '~~/lib/interfaces/modules/IModule';
 import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
-import type { AudioModule, ModulePayload } from '~/types/modules/AudioModule';
+import type { ModulePayload } from '~/types/modules/AudioModule';
 import { createModule } from '~/utils/factories/modules';
 
 export default {
