@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import type { PlacedModule } from '~/types/modules/AudioModule';
+import type { AudioModule } from '~/types/modules/AudioModule';
 import { isInput } from '~/utils/functions/ports';
 import { PORT_RADIUS } from '~~/lib/utils/constants';
 import Port from '~~/lib/wrappers/Port';
@@ -41,7 +41,7 @@ export default {
   }),
   props: {
     mod: {
-      type: Object as PropType<PlacedModule>, required: true
+      type: Object as PropType<AudioModule>, required: true
     },
     strokeColor: {
       type: String,

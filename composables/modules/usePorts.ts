@@ -1,4 +1,4 @@
-import type { PlacedModule } from "~/types/modules/AudioModule";
+import type { AudioModule } from "~/types/modules/AudioModule";
 import Port from "~~/lib/wrappers/Port";
 
 type State = { ports: Port[] }
@@ -11,7 +11,7 @@ export function usePorts() {
     addPorts(ports: Port[]) {
       ports.forEach(port => state.value.ports.push(port));
     },
-    addModulePorts(module: PlacedModule) {
+    addModulePorts(module: AudioModule) {
       this.addPorts(module.ports);
     },
     reset() {

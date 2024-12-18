@@ -2,14 +2,14 @@ import { getRack, getSlot } from "~~/lib/utils/coordinates";
 import sendModuleEvent from "~~/lib/commands/events/sendModuleEvent";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { repositories } from "~~/lib/repositories";
-import type { PlacedModule } from "~/types/modules/AudioModule";
+import type { AudioModule } from "~/types/modules/AudioModule";
 
 /**
  * This composable holds the logic for the drag and drop of a module in the racks and slots.
  */
 export const useModuleDrag = () => {
 
-  let mod!: PlacedModule;
+  let mod!: AudioModule;
   let synth!: Synthesizer;
   // The slot of the first position of the clicked module (its origin).
   let movedSlot: number = 0;
@@ -57,7 +57,7 @@ export const useModuleDrag = () => {
      * @param draggedMod the module currently moved.
      * @param draggedInSynth the synthesizer in which the drag n drop event is occurring.
      */
-    start($event: MouseEvent, draggedMod: PlacedModule, draggedInSynth: Synthesizer) {
+    start($event: MouseEvent, draggedMod: AudioModule, draggedInSynth: Synthesizer) {
       if (blocked) return;
       mod = draggedMod;
       synth = draggedInSynth;

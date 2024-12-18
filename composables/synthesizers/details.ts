@@ -13,12 +13,12 @@ import type { Cable } from "~/types/Cable";
 import { createCable } from "~/utils/factories/cables";
 import { stopChannels } from "~/utils/functions/channels";
 import { getCables } from "~/utils/functions/modules";
-import type { PlacedModule } from "~/types/modules/AudioModule";
+import type { AudioModule } from "~/types/modules/AudioModule";
 
 /** The currently displayed synthesizer, mainly used for position and zoom level */
 let synthesizer!: Ref<Synthesizer>;
 /** The list of currently displayed modules */
-const modules: Ref<PlacedModule[]> = ref([]);
+const modules: Ref<AudioModule[]> = ref([]);
 /** The list of currently displayed links */
 const links: Ref<Cable[]> = ref([]);
 
@@ -59,10 +59,10 @@ export function useSynthesizer() {
   }
 
   async function buildModules(list: IModule[], synthesizer: Synthesizer, generators: Generator[]) {
-    const mods: PlacedModule[] = await Promise.all(list.map((imod: IModule) => {
+    const mods: AudioModule[] = await Promise.all(list.map((imod: IModule) => {
       return ModulesFactory.build(imod as unknown as IModule, synthesizer, generators);
     }))
-    mods.forEach((mod: PlacedModule) => {
+    mods.forEach((mod: AudioModule) => {
       synthesizer.place(mod.rack, mod.slot, mod);
       modules.value.push(mod);
     });
@@ -103,7 +103,7 @@ export function useSynthesizer() {
   }
 
   function stopModules() {
-    modules.value.forEach((m: PlacedModule) => stopChannels(m.channels));
+    modules.value.forEach((m: AudioModule) => stopChannels(m.channels));
     modules.value = [];
   }
 
@@ -113,13 +113,13 @@ export function useSynthesizer() {
     await repositories.links.delete(cable.id);
   }
 
-  async function removeModule(mod: PlacedModule) {
+  async function removeModule(mod: AudioModule) {
     disconnectModule(mod);
     remove(modules.value, { id: mod.id });
     await repositories.modules.delete(mod.id);
   }
 
-  async function disconnectModule(mod: PlacedModule) {
+  async function disconnectModule(mod: AudioModule) {
     getCables(mod).forEach(useSynthesizer().removeLink);
   }
 

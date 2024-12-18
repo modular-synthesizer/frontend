@@ -8,11 +8,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { PlacedModule } from '~/types/modules/AudioModule';
+import type { AudioModule } from '~/types/modules/AudioModule';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 
 const props = defineProps({
-  mod: { type: Object as PropType<PlacedModule>, required: true },
+  mod: { type: Object as PropType<AudioModule>, required: true },
 });
 
 const x = computed(() => { return props.mod.slot * SLOT_SIZE + 10 });

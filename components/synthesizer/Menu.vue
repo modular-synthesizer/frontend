@@ -1,7 +1,7 @@
 <template>
   <v-btn-group divided class="position-absolute menu-btn-group" color="deep-purple darken-2" rounded="pill">
     <sp-button-with-tooltip label="common.back" icon="chevron-left" to="/synthesizers" />
-    <module-creator :tools="tools" :synthesizer="synthesizer" @selected="(m: PlacedModule) => emit('inserted', m)" />
+    <module-creator :tools="tools" :synthesizer="synthesizer" @selected="(m: AudioModule) => emit('inserted', m)" />
     <sp-button-with-tooltip @click="useLinksDisplay().toggle()" :icon="linksIcon" :label="`synthesizers.cables.${cablesLabel}`" />
     <sp-button-with-tooltip label="synthesizers.center" icon="compass-outline" @click="useSynthesizer().resetReference()" />
   </v-btn-group>
@@ -10,7 +10,7 @@
 <script lang="ts" setup>
 import type { Tool } from '~~/types/tools/Tool';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
-import type { PlacedModule } from '~/types/modules/AudioModule';
+import type { AudioModule } from '~/types/modules/AudioModule';
 
 const { tools, synthesizer } = defineProps({
   tools: { type: Array<Tool>, default: () => [] },
@@ -18,7 +18,7 @@ const { tools, synthesizer } = defineProps({
 });
 
 type EmitType = {
-  inserted: [ PlacedModule ]
+  inserted: [ AudioModule ]
 }
 const emit = defineEmits<EmitType>();
 

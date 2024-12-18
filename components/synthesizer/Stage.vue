@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import type { Cable } from '~/types/Cable';
-import type { PlacedModule } from '~/types/modules/AudioModule';
+import type { AudioModule } from '~/types/modules/AudioModule';
 import { equals } from '~~/lib/interfaces/common/Identifiable';
 import { repositories } from '~~/lib/repositories';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
@@ -20,7 +20,7 @@ export default {
       required: true
     },
     modules: {
-      type: Array<PlacedModule>,
+      type: Array<AudioModule>,
       default: () => []
     },
     links: {

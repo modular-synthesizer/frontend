@@ -27,14 +27,14 @@
 
 <script lang="ts">
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
-import type { PlacedModule } from '~/types/modules/AudioModule';
+import type { AudioModule } from '~/types/modules/AudioModule';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 export default {
   name: "module-body",
   props: {
     mod: {
-      type: Object as PropType<PlacedModule>,
+      type: Object as PropType<AudioModule>,
       required: true
     },
     hovered: {
@@ -54,7 +54,7 @@ export default {
       if (synthesizer === null) return;
       useModuleDrag().start($event, this.mod, synthesizer);
     },
-    showMenu(mod: PlacedModule, $event: MouseEvent) {
+    showMenu(mod: AudioModule, $event: MouseEvent) {
       useContexts().display($event, {
         items: [
           {label: "unlink", action: useSynthesizer().disconnectModule},

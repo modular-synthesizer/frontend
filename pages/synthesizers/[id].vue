@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
-import type { PlacedModule } from '~/types/modules/AudioModule';
+import type { AudioModule } from '~/types/modules/AudioModule';
 
 // @ts-ignore
 definePageMeta({
@@ -34,7 +34,7 @@ onMounted(async () => {
   await useAudio().context?.suspend();
 });
 
-function insertModule(mod: PlacedModule) {
+function insertModule(mod: AudioModule) {
   if(synthesizer.value === null) return;
   modules.value.push(mod);
   synthesizer.value.place(mod.rack, mod.slot, mod);

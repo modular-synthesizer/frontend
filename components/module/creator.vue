@@ -47,7 +47,7 @@ import type IModule from '~~/lib/interfaces/modules/IModule';
 import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
-import type { PlacedModule } from '~/types/modules/AudioModule';
+import type { AudioModule } from '~/types/modules/AudioModule';
 
 export default {
   data: () => ({
@@ -74,7 +74,7 @@ export default {
         rack: 0,
         slot: this.synthesizer.firstFreeSlot(tool.slots),
       };
-      const response: PlacedModule = await repositories.modules.createInSynthesizer(payload)
+      const response: AudioModule = await repositories.modules.createInSynthesizer(payload)
       const generators: Generator[] = await repositories.generators.list();
       ModulesFactory.build(response, this.synthesizer, generators).then(this.close);
     },

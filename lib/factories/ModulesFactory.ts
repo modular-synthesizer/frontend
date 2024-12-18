@@ -2,10 +2,11 @@ import type IModule from "../interfaces/modules/IModule";
 import Synthesizer from "../wrappers/Synthesizer";
 import type { Generator } from "../../types/Generator";
 import { createModule } from "~/utils/factories/modules";
-import type { PlacedModule } from "~/types/modules/AudioModule";
+import type { AudioModule } from "~/types/modules/AudioModule";
+import type { ModulePayload } from "../repositories/ModulesRepository";
 
 export class ModulesFactory {
-  public empty(): PlacedModule {
+  public empty(): AudioModule {
     return {
       id: "",
       rack: 0,
@@ -18,7 +19,7 @@ export class ModulesFactory {
       channels: []
     }
   }
-  public async build(details: IModule, synthesizer: Synthesizer, generators: Generator[]) {
+  public async build(details: ModulePayload, synthesizer: Synthesizer, generators: Generator[]) {
     return createModule(details, generators, synthesizer);
   }
 }

@@ -26,7 +26,7 @@ import type { Control } from '~~/types/tools/Control';
 import { repositories } from '~~/lib/repositories';
 import type { ScalablePosition } from '~~/lib/types/ScalablePosition';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
-import type { PlacedModule } from '~/types/modules/AudioModule';
+import type { AudioModule } from '~/types/modules/AudioModule';
 
 const props = defineProps({
   modelValue: { type: Object as PropType<Tool>, required: true },
@@ -34,7 +34,7 @@ const props = defineProps({
 
 const tool: ComputedRef<Tool> = computed(() => props.modelValue);
 
-const mod: PlacedModule =  ModulesFactory.empty();
+const mod: AudioModule =  ModulesFactory.empty();
 const { x, y, scale }: ScalablePosition = { x: 50, y: 50, scale: 1.5 } as ScalablePosition;
 const moveMode: Ref<boolean> = ref(false);
 

@@ -6,19 +6,22 @@ import type Port from "~/lib/wrappers/Port";
 
 export type Parameters = Record<string, Parameter>;
 
-export type HasChannels = { channels: Array<Channel> };
-
-export type AudioModule = Identified & HasChannels & {
+type ModuleDescription = Identified & {
   type: string;
   ports: Array<Port>;
-  parameters: Parameters;
   controls: Array<Control>;
-}
-
-export type ModuleCoordinates = {
   slots: number;
   slot: number;
   rack: number;
 }
 
-export type PlacedModule = AudioModule & ModuleCoordinates;
+export type ModulePayload = ModuleDescription & {
+  parameters: Array<Parameter>,
+  channels: Array<Channel>,
+}
+
+
+export type AudioModule = ModuleDescription & {
+  parameters: Parameters,
+  channels: Array<Channel>
+}

@@ -3,7 +3,7 @@ import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import type { Parameter } from '~/types/modules/Parameter';
 import { getControls } from "~/utils/functions/parameters";
 import type { Control } from "~/types/tools/Control";
-import type { PlacedModule } from "~/types/modules/AudioModule";
+import type { AudioModule } from "~/types/modules/AudioModule";
 
 export interface ControlEditPayload {
   module_id: string;
@@ -14,14 +14,14 @@ export interface ControlEditPayload {
 
 export default abstract class SynthesizerCommand extends Command<ControlEditPayload> {
 
-  protected extractModule(): PlacedModule|undefined {
+  protected extractModule(): AudioModule|undefined {
     const synth: Synthesizer = useSynthesizer().synthesizer.value;
     if (!synth || synth?.id !== this.payload.synthesizer_id) return;
-    return useSynthesizer().modules.value.find(m => m.id === this.payload.module_id) as PlacedModule;
+    return useSynthesizer().modules.value.find(m => m.id === this.payload.module_id) as AudioModule;
   }
 
   protected extractParameter(): Parameter|undefined {
-    const mod: PlacedModule|undefined = this.extractModule();
+    const mod: AudioModule|undefined = this.extractModule();
     if (!mod) return;
     return Object.values(mod.parameters).find(p => p.id === this.payload.parameter_id);
   }

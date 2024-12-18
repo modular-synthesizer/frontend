@@ -6,14 +6,14 @@
 import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
 import type { Channel } from '~/types/modules/Channel';
-import type { PlacedModule } from '~/types/modules/AudioModule';
+import type { AudioModule } from '~/types/modules/AudioModule';
 
 export default {
   props: {
     pitch: { type: String, required: true},
     envelope: { type: String, required: true},
     modwheel: { type: String, required: true },
-    mod: { type: Object as PropType<PlacedModule>, required: true }
+    mod: { type: Object as PropType<AudioModule>, required: true }
   },
   data: function() {
     return {

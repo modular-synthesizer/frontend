@@ -1,5 +1,5 @@
 import type IModule from "~/lib/interfaces/modules/IModule";
-import type { PlacedModule } from "~/types/modules/AudioModule";
+import type { AudioModule } from "~/types/modules/AudioModule";
 import type { Channel } from "~/types/modules/Channel";
 import type { InnerLink } from "~/types/tools/InnerLink";
 import InnerNodesFactory from '~~/lib/factories/InnerNodes';
@@ -9,9 +9,10 @@ import type Synthesizer from "~/lib/wrappers/Synthesizer";
 import { initParameters } from "../functions/parameters";
 import type IPort from "~/lib/interfaces/IPort";
 import Port from "~/lib/wrappers/Port";
+import type { ModulePayload } from "~/lib/repositories/ModulesRepository";
 
-export async function createModule(details: IModule, generators: Array<Generator>, synthesizer: Synthesizer): Promise<PlacedModule> {
-  const module: PlacedModule = {
+export async function createModule(details: ModulePayload, generators: Array<Generator>, synthesizer: Synthesizer): Promise<AudioModule> {
+  const module: AudioModule = {
     id: '',
     type: details.type,
     slots: details.slots,
@@ -38,7 +39,7 @@ export async function createModule(details: IModule, generators: Array<Generator
  * 
  * @returns the list of channels created with the given schema of nodes and links.
  */
-export function createChannels(details: IModule, generators: Array<Generator>, voices: number): Promise<Array<Channel>> {
+export function createChannels(details: ModulePayload, generators: Array<Generator>, voices: number): Promise<Array<Channel>> {
   const arr: Array<number> = new Array(voices).fill(null).map((_, i) => i);
   return Promise.all(arr.map(async (_, index: number) => {
     const nodes: Record<string, AudioNode> = await InnerNodesFactory.create(details.nodes, generators);

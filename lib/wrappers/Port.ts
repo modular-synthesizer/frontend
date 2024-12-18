@@ -3,19 +3,19 @@ import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 import type { Channel } from "~/types/modules/Channel";
 import type { Cable } from "~/types/Cable";
 import type { Control } from "~/types/tools/Control";
-import type { PlacedModule } from "~/types/modules/AudioModule";
+import type { AudioModule } from "~/types/modules/AudioModule";
 
 export default class Port implements IPort {
   id: string;
   index: number;
   name: string;
   target: string;
-  mod: PlacedModule;
+  mod: AudioModule;
   kind: string;
 
   public link: Cable|null = null;
 
-  constructor({id, index, name, target, kind}: IPort, mod: PlacedModule) {
+  constructor({id, index, name, target, kind}: IPort, mod: AudioModule) {
     this.id = id;
     this.index = index;
     this.name = name;

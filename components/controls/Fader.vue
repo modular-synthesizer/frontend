@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import { round } from 'lodash';
-import type { PlacedModule } from '~/types/modules/AudioModule';
+import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Parameter } from '~/types/modules/Parameter';
 import type { Control } from '~/types/tools/Control';
 import { DEFAULT_FADER_HEIGHT } from '~~/lib/utils/constants';
@@ -65,7 +65,7 @@ export default {
     height: { type: Number, default: DEFAULT_FADER_HEIGHT },
     target: { type: String, required: true },
     label: { type: String, default: "" },
-    mod: { type: Object as PropType<PlacedModule>, required: true },
+    mod: { type: Object as PropType<AudioModule>, required: true },
     control: { type: Object as PropType<Control>, required: true },
   },
   computed: {

@@ -2,7 +2,7 @@ import type ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import type IMembership from "../interfaces/synthesizers/IMembership";
 import type { Coordinates } from "~/types/utils/Coordinates";
 import { intersect } from "~/utils/functions/modules";
-import type { PlacedModule } from "~/types/modules/AudioModule";
+import type { AudioModule } from "~/types/modules/AudioModule";
 
 /**
  * A synthesizer is the main object of the application. It is materialized
@@ -23,7 +23,7 @@ export default class Synthesizer implements ISynthesizer {
 
   public voices: number = 1;
 
-  public modules: PlacedModule[] = [];
+  public modules: AudioModule[] = [];
 
   public members: IMembership[] = [];
 
@@ -37,7 +37,7 @@ export default class Synthesizer implements ISynthesizer {
     this.members = infos.members;
   }
 
-  public setModules(mods: PlacedModule[]) {
+  public setModules(mods: AudioModule[]) {
     this.modules = mods;
   }
 
@@ -48,7 +48,7 @@ export default class Synthesizer implements ISynthesizer {
     return true;
   }
 
-  public place(rack: number, slot: number, mod: PlacedModule) {
+  public place(rack: number, slot: number, mod: AudioModule) {
     mod.rack = rack;
     mod.slot = slot;
   }
