@@ -27,7 +27,6 @@ export type ModulePayload = ModuleDescription & {
   links: Array<InnerLink>;
 }
 
-
 export type AudioModule = ModuleDescription & {
   parameters: Parameters;
   channels: Array<Channel>;

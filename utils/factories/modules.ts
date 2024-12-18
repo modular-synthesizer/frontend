@@ -1,4 +1,3 @@
-import type IModule from "~/lib/interfaces/modules/IModule";
 import type { AudioModule, ModulePayload } from "~/types/modules/AudioModule";
 import type { Channel } from "~/types/modules/Channel";
 import type { InnerLink } from "~/types/tools/InnerLink";
@@ -12,7 +11,7 @@ import Port from "~/lib/wrappers/Port";
 
 export async function createModule(details: ModulePayload, generators: Array<Generator>, synthesizer: Synthesizer): Promise<AudioModule> {
   const module: AudioModule = {
-    id: '',
+    id: details.id,
     type: details.type,
     slots: details.slots,
     slot: details.slot,
