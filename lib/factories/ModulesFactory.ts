@@ -5,7 +5,6 @@ import InnerLinksFactory from "./InnerLinks"
 import type ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import Synthesizer from "../wrappers/Synthesizer";
 import type { Generator } from "../../types/Generator";
-import type IPlacableModule from "../interfaces/modules/IPlacableModule";
 import type { Channel } from "~/types/modules/Channel";
 import type { InnerLink } from "~/types/tools/InnerLink";
 

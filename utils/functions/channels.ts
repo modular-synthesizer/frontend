@@ -1,4 +1,3 @@
-import { some, find } from "lodash";
 import type { Channel } from "~/types/modules/Channel";
 
 /**
