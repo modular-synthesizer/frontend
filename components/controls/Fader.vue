@@ -83,7 +83,7 @@ export default {
       return this.x - (KNOB_SIZE / 2);
     },
     parameter(): Parameter {
-      return this.mod.param(this.target);
+      return this.mod.parameters[this.target]
     },
     value(): Number {
         return round(this.parameter.value, this.parameter.precision);

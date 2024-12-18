@@ -4,18 +4,19 @@ import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 import type { Channel } from "~/types/modules/Channel";
 import type { Cable } from "~/types/Cable";
 import type { Control } from "~/types/tools/Control";
+import type { PlacedModule } from "~/types/modules/AudioModule";
 
 export default class Port implements IPort {
   id: string;
   index: number;
   name: string;
   target: string;
-  mod: Mod;
+  mod: PlacedModule;
   kind: string;
 
   public link: Cable|null = null;
 
-  constructor({id, index, name, target, kind}: IPort, mod: Mod) {
+  constructor({id, index, name, target, kind}: IPort, mod: PlacedModule) {
     this.id = id;
     this.index = index;
     this.name = name;
@@ -43,7 +44,7 @@ export default class Port implements IPort {
     origin.link = via;
 
     this.mod.channels.forEach((channel: Channel) => {
-      const fromNode: AudioNode = channel.nodes[origin.target]
+      const fromNode: AudioNode = origin.mod.channels[channel.index].nodes[origin.target];
       const toNode: AudioNode = channel.nodes[this.target];
       fromNode.connect(toNode, origin.index, this.index);
     });
@@ -59,8 +60,8 @@ export default class Port implements IPort {
     origin.link = null;
 
     this.mod.channels.forEach((channel: Channel) => {
-      const fromNode: AudioNode = channel.nodes[origin.target];
-      const toNode: AudioNode = channel.nodes[this.target];
+      const fromNode: AudioNode = channel.nodes[this.target];
+      const toNode: AudioNode = origin.mod.channels[channel.index].nodes[origin.target];
 
       fromNode.disconnect(toNode);
     });

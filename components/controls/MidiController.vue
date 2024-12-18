@@ -24,7 +24,7 @@ export default {
     }
   },
   created() {
-    const midichannel: number = this.mod.parameters.find((p: Parameter) => p.name === 'channel')?.value ?? -1;
+    const midichannel: number = this.mod.parameters.channel.value ?? -1;
     this.declareKeyEvents(midichannel);
     eventbus.subscribe(`parameters/update/${this.mod.id}/channel`, ({ value }: any) => {
       this.removeKeyEvents();

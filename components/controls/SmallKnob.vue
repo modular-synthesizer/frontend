@@ -18,5 +18,5 @@ function midiLabel(value: number): String {
   return value === -1 ? 'KBD' : `${value + 1}`;
 }
 
-const parameter = computed(() => mod?.param(target))
+const parameter = computed(() => mod?.parameters[target])
 </script>

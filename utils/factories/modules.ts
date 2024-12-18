@@ -1,27 +1,31 @@
 import type IModule from "~/lib/interfaces/modules/IModule";
-import type { AudioModule, PlacedModule } from "~/types/modules/AudioModule";
+import type { PlacedModule } from "~/types/modules/AudioModule";
 import type { Channel } from "~/types/modules/Channel";
 import type { InnerLink } from "~/types/tools/InnerLink";
 import InnerNodesFactory from '~~/lib/factories/InnerNodes';
 import InnerLinksFactory from '~~/lib/factories/InnerLinks';
 import type { Generator } from '~~/types/Generator';
 import type Synthesizer from "~/lib/wrappers/Synthesizer";
-import { createParameters } from "../functions/parameters";
+import { initParameters } from "../functions/parameters";
+import type IPort from "~/lib/interfaces/IPort";
+import Port from "~/lib/wrappers/Port";
 
-export async function createModule(details: IModule, generators: Array<Generator>, synthesizer: Synthesizer): Promise<AudioModule> {
-  return {
+export async function createModule(details: IModule, generators: Array<Generator>, synthesizer: Synthesizer): Promise<PlacedModule> {
+  const module: PlacedModule = {
     id: '',
     type: details.type,
     slots: details.slots,
+    slot: details.slot,
+    rack: details.rack,
     controls: details.controls,
-    parameters: createParameters(details.parameters),
-    ports: details.ports,
+    parameters: {},
+    ports: [],
     channels: await createChannels(details, generators, synthesizer.voices)
   }
-}
-
-export function placeModule(module: AudioModule, slot: number, rack: number): PlacedModule {
-  return { ...module, slot, rack };
+  module.parameters = initParameters(module, details.parameters);
+  module.ports = details.ports.map((ip: IPort) => new Port(ip, module));
+  usePorts().addModulePorts(module)
+  return module;
 }
 
 /**

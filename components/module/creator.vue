@@ -76,10 +76,7 @@ export default {
       };
       const response: IModule = await repositories.modules.createInSynthesizer(payload)
       const generators: Generator[] = await repositories.generators.list();
-      ModulesFactory.build(response, this.synthesizer, generators).then((mod: Mod) => {
-        this.$emit('selected', mod);
-        this.close();
-      });
+      ModulesFactory.build(response, this.synthesizer, generators).then(this.close);
     },
     categories(tools: Tool[]) {
       return groupBy(tools, tool => tool.category.name);

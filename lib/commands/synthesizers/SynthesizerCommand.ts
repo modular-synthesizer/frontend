@@ -23,7 +23,7 @@ export default abstract class SynthesizerCommand extends Command<ControlEditPayl
   protected extractParameter(): Parameter|undefined {
     const mod: Mod|undefined = this.extractModule();
     if (!mod) return;
-    return mod.parameters.find(p => p.id === this.payload.parameter_id);
+    return Object.values(mod.parameters).find(p => p.id === this.payload.parameter_id);
   }
 
   public override validate(): boolean {

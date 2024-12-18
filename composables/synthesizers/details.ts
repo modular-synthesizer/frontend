@@ -14,11 +14,12 @@ import type { Cable } from "~/types/Cable";
 import { createCable } from "~/utils/factories/cables";
 import { stopChannels } from "~/utils/functions/channels";
 import { getCables } from "~/utils/functions/modules";
+import type { PlacedModule } from "~/types/modules/AudioModule";
 
 /** The currently displayed synthesizer, mainly used for position and zoom level */
 let synthesizer!: Ref<Synthesizer>;
 /** The list of currently displayed modules */
-const modules: Ref<Mod[]> = ref([]);
+const modules: Ref<PlacedModule[]> = ref([]);
 /** The list of currently displayed links */
 const links: Ref<Cable[]> = ref([]);
 
@@ -46,6 +47,7 @@ export function useSynthesizer() {
     await loadProcessors(useAudio().context as AudioContext);
     const [ generators, imodules, ilinks ] = await fetchChildren(synthesizer.value);
     await buildModules(imodules, synthesizer.value, generators);
+    console.log(ilinks);
     await buildLinks(ilinks);
   }
 
@@ -58,10 +60,10 @@ export function useSynthesizer() {
   }
 
   async function buildModules(list: IModule[], synthesizer: Synthesizer, generators: Generator[]) {
-    const mods: Mod[] = await Promise.all(list.map((imod: IModule) => {
+    const mods: PlacedModule[] = await Promise.all(list.map((imod: IModule) => {
       return ModulesFactory.build(imod as unknown as IModule, synthesizer, generators);
     }))
-    mods.forEach((mod: Mod) => {
+    mods.forEach((mod: PlacedModule) => {
       synthesizer.place(mod.rack, mod.slot, mod);
       modules.value.push(mod);
     });
@@ -69,6 +71,10 @@ export function useSynthesizer() {
   }
 
   async function buildLinks(list: ILink[]) {
+    console.log(list.filter((ilink: ILink) => {
+      return find(usePorts().ports, {id: ilink.from}) !== undefined
+          && find(usePorts().ports, {id: ilink.to}) !== undefined
+    }));
     list.filter((ilink: ILink) => {
       return find(usePorts().ports, {id: ilink.from}) !== undefined
           && find(usePorts().ports, {id: ilink.to}) !== undefined
@@ -76,6 +82,7 @@ export function useSynthesizer() {
     .forEach((link: ILink) => {
       links.value.push(createCable(link.id, link.from, link.to, link.color, usePorts().ports));
     });
+    console.log(links.value)
   }
 
   /**
@@ -97,7 +104,7 @@ export function useSynthesizer() {
   }
 
   function stopModules() {
-    modules.value.forEach((m: Mod) => stopChannels(m.channels));
+    modules.value.forEach((m: PlacedModule) => stopChannels(m.channels));
     modules.value = [];
   }
 
