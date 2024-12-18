@@ -23,9 +23,6 @@ export class ModulesFactory {
       parameters: [],
       category: "",
       controls: [],
-      intersects(_module: IPlacableModule) {
-        return false;
-      }
     }
   }
   public async build(details: IModule, synthesizer: ISynthesizer|Synthesizer, generators: Generator[]) {

@@ -1,5 +1,5 @@
 import Port from "./Port";
-import { find, flatten, some } from 'lodash';
+import { flatten } from 'lodash';
 import type IPort from "../interfaces/IPort";
 import type IModule from "../interfaces/modules/IModule";
 import type { InnerLink } from '~~/types/tools/InnerLink';
@@ -9,7 +9,7 @@ import type { Cable } from "~/types/Cable";
 import type { Parameter } from "~/types/modules/Parameter";
 import { setValue } from "~/utils/functions/parameters";
 import type { Control } from "~/types/tools/Control";
-import { freeChannel, intersect } from "~/utils/functions/modules";
+import { intersect } from "~/utils/functions/modules";
 import type { ModuleCoordinates } from "~/types/modules/AudioModule";
 import type { Identified } from "~/types/utils/Identified";
 
@@ -73,23 +73,5 @@ export default class Mod implements IModule {
 
   public channel(index: number): Channel {
     return this.channels[index];
-  }
-
-  public freeChannel(): Channel {
-    return freeChannel(this);
-  }
-
-  public stop() {
-    this.channels.forEach((ch: Channel) => {
-      Object.values(ch.nodes)
-        .filter((anode: AudioNode) => (anode instanceof OscillatorNode))
-        .forEach((anode: AudioNode) => {
-          (anode as OscillatorNode).stop();
-        })
-    })
-  }
-
-  public intersects(other: ModuleCoordinates & Identified): boolean {
-    return intersect(this, other);
   }
 }

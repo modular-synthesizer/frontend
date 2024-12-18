@@ -1,5 +1,5 @@
 import { values } from "lodash";
-import IManager from "~~/lib/interfaces/IManager";
+import type IManager from "~~/lib/interfaces/IManager";
 import { managers } from "~~/lib/managers";
 
 export function startManagers() {

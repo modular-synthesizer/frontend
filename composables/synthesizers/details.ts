@@ -12,6 +12,7 @@ import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { useAudio } from "./useAudio";
 import type { Cable } from "~/types/Cable";
 import { createCable } from "~/utils/factories/cables";
+import { stopChannels } from "~/utils/functions/channels";
 
 /** The currently displayed synthesizer, mainly used for position and zoom level */
 let synthesizer!: Ref<Synthesizer>;
@@ -95,7 +96,7 @@ export function useSynthesizer() {
   }
 
   function stopModules() {
-    modules.value.forEach((m: Mod) => m.stop());
+    modules.value.forEach((m: Mod) => stopChannels(m.channels));
     modules.value = [];
   }
 

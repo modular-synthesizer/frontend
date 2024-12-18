@@ -1,12 +1,5 @@
-import { find, some } from "lodash";
-import type { HasChannels, ModuleCoordinates } from "~/types/modules/AudioModule";
-import type { Channel } from "~/types/modules/Channel";
+import type { ModuleCoordinates } from "~/types/modules/AudioModule";
 import type { Identified } from "~/types/utils/Identified";
-
-export function freeChannel(module: HasChannels): Channel {
-  if (some(module.channels, { used: false})) return find(module.channels, { used: false }) as Channel;
-  return module.channels[0];
-}
 
 type Intersectable = ModuleCoordinates & Identified
 

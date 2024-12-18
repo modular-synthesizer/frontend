@@ -2,6 +2,7 @@ import type ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import Mod from "./Mod";
 import type IMembership from "../interfaces/synthesizers/IMembership";
 import type { Coordinates } from "~/types/utils/Coordinates";
+import { intersect } from "~/utils/functions/modules";
 
 /**
  * A synthesizer is the main object of the application. It is materialized
@@ -42,7 +43,7 @@ export default class Synthesizer implements ISynthesizer {
 
   public hasRoom(rack: number, slot: number, slots: number, id: string): boolean {
     for (let mod of this.modules) {
-      if (mod.intersects({ rack, slot, slots, id: id })) return false;
+      if (intersect(mod, { rack, slot, slots, id: id })) return false;
     }
     return true;
   }
