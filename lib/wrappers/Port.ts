@@ -1,11 +1,11 @@
-import type IPort from "../interfaces/IPort";
 import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 import type { Channel } from "~/types/modules/Channel";
 import type { Cable } from "~/types/Cable";
 import type { Control } from "~/types/tools/Control";
 import type { AudioModule } from "~/types/modules/AudioModule";
+import type { ToolPort } from "~/types/tools/Port";
 
-export default class Port implements IPort {
+export default class Port implements Port {
   id: string;
   index: number;
   name: string;
@@ -15,7 +15,7 @@ export default class Port implements IPort {
 
   public link: Cable|null = null;
 
-  constructor({id, index, name, target, kind}: IPort, mod: AudioModule) {
+  constructor({id, index, name, target, kind}: ToolPort, mod: AudioModule) {
     this.id = id;
     this.index = index;
     this.name = name;

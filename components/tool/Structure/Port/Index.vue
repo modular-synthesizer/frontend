@@ -14,13 +14,13 @@
 </template>
 
 <script setup lang="ts">
-import IPort from '~~/lib/interfaces/IPort';
 import type { Tool } from '~~/types/tools/Tool';
 import type { ToolPort } from '~~/types/tools/Port';
 import type { InnerNode } from '~~/types/tools/InnerNode';
+import type { Port } from '~/types/modules/Port';
 
 const props = defineProps({
-  port: { type: Object as PropType<IPort>, required: true },
+  port: { type: Object as PropType<Port>, required: true },
   tool: { type: Object as PropType<Tool>, required: true },
   selected: { type: Boolean, default: false },
 });
