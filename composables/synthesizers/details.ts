@@ -1,13 +1,12 @@
 import { find, remove, uniqBy } from "lodash";
 import type { Generator } from "~/types/Generator";
-import type ILink from "~~/lib/interfaces/ILink";
 import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { managers } from "~~/lib/managers";
 import { repositories } from "~~/lib/repositories";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { useAudio } from "./useAudio";
-import type { Cable } from "~/types/Cable";
+import type { Cable, LinkPayload } from "~/types/Cable";
 import { createCable } from "~/utils/factories/cables";
 import { stopChannels } from "~/utils/functions/channels";
 import { getCables } from "~/utils/functions/modules";
@@ -66,16 +65,12 @@ export function useSynthesizer() {
     synthesizer.setModules(modules.value);
   }
 
-  async function buildLinks(list: ILink[]) {
-    console.log(list.filter((ilink: ILink) => {
-      return find(usePorts().ports, {id: ilink.from}) !== undefined
-          && find(usePorts().ports, {id: ilink.to}) !== undefined
-    }));
-    list.filter((ilink: ILink) => {
+  async function buildLinks(list: Array<LinkPayload>) {
+    list.filter((ilink: LinkPayload) => {
       return find(usePorts().ports, {id: ilink.from}) !== undefined
           && find(usePorts().ports, {id: ilink.to}) !== undefined
     })
-    .forEach((link: ILink) => {
+    .forEach((link: LinkPayload) => {
       links.value.push(createCable(link.id, link.from, link.to, link.color, usePorts().ports));
     });
     console.log(links.value)
