@@ -7,7 +7,6 @@ import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { managers } from "~~/lib/managers";
 import { repositories } from "~~/lib/repositories";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
-import Mod from "~~/lib/wrappers/Mod";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { useAudio } from "./useAudio";
 import type { Cable } from "~/types/Cable";
@@ -114,13 +113,13 @@ export function useSynthesizer() {
     await repositories.links.delete(cable.id);
   }
 
-  async function removeModule(mod: Mod) {
+  async function removeModule(mod: PlacedModule) {
     disconnectModule(mod);
     remove(modules.value, { id: mod.id });
     await repositories.modules.delete(mod.id);
   }
 
-  async function disconnectModule(mod: Mod) {
+  async function disconnectModule(mod: PlacedModule) {
     getCables(mod).forEach(useSynthesizer().removeLink);
   }
 

@@ -3,7 +3,6 @@ import type { Channel } from "~/types/modules/Channel";
 import type { Parameter } from "~/types/modules/Parameter";
 import type { Control } from "~/types/tools/Control";
 import type { Parameters, PlacedModule } from "~/types/modules/AudioModule";
-import type Mod from "~/lib/wrappers/Mod";
 
 /**
  * Sets a new value in a parameter, and its corresponding Web Audio API AudioParam object.

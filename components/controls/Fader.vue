@@ -51,10 +51,10 @@
 
 <script lang="ts">
 import { round } from 'lodash';
+import type { PlacedModule } from '~/types/modules/AudioModule';
 import type { Parameter } from '~/types/modules/Parameter';
 import type { Control } from '~/types/tools/Control';
 import { DEFAULT_FADER_HEIGHT } from '~~/lib/utils/constants';
-import Mod from '~~/lib/wrappers/Mod';
 
 const KNOB_SIZE = 26;
 
@@ -65,7 +65,7 @@ export default {
     height: { type: Number, default: DEFAULT_FADER_HEIGHT },
     target: { type: String, required: true },
     label: { type: String, default: "" },
-    mod: { type: Mod, required: true },
+    mod: { type: Object as PropType<PlacedModule>, required: true },
     control: { type: Object as PropType<Control>, required: true },
   },
   computed: {

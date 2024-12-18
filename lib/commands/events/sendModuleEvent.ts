@@ -1,7 +1,7 @@
-import Mod from '~~/lib/wrappers/Mod';
+import type { PlacedModule } from '~/types/modules/AudioModule';
 import sendEvent from './sendEvent';
 
-export default function(operation: string, mod: Mod): void {
+export default function(operation: string, mod: PlacedModule): void {
   sendEvent({
     resource: 'synthesizer',
     operation,

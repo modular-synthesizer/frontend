@@ -3,15 +3,14 @@
     <synthesizer-module v-for="mod in modules" :mod="mod" :hovered="hovered !== null && equals(hovered, mod)" />
     <synthesizer-link v-for="link in links" :link="link" />
     <LinkCreator />
-    <module-tooltip v-if="hovered" :mod="hovered" />
   </draggable-stage>
 </template>
 
 <script lang="ts">
 import type { Cable } from '~/types/Cable';
+import type { PlacedModule } from '~/types/modules/AudioModule';
 import { equals } from '~~/lib/interfaces/common/Identifiable';
 import { repositories } from '~~/lib/repositories';
-import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 export default {
@@ -21,7 +20,7 @@ export default {
       required: true
     },
     modules: {
-      type: Array<Mod>,
+      type: Array<PlacedModule>,
       default: () => []
     },
     links: {

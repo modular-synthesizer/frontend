@@ -1,8 +1,8 @@
+import type { PlacedModule } from "~/types/modules/AudioModule";
 import type { Parameter } from "~/types/modules/Parameter";
-import type Mod from "../wrappers/Mod";
 
 export class ParametersFactory {
-  public empty(mod: Mod): Parameter {
+  public empty(mod: PlacedModule): Parameter {
     return {
       id: "",
       name: "",

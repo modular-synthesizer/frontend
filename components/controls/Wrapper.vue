@@ -11,9 +11,8 @@ import {
   ControlsSmallKnob,
   ControlsFader,
 } from "#components"
+import type { PlacedModule } from "~/types/modules/AudioModule";
 import type { Control } from "~/types/tools/Control";
-
-import Mod from "~~/lib/wrappers/Mod";
 
 export default {
   components: {
@@ -30,7 +29,7 @@ export default {
       required: true,
     },
     mod: {
-      type: Object as PropType<Mod>,
+      type: Object as PropType<PlacedModule>,
       required: true,
     }
   }

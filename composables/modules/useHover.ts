@@ -1,8 +1,8 @@
-import Mod from "~~/lib/wrappers/Mod";
+import type { PlacedModule } from "~/types/modules/AudioModule";
 
 interface Payload {
-  current: Mod | null;
-  next: Mod | null;
+  current: PlacedModule | null;
+  next: PlacedModule | null;
   blocked: boolean;
 }
 
@@ -11,7 +11,7 @@ const state: Ref<Payload> = ref({ current: null, next: null, blocked: false });
 export function useHover() {
   return {
     state,
-    mouseenter(mod: Mod) {
+    mouseenter(mod: PlacedModule) {
       useStates().setState(SynthState.HOVERING_MODULE);
       useModuleDrag().entersOtherModule()
       state.value.next = mod;

@@ -1,18 +1,18 @@
 <template>
 <g :transform="`translate(${x} ${y})`">
   <foreignObject width="1" height="1" class="label-container">
-    <span class="label-wrapper">{{ $t(`modules.${props.mod.category}.${props.mod.type}.short`) }}</span>
+    <span class="label-wrapper">pouet</span>
   </foreignObject>
   <line x1="10" y1="40" x2="10" y2="25" stroke="white" stroke-width="2" />
 </g>
 </template>
 
 <script lang="ts" setup>
+import type { PlacedModule } from '~/types/modules/AudioModule';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
-import Mod from '~~/lib/wrappers/Mod';
 
 const props = defineProps({
-  mod: { type: Mod, required: true },
+  mod: { type: Object as PropType<PlacedModule>, required: true },
 });
 
 const x = computed(() => { return props.mod.slot * SLOT_SIZE + 10 });

@@ -1,5 +1,4 @@
 import type ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
-import Mod from "./Mod";
 import type IMembership from "../interfaces/synthesizers/IMembership";
 import type { Coordinates } from "~/types/utils/Coordinates";
 import { intersect } from "~/utils/functions/modules";

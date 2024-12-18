@@ -1,9 +1,9 @@
 import Command from "../Command";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
-import Mod from "~~/lib/wrappers/Mod";
 import type { Parameter } from '~/types/modules/Parameter';
 import { getControls } from "~/utils/functions/parameters";
 import type { Control } from "~/types/tools/Control";
+import type { PlacedModule } from "~/types/modules/AudioModule";
 
 export interface ControlEditPayload {
   module_id: string;
@@ -14,14 +14,14 @@ export interface ControlEditPayload {
 
 export default abstract class SynthesizerCommand extends Command<ControlEditPayload> {
 
-  protected extractModule(): Mod|undefined {
+  protected extractModule(): PlacedModule|undefined {
     const synth: Synthesizer = useSynthesizer().synthesizer.value;
     if (!synth || synth?.id !== this.payload.synthesizer_id) return;
-    return useSynthesizer().modules.value.find(m => m.id === this.payload.module_id) as Mod;
+    return useSynthesizer().modules.value.find(m => m.id === this.payload.module_id) as PlacedModule;
   }
 
   protected extractParameter(): Parameter|undefined {
-    const mod: Mod|undefined = this.extractModule();
+    const mod: PlacedModule|undefined = this.extractModule();
     if (!mod) return;
     return Object.values(mod.parameters).find(p => p.id === this.payload.parameter_id);
   }

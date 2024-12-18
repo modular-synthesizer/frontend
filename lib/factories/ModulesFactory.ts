@@ -2,21 +2,20 @@ import type IModule from "../interfaces/modules/IModule";
 import Synthesizer from "../wrappers/Synthesizer";
 import type { Generator } from "../../types/Generator";
 import { createModule } from "~/utils/factories/modules";
+import type { PlacedModule } from "~/types/modules/AudioModule";
 
 export class ModulesFactory {
-  public empty(): IModule {
+  public empty(): PlacedModule {
     return {
       id: "",
-      nodes: [],
-      links: [],
       rack: 0,
       slot: 0,
       slots: 0,
       type: "",
       ports: [],
-      parameters: [],
-      category: "",
+      parameters: {},
       controls: [],
+      channels: []
     }
   }
   public async build(details: IModule, synthesizer: Synthesizer, generators: Generator[]) {

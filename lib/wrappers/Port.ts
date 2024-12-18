@@ -1,5 +1,4 @@
 import type IPort from "../interfaces/IPort";
-import Mod from "./Mod";
 import { RACK_HEIGHT, SLOT_SIZE } from "../utils/constants";
 import type { Channel } from "~/types/modules/Channel";
 import type { Cable } from "~/types/Cable";
