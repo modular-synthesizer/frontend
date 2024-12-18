@@ -29,8 +29,9 @@
 </template>
 
 <script lang="ts">
+import type { AudioModule } from '~/types/modules/AudioModule';
+import { isInput } from '~/utils/functions/ports';
 import { PORT_RADIUS } from '~~/lib/utils/constants';
-import Mod from '~~/lib/wrappers/Mod';
 import Port from '~~/lib/wrappers/Port';
 
 export default {
@@ -40,7 +41,7 @@ export default {
   }),
   props: {
     mod: {
-      type: Mod, required: true
+      type: Object as PropType<AudioModule>, required: true
     },
     strokeColor: {
       type: String,
@@ -59,11 +60,11 @@ export default {
       return this.mod.ports.find(p => p.name === this.target) as Port;
     },
     colorClass() {
-      const input: boolean = !!this.port?.isInput();
+      const input: boolean = isInput(this.port);
       return { 'fill-grey-darken-3': input, 'fill-indigo-darken-3': !input };
     },
     strokeClass() {
-      const input: boolean = !!this.port?.isInput();
+      const input: boolean = isInput(this.port)
       return { 'stroke-grey-darken-3': input, 'stroke-indigo-darken-3': !input };
     }
   },

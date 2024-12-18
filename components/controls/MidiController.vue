@@ -3,18 +3,17 @@
 </template>
 
 <script lang="ts">
-import Mod from '~~/lib/wrappers/Mod';
 import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
 import type { Channel } from '~/types/modules/Channel';
-import type { Parameter } from '~/types/modules/Parameter';
+import type { AudioModule } from '~/types/modules/AudioModule';
 
 export default {
   props: {
     pitch: { type: String, required: true},
     envelope: { type: String, required: true},
     modwheel: { type: String, required: true },
-    mod: { type: Mod, required: true }
+    mod: { type: Object as PropType<AudioModule>, required: true }
   },
   data: function() {
     return {
@@ -24,7 +23,7 @@ export default {
     }
   },
   created() {
-    const midichannel: number = this.mod.parameters.find((p: Parameter) => p.name === 'channel')?.value ?? -1;
+    const midichannel: number = this.mod.parameters.channel.value ?? -1;
     this.declareKeyEvents(midichannel);
     eventbus.subscribe(`parameters/update/${this.mod.id}/channel`, ({ value }: any) => {
       this.removeKeyEvents();

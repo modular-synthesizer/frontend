@@ -1,24 +1,22 @@
 import { find, remove, uniqBy } from "lodash";
-import ModulesFactory from "~~/lib/factories/ModulesFactory";
 import type { Generator } from "~/types/Generator";
-import type ILink from "~~/lib/interfaces/ILink";
-import type IModule from "~~/lib/interfaces/modules/IModule";
 import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { managers } from "~~/lib/managers";
 import { repositories } from "~~/lib/repositories";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
-import Mod from "~~/lib/wrappers/Mod";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { useAudio } from "./useAudio";
-import type { Cable } from "~/types/Cable";
+import type { Cable, LinkPayload } from "~/types/Cable";
 import { createCable } from "~/utils/factories/cables";
 import { stopChannels } from "~/utils/functions/channels";
 import { getCables } from "~/utils/functions/modules";
+import type { AudioModule, ModulePayload } from "~/types/modules/AudioModule";
+import { createModule } from "~/utils/factories/modules";
 
 /** The currently displayed synthesizer, mainly used for position and zoom level */
 let synthesizer!: Ref<Synthesizer>;
 /** The list of currently displayed modules */
-const modules: Ref<Mod[]> = ref([]);
+const modules: Ref<AudioModule[]> = ref([]);
 /** The list of currently displayed links */
 const links: Ref<Cable[]> = ref([]);
 
@@ -46,6 +44,7 @@ export function useSynthesizer() {
     await loadProcessors(useAudio().context as AudioContext);
     const [ generators, imodules, ilinks ] = await fetchChildren(synthesizer.value);
     await buildModules(imodules, synthesizer.value, generators);
+    console.log(ilinks);
     await buildLinks(ilinks);
   }
 
@@ -57,25 +56,24 @@ export function useSynthesizer() {
     ]);
   }
 
-  async function buildModules(list: IModule[], synthesizer: Synthesizer, generators: Generator[]) {
-    const mods: Mod[] = await Promise.all(list.map((imod: IModule) => {
-      return ModulesFactory.build(imod as unknown as IModule, synthesizer, generators);
-    }))
-    mods.forEach((mod: Mod) => {
+  async function buildModules(list: Array<ModulePayload>, synthesizer: Synthesizer, generators: Generator[]) {
+    const mods: Array<AudioModule> = await Promise.all(list.map((details: ModulePayload) => createModule(details, generators, synthesizer)));
+    mods.forEach((mod: AudioModule) => {
       synthesizer.place(mod.rack, mod.slot, mod);
       modules.value.push(mod);
     });
     synthesizer.setModules(modules.value);
   }
 
-  async function buildLinks(list: ILink[]) {
-    list.filter((ilink: ILink) => {
+  async function buildLinks(list: Array<LinkPayload>) {
+    list.filter((ilink: LinkPayload) => {
       return find(usePorts().ports, {id: ilink.from}) !== undefined
           && find(usePorts().ports, {id: ilink.to}) !== undefined
     })
-    .forEach((link: ILink) => {
+    .forEach((link: LinkPayload) => {
       links.value.push(createCable(link.id, link.from, link.to, link.color, usePorts().ports));
     });
+    console.log(links.value)
   }
 
   /**
@@ -97,7 +95,7 @@ export function useSynthesizer() {
   }
 
   function stopModules() {
-    modules.value.forEach((m: Mod) => stopChannels(m.channels));
+    modules.value.forEach((m: AudioModule) => stopChannels(m.channels));
     modules.value = [];
   }
 
@@ -107,13 +105,13 @@ export function useSynthesizer() {
     await repositories.links.delete(cable.id);
   }
 
-  async function removeModule(mod: Mod) {
+  async function removeModule(mod: AudioModule) {
     disconnectModule(mod);
     remove(modules.value, { id: mod.id });
     await repositories.modules.delete(mod.id);
   }
 
-  async function disconnectModule(mod: Mod) {
+  async function disconnectModule(mod: AudioModule) {
     getCables(mod).forEach(useSynthesizer().removeLink);
   }
 

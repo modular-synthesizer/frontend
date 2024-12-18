@@ -26,16 +26,15 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
-import Mod from '~~/lib/wrappers/Mod';
+import type { AudioModule } from '~/types/modules/AudioModule';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 export default {
   name: "module-body",
   props: {
     mod: {
-      type: Object as PropType<Mod>,
+      type: Object as PropType<AudioModule>,
       required: true
     },
     hovered: {
@@ -55,7 +54,7 @@ export default {
       if (synthesizer === null) return;
       useModuleDrag().start($event, this.mod, synthesizer);
     },
-    showMenu(mod: Mod, $event: MouseEvent) {
+    showMenu(mod: AudioModule, $event: MouseEvent) {
       useContexts().display($event, {
         items: [
           {label: "unlink", action: useSynthesizer().disconnectModule},

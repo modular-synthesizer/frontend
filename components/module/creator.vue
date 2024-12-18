@@ -41,13 +41,12 @@
 
 <script lang="ts">
 import { groupBy } from 'lodash';
-import ModulesFactory from '~~/lib/factories/ModulesFactory';
 import type { Generator } from '~/types/Generator';
-import type IModule from '~~/lib/interfaces/modules/IModule';
 import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
-import Mod from '~~/lib/wrappers/Mod';
 import Synthesizer from '~~/lib/wrappers/Synthesizer';
+import type { ModulePayload } from '~/types/modules/AudioModule';
+import { createModule } from '~/utils/factories/modules';
 
 export default {
   data: () => ({
@@ -74,12 +73,10 @@ export default {
         rack: 0,
         slot: this.synthesizer.firstFreeSlot(tool.slots),
       };
-      const response: IModule = await repositories.modules.createInSynthesizer(payload)
+      const response: ModulePayload = await repositories.modules.createInSynthesizer(payload)
       const generators: Generator[] = await repositories.generators.list();
-      ModulesFactory.build(response, this.synthesizer, generators).then((mod: Mod) => {
-        this.$emit('selected', mod);
-        this.close();
-      });
+      await createModule(response, generators, this.synthesizer);
+      this.close();
     },
     categories(tools: Tool[]) {
       return groupBy(tools, tool => tool.category.name);

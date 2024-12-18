@@ -9,5 +9,5 @@ const { x, y, target, label, mod, control } = defineProps({
   ...KnobPayload, ...ControlsPayload
 });
 
-const parameter = computed(() => mod?.param(target))
+const parameter = computed(() => mod?.parameters[target])
 </script>
