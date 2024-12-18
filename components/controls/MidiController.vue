@@ -3,18 +3,17 @@
 </template>
 
 <script lang="ts">
-import Mod from '~~/lib/wrappers/Mod';
 import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
 import type { Channel } from '~/types/modules/Channel';
-import type { Parameter } from '~/types/modules/Parameter';
+import type { AudioModule } from '~/types/modules/AudioModule';
 
 export default {
   props: {
     pitch: { type: String, required: true},
     envelope: { type: String, required: true},
     modwheel: { type: String, required: true },
-    mod: { type: Mod, required: true }
+    mod: { type: Object as PropType<AudioModule>, required: true }
   },
   data: function() {
     return {
@@ -24,7 +23,7 @@ export default {
     }
   },
   created() {
-    const midichannel: number = this.mod.parameters.find((p: Parameter) => p.name === 'channel')?.value ?? -1;
+    const midichannel: number = this.mod.parameters.channel.value ?? -1;
     this.declareKeyEvents(midichannel);
     eventbus.subscribe(`parameters/update/${this.mod.id}/channel`, ({ value }: any) => {
       this.removeKeyEvents();
@@ -36,7 +35,7 @@ export default {
   },
   methods: {
     noteTrigger({ note, channel }: any) {
-      const c = this.mod.channel(channel);
+      const c = this.mod.channels[channel]
       if (c === undefined) return;
       const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode
       gate.offset.setValueAtTime(1, this.ctx.currentTime);
@@ -44,14 +43,14 @@ export default {
     },
     noteChange({ note, channel }: any) {
       const voltage: number = (note - 69) / 12;
-      const c = this.mod.channel(channel);
+      const c = this.mod.channels[channel]
       if (!c) return;
       const pitch: ConstantSourceNode = c.nodes[this.pitch] as ConstantSourceNode
       pitch.offset.cancelScheduledValues(this.ctx.currentTime);
       pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
     },
     noteRelease({ channel }: any) {
-      const c = this.mod.channel(channel);
+      const c = this.mod.channels[channel]
       if (c === undefined) return;
       const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode
       gate.offset.cancelScheduledValues(this.ctx.currentTime);
@@ -69,7 +68,7 @@ export default {
       eventbus.unsubscribe(`midi/release/${this.midichannel}`, this.noteRelease);
       eventbus.unsubscribe(`midi/modwheel/${this.midichannel}`, this.modWheel);
       for (let i = 0; i < POLYPHONY_CHANNELS; ++i) {
-        const c = this.mod.channel(i);
+        const c = this.mod.channels[i]
         if (c === undefined) continue;
         const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode;
         if (gate === undefined) continue;

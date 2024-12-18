@@ -1,24 +1,33 @@
-import type IPort from "~/lib/interfaces/IPort";
 import type { Identified } from "../utils/Identified";
 import type { Channel } from "./Channel";
 import type { Parameter } from "./Parameter";
 import type { Control } from "../tools/Control";
+import type Port from "~/lib/wrappers/Port";
+import type { InnerLink } from "../tools/InnerLink";
+import type { InnerNode } from "../tools/InnerNode";
 
 export type Parameters = Record<string, Parameter>;
 
-export type HasChannels = { channels: Array<Channel> };
-
-export type AudioModule = Identified & HasChannels & {
-  type: string;
-  ports: Array<IPort>;
-  parameters: Parameters;
-  controls: Array<Control>;
-}
-
-export type ModuleCoordinates = {
+export type ModuleCoordinates = Identified & {
   slots: number;
   slot: number;
   rack: number;
 }
 
-export type PlacedModule = AudioModule & ModuleCoordinates;
+type ModuleDescription = ModuleCoordinates & {
+  type: string;
+  ports: Array<Port>;
+  controls: Array<Control>;
+  category: string;
+}
+
+export type ModulePayload = ModuleDescription & {
+  parameters: Array<Parameter>;
+  nodes: Array<InnerNode>;
+  links: Array<InnerLink>;
+}
+
+export type AudioModule = ModuleDescription & {
+  parameters: Parameters;
+  channels: Array<Channel>;
+}

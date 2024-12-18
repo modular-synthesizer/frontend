@@ -1,8 +1,22 @@
-import type { ModuleCoordinates } from "~/types/modules/AudioModule";
+import { flatten } from "lodash";
+import { repositories } from "~/lib/repositories";
+import type Port from "~/lib/wrappers/Port";
+import type Synthesizer from "~/lib/wrappers/Synthesizer";
+import type { AudioModule, ModuleCoordinates, ModulePayload } from "~/types/modules/AudioModule";
 import type { Identified } from "~/types/utils/Identified";
+import { createModule } from "../factories/modules";
+import type { Generator } from "~/types/Generator";
 
 type Intersectable = ModuleCoordinates & Identified
 
+/**
+ * Checks if a module intersects another one by checking if they are on the same "line", not the same module
+ * (otherwise any module would intersect with himself) and if the start of one of the two modules is "inside" the other.
+ * 
+ * @param a the first module to check. 
+ * @param b the second module to check.
+ * @returns TRUE if a module intersects the other, FALSE otherwise.
+ */
 export function intersect(a: Intersectable, b: Intersectable): boolean {
   return inSameRack(a, b) && !equal(a, b) && (overlap(a, b) || overlap(b, a));
 }
@@ -17,4 +31,17 @@ function equal(first: Identified, second: Identified): boolean {
 
 function overlap(a: ModuleCoordinates, b: ModuleCoordinates): boolean {
   return a.slot >= b.slot && a.slot < (b.slot + b.slots);
+}
+
+/**
+ * Vanity methods used to aggregate all cables from and to a given module.
+ * @param module the module having a list of ports that should be check to aggregate cables to/from them. 
+ * @returns the complete list of cables linked to the module.
+ */
+export function getCables({ ports }: { ports: Array<Port> }) {
+  return flatten(ports.map((p: Port) => p.links));
+}
+
+export async function fetchModules(results: Array<ModulePayload>, synthesizer: Synthesizer, generators: Array<Generator>): Promise<Array<AudioModule>> {
+  return Promise.all(results.map((details: ModulePayload) => createModule(details, generators, synthesizer)));
 }

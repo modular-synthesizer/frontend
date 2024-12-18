@@ -1,6 +1,7 @@
 import type { Cable } from "~/types/Cable";
 import type { Coordinates } from "~/types/utils/Coordinates";
 import { createCable } from "~/utils/factories/cables";
+import { isInput } from "~/utils/functions/ports";
 import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { repositories } from "~~/lib/repositories";
 import Port from "~~/lib/wrappers/Port";
@@ -44,8 +45,8 @@ async function createLink() {
   useSynthesizer().links.value.push(insertion);
   const payload = {
     id: '',
-    from: to.isInput() ? from.id : to.id,
-    to: from.isInput() ? from.id : to.id,
+    from: isInput(to) ? from.id : to.id,
+    to: isInput(from) ? from.id : to.id,
     synthesizer_id: useSynthesizer().synthesizer.value.id,
     color: 'red'
   }

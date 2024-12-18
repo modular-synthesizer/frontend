@@ -2,7 +2,7 @@ import { clamp } from "lodash";
 import type { Channel } from "~/types/modules/Channel";
 import type { Parameter } from "~/types/modules/Parameter";
 import type { Control } from "~/types/tools/Control";
-import type { Parameters } from "~/types/modules/AudioModule";
+import type { Parameters, AudioModule } from "~/types/modules/AudioModule";
 
 /**
  * Sets a new value in a parameter, and its corresponding Web Audio API AudioParam object.
@@ -45,6 +45,10 @@ export function extractAudioParam(node: AudioNode, field: string): AudioParam|un
   return node[field as keyof AudioNode] as unknown as AudioParam;
 }
 
-export function createParameters(parameters: Array<Parameter>): Parameters {
+export function initParameters(module: AudioModule, parameters: Array<Parameter>): Parameters {
+  parameters.forEach((p: Parameter) => {
+    p.mod = module;
+    setValue(p, p.value);
+  })
   return Object.fromEntries(parameters.map((p: Parameter) => [p.name, p]))
 }

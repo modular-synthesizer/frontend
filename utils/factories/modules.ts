@@ -1,27 +1,31 @@
-import type IModule from "~/lib/interfaces/modules/IModule";
-import type { AudioModule, PlacedModule } from "~/types/modules/AudioModule";
+import type { AudioModule, ModulePayload } from "~/types/modules/AudioModule";
 import type { Channel } from "~/types/modules/Channel";
 import type { InnerLink } from "~/types/tools/InnerLink";
 import InnerNodesFactory from '~~/lib/factories/InnerNodes';
 import InnerLinksFactory from '~~/lib/factories/InnerLinks';
 import type { Generator } from '~~/types/Generator';
 import type Synthesizer from "~/lib/wrappers/Synthesizer";
-import { createParameters } from "../functions/parameters";
+import { initParameters } from "../functions/parameters";
+import type IPort from "~/lib/interfaces/IPort";
+import Port from "~/lib/wrappers/Port";
 
-export async function createModule(details: IModule, generators: Array<Generator>, synthesizer: Synthesizer): Promise<AudioModule> {
-  return {
-    id: '',
+export async function createModule(details: ModulePayload, generators: Array<Generator>, synthesizer: Synthesizer): Promise<AudioModule> {
+  const module: AudioModule = {
+    id: details.id,
     type: details.type,
     slots: details.slots,
+    slot: details.slot,
+    rack: details.rack,
     controls: details.controls,
-    parameters: createParameters(details.parameters),
-    ports: details.ports,
-    channels: await createChannels(details, generators, synthesizer.voices)
+    parameters: {},
+    ports: [],
+    channels: await createChannels(details, generators, synthesizer.voices),
+    category: details.category,
   }
-}
-
-export function placeModule(module: AudioModule, slot: number, rack: number): PlacedModule {
-  return { ...module, slot, rack };
+  module.parameters = initParameters(module, details.parameters);
+  module.ports = details.ports.map((ip: IPort) => new Port(ip, module));
+  usePorts().addModulePorts(module)
+  return module;
 }
 
 /**
@@ -34,11 +38,17 @@ export function placeModule(module: AudioModule, slot: number, rack: number): Pl
  * 
  * @returns the list of channels created with the given schema of nodes and links.
  */
-export function createChannels(details: IModule, generators: Array<Generator>, voices: number): Promise<Array<Channel>> {
+export function createChannels(details: ModulePayload, generators: Array<Generator>, voices: number): Promise<Array<Channel>> {
   const arr: Array<number> = new Array(voices).fill(null).map((_, i) => i);
   return Promise.all(arr.map(async (_, index: number) => {
     const nodes: Record<string, AudioNode> = await InnerNodesFactory.create(details.nodes, generators);
     const links: Array<InnerLink> = InnerLinksFactory.link(nodes, details.links);
     return { index, used: false, nodes, links}
   }));
+}
+
+export function createEmptyModule(): AudioModule {
+  return {
+    id: '', type: '', category: '', slot: 0, rack: 0, slots: 2, channels: [], ports: [], parameters: {}, controls: []
+  }
 }
