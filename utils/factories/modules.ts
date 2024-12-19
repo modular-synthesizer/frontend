@@ -22,7 +22,7 @@ export async function createModule(details: ModulePayload, generators: Array<Gen
     category: details.category,
   }
   module.parameters = initParameters(module, details.parameters);
-  module.ports = details.ports.map((tp: ToolPort) => ({ ...tp, link: null, mod: module }));
+  module.ports = details.ports.map((tp: ToolPort) => ({ ...tp, link: undefined, mod: module }));
   usePorts().addModulePorts(module)
   return module;
 }
