@@ -9,7 +9,7 @@ import type { Tool } from '~~/types/tools/Tool';
 const tool: Ref<Tool> = ref(createEmptyTool());
 
   // @ts-ignore
-definePageMeta({ layout: 'empty' });
+definePageMeta({ layout: false });
 
 onMounted(() => {
   const content = localStorage.getItem("import-json");

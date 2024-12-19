@@ -32,9 +32,11 @@ const props = defineProps({
   modelValue: { type: Object as PropType<Tool>, required: true },
 });
 
+console.log(props.modelValue);
+
 const tool: ComputedRef<Tool> = computed(() => props.modelValue);
 
-const mod: AudioModule =  createEmptyModule();
+const mod: AudioModule =  createEmptyModule(tool.value);
 const { x, y, scale }: ScalablePosition = { x: 50, y: 50, scale: 1.5 } as ScalablePosition;
 const moveMode: Ref<boolean> = ref(false);
 

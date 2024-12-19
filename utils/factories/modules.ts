@@ -1,4 +1,4 @@
-import type { AudioModule, ModulePayload } from "~/types/modules/AudioModule";
+import type { AudioModule, ModulePayload, Parameters } from "~/types/modules/AudioModule";
 import type { Channel } from "~/types/modules/Channel";
 import type { InnerLink } from "~/types/tools/InnerLink";
 import InnerNodesFactory from '~~/lib/factories/InnerNodes';
@@ -7,6 +7,10 @@ import type { Generator } from '~~/types/Generator';
 import { initParameters } from "../functions/parameters";
 import type { ToolPort } from "~/types/tools/Port";
 import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
+import type { Tool } from "~/types/tools/Tool";
+import type { Port } from "~/types/modules/Port";
+import type { Parameter } from "~/types/modules/Parameter";
+import type { ToolParameter } from "~/types/tools/Parameter";
 
 export async function createModule(details: ModulePayload, generators: Array<Generator>, synthesizer: Synthesizer): Promise<AudioModule> {
   const module: AudioModule = {
@@ -22,9 +26,16 @@ export async function createModule(details: ModulePayload, generators: Array<Gen
     category: details.category,
   }
   module.parameters = initParameters(module, details.parameters);
-  module.ports = details.ports.map((tp: ToolPort) => ({ ...tp, link: undefined, mod: module }));
+  module.ports = instanciatePorts(module, details.ports);
+
+  console.log(module)
+
   usePorts().addModulePorts(module)
   return module;
+}
+
+function instanciatePorts(module: AudioModule, ports: Array<ToolPort>): Array<Port> {
+  return ports.map((tp: ToolPort) => ({ ...tp, link: undefined, mod: module }))
 }
 
 /**
@@ -46,8 +57,15 @@ export function createChannels(details: ModulePayload, generators: Array<Generat
   }));
 }
 
-export function createEmptyModule(): AudioModule {
-  return {
+function instanciateParameters(module: AudioModule, parameters: Array<ToolParameter>): Parameters {
+  return initParameters(module, parameters.map((tp: ToolParameter): Parameter => ({ ...tp, mod: module, value: tp.default })));
+}
+
+export function createEmptyModule(tool: Tool): AudioModule {
+  const module: AudioModule = {
     id: '', type: '', category: '', slot: 0, rack: 0, slots: 2, channels: [], ports: [], parameters: {}, controls: []
   }
+  module.ports = instanciatePorts(module, tool.ports);
+  module.parameters = instanciateParameters(module, tool.parameters);
+  return module;
 }

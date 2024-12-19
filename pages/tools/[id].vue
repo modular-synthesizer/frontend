@@ -6,7 +6,7 @@
 import type { Tool } from '~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
 
-definePageMeta({ layout: 'empty' });
+definePageMeta({ layout: false });
 
 const tool: Tool = await repositories.tools.get(useRoute().params.id as string);
 </script>
