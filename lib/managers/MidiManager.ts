@@ -1,4 +1,4 @@
-import IManager from "~~/lib/interfaces/IManager";
+import type IManager from "~~/lib/interfaces/IManager";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import MidiDevice from "~~/lib/midi/MidiDevice";
 import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
@@ -56,7 +56,7 @@ export default class MidiManager implements IManager {
    */
   public bindEvents(input: MIDIInput) {
     input.onmidimessage = (message: Event): any => {
-      if (!(message instanceof MIDIMessageEvent)) return;
+      if (!(message instanceof MIDIMessageEvent) || message?.data === null) return;
       const channel = message.data[0] % 16;
       const device: MidiDevice = this.getOrCreateDevice(channel);
       device.message(message.data[0] - channel, message.data);
