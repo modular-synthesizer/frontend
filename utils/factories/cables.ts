@@ -8,6 +8,10 @@ export function createCable(id: string, from: string, to: string, color: string,
   return connectCable(cable);
 }
 
+export function searchPort(ports: Array<Port>, id: string): Port {
+  return ports.find(port => equals(port, { id })) as Port
+}
+
 export function connectCable(cable: Cable): Cable {
   cable.from.link = cable;
   cable.to.link = cable;
@@ -19,10 +23,6 @@ export function connectCable(cable: Cable): Cable {
 
 function getNode(port: Port, index: number): AudioNode {
   return port.mod.channels[index].nodes[port.target];
-}
-
-export function searchPort(ports: Array<Port>, id: string): Port {
-  return ports.find(port => equals(port, { id })) as Port
 }
 
 export function disconnectCable(cable: Cable): Cable {

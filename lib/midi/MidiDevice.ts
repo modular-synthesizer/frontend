@@ -1,8 +1,7 @@
 import { difference, findIndex, indexOf, last } from "lodash";
 import { POLYPHONY_CHANNELS } from "../utils/constants";
 import { eventbus } from "../utils/eventbus/EventBus";
-import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
-import Synthesizer from "../wrappers/Synthesizer";
+import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 
 export default class MidiDevice {
 
@@ -17,7 +16,7 @@ export default class MidiDevice {
     this.midichannel = midichannel;
   }
 
-  public setSynthesizer(synthesizer: Synthesizer|ISynthesizer) {
+  public setSynthesizer(synthesizer: Synthesizer) {
     if (synthesizer.voices > this.channels.length) {
       const newArray = Array.from(Array(synthesizer.voices - this.channels.length)).map(_ => -1);
       this.channels = [...this.channels, ...newArray];

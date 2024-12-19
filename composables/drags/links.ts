@@ -2,9 +2,9 @@ import type { Cable } from "~/types/Cable";
 import type { Coordinates } from "~/types/utils/Coordinates";
 import { createCable } from "~/utils/factories/cables";
 import { getAbsoluteCoordinates, isInput } from "~/utils/functions/ports";
-import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { repositories } from "~~/lib/repositories";
 import type { Port } from '~/types/modules/Port';
+import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 
 type StateType = {
   start?: Coordinates,
@@ -21,7 +21,7 @@ function setStartPort(port: Port) {
 }
 
 function setEndCoordinates({ x, y }: Coordinates) {
-  const { scale, x: sx, y: sy}: ISynthesizer = useSynthesizer().synthesizer.value;
+  const { scale, x: sx, y: sy}: Synthesizer = useSynthesizer().synthesizer.value;
   linkCreationState.value.end = { x: (x - sx) / scale, y: (y - sy) / scale }
 }
 
@@ -59,7 +59,6 @@ function canLinkTo(port: Port): boolean {
 }
 
 export function magnetize(port: Port) {
-  console.log(!linkCreationState.value.startPort, !canLinkTo(port))
   if (!linkCreationState.value.startPort || !canLinkTo(port)) return;
   linkCreationState.value.endPort = port;
   linkCreationState.value.end = getAbsoluteCoordinates(port);

@@ -1,8 +1,10 @@
 import { getRack, getSlot } from "~~/lib/utils/coordinates";
 import sendModuleEvent from "~~/lib/commands/events/sendModuleEvent";
-import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { repositories } from "~~/lib/repositories";
 import type { AudioModule } from "~/types/modules/AudioModule";
+import { hasRoom } from "~/utils/functions/synthesizers";
+import { place } from "~/utils/functions/modules";
+import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 
 /**
  * This composable holds the logic for the drag and drop of a module in the racks and slots.
@@ -35,11 +37,11 @@ export const useModuleDrag = () => {
 
     if (newPlace === mod.slot && rack === mod.rack) return;
 
-    if (synth.hasRoom(rack, newPlace, mod.slots, mod.id)) {
-      synth.place(rack, newPlace, mod);
+    if (hasRoom(synth, { rack, slot: newPlace, slots: mod.slots, id: mod.id })) {
+      place(mod, rack, newPlace);
     }
     else {
-      synth.place(mod.rack || 0, mod.slot || 0, mod);
+      place(mod, mod.rack || 0, mod.slot || 0);
     }
   }
   

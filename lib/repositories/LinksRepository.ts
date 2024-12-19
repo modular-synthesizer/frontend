@@ -1,10 +1,10 @@
 import type { LinkPayload } from "~/types/Cable";
-import type ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import { Repository } from "./utils/Repository";
+import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 
 export default class LinksRepository extends Repository<LinkPayload> {
     
-  public override async list(synthesizer: ISynthesizer): Promise<LinkPayload[]> {
+  public override async list(synthesizer: Synthesizer): Promise<LinkPayload[]> {
     return super.list({ synthesizer_id: synthesizer.id});
   }
 }

@@ -4,6 +4,7 @@ import { Strategies } from "./editionStrategy";
 import { repositories } from "~~/lib/repositories";
 import type { Parameter } from '~/types/modules/Parameter';
 import type { Control } from '~/types/tools/Control';
+import { isReadMember } from '~/utils/functions/synthesizers';
 
 const strategy: Ref<Strategies> = ref(Strategies.DECORRELATED);
 
@@ -15,7 +16,7 @@ interface ParameterSettings {
 }
 
 export function startParameterSetting({ $event, parameter, control, mode }: ParameterSettings, callback: () => void = () => {}) {
-  if (useSynthesizer().synthesizer.value.isReadonly(useAuthentication().username)) return;
+  if (isReadMember(useSynthesizer().synthesizer.value, useAuthentication().username)) return;
   selectParameter({ parameter, control, x: $event.clientX, y: $event.clientY });
   strategy.value = mode;
   sendParamEvent('startEdit', parameter);

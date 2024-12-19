@@ -9,9 +9,9 @@
 <script lang="ts">
 import type { Cable } from '~/types/Cable';
 import type { AudioModule } from '~/types/modules/AudioModule';
+import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 import { equals } from '~~/lib/interfaces/common/Identifiable';
 import { repositories } from '~~/lib/repositories';
-import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 export default {
   props: {

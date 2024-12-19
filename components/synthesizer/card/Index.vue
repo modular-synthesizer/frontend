@@ -64,12 +64,13 @@
 
 <script lang="ts" setup>
 import type { Account } from '~/types/authentication/Account'
-import type IMembership from '~~/lib/interfaces/synthesizers/IMembership';
+import type { Membership } from '~/types/synthesizers/Membership';
+import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
+import { isCreatorMember, isReadMember } from '~/utils/functions/synthesizers';
 import { repositories } from '~~/lib/repositories';
-import Synthesizer from '~~/lib/wrappers/Synthesizer';
 
 const props = defineProps({
-  synthesizer: { type: Synthesizer, required: true }
+  synthesizer: { type: Object as PropType<Synthesizer>, required: true }
 });
 
 const emit = defineEmits<{ delete: [ id: string ] }>();
@@ -77,7 +78,7 @@ const emit = defineEmits<{ delete: [ id: string ] }>();
 const showMembers = ref(false);
 
 const account_ids = computed((): string[] => {
-  return props.synthesizer.members.map((m: IMembership) => m.account_id);
+  return props.synthesizer.members.map((m: Membership) => m.account_id);
 });
 
 let results: Ref<Account[]> = ref([]);
@@ -91,17 +92,17 @@ const filteredResults = computed((): Account[] => {
 })
 
 async function addMember(account_id: string, username: string, type: string) {
-  const params: IMembership = { account_id, synthesizer_id: props.synthesizer.id, type, id: '', username };
+  const params: Membership = { account_id, synthesizer_id: props.synthesizer.id, type, id: '', username };
   await repositories.memberships.add(props.synthesizer.members)(params);
 }
 
 const remove: (id: string) => Promise<void> = repositories.memberships.remove(props.synthesizer.members);
 
 const isReadOnly = computed(() => {
-  return props.synthesizer?.isReadonly(useAuthentication().username);
+  return isReadMember(props.synthesizer, useAuthentication().username);
 });
 
 const isCreator = computed(() => {
-  return props.synthesizer?.isCreator(useAuthentication().username);
+  return isCreatorMember(props.synthesizer, useAuthentication().username);
 });
 </script>

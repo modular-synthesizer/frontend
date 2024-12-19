@@ -44,9 +44,10 @@ import { groupBy } from 'lodash';
 import type { Generator } from '~/types/Generator';
 import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
-import Synthesizer from '~~/lib/wrappers/Synthesizer';
 import type { ModulePayload } from '~/types/modules/AudioModule';
 import { createModule } from '~/utils/factories/modules';
+import { firstFreeSlot } from '~/utils/functions/synthesizers';
+import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 
 export default {
   data: () => ({
@@ -56,7 +57,7 @@ export default {
   }),
   props: {
     synthesizer: {
-      type: Synthesizer,
+      type: Object as PropType<Synthesizer>,
       required: true
     }
   },
@@ -71,7 +72,7 @@ export default {
         tool_id: tool.id,
         synthesizer_id: this.synthesizer.id,
         rack: 0,
-        slot: this.synthesizer.firstFreeSlot(tool.slots),
+        slot: firstFreeSlot(this.synthesizer, tool.slots),
       };
       const response: ModulePayload = await repositories.modules.createInSynthesizer(payload)
       const generators: Generator[] = await repositories.generators.list();

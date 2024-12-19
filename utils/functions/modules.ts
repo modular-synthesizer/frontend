@@ -1,6 +1,6 @@
 import type { Port } from '~/types/modules/Port';
 import type { Cable } from "~/types/Cable";
-import type { ModuleCoordinates } from "~/types/modules/AudioModule";
+import type { AudioModule, ModuleCoordinates } from "~/types/modules/AudioModule";
 import type { Identified } from "~/types/utils/Identified";
 
 type Intersectable = ModuleCoordinates & Identified
@@ -36,4 +36,9 @@ function overlap(a: ModuleCoordinates, b: ModuleCoordinates): boolean {
  */
 export function getCables({ ports }: { ports: Array<Port> }): Array<Cable> {
   return ports.map((p: Port) => p.link).filter((c: Cable|undefined) => !!c);
+}
+
+export function place(module: AudioModule, rack: number, slot: number) {
+  module.rack = rack;
+  module.slot = slot;
 }

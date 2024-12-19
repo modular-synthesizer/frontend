@@ -28,7 +28,7 @@
 <script lang="ts">
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 import type { AudioModule } from '~/types/modules/AudioModule';
-import Synthesizer from '~~/lib/wrappers/Synthesizer';
+import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 
 export default {
   name: "module-body",
@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     dragstart($event: MouseEvent) {
-      const synthesizer: Synthesizer|null = useSynthesizer().synthesizer.value;
+      const synthesizer: Synthesizer = useSynthesizer().synthesizer.value;
       if (synthesizer === null) return;
       useModuleDrag().start($event, this.mod, synthesizer);
     },

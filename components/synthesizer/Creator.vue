@@ -47,13 +47,13 @@
 <script setup lang="ts">
 import { boundaries, minlength, required } from '@/lib/rules';
 import { useI18n } from 'vue-i18n';
-import ISynthesizer from '~~/lib/interfaces/synthesizers/ISynthesizer';
+import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 
-let synthesizer: Ref<ISynthesizer> = ref(createEmptySynthesizer());
+let synthesizer: Ref<Synthesizer> = ref(createEmptySynthesizer());
 
 const translator = useI18n();
 
-const emit = defineEmits<{ created: [ synth: ISynthesizer ] }>();
+const emit = defineEmits<{ created: [ synth: Synthesizer ] }>();
 
 const props = defineProps({ floating: { type: Boolean, default: false } })
 

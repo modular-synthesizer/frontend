@@ -19,10 +19,10 @@
 </template>
 
 <script setup lang="ts">
-import Synthesizer from '~~/lib/wrappers/Synthesizer';
+import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 
 const { synthesizer } = defineProps({
-  synthesizer: { type: Synthesizer, required: true }
+  synthesizer: { type: Object as PropType<Synthesizer>, required: true }
 });
 
 const emit = defineEmits<{delete: [ id: string ]}>();

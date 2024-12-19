@@ -1,8 +1,7 @@
-import { pick } from "lodash";
-import type ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
 import type { Parameter } from '~/types/modules/Parameter';
 import { Repository } from "./utils/Repository";
-import type { ModulePayload } from "~/types/modules/AudioModule";
+import type { ModuleDescription, ModulePayload } from "~/types/modules/AudioModule";
+import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 
 type CreationPayload = { tool_id: string, synthesizer_id: string, rack: number, slot: number };
 
@@ -11,16 +10,17 @@ export class ModulesRepository extends Repository<ModulePayload> {
     return await api_post(`${this.BASE_URI}/modules`, payload);
   }
 
-  public override async list(synthesizer: ISynthesizer): Promise<ModulePayload[]> {
+  public override async list(synthesizer: Synthesizer): Promise<ModulePayload[]> {
     return super.list({ synthesizer_id: synthesizer.id});
   }
 
-  public override async update(payload: ModulePayload): Promise<ModulePayload> {
-    return await api_put(this.uri(payload.id), pick(payload, 'slot', 'rack'));
+  public override async update({ rack, slot, id }: ModuleDescription): Promise<ModulePayload> {
+    return await api_put(this.uri(id), { slot, rack });
   }
 
   public async updateParameter(parameter: Parameter): Promise<Parameter> {
-    await api_put(this.uri(parameter.mod.id), { parameters: [pick(parameter, 'id', 'value')] });
+    const { id, mod, value } = parameter;
+    await api_put(this.uri(mod.id), { parameters: [ { id, value } ] });
     return parameter;
   }
 }

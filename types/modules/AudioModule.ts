@@ -15,7 +15,7 @@ export type ModuleCoordinates = Identified & {
   rack: number;
 }
 
-type ModuleDescription = ModuleCoordinates & {
+export type ModuleDescription = ModuleCoordinates & {
   type: string;
   controls: Array<Control>;
   category: string;

@@ -12,6 +12,7 @@
 import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
 import type { AudioModule } from '~/types/modules/AudioModule';
+import { place } from '~/utils/functions/modules';
 
 // @ts-ignore
 definePageMeta({
@@ -37,7 +38,7 @@ onMounted(async () => {
 function insertModule(mod: AudioModule) {
   if(synthesizer.value === null) return;
   modules.value.push(mod);
-  synthesizer.value.place(mod.rack, mod.slot, mod);
+  place(mod, mod.rack, mod.slot);
 }
 
 async function initialize() {

@@ -4,9 +4,9 @@ import type { InnerLink } from "~/types/tools/InnerLink";
 import InnerNodesFactory from '~~/lib/factories/InnerNodes';
 import InnerLinksFactory from '~~/lib/factories/InnerLinks';
 import type { Generator } from '~~/types/Generator';
-import type Synthesizer from "~/lib/wrappers/Synthesizer";
 import { initParameters } from "../functions/parameters";
 import type { ToolPort } from "~/types/tools/Port";
+import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 
 export async function createModule(details: ModulePayload, generators: Array<Generator>, synthesizer: Synthesizer): Promise<AudioModule> {
   const module: AudioModule = {

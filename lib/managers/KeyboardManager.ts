@@ -1,9 +1,8 @@
 import { find } from "lodash";
-import IManager from "~~/lib/interfaces/IManager";
+import type IManager from "~~/lib/interfaces/IManager";
 import keyboard from './keyboard.json'
 import MidiDevice from "~~/lib/midi/MidiDevice";
-import Synthesizer from "../wrappers/Synthesizer";
-import ISynthesizer from "../interfaces/synthesizers/ISynthesizer";
+import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 
 /**
  * This class helps us trate the keyboard as a separated MIDI device. The difference with a classical MIDI device is
@@ -39,7 +38,7 @@ export default class KeyboardManager implements IManager {
     }
   }
 
-  public setSynthesizer(synth: Synthesizer|ISynthesizer) {
+  public setSynthesizer(synth: Synthesizer) {
     this.device.setSynthesizer(synth);
   }
 

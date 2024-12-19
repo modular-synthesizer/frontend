@@ -16,23 +16,21 @@
 
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify'
-import Synthesizer from '~~/lib/wrappers/Synthesizer';
 import { repositories } from '~~/lib/repositories';
 import { sortBy } from 'lodash';
-import ISynthesizer from '~~/lib/interfaces/synthesizers/ISynthesizer';
+import { membershipType } from '~/utils/functions/synthesizers';
+import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 
-const { synthesizers: repository } = repositories;
 const { mobile } = useDisplay()
-const synthesizers: Ref<Synthesizer[]> = ref(await repository.wrap(Synthesizer));
+const synthesizers: Ref<Array<Synthesizer>> = ref(await repositories.synthesizers.list());
 
 // Gets the list of memberships of the current account in the correct order.
 const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
 const name: string = useAuthentication().username;
-const sorted = computed(() => sortBy(synthesizers.value, (s: ISynthesizer) => order[s.membershipType(name)]));
+const sorted = computed(() => sortBy(synthesizers.value, (s: Synthesizer) => order[membershipType(s, name)]));
 
 const remove = repositories.synthesizers.remove(synthesizers.value);
-async function create(details: ISynthesizer) {
-  const creation: ISynthesizer = await repositories.synthesizers.create(details);
-  synthesizers.value.push(new Synthesizer(creation));
+async function create(details: Synthesizer) {
+  return await repositories.synthesizers.create(details);
 }
 </script>

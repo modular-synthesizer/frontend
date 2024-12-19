@@ -1,17 +1,16 @@
-import { find, remove, uniqBy } from "lodash";
+import { find, remove } from "lodash";
 import type { Generator } from "~/types/Generator";
-import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { managers } from "~~/lib/managers";
 import { repositories } from "~~/lib/repositories";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
-import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { useAudio } from "./useAudio";
 import type { Cable, LinkPayload } from "~/types/Cable";
 import { createCable, disconnectCable } from "~/utils/factories/cables";
 import { stopChannels } from "~/utils/functions/channels";
-import { getCables } from "~/utils/functions/modules";
+import { getCables, place } from "~/utils/functions/modules";
 import type { AudioModule, ModulePayload } from "~/types/modules/AudioModule";
 import { createModule } from "~/utils/factories/modules";
+import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 
 /** The currently displayed synthesizer, mainly used for position and zoom level */
 let synthesizer!: Ref<Synthesizer>;
@@ -28,10 +27,8 @@ export function useSynthesizer() {
    * @returns a synthesizer class object instanciated from the details got in the API.
    */
   async function fetch(id: string): Promise<void> {
-    const details: ISynthesizer = await repositories.synthesizers.get(id);
-    initializeManagers(details);
-    // @ts-ignore
-    synthesizer = ref(new Synthesizer(details));
+    synthesizer = ref(await repositories.synthesizers.get(id));
+    initializeManagers(synthesizer.value);
   }
 
   /**
@@ -44,11 +41,10 @@ export function useSynthesizer() {
     await loadProcessors(useAudio().context as AudioContext);
     const [ generators, imodules, ilinks ] = await fetchChildren(synthesizer.value);
     await buildModules(imodules, synthesizer.value, generators);
-    console.log(ilinks);
     await buildLinks(ilinks);
   }
 
-  async function fetchChildren(synthesizer: ISynthesizer): Promise<any> {
+  async function fetchChildren(synthesizer: Synthesizer): Promise<any> {
     return await Promise.all([
       repositories.generators.list(),
       repositories.modules.list(synthesizer),
@@ -59,10 +55,10 @@ export function useSynthesizer() {
   async function buildModules(list: Array<ModulePayload>, synthesizer: Synthesizer, generators: Generator[]) {
     const mods: Array<AudioModule> = await Promise.all(list.map((details: ModulePayload) => createModule(details, generators, synthesizer)));
     mods.forEach((mod: AudioModule) => {
-      synthesizer.place(mod.rack, mod.slot, mod);
+      place(mod, mod.rack, mod.slot);
       modules.value.push(mod);
     });
-    synthesizer.setModules(modules.value);
+    synthesizer.modules = modules.value;
   }
 
   async function buildLinks(list: Array<LinkPayload>) {
@@ -73,14 +69,13 @@ export function useSynthesizer() {
     .forEach((link: LinkPayload) => {
       links.value.push(createCable(link.id, link.from, link.to, link.color, usePorts().ports));
     });
-    console.log(links.value)
   }
 
   /**
    * Signals to the entities managing the keyboard and MIDI inputs that the synthesizer has changed.
    * @param details the informations about the synthesizer to handle now (mainly to get the number of voices).
    */
-  function initializeManagers(details: ISynthesizer) {
+  function initializeManagers(details: Synthesizer) {
     managers.keyboard.setSynthesizer(details);
     managers.midi.setSynthesizer(details);
   }

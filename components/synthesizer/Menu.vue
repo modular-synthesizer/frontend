@@ -9,12 +9,12 @@
 
 <script lang="ts" setup>
 import type { Tool } from '~~/types/tools/Tool';
-import Synthesizer from '~~/lib/wrappers/Synthesizer';
 import type { AudioModule } from '~/types/modules/AudioModule';
+import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 
 const { tools, synthesizer } = defineProps({
   tools: { type: Array<Tool>, default: () => [] },
-  synthesizer: { type: Synthesizer, required: true },
+  synthesizer: { type: Object as PropType<Synthesizer>, required: true },
 });
 
 type EmitType = {

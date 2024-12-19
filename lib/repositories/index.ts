@@ -1,5 +1,4 @@
 import type { Generator } from "../../types/Generator"
-import type IMembership from "../interfaces/synthesizers/IMembership"
 import type { ToolPort } from '~~/types/tools/Port';
 import type { ToolParameter } from '~~/types/tools/Parameter';
 import type { InnerLink } from '~~/types/tools/InnerLink';
@@ -17,8 +16,9 @@ import ToolsRepository from "./toolsRepository"
 import { ToolElementsRepository } from "./utils/ToolElementsRepository"
 import type { Category } from "~/types/tools/Category";
 import type { Control } from "~/types/tools/Control";
+import type { Membership } from "~/types/synthesizers/Membership";
 
-export type Repositories = { [key: string]: Repository<any> }
+export type Repositories = Record<string, Repository<any>>;
 
 export const repositories = {
   accounts: new AccountsRepository('accounts'),
@@ -27,7 +27,7 @@ export const repositories = {
   generators: new Repository<Generator>('generators'),
   groups: new Repository<IGroup>('groups'),
   links: new LinksRepository('links'),
-  memberships: new Repository<IMembership>('memberships'),
+  memberships: new Repository<Membership>('memberships'),
   modules: new ModulesRepository('modules'),
   tool: {
     controls: new ToolElementsRepository<Control>('controls'),

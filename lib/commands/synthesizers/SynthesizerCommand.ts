@@ -1,9 +1,9 @@
 import Command from "../Command";
-import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import type { Parameter } from '~/types/modules/Parameter';
 import { getControls } from "~/utils/functions/parameters";
 import type { Control } from "~/types/tools/Control";
 import type { AudioModule } from "~/types/modules/AudioModule";
+import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 
 export interface ControlEditPayload {
   module_id: string;
