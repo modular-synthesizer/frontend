@@ -35,13 +35,13 @@
 </template>
 
 <script lang="ts" setup>
-import IRight from "~~/lib/interfaces/permissions/IRight";
-import IGroup from "~~/lib/interfaces/permissions/IGroup";
+import type { Group } from "~/types/permissions/Group";
+import type { Right } from "~/types/permissions/Right";
 import { repositories } from "~~/lib/repositories";
 
-const group: Ref<IGroup> = ref(await repositories.groups.get(useRoute().params.id as string));
-const rights: IRight[] = await repositories.rights.list();
-const selected: Ref<string[]> = ref(group.value.scopes.map((s: IRight) => s.id))
+const group: Ref<Group> = ref(await repositories.groups.get(useRoute().params.id as string));
+const rights: Right[] = await repositories.rights.list();
+const selected: Ref<string[]> = ref(group.value.scopes.map((s: Right) => s.id))
 const form: Ref<any> = ref();
 
 async function save() {

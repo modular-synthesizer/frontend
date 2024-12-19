@@ -1,4 +1,4 @@
-import { Identifiable } from "../common/Identifiable";
+import type { Identified } from "~/types/utils/Identified";
 
 /**
  * A right represents the access to a given route on the API side, or the access to a given feature on the frontend
@@ -6,6 +6,6 @@ import { Identifiable } from "../common/Identifiable";
  * be granted the rights to use parts of the application.
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
-export default interface IRight extends Identifiable {
+export type Right = Identified & {
   label: string;
 }

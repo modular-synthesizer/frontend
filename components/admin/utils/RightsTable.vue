@@ -14,11 +14,11 @@
 
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import IRight from '~~/lib/interfaces/permissions/IRight';
+import type { Right } from '~/types/permissions/Right';
 
 defineProps({
   density: { type: String, default: 'comfortable' },
-  rights: { type: Array<IRight>, default: () => [] },
+  rights: { type: Array<Right>, default: () => [] },
 });
 
 const headers = useHeaders(useI18n, [

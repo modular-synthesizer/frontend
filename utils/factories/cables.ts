@@ -1,7 +1,7 @@
 import { times } from "lodash";
-import { equals } from "~/lib/interfaces/common/Identifiable";
 import type { Port } from '~/types/modules/Port';
 import type { Cable } from "~/types/Cable";
+import { equals } from "../functions/equals";
 
 export function createCable(id: string, from: string, to: string, color: string, ports: Array<Port>): Cable {
   const cable: Cable = { id, color, from: searchPort(ports, from), to: searchPort(ports, to) };

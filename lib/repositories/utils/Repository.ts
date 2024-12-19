@@ -1,13 +1,13 @@
 import { map, remove } from "lodash";
-import { Identifiable } from "../../interfaces/common/Identifiable";
 import { BaseRepository } from "./BaseRepository";
+import type { Identified } from "~/types/utils/Identified";
 
 /**
  * A repository provides CRUD methods to access to a resource on the API. It wraps HTTP calls and
  * makes it easier to pass parameters, save or fetch elements.
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
-export class Repository<T extends Identifiable> extends BaseRepository {
+export class Repository<T extends Identified> extends BaseRepository {
 
   public async list(payload: any = {}): Promise<T[]> {
     return await api_get(this.uri(), payload);

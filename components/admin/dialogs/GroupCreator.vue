@@ -31,12 +31,12 @@
 </template>
 
 <script lang="ts" setup>
-import IGroup from '~~/lib/interfaces/permissions/IGroup';
+import type { Group } from '~/types/permissions/Group';
 import { repositories } from '~~/lib/repositories';
 
 const emit = defineEmits(['submitted']);
 const rights = ref(await repositories.rights.list());
-const group: Ref<IGroup> = ref({ id: "", slug: "", scopes: [], is_default: false });
+const group: Ref<Group> = ref({ id: "", slug: "", scopes: [], is_default: false });
 const dialog = ref(false);
 const validity = ref(true);
 

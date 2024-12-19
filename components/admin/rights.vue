@@ -20,14 +20,14 @@
 </template>
 
 <script lang="ts" setup>
-import IRight from '~~/lib/interfaces/permissions/IRight';
+import type { Right } from '~/types/permissions/Right';
 import SoloFieldForm from '../common/SoloFieldForm.vue';
 import RightsTable from './utils/RightsTable.vue';
 import { repositories } from '~~/lib/repositories';
 
-const right: Ref<IRight> = ref({ label: '', id: '' });
+const right: Ref<Right> = ref({ label: '', id: '' });
 
 const { rights: repo } = repositories;
-const rights: Ref<IRight[]> = ref(await repo.list());
+const rights: Ref<Right[]> = ref(await repo.list());
 const add = repo.add(rights.value);
 </script>

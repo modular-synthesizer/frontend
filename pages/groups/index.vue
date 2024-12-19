@@ -34,8 +34,8 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import type { Group } from '~/types/permissions/Group';
 import GroupCreator from "~~/components/admin/dialogs/GroupCreator.vue"
-import IGroup from '~~/lib/interfaces/permissions/IGroup';
 import { repositories } from '~~/lib/repositories';
 
 const headers = useHeaders(useI18n, [
@@ -44,7 +44,7 @@ const headers = useHeaders(useI18n, [
   { 'title': 'common.actions' },
 ]);
 
-const groups: Ref<IGroup[]> = ref(await repositories.groups.list());
+const groups: Ref<Group[]> = ref(await repositories.groups.list());
 const add = repositories.groups.add(groups.value);
 const remove = repositories.groups.remove(groups.value);
 </script>
