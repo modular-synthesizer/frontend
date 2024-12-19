@@ -28,8 +28,6 @@ export async function createModule(details: ModulePayload, generators: Array<Gen
   module.parameters = initParameters(module, details.parameters);
   module.ports = instanciatePorts(module, details.ports);
 
-  console.log(module)
-
   usePorts().addModulePorts(module)
   return module;
 }

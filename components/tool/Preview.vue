@@ -32,8 +32,6 @@ const props = defineProps({
   modelValue: { type: Object as PropType<Tool>, required: true },
 });
 
-console.log(props.modelValue);
-
 const tool: ComputedRef<Tool> = computed(() => props.modelValue);
 
 const mod: AudioModule =  createEmptyModule(tool.value);

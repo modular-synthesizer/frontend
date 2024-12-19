@@ -67,9 +67,6 @@ export default {
       const input: boolean = isInput(this.port)
       return { 'stroke-grey-darken-3': input, 'stroke-indigo-darken-3': !input };
     }
-  },
-  mounted() {
-    console.log(this.mod.ports);
   }
 }
 </script>
