@@ -70,8 +70,6 @@
 import useVuelidate from '@vuelidate/core';
 import { email, minLength, required } from '@vuelidate/validators';
 import { split } from 'lodash';
-import { api } from '~~/lib/api/Api';
-import IApiError from '~~/lib/interfaces/IApiError';
 import { repositories } from '~~/lib/repositories';
 
 definePageMeta({ middleware: ['already-logged'], layout: 'anonymous' });

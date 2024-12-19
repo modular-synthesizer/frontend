@@ -1,7 +1,7 @@
-import type IManager from "~~/lib/interfaces/IManager";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import MidiDevice from "~~/lib/midi/MidiDevice";
 import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
+import type { IManageable } from "~/utils/interfaces/IManageable";
 
 /**
  * This class manages the connection of MIDI devices to the event bus and the emission of "noteOn" and "noteOff"
@@ -9,7 +9,7 @@ import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
  * message is supposed to do, this class just "binds" the events to it and allow the circulation of messages.
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
-export default class MidiManager implements IManager {
+export default class MidiManager implements IManageable {
 
   // The list of MIDI devices currently connected to the application. This is updated when a new device is plugged.
   private devices: MidiDevice[] = [];

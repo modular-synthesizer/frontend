@@ -1,15 +1,15 @@
 import { find } from "lodash";
-import type IManager from "~~/lib/interfaces/IManager";
 import keyboard from './keyboard.json'
 import MidiDevice from "~~/lib/midi/MidiDevice";
 import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
+import type { IManageable } from "~/utils/interfaces/IManageable";
 
 /**
  * This class helps us trate the keyboard as a separated MIDI device. The difference with a classical MIDI device is
  * the keyboard has to have a mapping to tell us which key is mapped to which MIDI tonality message.
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
-export default class KeyboardManager implements IManager {
+export default class KeyboardManager implements IManageable {
   // This represents the mapping from a set of keyboard keys to a set of MIDI tonalities.
   private mapping: {key: string, midicode: number}[] = keyboard;
 

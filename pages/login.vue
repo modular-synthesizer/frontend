@@ -36,7 +36,7 @@
 <script lang="ts" setup>
 import useVuelidate from '@vuelidate/core';
 import { minLength, required } from '@vuelidate/validators';
-import IApiError from '~~/lib/interfaces/IApiError';
+import type { ApiError } from '~/types/ApiError';
 
 definePageMeta({ middleware: ['already-logged'], layout: 'anonymous' });
 
@@ -57,8 +57,8 @@ async function submitLogin() {
   if (username === '' || password === '') return;
   useAuthentication().login(username, password)
     .catch((error: any) => {
-        const err: IApiError = error.response.data;
-        $externalResults.value = { [err.key]: err.message };
+        const { key, message }: ApiError = error.response.data;
+        $externalResults.value = { [key]: message };
     });
 }
 </script>
