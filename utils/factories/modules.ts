@@ -6,7 +6,6 @@ import InnerLinksFactory from '~~/lib/factories/InnerLinks';
 import type { Generator } from '~~/types/Generator';
 import type Synthesizer from "~/lib/wrappers/Synthesizer";
 import { initParameters } from "../functions/parameters";
-import Port from "~/lib/wrappers/Port";
 import type { ToolPort } from "~/types/tools/Port";
 
 export async function createModule(details: ModulePayload, generators: Array<Generator>, synthesizer: Synthesizer): Promise<AudioModule> {
@@ -23,7 +22,7 @@ export async function createModule(details: ModulePayload, generators: Array<Gen
     category: details.category,
   }
   module.parameters = initParameters(module, details.parameters);
-  module.ports = details.ports.map((ip: ToolPort) => new Port(ip, module));
+  module.ports = details.ports.map((tp: ToolPort) => ({ ...tp, link: null, mod: module }));
   usePorts().addModulePorts(module)
   return module;
 }

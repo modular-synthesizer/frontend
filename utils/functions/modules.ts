@@ -1,5 +1,5 @@
-import { flatten } from "lodash";
-import type Port from "~/lib/wrappers/Port";
+import type { Port } from '~/types/modules/Port';
+import type { Cable } from "~/types/Cable";
 import type { ModuleCoordinates } from "~/types/modules/AudioModule";
 import type { Identified } from "~/types/utils/Identified";
 
@@ -34,6 +34,6 @@ function overlap(a: ModuleCoordinates, b: ModuleCoordinates): boolean {
  * @param module the module having a list of ports that should be check to aggregate cables to/from them. 
  * @returns the complete list of cables linked to the module.
  */
-export function getCables({ ports }: { ports: Array<Port> }) {
-  return flatten(ports.map((p: Port) => p.links));
+export function getCables({ ports }: { ports: Array<Port> }): Array<Cable> {
+  return ports.map((p: Port) => p.link).filter((c: Cable|undefined) => !!c);
 }

@@ -1,10 +1,10 @@
 import type { Cable } from "~/types/Cable";
 import type { Coordinates } from "~/types/utils/Coordinates";
 import { createCable } from "~/utils/factories/cables";
-import { isInput } from "~/utils/functions/ports";
+import { getAbsoluteCoordinates, isInput } from "~/utils/functions/ports";
 import type ISynthesizer from "~~/lib/interfaces/synthesizers/ISynthesizer";
 import { repositories } from "~~/lib/repositories";
-import Port from "~~/lib/wrappers/Port";
+import type { Port } from '~/types/modules/Port';
 
 type StateType = {
   start?: Coordinates,
@@ -17,7 +17,7 @@ export const linkCreationState = useState<StateType>('linkCreation', () => ({}))
 
 function setStartPort(port: Port) {
   linkCreationState.value.startPort = port;
-  linkCreationState.value.start = { x: port.ax, y: port.ay };
+  linkCreationState.value.start = getAbsoluteCoordinates(port)
 }
 
 function setEndCoordinates({ x, y }: Coordinates) {
@@ -55,13 +55,14 @@ async function createLink() {
 }
 
 function canLinkTo(port: Port): boolean {
-  return !!linkCreationState.value.startPort?.connectableTo(port);
+  return linkCreationState.value.startPort?.kind !== port.kind
 }
 
 export function magnetize(port: Port) {
+  console.log(!linkCreationState.value.startPort, !canLinkTo(port))
   if (!linkCreationState.value.startPort || !canLinkTo(port)) return;
   linkCreationState.value.endPort = port;
-  linkCreationState.value.end = { x: port.ax, y: port.ay }
+  linkCreationState.value.end = getAbsoluteCoordinates(port);
 }
 
 export function unmagnetize() {

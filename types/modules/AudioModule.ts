@@ -5,7 +5,7 @@ import type { Control } from "../tools/Control";
 import type { InnerLink } from "../tools/InnerLink";
 import type { InnerNode } from "../tools/InnerNode";
 import type { ToolPort } from "../tools/Port";
-import type Port from "~/lib/wrappers/Port";
+import type { Port } from '~/types/modules/Port';
 
 export type Parameters = Record<string, Parameter>;
 

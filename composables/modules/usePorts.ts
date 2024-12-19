@@ -1,5 +1,5 @@
 import type { AudioModule } from "~/types/modules/AudioModule";
-import Port from "~~/lib/wrappers/Port";
+import type { Port } from '~/types/modules/Port';
 
 type State = { ports: Port[] }
 

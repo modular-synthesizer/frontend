@@ -7,7 +7,7 @@ import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 import Synthesizer from "~~/lib/wrappers/Synthesizer";
 import { useAudio } from "./useAudio";
 import type { Cable, LinkPayload } from "~/types/Cable";
-import { createCable } from "~/utils/factories/cables";
+import { createCable, disconnectCable } from "~/utils/factories/cables";
 import { stopChannels } from "~/utils/functions/channels";
 import { getCables } from "~/utils/functions/modules";
 import type { AudioModule, ModulePayload } from "~/types/modules/AudioModule";
@@ -100,8 +100,8 @@ export function useSynthesizer() {
   }
 
   async function removeLink(cable: Cable) {
-    cable.to.disconnect(cable.from);
-    remove(links.value, cable);
+    disconnectCable(cable);
+    remove(links.value, { id: cable.id });
     await repositories.links.delete(cable.id);
   }
 

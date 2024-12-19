@@ -30,9 +30,9 @@
 
 <script lang="ts">
 import type { AudioModule } from '~/types/modules/AudioModule';
+import type { Port } from '~/types/modules/Port';
 import { isInput } from '~/utils/functions/ports';
 import { PORT_RADIUS } from '~~/lib/utils/constants';
-import Port from '~~/lib/wrappers/Port';
 
 export default {
   name: 'controls-port',

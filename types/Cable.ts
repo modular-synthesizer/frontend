@@ -1,4 +1,4 @@
-import type Port from "~/lib/wrappers/Port";
+import type { Port } from '~/types/modules/Port';
 
 type CableDescription = {
   // The identifier of the connection, used to delete it.
