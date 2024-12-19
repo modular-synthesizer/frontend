@@ -21,6 +21,8 @@
 <script lang="ts" setup>
 import type { Tool } from '~~/types/tools/Tool';
 import type { ToolPort } from '~~/types/tools/Port';
+import { repositories } from '~/lib/repositories';
+import type { InnerNode } from '~/types/tools/InnerNode'
 
 const { tool } = defineProps({
   tool: { type: Object as PropType<Tool>, required: true }
@@ -50,8 +52,9 @@ function handleKeyPress (event: KeyboardEvent) {
   }
   const id = selected.value.item.id;
   timer.value = window.setTimeout(async () => {
-    await api_put(`/tools/nodes/${id}`, { ...selected.value.item, tool_id: tool.id });
-  }, 200);
+    const item: Selectable = selected.value.item as unknown as InnerNode;
+    await repositories.tool.nodes.update(tool, tool.nodes, item);
+  }, 500);
 }
 window.addEventListener('keydown', handleKeyPress);
 
