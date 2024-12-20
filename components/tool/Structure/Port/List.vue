@@ -2,8 +2,8 @@
   <template v-for="port in ports">
     <tool-structure-port
       :port="port"
-      :selected="port.id === selected.item?.id"
-      @select="selectItem(port, 'ports', tool)"
+      :selected="port.id === selection.item?.id"
+      @select="selection.select(port)"
       @edit="editPort"
       :tool="tool"
     />
@@ -19,7 +19,9 @@ const { tool } = defineProps({
   tool: { type: Object as PropType<Tool>, required: true }
 })
 
-const emit = defineEmits<{ edit: [ item: ToolPort ] }>()
+const emit = defineEmits<{ edit: [ item: ToolPort ] }>();
+
+const selection = ref(useSelectables().state.value.ports);
 
 function editPort(port: ToolPort) {
   emit('edit', port)

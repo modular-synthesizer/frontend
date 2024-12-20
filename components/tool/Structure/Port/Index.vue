@@ -2,7 +2,7 @@
   <g
     @click.stop.prevent="selectPort"
     @dblclick.stop.prevent="$emit('edit', port)"
-    v-if="getNode() !== undefined" :transform="`translate(${getNode().x + x()} ${getNode().y + port.index * 20 + 20})`"
+    v-if="getNode !== undefined" :transform="`translate(${getNode.x + x()} ${getNode.y + port.index * 20 + 20})`"
   >
     <path :d="path()" :stroke="selected ? 'red' : 'white'" stroke-width="3"/>
     <circle r="8" :fill="fill()" stroke="white" stroke-width="2" />
@@ -17,10 +17,9 @@
 import type { Tool } from '~~/types/tools/Tool';
 import type { ToolPort } from '~~/types/tools/Port';
 import type { InnerNode } from '~~/types/tools/InnerNode';
-import type { Port } from '~/types/modules/Port';
 
 const props = defineProps({
-  port: { type: Object as PropType<Port>, required: true },
+  port: { type: Object as PropType<ToolPort>, required: true },
   tool: { type: Object as PropType<Tool>, required: true },
   selected: { type: Boolean, default: false },
 });
@@ -49,7 +48,7 @@ function path() {
   return `M 0 0 L ${props.port.kind === 'input' ? OFFSET : -OFFSET} 0`
 }
 
-function getNode() {
+const getNode = computed(() => {
   return props.tool.nodes.find((n: InnerNode) => n.name === props.port.target)
-}
+});
 </script>

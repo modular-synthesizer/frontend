@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
 import type { Tool } from '~~/types/tools/Tool';
 import type { ToolPort } from '~~/types/tools/Port';
 import type { InnerNode } from '~~/types/tools/InnerNode';

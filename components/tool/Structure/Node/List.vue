@@ -1,17 +1,17 @@
 <template>
   <template v-for="node in tool.nodes">
     <tool-structure-node
-      v-if="node.id !== selected.item?.id"
+      v-if="node.id !== selection.item?.id"
       :node="node"
       :selected="false"
-      @select="selectItem(node, 'nodes', tool)"
+      @select="selection.select(node)"
       :tool="tool"
       @edit-port="editPort"
     />
   </template>
   <tool-structure-node
-    v-if="selected.item !== null && selected.uri === 'nodes'"
-    :node="selected.item"
+    v-if="selection.item"
+    :node="selection.item"
     :selected="true"
     :tool="tool"
     @edit-port="editPort"
@@ -27,38 +27,33 @@ import { find } from 'lodash';
 
 const { tool } = defineProps({
   tool: { type: Object as PropType<Tool>, required: true }
-})
+});
+
+const selection = ref(useSelectables().state.value.nodes);
 
 const emit = defineEmits<{ editPort: [ item: ToolPort ] }>();
-
-const timer: Ref<number> = ref(-1);
 
 function editPort(port: ToolPort) {
   emit('editPort', port)
 }
 
 function handleKeyPress (event: KeyboardEvent) {
-  if (selected.value.item === null) return;
-  if (!isNodeSelected(selected.value.item)) return;
-  window.clearTimeout(timer.value);
+  if (selection.value.item === undefined) return;
+  const item: InnerNode | undefined = find(tool.nodes, { id: selection.value.item.id });
+  if (item === undefined) return;
   switch(event.code) {
     case 'ArrowRight':
-      selected.value.item.x += 20; break;
+      item.x += 20; break;
     case 'ArrowLeft':
-      selected.value.item.x -= 20; break;
+      item.x -= 20; break;
     case 'ArrowDown':
-      selected.value.item.y += 20; break;
+      item.y += 20; break;
     case 'ArrowUp':
-      selected.value.item.y -= 20; break;
+      item.y -= 20; break;
   }
-  const id = selected.value.item.id;
-  const item: InnerNode = find(tool.nodes, { id }) as InnerNode;
-  item.x = selected.value.item.x;
-  item.y = selected.value.item.y;
-  timer.value = window.setTimeout(async () => {
-    const item: Selectable = selected.value.item as unknown as InnerNode;
+  debounce(`edit-${item.id}`, 500, async () => {
     await repositories.tool.nodes.update(tool, tool.nodes, item);
-  }, 500);
+  });
 }
 window.addEventListener('keydown', handleKeyPress);
 

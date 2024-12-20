@@ -2,7 +2,7 @@
   <svg @wheel="handleZoom">
     <g :transform="`scale(${scale} ${scale})`">
       <g :transform="`translate(${x % BG_SIZE} ${y % BG_SIZE})`">
-        <tool-structure-background @move="seeMove" @start="selectItem(null, '', tool)" :scale="scale" />
+        <tool-structure-background @move="seeMove" @start="useSelectables().reset()" :scale="scale" />
       </g>
       <g :transform="`translate(${x} ${y})`">
         <tool-structure-node-list :tool="tool" @edit-port="editPort" />
