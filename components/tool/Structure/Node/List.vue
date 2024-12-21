@@ -37,25 +37,14 @@ function editPort(port: ToolPort) {
   emit('editPort', port)
 }
 
-function handleKeyPress (event: KeyboardEvent) {
-  if (selection.value.item === undefined) return;
-  const item: InnerNode | undefined = find(tool.nodes, { id: selection.value.item.id });
-  if (item === undefined) return;
-  switch(event.code) {
-    case 'ArrowRight':
-      item.x += 20; break;
-    case 'ArrowLeft':
-      item.x -= 20; break;
-    case 'ArrowDown':
-      item.y += 20; break;
-    case 'ArrowUp':
-      item.y -= 20; break;
-  }
-  debounce(`edit-${item.id}`, 500, async () => {
-    await repositories.tool.nodes.update(tool, tool.nodes, item);
+const keys: Record<string, [number, number]> = { Right: [20, 0], Left: [-20, 0], Down: [0, 20], Up: [0, -20] }
+Object.keys(keys).forEach((k: string) => {
+  useKeyboardEvents().keydown(`Arrow${k}`, () => {
+    if (selection.value.item === undefined) return;
+    const item: InnerNode | undefined = find(tool.nodes, { id: selection.value.item.id });
+    if (item === undefined) return;
+    item.x += keys[k][0]; item.y += keys[k][1];
+    debounce(item.id, 500, () => repositories.tool.nodes.update(tool, tool.nodes, item));
   });
-}
-window.addEventListener('keydown', handleKeyPress);
-
-onBeforeUnmount(() => window.removeEventListener('keydown', handleKeyPress));
+});
 </script>

@@ -19,7 +19,10 @@
 <script lang="ts" setup>
 useHead({ htmlAttrs: { lang: 'fr' } });
 
-window.addEventListener("beforeunload", () => closeWebsocket());
+window.addEventListener("beforeunload", () => {
+  closeWebsocket();
+  useKeyboardEvents().cancel();
+});
 </script>
 
 <style>

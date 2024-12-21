@@ -5,7 +5,7 @@ import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 import type { Membership } from "~/types/synthesizers/Membership";
 
 export function hasRoom(synthesizer: Synthesizer, coordinates: ModuleCoordinates): boolean {
-  return some(synthesizer.modules, (module: AudioModule) => intersect(module, coordinates));
+  return !some(synthesizer.modules, (module: AudioModule) => intersect(module, coordinates));
 }
 
 export function firstFreeSlot(synthesizer: Synthesizer, slots: number) {

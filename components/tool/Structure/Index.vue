@@ -60,6 +60,10 @@ function handleZoom(event: WheelEvent) {
   scale.value = Math.min(Math.max(MAX_ZOOM_OUT, s), MAX_ZOOM_IN);
 }
 
+useKeyboardEvents().keydown('Delete', () => {
+  useSelectables().delete(tool);
+})
+
 declareDeletionHandlers(window, onBeforeUnmount);
 </script>
 
