@@ -4,6 +4,7 @@
     @mousedown.left.stop="onMouseDown"
     @wheel.passive="onWheel"
     @click.right.stop.prevent="onRightClick(parameter, $event)"
+    v-touch="touchHandler"
   >
     <slot></slot>
   </g>
@@ -14,6 +15,7 @@ import sendParamEvent from '~~/lib/commands/events/sendParamEvent';
 import type { Parameter } from '~/types/modules/Parameter';
 import { moveValue } from '~/utils/functions/parameters';
 import type { Control } from '~/types/tools/Control';
+import { useDisplay } from 'vuetify';
 
 const { control, parameter } = defineProps({
   parameter: { type: Object as PropType<Parameter>, required: true },
@@ -63,5 +65,13 @@ function onWheel($event: WheelEvent): void {
   if (control.editing) return;
   $event.stopPropagation();
   fireWheelEvent($event)
+}
+
+const { mobile } = useDisplay();
+
+function touchHandler() {
+  if (!mobile.value) return;
+  console.log("Affichage de la modale d'édition")
+  useParamDialog().toggle()
 }
 </script>

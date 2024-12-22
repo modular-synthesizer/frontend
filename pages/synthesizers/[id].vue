@@ -6,6 +6,11 @@
       <synthesizer-menu @inserted="insertModule" :synthesizer="synthesizer" :tools="tools" />
     </template>
   </div>
+  <v-dialog v-model="useParamDialog().state.value.display" fullscreen>
+    <v-card>
+      <v-card-title>Edition</v-card-title>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
