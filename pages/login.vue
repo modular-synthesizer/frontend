@@ -26,7 +26,10 @@
             autocomplete="current-password"
             class="mb-3"
           />
-          <v-btn color="primary" type="submit">{{ $t('login.button') }}</v-btn>
+          <v-btn color="primary" type="submit" :disabled="loading" icon>
+            <v-progress-circular indeterminate v-if="loading" />
+            <v-icon v-else>mdi-check</v-icon>
+          </v-btn>
         </v-form>
       </v-col>
     </v-row>
@@ -36,13 +39,13 @@
 <script lang="ts" setup>
 import useVuelidate from '@vuelidate/core';
 import { minLength, required } from '@vuelidate/validators';
-import type { ApiError } from '~/types/ApiError';
+import type { LoginAttempt } from '~/types/authentication/Account';
 
 definePageMeta({ middleware: ['already-logged'], layout: 'anonymous' });
 
-const account = reactive({ username: '', password: '' });
+const account: Ref<LoginAttempt> = ref({ username: '', password: '' });
 
-const $externalResults = ref({})
+const $externalResults: Ref<Record<string, string>> = ref({})
 
 const rules = computed(() => ({
   username: { required, minsize: minLength(6) },
@@ -51,14 +54,17 @@ const rules = computed(() => ({
 
 const v$ = useVuelidate(rules, account, { $externalResults });
 
+const loading: Ref<boolean> = ref(false);
+
 async function submitLogin() {
-  const { username, password } = account;
   await v$.value.$validate();
-  if (username === '' || password === '') return;
-  useAuthentication().login(username, password)
+  if (v$.value.$error) return;
+  loading.value = true;
+  useAuthentication().login(account.value.username, account.value.password)
     .catch((error: any) => {
-        const { key, message }: ApiError = error.response.data;
+        const [ key, message ]: [ string, string ] = error.statusMessage.split('.');
         $externalResults.value = { [key]: message };
+        loading.value = false;
     });
 }
 </script>

@@ -77,6 +77,7 @@
     "username": {
       "forbidden": "The given credentials are incorrect",
       "length": "Your username must be at least six characters",
+      "minsize": "Your username must be at least six characters",
       "required": "You must give a username",
       "uniq": "This username is already used",
       "unknown": "This username is unknown"

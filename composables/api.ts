@@ -33,8 +33,6 @@ export async function make_request(method: HttpMethod, url: string, payload: any
     return (await axios.request({ method, url, ...payload })).data;
   }
   catch (exception: any) {
-    console.log(method, url);
-    console.log(payload);
     const { key, message } = exception.response.data;
     throw createError({
       statusCode: exception.response.status,
