@@ -27,6 +27,7 @@ export class Selector<T extends Identified> implements ISelector {
     if (this.item !== undefined) {
       this.repository.remove(tool, tool[this.collection] as any[], this.item);
     }
+    this.reset();
   }
 
   public select(item: T): void {
@@ -49,10 +50,7 @@ export function useSelectables() {
   return {
     state,
     delete(tool: Tool): void {
-      Object.values(state.value).forEach((s: ISelector) => {
-        s.delete(tool);
-        s.reset()
-      })
+      Object.values(state.value).forEach((s: ISelector) => s.delete(tool));
     },
     reset() {
       Object.values(state.value).forEach((s: ISelector) => s.reset());

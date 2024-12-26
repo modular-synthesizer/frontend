@@ -21,7 +21,13 @@ const state: Ref<State> = ref({
   payload: null as any,
 });
 
+function hide(unblock: boolean = false) {
+  if (unblock) useStates().unblock();
+  state.value.visible = false;
+}
+
 export function useContexts() {
+  window.addEventListener('click', () => hide());
   return {
     state,
     display($event: MouseEvent, options: ContextOptions) {
@@ -32,10 +38,7 @@ export function useContexts() {
       state.value.payload = options.payload;
       state.value.visible = true;
     },
-    hide(unblock = false) {
-      if (unblock) useStates().unblock();
-      state.value.visible = false;
-    },
+    hide,
     get x() {
       return state.value.x;
     },

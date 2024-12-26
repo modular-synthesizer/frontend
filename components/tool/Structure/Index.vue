@@ -63,8 +63,6 @@ function handleZoom(event: WheelEvent) {
 useKeyboardEvents().keydown('Delete', () => {
   useSelectables().delete(tool);
 })
-
-declareDeletionHandlers(window, onBeforeUnmount);
 </script>
 
 <style scoped>
