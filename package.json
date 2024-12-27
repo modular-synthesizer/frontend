@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.6.1",
-    "unctx": "^2.4.0"
+    "unctx": "^2.4.0",
+    "vitest": "^2.1.8"
   }
 }
