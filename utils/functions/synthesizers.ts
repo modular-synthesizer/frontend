@@ -10,7 +10,7 @@ export function hasRoom(synthesizer: Synthesizer, coordinates: ModuleCoordinates
 
 export function firstFreeSlot(synthesizer: Synthesizer, slots: number) {
   let slot = 0;
-  while(hasRoom(synthesizer, { rack: 0, slot, slots, id: '' })) slot ++;
+  while(!hasRoom(synthesizer, { rack: 0, slot, slots, id: '' })) slot ++;
   return slot;
 }
 

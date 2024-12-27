@@ -28,7 +28,7 @@ export async function createModule(details: ModulePayload, generators: Array<Gen
   module.parameters = initParameters(module, details.parameters);
   module.ports = instanciatePorts(module, details.ports);
 
-  usePorts().addModulePorts(module)
+  usePorts().addModulePorts(module);
   return module;
 }
 

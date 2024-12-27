@@ -76,7 +76,7 @@ export default {
       };
       const response: ModulePayload = await repositories.modules.createInSynthesizer(payload)
       const generators: Generator[] = await repositories.generators.list();
-      await createModule(response, generators, this.synthesizer);
+      this.synthesizer.modules.push(await createModule(response, generators, this.synthesizer));
       this.close();
     },
     categories(tools: Tool[]) {
