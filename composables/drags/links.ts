@@ -39,14 +39,18 @@ function end() {
 }
 
 async function createLink() {
-  const { startPort: from, endPort: to } = linkCreationState.value;
-  if (!from || !to) return
+  const { startPort, endPort } = linkCreationState.value;
+  if (!startPort || !endPort) return
+  const from = isInput(endPort) ? startPort : endPort;
+  const to = isInput(startPort) ? startPort : endPort;
+  
   const insertion: Cable = createCable('', from.id, to.id, 'red', usePorts().ports);
   useSynthesizer().links.value.push(insertion);
+
   const payload = {
     id: '',
-    from: isInput(to) ? from.id : to.id,
-    to: isInput(from) ? from.id : to.id,
+    from: from.id,
+    to: to.id,
     synthesizer_id: useSynthesizer().synthesizer.value.id,
     color: 'red'
   }
