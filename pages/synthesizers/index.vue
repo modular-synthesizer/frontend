@@ -31,6 +31,6 @@ const sorted = computed(() => sortBy(synthesizers.value, (s: Synthesizer) => ord
 
 const remove = repositories.synthesizers.remove(synthesizers.value);
 async function create(details: Synthesizer) {
-  return await repositories.synthesizers.create(details);
+  synthesizers.value.push(await repositories.synthesizers.create(details));
 }
 </script>
