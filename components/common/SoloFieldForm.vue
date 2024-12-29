@@ -3,55 +3,42 @@
     <v-text-field
       density="compact"
       variant="outlined"
-      v-bind:modelValue="computedValue"
+      v-model="refValue"
       @change="onChange"
-      :label="translatedLabel"
+      :label="t(label)"
       :append-inner-icon="icon"
       @click:append-inner="validate"
-      :hint="translatedHint"
+      :hint="t(hint)"
     />
   </form>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'SoloFieldForm',
-  props: {
-    modelValue: {
-      type: String,
-      required: true,
-    },
-    hint: {
-      type: String,
-      default: '',
-    },
-    label: {
-      type: String,
-      default: '',
-    },
-    icon: {
-      type: String,
-      default: 'mdi-plus',
-    },
-  },
-  computed: {
-    translatedHint(): undefined | string {
-      return this.hint === '' ? undefined : this.$t(this.hint);
-    },
-    translatedLabel(): undefined | string {
-      return this.label === '' ? undefined : this.$t(this.label);
-    },
-    computedValue() {
-      return this.modelValue;
-    }
-  },
-  methods: {
-    validate() {
-      this.$emit('submitted', this.modelValue)
-    },
-    onChange($event: any) {
-      this.$emit('update:modelValue', $event.target.value);
-    }
-  }
+<script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+
+const { modelValue, hint, label, icon } = defineProps({
+  modelValue: { type: String, required: true },
+  hint: { type: String, default: '' },
+  label: { type: String, default: '' },
+  icon: { type: String, default: 'mdi-plus' }
+});
+
+type Emits = {
+  'update:modelValue': [ string ],
+  'submitted': [ string ],
+}
+
+const emit = defineEmits<Emits>();
+
+const { t } = useI18n();
+
+const refValue = ref('')
+
+function validate() {
+  emit('submitted', refValue.value)
+}
+
+function onChange() {
+  emit('update:modelValue', refValue.value);
 }
 </script>

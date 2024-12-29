@@ -3,13 +3,13 @@
     <v-container>
       <v-row>
         <v-col xs="12" sm="8" offset-sm="2" md="6" offset-md="3">
-          <SoloFieldForm v-model="right.label" @submitted="add" />
+          <SoloFieldForm v-model="right.label" @submitted="add()" />
         </v-col>
       </v-row>
       <v-row>
         <v-col xs="12">
           <rights-table v-slot="{ right }" :rights="rights">
-            <v-btn icon small variant="plain" @click="remove(right)">
+            <v-btn icon small variant="plain" @click="remove()">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </rights-table>
@@ -29,5 +29,6 @@ const right: Ref<Right> = ref({ label: '', id: '' });
 
 const { rights: repo } = repositories;
 const rights: Ref<Right[]> = ref(await repo.list());
-const add = repo.add(rights.value);
+const add = () => repo.add(rights.value)(right.value);
+const remove = () => repo.remove(rights.value)(right.value.id);
 </script>

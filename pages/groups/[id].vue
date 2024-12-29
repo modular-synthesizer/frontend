@@ -45,7 +45,7 @@ const selected: Ref<string[]> = ref(group.value.scopes.map((s: Right) => s.id))
 const form: Ref<any> = ref();
 
 async function save() {
-  group.value = await api_put(`/groups/${useRoute().params.id}`, {
+  group.value = await api_put(`/proxy/groups/${useRoute().params.id}`, {
     slug: group.value.slug,
     scopes: selected.value,
   });
