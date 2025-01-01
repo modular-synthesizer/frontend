@@ -1,5 +1,6 @@
 <template>
-  <g :transform="`translate(${$props.node.x} ${$props.node.y})`" @click="emit('select', node)" @click.right.prevent.stop="openMenu">
+  <!--g :transform="`translate(${$props.node.x} ${$props.node.y})`" @mousedown="onmousedown" @click="emit('select', node)"-->
+  <sp-stage-draggable stage="tool-structure" :name="`${node.id}`" :target="node">
     <rect :height="getNodeHeight(node, tool)" width="180" fill="black" stroke="white" />
     <text x="10" y="20" fill="white">{{ node.name }}</text>
     <g v-for="(param, i) in parametersFor(node, tool)" :transform="`translate(10, ${(i * PARAM_HEIGHT) + TITLE_HEIGHT})`">
@@ -16,7 +17,7 @@
     />
     <circle v-for="idx in maxIndexTo(node, tool)" cx="0" :cy="20 * idx" :r="PORT_RADIUS" fill="white" />
     <circle v-for="idx in maxIndexFrom(node, tool)" cx="180" :cy="20 * idx" :r="PORT_RADIUS" fill="white" />
-  </g>
+  </sp-stage-draggable>
 </template>
 
 <script setup lang="ts">
