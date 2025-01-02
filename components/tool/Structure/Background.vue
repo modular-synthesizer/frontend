@@ -11,6 +11,6 @@
 const DOT_SIZE = 2;
 
 const { scale } = defineProps({
-  scale: { type: Number, default: 1 }
+  scale: { type: Number, default: 1 },
 })
 </script>

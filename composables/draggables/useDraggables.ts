@@ -19,6 +19,7 @@ export type Stage = HasCallback & {
 type DraggableOptions = {
   sx: number,
   sy: number,
+  collision: (coordinates: Coordinates) => Boolean,
 }
 
 export type Draggable = HasCallback & {
@@ -47,9 +48,9 @@ function declare(name: string, d: Coordinates = { x: 0, y: 0 }, a: Coordinates =
   return stage;
 }
 
-function addDraggable(stageName: string, name: string, item: Coordinates = { x: 0, y: 0 }, options: DraggableOptions = { sx: 1, sy: 1 }): Draggable {
+function addDraggable(stageName: string, name: string, item: Coordinates = { x: 0, y: 0 }, options: DraggableOptions = { sx: 1, sy: 1, collision: () => true }): Draggable {
   let stage = getStage(stageName);
-  const draggable: Draggable = { item, options, stage }
+  const draggable: Draggable = { item, options, stage };
   getStage(stageName).draggables[name] = draggable;
   return draggable;
 }
@@ -62,7 +63,7 @@ function startDrag(stageName: string, name: string, $event: MouseEvent) {
   const stage: Stage = getStage(stageName);
   const draggable = stage.draggables[name];
 
-  stage.strategy = new ItemDragStrategy(stage, draggable, 5, 5);
+  stage.strategy = new ItemDragStrategy(stage, draggable, draggable.options.sx, draggable.options.sy, draggable.options.collision);
   stage.strategy.start($event);
 }
 

@@ -20,13 +20,16 @@ export class ItemDragStrategy implements DragStrategy {
   private sx: number;
   private sy: number;
 
-  public constructor(stage: Stage, draggable: Draggable, sx: number = 1, sy: number = 1) {
+  private collision: (c: Coordinates) => Boolean;
+
+  public constructor(stage: Stage, draggable: Draggable, sx: number = 1, sy: number = 1, collision: (c: Coordinates) => Boolean) {
     this.stage = stage;
     this.item = draggable.item;
     this.sx = sx;
     this.sy = sy;
     this.origin = { x: this.item.x, y: this.item.y }
     this.callback = draggable.callback ?? (() => { })
+    this.collision = collision;
   }
 
   public start($event: MouseEvent): void {
@@ -37,8 +40,13 @@ export class ItemDragStrategy implements DragStrategy {
     const offset: Coordinates = this.project($event);
     offset.x -= this.event.x;
     offset.y -= this.event.y;
-    this.item.x = this.round(this.origin.x + offset.x, this.sx);
-    this.item.y = this.round(this.origin.y + offset.y, this.sy);
+    const results: Coordinates = {
+      x: this.round(this.origin.x + offset.x, this.sx),
+      y: this.round(this.origin.y + offset.y, this.sy),
+    }
+    if (this.collision(results)) return;
+    this.item.x = results.x
+    this.item.y = results.y;
   }
 
   public end(): void {
@@ -58,6 +66,7 @@ export class ItemDragStrategy implements DragStrategy {
   }
 
   private round(value: number, step: number): number {
-    return Math.round(value / step) * step;
+    const rounded: number = Math.round(value / step) * step;
+    return rounded;
   }
 }

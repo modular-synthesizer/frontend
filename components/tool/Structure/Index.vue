@@ -1,9 +1,7 @@
 <template>
-  <sp-stage name="tool-structure" :target="tool" :dy="48" @zoomed="updateScale" @dragend="updateCoordinates">
+  <sp-stage name="tool-structure" :target="tool" :dy="48" @zoomed="updateScale" @dragend="updateCoordinates" :bg-width="BG_SIZE" :bg-height="BG_SIZE">
     <template #background>
-      <g :transform="`translate(${tool.x % BG_SIZE} ${tool.y % BG_SIZE})`" @mousedown="useSelectables().reset()">
-        <tool-structure-background :scale="tool.scale" />
-      </g>
+      <tool-structure-background :scale="tool.scale" @mousedown="useSelectables().reset()" />
     </template>
     <tool-structure-node-list :tool="tool" @edit-port="editPort" />
     <tool-structure-link-list :tool="tool" />

@@ -23,12 +23,12 @@
 </template>
 
 <script setup lang="ts">
-import { ScalablePosition } from '~~/lib/types/ScalablePosition';
+import type { Coordinates, ScaledCoordinates } from '~/types/utils/Coordinates';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 
 type Dimensions = { width: number, height: number }
 
-const { position } = defineProps<{position: ScalablePosition}>();
+const { position } = defineProps<{position: ScaledCoordinates}>();
 
 const dimensions = ref<Dimensions>({ width: 0, height: 0 });
 

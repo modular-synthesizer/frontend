@@ -14,7 +14,9 @@ This component is a stage where several possible operations can be done :
     @mouseleave="useDraggables().reset(name)"
   >
     <g :transform="`scale(${stage.scale} ${stage.scale})`">
-      <slot name="background"></slot>
+      <g :transform="`translate(${stage.d.x % bgWidth} ${stage.d.y % bgHeight})`">
+        <slot name="background"></slot>
+      </g>
       <g :transform="`translate(${stage.d.x} ${stage.d.y})`">
         <slot></slot>
       </g>
@@ -27,23 +29,27 @@ import { clamp } from 'lodash';
 import { ZOOM_RATIO, MAX_ZOOM_OUT, MAX_ZOOM_IN } from '~/lib/utils/constants';
 import type { Coordinates, ScaledCoordinates } from '~/types/utils/Coordinates';
 
-const { name, target, dx, dy } = defineProps({
+const { name, target, dx, dy, bgWidth, bgHeight } = defineProps({
   name: { type: String, required: true },
   target: { type: Object as PropType<ScaledCoordinates>, required: true },
   dx: { type: Number, default: 0 },
   dy: { type: Number, default: 0 },
+  bgWidth: { type: Number, default: 1},
+  bgHeight: { type: Number, default: 1},
 });
+
+console.log(target);
 
 type Emits = { zoomed: [ number ], dragend: [ Coordinates ] };
 
 const emit = defineEmits<Emits>();
 
 function onwheel($event: WheelEvent) {
-  const value: number = Math.abs(stage.scale + $event.deltaY * -ZOOM_RATIO);
-  stage.scale = clamp(value, MAX_ZOOM_OUT, MAX_ZOOM_IN);
-  emit('zoomed', stage.scale)
+  const value: number = Math.abs(stage.value.scale + $event.deltaY * -ZOOM_RATIO);
+  stage.value.scale = clamp(value, MAX_ZOOM_OUT, MAX_ZOOM_IN);
+  emit('zoomed', stage.value.scale)
 }
 
-const stage: Stage = useDraggables().declare(name, target, { x: dx, y: dy });
-stage.callback = () => emit('dragend', stage.d);
+const stage: Ref<Stage> = ref(useDraggables().declare(name, target, { x: dx, y: dy }, target.scale));
+stage.value.callback = () => emit('dragend', stage.value.d);
 </script>
