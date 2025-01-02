@@ -1,3 +1,4 @@
+import { renderToString } from "vue/server-renderer"
 import Stage from "~/components/draggable/Stage.vue"
 import type { Coordinates } from "~/types/utils/Coordinates"
 
@@ -12,6 +13,7 @@ export type Stage = {
   // The current drag origin on this stage, updated when a drag is started.
   drag: Drag,
   panning: boolean,
+  pan: Drag,
 }
 
 type DraggableOptions = {
@@ -53,7 +55,7 @@ function emptyDrag(): Drag {
  * @param options Some configuration options, like the number of pixels of a drag step, etc.
  */
 function declare(name: string, d: Coordinates = { x: 0, y: 0 }, a: Coordinates = { x: 0, y: 0 }, scale: number = 1): Stage {
-  const stage: Stage = { name, d, a, scale, draggables: [], drag: emptyDrag(), panning: false };
+  const stage: Stage = { name, d, a, scale, draggables: [], drag: emptyDrag(), panning: false, pan: emptyDrag() };
   state.value.stages.push(stage);
   return stage;
 }
@@ -68,7 +70,7 @@ function addDraggable(stageName: string, name: string, item: Coordinates = { x: 
 function getStage(name: string): Stage {
   const found: Stage | undefined = state.value.stages.find((s: Stage) => s.name === name);
   if (found === undefined) {
-    const stage: Stage = { name, d: { x: 0, y: 0 }, a: { x: 0, y: 0 }, scale: 1, draggables: [ ], drag: emptyDrag(), panning: false };
+    const stage: Stage = { name, d: { x: 0, y: 0 }, a: { x: 0, y: 0 }, scale: 1, draggables: [ ], drag: emptyDrag(), panning: false, pan: emptyDrag() };
     state.value.stages.push(stage);
     return stage;
   }
@@ -105,17 +107,26 @@ function startDrag(stageName: string, name: string, $event: MouseEvent) {
 function moveDrag(stageName: string, $event: MouseEvent) {
   const stage = getStage(stageName);
   if (stage.panning) {
-    console.log("Stage is panning !");
-    const offset: Coordinates = projectEvent(stage, $event);
-    stage.d.x = stage.drag.item.x - stage.drag.event.x + offset.x;
-    stage.d.y = stage.drag.item.y - stage.drag.event.y + offset.y;
+    const delta: Coordinates = {
+      x: $event.clientX - stage.pan.event.x,
+      y: $event.clientY - stage.pan.event.y
+    }
+    stage.d.x = stage.pan.item.x + delta.x;
+    stage.d.y = stage.pan.item.y + delta.y;
     return;
   }
   const draggable = stage.draggables.find((d: Draggable) => d.dragged === true);
   if (draggable === undefined) return;
   const offset: Coordinates = projectEvent(stage, $event);
-  draggable.item.x = stage.drag.item.x - stage.drag.event.x + offset.x;
-  draggable.item.y = stage.drag.item.y - stage.drag.event.y + offset.y;
+  offset.x -= stage.drag.event.x;
+  offset.y -= stage.drag.event.y;
+
+  draggable.item.x = round(stage.drag.item.x + offset.x, draggable.options.sx);
+  draggable.item.y = round(stage.drag.item.y + offset.y, draggable.options.sy);
+}
+
+function round(value: number, step: number): number {
+  return Math.round(value / step) * step;
 }
 
 function setScale(name: string, scale: number) {
@@ -135,7 +146,10 @@ function reset(name: string) {
 function startPanning(name: string, $event: MouseEvent) {
   const stage: Stage = getStage(name);
   stage.panning = true;
-  stage.drag = createDrag(stage, stage.d, $event);
+  stage.pan = {
+    event: { x: $event.clientX, y: $event.clientY },
+    item: { x: stage.d.x, y: stage.d.y },
+  }
 }
 
 export function useDraggables() {

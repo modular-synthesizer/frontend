@@ -7,11 +7,13 @@
 <script lang="ts" setup>
 import type { Coordinates } from '~/types/utils/Coordinates';
 
-const { stage, name, target } = defineProps({
+const { stage, name, sx, sy, target } = defineProps({
   stage: { type: String, required: true },
   name: { type: String, required: true },
-  target: { type: Object as PropType<Coordinates>, required: true }
+  target: { type: Object as PropType<Coordinates>, required: true },
+    sx: { type: Number, default: 1 },
+    sy: { type: Number, default: 1 },
 });
 
-useDraggables().addDraggable(stage, name, target);
+useDraggables().addDraggable(stage, name, target, { sx, sy });
 </script>

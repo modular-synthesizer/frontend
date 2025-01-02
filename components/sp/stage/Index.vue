@@ -13,7 +13,8 @@ This component is a stage where several possible operations can be done :
     @mouseup="useDraggables().reset(name)"
     @mouseleave="useDraggables().reset(name)"
   >
-    <g :transform="`scale(${stage.scale} ${stage.scale}) translate(${stage.d.x} ${stage.d.y})`">
+    <slot name="background"></slot>
+    <g :transform="`translate(${stage.d.x} ${stage.d.y}) scale(${stage.scale} ${stage.scale})`">
       <slot></slot>
     </g>
   </svg>

@@ -1,14 +1,13 @@
 <template>
-  <!--svg @wheel="handleZoom" @mousemove="onmousemove" @mouseup.capture.prevent.stop="useDraggables().reset('tool-structure')"-->
   <sp-stage name="tool-structure">
-    <!--g :transform="`translate(${x % BG_SIZE} ${y % BG_SIZE})`">
-      <tool-structure-background @move="seeMove" @start="useSelectables().reset()" :scale="scale" />
-    </g-->
-    <g :transform="`translate(${x} ${y})`">
-      <tool-structure-node-list :tool="tool" @edit-port="editPort" />
-      <tool-structure-link-list :tool="tool" />
-      <tool-structure-port-list :ports="tool.ports" :tool="tool" @edit="editPort" />
-    </g>
+    <template #background>
+      <g :transform="`translate(${stage.d.x % BG_SIZE} ${stage.d.y % BG_SIZE})`" @mousedown="useSelectables().reset()">
+        <tool-structure-background :scale="stage.scale" />
+      </g>
+    </template>
+    <tool-structure-node-list :tool="tool" @edit-port="editPort" />
+    <tool-structure-link-list :tool="tool" />
+    <tool-structure-port-list :ports="tool.ports" :tool="tool" @edit="editPort" />
   </sp-stage>
   <tool-structure-dialogs-port
     v-if="p !== null"
@@ -31,10 +30,6 @@ const { tool } = defineProps({
   tool: { type: Object as PropType<Tool>, required: true }
 });
 
-const x: Ref<number> = ref(0);
-const y: Ref<number> = ref(0);
-const scale: Ref<number> = ref(1)
-
 const p: Ref<ToolPort|null> = ref(null);
 const dialog: Ref<boolean> = ref(false);
 
@@ -49,19 +44,12 @@ async function validateEditPort(port: ToolPort) {
   dialog.value = false;
 }
 
-useDraggables().declare('tool-structure', { x: 0, y: 0 }, { x: 0, y: 48 });
+const stage: Stage = useDraggables().declare('tool-structure', { x: 0, y: 0 }, { x: 0, y: 48 });
 
-useKeyboardEvents().keydown('Delete', () => {
-  useSelectables().delete(tool);
-})
+useKeyboardEvents().keydown('Delete', () => useSelectables().delete(tool));
 </script>
 
 <style scoped>
-.super-wrapper > header {
-  border: 1px solid white;
-  border-bottom: none;
-}
-
 svg {
   height: calc(100vh - 48px);
   width: 100%;
