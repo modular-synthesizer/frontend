@@ -5,6 +5,7 @@
     :target="node"
     :sx="10"
     :sy="10"
+    @dragend="ondragend"
   >
     <g @click.prevent.stop.right="openMenu($event)" @click.stop="emit('select', node)">
       <rect :height="getNodeHeight(node, tool)" width="180" fill="black" stroke="white" />
@@ -30,6 +31,7 @@
 <script setup lang="ts">
 import type { Tool } from '~~/types/tools/Tool';
 import type { InnerNode } from '~~/types/tools/InnerNode';
+import { repositories } from '~/lib/repositories';
 
 const { node, selected, tool } = defineProps({
   node: { type: Object as PropType<InnerNode>, required: true },
@@ -50,6 +52,10 @@ function openMenu($event: MouseEvent) {
       }
     ]
   })
+}
+
+function ondragend() {
+  repositories.tool.nodes.update(tool, tool.nodes, node);
 }
 </script>
 

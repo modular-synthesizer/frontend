@@ -23,6 +23,7 @@ export type Draggable = {
   item: Coordinates,
   options: DraggableOptions,
   stage: Stage,
+  callback?: () => void;
 }
 
 type State = {
@@ -60,7 +61,7 @@ function startDrag(stageName: string, name: string, $event: MouseEvent) {
   const stage: Stage = getStage(stageName);
   const draggable = stage.draggables[name];
 
-  stage.strategy = new ItemDragStrategy(stage, draggable.item, 5, 5);
+  stage.strategy = new ItemDragStrategy(stage, draggable, 5, 5);
   stage.strategy.start($event);
 }
 
@@ -76,6 +77,7 @@ function setScale(name: string, scale: number) {
 
 function reset(name: string) {
   const stage: Stage = getStage(name);
+  stage.strategy?.end();
   stage.strategy = undefined;
 }
 

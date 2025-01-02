@@ -15,5 +15,10 @@ const { stage, name, sx, sy, target } = defineProps({
     sy: { type: Number, default: 1 },
 });
 
-useDraggables().addDraggable(stage, name, target, { sx, sy });
+type Emits = { dragend: [ Coordinates ] };
+
+const emit = defineEmits<Emits>();
+
+const draggable: Draggable = useDraggables().addDraggable(stage, name, target, { sx, sy });
+draggable.callback = () => emit("dragend", draggable.item);
 </script>

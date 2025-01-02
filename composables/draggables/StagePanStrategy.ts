@@ -13,6 +13,8 @@ export class StagePanStrategy implements DragStrategy {
     this.stage = stage;
     this.origin = { x: stage.d.x, y: stage.d.y }
   }
+  
+  end(): void { }
 
   start($event: MouseEvent): void {
     this.event = { x: $event.clientX, y: $event.clientY }

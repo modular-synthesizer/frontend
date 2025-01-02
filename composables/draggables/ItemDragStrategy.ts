@@ -15,15 +15,18 @@ export class ItemDragStrategy implements DragStrategy {
   // The original coordinates of the item itself
   private origin: Coordinates;
 
+  private callback: () => void;
+
   private sx: number;
   private sy: number;
 
-  public constructor(stage: Stage, item: Coordinates, sx: number = 1, sy: number = 1) {
+  public constructor(stage: Stage, draggable: Draggable, sx: number = 1, sy: number = 1) {
     this.stage = stage;
-    this.item = item;
+    this.item = draggable.item;
     this.sx = sx;
     this.sy = sy;
-    this.origin = { x: item.x, y: item.y }
+    this.origin = { x: this.item.x, y: this.item.y }
+    this.callback = draggable.callback ?? (() => { })
   }
 
   public start($event: MouseEvent): void {
@@ -36,6 +39,10 @@ export class ItemDragStrategy implements DragStrategy {
     offset.y -= this.event.y;
     this.item.x = this.round(this.origin.x + offset.x, this.sx);
     this.item.y = this.round(this.origin.y + offset.y, this.sy);
+  }
+
+  public end(): void {
+    this.callback();
   }
 
   public get panning(): boolean {
