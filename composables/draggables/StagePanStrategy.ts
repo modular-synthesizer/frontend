@@ -13,20 +13,29 @@ export class StagePanStrategy implements DragStrategy {
     this.stage = stage;
     this.origin = { x: stage.d.x, y: stage.d.y }
   }
-  
-  end(): void { }
+
+  public end(): void {
+    if (this.stage.callback) this.stage.callback();
+  }
 
   start($event: MouseEvent): void {
-    this.event = { x: $event.clientX, y: $event.clientY }
+    this.event = this.project($event);
   }
   
   move($event: MouseEvent): void {
-    const delta: Coordinates = {
-      x: $event.clientX - this.event.x,
-      y: $event.clientY - this.event.y
+    const offset: Coordinates = this.project($event);
+    offset.x -= this.event.x;
+    offset.y -= this.event.y;
+    this.stage.d.x = (this.origin.x + offset.x);
+    this.stage.d.y = (this.origin.y + offset.y);
+  }
+
+  private project($event: MouseEvent): Coordinates {
+    const { a, scale } = this.stage;
+    return {
+      x: Math.round(($event.clientX - a.x) / scale),
+      y: Math.round(($event.clientY - a.y) / scale),
     }
-    this.stage.d.x = this.origin.x + delta.x;
-    this.stage.d.y = this.origin.y + delta.y;
   }
 
   public get panning(): boolean {

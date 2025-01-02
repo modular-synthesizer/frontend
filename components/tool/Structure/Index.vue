@@ -1,8 +1,8 @@
 <template>
-  <sp-stage name="tool-structure">
+  <sp-stage name="tool-structure" :target="tool" :dy="48" @zoomed="updateScale" @dragend="updateCoordinates">
     <template #background>
-      <g :transform="`translate(${stage.d.x % BG_SIZE} ${stage.d.y % BG_SIZE})`" @mousedown="useSelectables().reset()">
-        <tool-structure-background :scale="stage.scale" />
+      <g :transform="`translate(${tool.x % BG_SIZE} ${tool.y % BG_SIZE})`" @mousedown="useSelectables().reset()">
+        <tool-structure-background :scale="tool.scale" />
       </g>
     </template>
     <tool-structure-node-list :tool="tool" @edit-port="editPort" />
@@ -24,7 +24,7 @@ import { cloneDeep } from 'lodash';
 import type { Tool } from '~~/types/tools/Tool';
 import type { ToolPort } from '~~/types/tools/Port';
 import { repositories } from '~~/lib/repositories';
-import { useDraggables } from '~/composables/draggables/useDraggables';
+import type { Coordinates } from '~/types/utils/Coordinates';
 
 const { tool } = defineProps({
   tool: { type: Object as PropType<Tool>, required: true }
@@ -44,7 +44,16 @@ async function validateEditPort(port: ToolPort) {
   dialog.value = false;
 }
 
-const stage: Stage = useDraggables().declare('tool-structure', { x: 0, y: 0 }, { x: 0, y: 48 });
+async function updateScale(scale: number) {
+  tool.scale = scale;
+  repositories.tools.update(tool);
+}
+
+async function updateCoordinates(coordinates: Coordinates) {
+  tool.x = coordinates.x;
+  tool.y = coordinates.y;
+  repositories.tools.update(tool);
+}
 
 useKeyboardEvents().keydown('Delete', () => useSelectables().delete(tool));
 </script>

@@ -1,3 +1,4 @@
+import type { ScaledCoordinates } from "../utils/Coordinates";
 import type { Identified } from "../utils/Identified";
 import type { Category } from "./Category";
 import type { Control } from "./Control";
@@ -11,7 +12,7 @@ import type { ToolPort } from "./Port";
  * This type represents the whole structure of a tool in the synple application.
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
-export type UncategorizedTool = Identified & {
+export type UncategorizedTool = Identified & ScaledCoordinates & {
     // The number of slots the tool is taken when instanciated as a module.
     slots: number;
     // The name of the tool, used as a translation key.
