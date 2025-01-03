@@ -18,10 +18,11 @@ const { collision, stage, name, sx, sy, target } = defineProps({
   collision: {type: Function as PropType<CollisionFunction>, default: (_: Coordinates) => false},
 });
 
-type Emits = { dragend: [ Coordinates ] };
+type Emits = { dragend: [ Coordinates ], dragmove: [ Coordinates ] };
 
 const emit = defineEmits<Emits>();
 
 const draggable: Draggable = useDraggables().addDraggable(stage, name, target, { sx, sy, collision });
-draggable.callback = () => emit("dragend", draggable.item);
+draggable.onmoved = () => emit("dragend", draggable.item);
+draggable.onmoving = () => emit("dragmove", draggable.item);
 </script>

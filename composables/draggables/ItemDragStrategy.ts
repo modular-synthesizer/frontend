@@ -1,6 +1,6 @@
 import type { Coordinates } from "~/types/utils/Coordinates";
 import type { DragStrategy } from "./DragStrategy";
-import type { Stage } from "./useDraggables";
+import type { Draggable, Stage } from "./useDraggables";
 
 /**
  * This is the strategy implemented to drag an item across the stage and not the others.
@@ -8,14 +8,12 @@ import type { Stage } from "./useDraggables";
 export class ItemDragStrategy implements DragStrategy {
   // The stage in which the item is currently dragged.
   private stage: Stage;
-  // The item currently being dragged across the stage.
-  private item: Coordinates;
   // The coordinates of the event triggering the drag in the first place
   private event!: Coordinates;
   // The original coordinates of the item itself
   private origin: Coordinates;
 
-  private callback: () => void;
+  private draggable: Draggable;
 
   private sx: number;
   private sy: number;
@@ -24,11 +22,10 @@ export class ItemDragStrategy implements DragStrategy {
 
   public constructor(stage: Stage, draggable: Draggable, sx: number = 1, sy: number = 1, collision: (c: Coordinates) => Boolean) {
     this.stage = stage;
-    this.item = draggable.item;
     this.sx = sx;
     this.sy = sy;
-    this.origin = { x: this.item.x, y: this.item.y }
-    this.callback = draggable.callback ?? (() => { })
+    this.origin = { x: draggable.item.x, y: draggable.item.y }
+    this.draggable = draggable;
     this.collision = collision;
   }
 
@@ -45,12 +42,13 @@ export class ItemDragStrategy implements DragStrategy {
       y: this.round(this.origin.y + offset.y, this.sy),
     }
     if (this.collision(results)) return;
-    this.item.x = results.x
-    this.item.y = results.y;
+    this.draggable.item.x = results.x
+    this.draggable.item.y = results.y;
+    if (this.draggable.onmoving) this.draggable.onmoving();
   }
 
   public end(): void {
-    this.callback();
+    if (this.draggable.onmoved) this.draggable.onmoved();
   }
 
   public get panning(): boolean {

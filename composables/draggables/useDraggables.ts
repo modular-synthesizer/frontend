@@ -4,9 +4,12 @@ import type { DragStrategy } from "./DragStrategy"
 import { ItemDragStrategy } from "./ItemDragStrategy"
 import { StagePanStrategy } from "./StagePanStrategy"
 
-type HasCallback = { callback?: () => void; }
+type HasCallbacks = {
+  onmoving?: () => void;
+  onmoved?: () => void;
+}
 
-export type Stage = HasCallback & {
+export type Stage = HasCallbacks & {
   // The offset coordinates of the stage INSIDE (how is it moved from its 0;0 point).
   d: Coordinates,
   // The offset coordinates of the stage OUTSIDE (where is it on the screen currently).
@@ -22,7 +25,7 @@ type DraggableOptions = {
   collision: (coordinates: Coordinates) => Boolean,
 }
 
-export type Draggable = HasCallback & {
+export type Draggable = HasCallbacks & {
   item: Coordinates,
   options: DraggableOptions,
   stage: Stage,

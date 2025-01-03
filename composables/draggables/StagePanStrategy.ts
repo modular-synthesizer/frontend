@@ -15,7 +15,7 @@ export class StagePanStrategy implements DragStrategy {
   }
 
   public end(): void {
-    if (this.stage.callback) this.stage.callback();
+    if (this.stage.onmoved) this.stage.onmoved();
   }
 
   start($event: MouseEvent): void {
