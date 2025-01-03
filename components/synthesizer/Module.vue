@@ -5,7 +5,7 @@
       <use :xlink:href="`#${mod.id}`" />
     </clipPath>
   </defs>
-  <sp-stage-draggable stage="synthesizer" :name="mod.id" :target="coordinates" :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @dragend="ondragend" :collision="collides">
+  <sp-stage-draggable stage="synthesizer" :name="mod.id" :target="coordinates" :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @dragend="ondragend" @dragmove="ondragmove" :collision="collides">
     <g
       @click.right.stop.prevent="showMenu(mod, $event)"
       @mouseenter.stop="useHover().mouseenter(mod)"
@@ -58,11 +58,15 @@ function showMenu(mod: AudioModule, $event: MouseEvent) {
   });
 }
 
-function ondragend(c: Coordinates) {
+function ondragmove(c: Coordinates) {
   const { slot, rack } = fromCoords(c);
+  if (slot === mod.slot && rack === mod.rack) return;
   if (!hasRoom(synthesizer, { id: mod.id, slot, rack, slots: mod.slots })) return;
   place(mod, rack, slot);
   coordinates.value = c;
+}
+
+function ondragend(c: Coordinates) {
   repositories.modules.update(mod);
 }
 

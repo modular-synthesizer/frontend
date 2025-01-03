@@ -3,7 +3,9 @@
     <template #background="{ position, scale }">
       <synthesizer-background :position="{ ...position, scale }" />
     </template>
-    <synthesizer-module v-for="mod in modules" :mod="mod" :hovered="hovered !== null && equals(hovered, mod)" :synthesizer="synthesizer" />
+    <template  v-for="mod in modules">
+      <synthesizer-module v-if="!mod.deleted" :mod="mod" :hovered="hovered !== null && equals(hovered, mod)" :synthesizer="synthesizer" />
+    </template>
     <synthesizer-link v-for="link in links" :link="link" />
     <LinkCreator />
   </sp-stage>

@@ -19,6 +19,7 @@ export type ModuleDescription = ModuleCoordinates & {
   type: string;
   controls: Array<Control>;
   category: string;
+  deleted: Boolean;
 }
 
 export type ModulePayload = ModuleDescription & {

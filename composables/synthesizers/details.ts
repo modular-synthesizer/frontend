@@ -102,7 +102,7 @@ export function useSynthesizer() {
 
   async function removeModule(mod: AudioModule) {
     disconnectModule(mod);
-    remove(modules.value, { id: mod.id });
+    mod.deleted = true;
     await repositories.modules.delete(mod.id);
   }
 
