@@ -4,6 +4,7 @@
       :d="path"
       :opacity="entered ? 1 : opacity"
       stroke-width="7"
+      fill="transparent"
       :class="[{ 'no-events': noEvents, path: true, entered }, 'stroke-purple-darken-3']"
       @click.prevent="click(true)"
       v-if="showCable"

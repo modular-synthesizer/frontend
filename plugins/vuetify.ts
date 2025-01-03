@@ -1,4 +1,4 @@
-import { VuetifyOptions, createVuetify } from 'vuetify'
+import { type VuetifyOptions, createVuetify } from 'vuetify'
 import * as labs from 'vuetify/labs/components';
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'

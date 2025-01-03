@@ -1,6 +1,6 @@
 import type { Parameter } from '~/types/modules/Parameter';
 import { Repository } from "./utils/Repository";
-import type { ModuleDescription, ModulePayload } from "~/types/modules/AudioModule";
+import type { AudioModule, ModuleDescription, ModulePayload } from "~/types/modules/AudioModule";
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 
 type CreationPayload = { tool_id: string, synthesizer_id: string, rack: number, slot: number };
