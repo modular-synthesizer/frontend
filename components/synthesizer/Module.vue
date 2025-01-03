@@ -69,13 +69,13 @@ function ondragend(c: Coordinates) {
 function fromCoords(c: Coordinates): { slot: number, rack: number} {
   return {
     slot: Math.round(c.x / SLOT_SIZE),
-    rack: Math.round(c.y / RACK_HEIGHT) + 1
+    rack: Math.round(c.y / RACK_HEIGHT)
   }
 }
 
 function collides(c: Coordinates): Boolean {
   const { slot, rack } = fromCoords(c);
-  return !hasRoom(synthesizer, { id: mod.id, slot, rack: rack - 1, slots: mod.slots });
+  return !hasRoom(synthesizer, { id: mod.id, slot, rack: rack, slots: mod.slots });
 }
 </script>
 
