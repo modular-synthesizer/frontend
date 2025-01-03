@@ -1,5 +1,8 @@
 <template>
   <sp-stage name="synthesizer" :target="synthesizer" @zoomed="saveScale" @dragend="saveCoords">
+    <template #background="{ position, scale }">
+      <synthesizer-background :position="{ ...position, scale }" />
+    </template>
     <synthesizer-module v-for="mod in modules" :mod="mod" :hovered="hovered !== null && equals(hovered, mod)" :synthesizer="synthesizer" />
     <synthesizer-link v-for="link in links" :link="link" />
     <LinkCreator />

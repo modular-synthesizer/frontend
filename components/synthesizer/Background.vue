@@ -11,14 +11,12 @@
       <circle cx="10" cy="390" r="3" class="fill-black" />
     </pattern>
   </defs>
-  <g :transform="`scale(${position.scale} ${position.scale})`">
-    <g :transform="`translate(${origin().x} ${origin().y})`">
-      <rect
-        :height="nbRacks() * RACK_HEIGHT"
-        :width="nbSlots() * SLOT_SIZE"
-        fill="url(#singleSlot)"
-      />
-    </g>
+  <g :transform="`translate(${origin().x} ${origin().y})`">
+    <rect
+      :height="nbRacks() * RACK_HEIGHT"
+      :width="nbSlots() * SLOT_SIZE"
+      fill="url(#singleSlot)"
+    />
   </g>
 </template>
 
@@ -48,17 +46,17 @@ function screenHeight() {
 }
 
 function nbRacks() {
-  return Math.ceil((screenHeight() / RACK_HEIGHT) + 1);
+  return Math.ceil((screenHeight() / RACK_HEIGHT) + 2);
 }
 
 function nbSlots() {
-  return Math.ceil((screenWidth() / SLOT_SIZE) + 1);
+  return Math.ceil((screenWidth() / SLOT_SIZE) + 2);
 }
 
 function origin(): Coordinates {
   return {
-    x: (position.x / position.scale) % SLOT_SIZE - SLOT_SIZE,
-    y: (position.y / position.scale) % RACK_HEIGHT - RACK_HEIGHT,
+    x: (position.x % SLOT_SIZE) - SLOT_SIZE,
+    y: (position.y % RACK_HEIGHT) - RACK_HEIGHT,
   }
 }
 

@@ -15,7 +15,7 @@ This component is a stage where several possible operations can be done :
   >
     <g :transform="`scale(${stage.scale} ${stage.scale})`">
       <g :transform="`translate(${stage.d.x % bgWidth} ${stage.d.y % bgHeight})`">
-        <slot name="background"></slot>
+        <slot name="background" :position="stage.d" :scale="stage.scale"></slot>
       </g>
       <g :transform="`translate(${stage.d.x} ${stage.d.y})`">
         <slot></slot>
@@ -51,5 +51,5 @@ function onwheel($event: WheelEvent) {
 }
 
 const stage: Ref<Stage> = ref(useDraggables().declare(name, target, { x: dx, y: dy }, target.scale));
-stage.value.callback = () => emit('dragend', stage.value.d);
+stage.value.onmoved = () => emit('dragend', stage.value.d);
 </script>
