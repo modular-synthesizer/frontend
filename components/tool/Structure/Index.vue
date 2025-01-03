@@ -1,5 +1,5 @@
 <template>
-  <sp-stage name="tool-structure" :target="tool" :dy="48" @zoomed="updateScale" @dragend="updateCoordinates" :bg-width="BG_SIZE" :bg-height="BG_SIZE">
+  <sp-stage name="tool-structure" :target="tool" :dy="48" @zoomed="updateScale" @dragend="updateCoordinates" :bg-width="BG_SIZE" :bg-height="BG_SIZE" @mousedown="useSelectables().reset()">
     <template #background>
       <tool-structure-background :scale="tool.scale" @mousedown="useSelectables().reset()" />
     </template>
