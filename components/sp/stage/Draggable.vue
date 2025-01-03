@@ -1,5 +1,5 @@
 <template>
-  <g @mousedown.capture.stop.prevent="useDraggables().startDrag(stage, name, $event)" :transform="`translate(${target.x} ${target.y})`">
+  <g @mousedown.stop.prevent="useDraggables().startDrag(stage, name, $event)" :transform="`translate(${target.x} ${target.y})`">
     <slot></slot>
   </g>
 </template>

@@ -6,6 +6,7 @@
   <v-app
     @mousemove="triggerDragMove"
     @touchmove.passive="($event: TouchEvent) => triggerDragMove($event.touches[0] as any)"
+    @mouseup="triggerDragEnd"
   >
     <v-layout>
       <NuxtLayout>
