@@ -28,6 +28,12 @@ export type UncategorizedTool = Identified & {
     ports: Array<ToolPort>;
     // The controls offered to the user to pilot the modules.
     controls: Array<Control>;
+
+    x: number;
+
+    y: number;
+
+    scale: number;
 }
 
 export type Tool = UncategorizedTool & {

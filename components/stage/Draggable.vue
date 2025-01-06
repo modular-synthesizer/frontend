@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import type { Draggable } from '~/types/utils/Coordinates';
-import type { DragDeclaration } from './strategies/AbstractStrategy';
+import type { DragDeclaration } from '../../utils/draggables/AbstractStrategy';
 import { translate } from '~/utils/functions/svg';
 
 const { click, sx, sy, target } = defineProps({

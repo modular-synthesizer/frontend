@@ -1,5 +1,6 @@
 import { clone } from "lodash";
 import type { Coordinates, Draggable } from "~/types/utils/Coordinates";
+import type { IStrategy } from "./IStrategy";
 
 export abstract class AbstractStrategy implements IStrategy {
   // The origin coordinates of the item you're dragging.
@@ -34,20 +35,3 @@ export abstract class AbstractStrategy implements IStrategy {
 
   public abstract end($event: MouseEvent): void;
 }
-
-export enum StrategyState { PANNING = 'PANNING', IDLE = 'IDLE', DRAGGING = 'DRAGGING' };
-
-export interface IStrategy {
-  start($event: MouseEvent): void;
-  move($event: MouseEvent): void;
-  end($event: MouseEvent): void;
-  newPosition($event: MouseEvent): Coordinates;
-}
-
-export class IdleStrategy extends AbstractStrategy {
-  public move(_$event: MouseEvent): void { return; }
-  public end(_$event: MouseEvent): void { return; }
-
-}
-
-export type DragDeclaration = (target: Draggable, sx: number, sy: number, $event: MouseEvent) => void;

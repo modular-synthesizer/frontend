@@ -16,12 +16,13 @@
 
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import type { Coordinates, Draggable, ScaledCoordinates } from '~/types/utils/Coordinates';
+import type { Draggable, ScaledCoordinates } from '~/types/utils/Coordinates';
 import { zoom } from '~/utils/functions/geometry';
 import { scale, translate } from '~/utils/functions/svg';
-import { IdleStrategy, type IStrategy } from './strategies/AbstractStrategy';
-import { PanStrategy } from './strategies/PanStrategy';
-import { DragStrategy } from './strategies/DragStrategy';
+import { PanStrategy } from '~/utils/draggables/PanStrategy';
+import { DragStrategy } from '~/utils/draggables/DragStrategy';
+import { IdleStrategy } from '~/utils/draggables/IdleStrategy';
+import type { IStrategy } from '~/utils/draggables/IStrategy';
 
 const { height, target, width } = defineProps({
   height: { type: String, default: '100%' },
@@ -31,7 +32,6 @@ const { height, target, width } = defineProps({
 
 type Emits = {
   zoom: [ number ],
-  panned: [ Coordinates ],
 }
 
 const emit = defineEmits<Emits>();
@@ -49,7 +49,6 @@ function onmousemove($event: MouseEvent) {
 
 function onmouseup($event: MouseEvent) {
   strategy.value.end($event);
-  emit('panned', target);
   strategy.value = new IdleStrategy(target, target.scale);
 }
 

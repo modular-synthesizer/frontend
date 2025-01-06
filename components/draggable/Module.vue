@@ -8,7 +8,7 @@
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Draggable } from '~/types/utils/Coordinates';
-import type { DragDeclaration } from '../stage/strategies/AbstractStrategy';
+import type { DragDeclaration } from '../../utils/draggables/AbstractStrategy';
 
 const { click, module } = defineProps({
   click: { type: Function as PropType<DragDeclaration>, required: true },

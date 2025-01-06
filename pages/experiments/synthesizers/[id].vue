@@ -15,7 +15,6 @@ import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 import { createModule } from '~/utils/factories/modules';
 import type { Generator } from '~/types/Generator';
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
-import { translate } from '~/utils/functions/svg';
 
 definePageMeta({ layout: false })
 
