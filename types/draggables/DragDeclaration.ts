@@ -1,3 +1,3 @@
-import type { Draggable } from "../utils/Coordinates";
+import type { IStrategy } from "~/utils/draggables/IStrategy";
 
-export type DragDeclaration = (target: Draggable, sx: number, sy: number, callback: () => void, $event: MouseEvent) => void;
+export type DragDeclaration = (strategy: IStrategy, $event: MouseEvent) => void;
