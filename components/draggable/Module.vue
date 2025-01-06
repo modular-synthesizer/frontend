@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import type { AudioModule } from '~/types/modules/AudioModule';
-import type { Coordinates } from '~/types/utils/Coordinates';
+import type { Draggable } from '~/types/utils/Coordinates';
 import type { DragDeclaration } from '../stage/strategies/AbstractStrategy';
 
 const { click, module } = defineProps({
@@ -15,8 +15,9 @@ const { click, module } = defineProps({
   module: { type: Object as PropType<AudioModule>, required: true },
 });
 
-const target: Ref<Coordinates> = ref({
+const target: Ref<Draggable> = ref({
   x: module.slot * SLOT_SIZE,
   y: module.rack * RACK_HEIGHT,
+  id: module.id,
 });
 </script>

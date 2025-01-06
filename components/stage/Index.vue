@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import type { Coordinates, ScaledCoordinates } from '~/types/utils/Coordinates';
+import type { Coordinates, Draggable, ScaledCoordinates } from '~/types/utils/Coordinates';
 import { zoom } from '~/utils/functions/geometry';
 import { scale, translate } from '~/utils/functions/svg';
 import { IdleStrategy, type IStrategy } from './strategies/AbstractStrategy';
@@ -36,26 +36,26 @@ type Emits = {
 
 const emit = defineEmits<Emits>();
 
-let strategy: IStrategy = new IdleStrategy(target, target.scale);
+const strategy: Ref<IStrategy> = ref(new IdleStrategy(target, target.scale));
 
 function onmousedown($event: MouseEvent) {
-  strategy = new PanStrategy(target, target.scale);
-  strategy.start($event);
+  strategy.value = new PanStrategy(target, target.scale);
+  strategy.value.start($event);
 }
 
 function onmousemove($event: MouseEvent) {
-  strategy.move($event)
+  strategy.value.move($event)
 }
 
 function onmouseup($event: MouseEvent) {
-  strategy.end($event);
+  strategy.value.end($event);
   emit('panned', target);
-  strategy = new IdleStrategy(target, target.scale);
+  strategy.value = new IdleStrategy(target, target.scale);
 }
 
-function onclick(draggable: Coordinates, sx: number, sy: number, $event: MouseEvent) {
-  strategy = new DragStrategy(draggable, target.scale, sx, sy);
-  strategy.start($event);
+function onclick(draggable: Draggable, sx: number, sy: number, $event: MouseEvent) {
+  strategy.value = new DragStrategy(draggable, target.scale, sx, sy);
+  strategy.value.start($event);
 }
 </script>
 
