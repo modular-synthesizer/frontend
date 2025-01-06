@@ -15,7 +15,8 @@ const { click, module } = defineProps({
   module: { type: Object as PropType<AudioModule>, required: true },
 });
 
-const target: ComputedRef<Coordinates> = computed(() => {
-  return { x: module.slot * SLOT_SIZE, y: module.rack * RACK_HEIGHT };
+const target: Ref<Coordinates> = ref({
+  x: module.slot * SLOT_SIZE,
+  y: module.rack * RACK_HEIGHT,
 });
 </script>

@@ -2,9 +2,7 @@
   <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom">
     <template #default="{ props }">
       <draggable-module v-for="module in synthesizer.modules" v-bind="props" :module="module" :sx="SLOT_SIZE" :sy="RACK_HEIGHT">
-        <g :transform="translate({ x: module.slot * SLOT_SIZE, y: module.rack * RACK_HEIGHT })">
-          <rect :width="module.slots * SLOT_SIZE" :height="RACK_HEIGHT" fill="black" stroke="white" />
-        </g>
+        <rect :width="module.slots * SLOT_SIZE" :height="RACK_HEIGHT" fill="black" stroke="white" />
       </draggable-module>
     </template>
   </stage>

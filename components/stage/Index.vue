@@ -19,7 +19,7 @@ import type { PropType } from 'vue';
 import type { Coordinates, ScaledCoordinates } from '~/types/utils/Coordinates';
 import { zoom } from '~/utils/functions/geometry';
 import { scale, translate } from '~/utils/functions/svg';
-import { AbstractStrategy, IdleStrategy, StrategyState } from './strategies/AbstractStrategy';
+import { IdleStrategy, type IStrategy } from './strategies/AbstractStrategy';
 import { PanStrategy } from './strategies/PanStrategy';
 import { DragStrategy } from './strategies/DragStrategy';
 
@@ -36,7 +36,7 @@ type Emits = {
 
 const emit = defineEmits<Emits>();
 
-let strategy: AbstractStrategy = new IdleStrategy(target, target.scale);
+let strategy: IStrategy = new IdleStrategy(target, target.scale);
 
 function onmousedown($event: MouseEvent) {
   strategy = new PanStrategy(target, target.scale);
@@ -53,7 +53,7 @@ function onmouseup($event: MouseEvent) {
   strategy = new IdleStrategy(target, target.scale);
 }
 
-function onclick(draggable: Coordinates, sx: number, sy: number, $event: MouseEvent): void {
+function onclick(draggable: Coordinates, sx: number, sy: number, $event: MouseEvent) {
   strategy = new DragStrategy(draggable, target.scale, sx, sy);
   strategy.start($event);
 }

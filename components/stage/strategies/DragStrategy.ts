@@ -16,8 +16,8 @@ export class DragStrategy extends AbstractStrategy {
     const position = this.newPosition($event);
     this.target.x = this.round(position.x, this.sx);
     this.target.y = this.round(position.y, this.sy);
-    console.log(this.target.x + ";" + this.target.y);
   }
+  
   public override end($event: MouseEvent): void {
     console.log("end of item drag");
   }
