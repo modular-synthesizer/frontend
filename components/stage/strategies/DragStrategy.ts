@@ -1,35 +1,28 @@
-import type { Coordinates, ScaledCoordinates } from "~/types/utils/Coordinates";
+import type { Coordinates } from "~/types/utils/Coordinates";
+import { AbstractStrategy } from "./AbstractStrategy";
 
-export abstract class DragStrategy {
-  // The origin coordinates of the item you're dragging.
-  private origin: Coordinates = { x: 0, y: 0 };
-  // The origin event of the drag.
-  private event!: MouseEvent;
+export class DragStrategy extends AbstractStrategy {
 
-  private scale: number;
+  private sx: number;
+  private sy: number;
 
-  private delta: Coordinates = { x: 0, y: 0 };
-
-  public constructor(target: Coordinates, scale: number) {
-    this.origin.x = target.x;
-    this.origin.y = target.y;
-    this.scale = scale;
+  public constructor(target: Coordinates, scale: number, sx: number, sy: number) {
+    super(target, scale);
+    this.sx = sx;
+    this.sy = sy;
   }
 
-  public start($event: MouseEvent) {
-    this.event = $event;
+  public override move($event: MouseEvent): void {
+    const position = this.newPosition($event);
+    this.target.x = this.round(position.x, this.sx);
+    this.target.y = this.round(position.y, this.sy);
+    console.log(this.target.x + ";" + this.target.y);
+  }
+  public override end($event: MouseEvent): void {
+    console.log("end of item drag");
   }
 
-  public move({ clientX: x, clientY: y }: MouseEvent): void {
-    this.delta.x = this.origin.x + (x - this.event.x) / this.scale;
-    this.delta.y = this.origin.y + (y - this.event.y) / this.scale;
-  }
-
-  public abstract end($event: MouseEvent): void;
-}
-
-export class IdleStrategy extends DragStrategy {
-  public end(_$event: MouseEvent): void {
-    return;
+  private round(value: number, step: number): number {
+    return Math.round(value / step) * step;
   }
 }

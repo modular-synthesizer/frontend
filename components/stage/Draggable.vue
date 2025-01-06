@@ -1,14 +1,15 @@
 <template>
-  <g @mousedown.prevent.stop="click(target, $event)"><slot /></g>
+  <g @mousedown.prevent.stop="click(target, sx, sy, $event)"><slot /></g>
 </template>
 
 <script setup lang="ts">
 import type { Coordinates } from '~/types/utils/Coordinates';
-
-type MouseCallback = (target: Coordinates, $event: MouseEvent) => void;
+import type { DragDeclaration } from './strategies/AbstractStrategy';
 
 const { click } = defineProps({
-  click: { type: Function as PropType<MouseCallback>, required: true },
+  click: { type: Function as PropType<DragDeclaration>, required: true },
+  sx: { type: Number, default: 1 },
+  sy: { type: Number, default: 1 },
   target: { type: Object as PropType<Coordinates>, required: true },
 });
 </script>

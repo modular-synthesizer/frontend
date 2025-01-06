@@ -8,11 +8,10 @@
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Coordinates } from '~/types/utils/Coordinates';
-
-type MouseCallback = (target: Coordinates, $event: MouseEvent) => void;
+import type { DragDeclaration } from '../stage/strategies/AbstractStrategy';
 
 const { click, module } = defineProps({
-  click: { type: Function as PropType<MouseCallback>, required: true },
+  click: { type: Function as PropType<DragDeclaration>, required: true },
   module: { type: Object as PropType<AudioModule>, required: true },
 });
 
