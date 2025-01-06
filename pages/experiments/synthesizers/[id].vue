@@ -3,7 +3,7 @@
     <template #default="{ props }">
       <draggable-module v-for="module in synthesizer.modules" v-bind="props" :module="module" :sx="SLOT_SIZE" :sy="RACK_HEIGHT">
         <module :module="module">
-          <control v-for="control in module.controls" v-bind="props" :control="control" />
+          <control v-for="control in module.controls" v-bind="props" :control="control" :module="module" />
         </module>
       </draggable-module>
     </template>

@@ -1,30 +1,45 @@
 <template>
-  <knob-events v-if="parameter" :parameter="parameter" :control=control>
+  <g v-if="parameter" @mousedown.stop="onmousedown">
     <knob-label :x="x" :y="y - r - 6" :label="label" />
     <knob-background :x="x" :y="y" :radius="r" :editing="control.editing" />
     <knob-gauge :x="x" :y="y" :radius="r - 4" :startAngle="30" :endAngle="330" :parameter="parameter" />
-    <knob-value :x="x" :y="y" :small="small" :value="value">
+    <knob-value :x="x" :y="y" :small="r <= 15" :value="value">
       <slot :value="value">{{ value }}</slot>
     </knob-value>
-  </knob-events>
+  </g>
 </template>
 
 <script setup lang="ts">
 import type { Parameter } from '~/types/modules/Parameter';
 import { round } from 'lodash';
 import type { Control } from '~/types/tools/Control';
+import type { AudioModule } from '~/types/modules/AudioModule';
+import type { DragDeclaration } from '~/types/draggables/DragDeclaration';
+import { ParamStrategy } from '~/utils/draggables/ParamStrategy';
+import { repositories } from '~/lib/repositories';
 
-const { x, y, parameter, r, label, control } = defineProps({
-  x: { type: Number, default: 0 },
-  y: { type: Number, default: 0 },
-  parameter: { type: Object as PropType<Parameter>, required: true },
+const { click, module, r, control } = defineProps({
   r: { type: Number, default: 20 },
-  label: { type: String, default: "" },
   control: { type: Object as PropType<Control>, required: true },
-  small: { type: Boolean, default: false },
+  module: { type: Object as PropType<AudioModule>, required: true },
+  click: { type: Function as PropType<DragDeclaration>, required: true },
 });
 
-const value = computed(() => {
-  return round(parameter.value, parameter.precision);
-});
+const parameter: Parameter = Object.values(module.parameters).find((p: Parameter) => {
+  return p.name === control.payload.target
+}) as Parameter;
+
+const value = computed(() => round(parameter.value, parameter.precision));
+
+const x: number = +control.payload.x;
+const y: number = +control.payload.y;
+const label: string = `${control.payload.label ?? ''}`;
+
+function onmousedown($event: MouseEvent) {
+  click(new ParamStrategy(control, parameter, save), $event);
+}
+
+function save() {
+  repositories.modules.updateParameter(parameter);
+}
 </script>

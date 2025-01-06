@@ -1,5 +1,5 @@
 <template>
-  <control-small-knob v-bind="{ click, control, module }" v-if="control.component === 'SmallKnob'" />
+  <knob-wrapper :control="control" :r="15" :module="module" :click="click" />
 </template>
 
 <script setup lang="ts">
