@@ -1,5 +1,5 @@
 <template>
-  <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom">
+  <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save">
     <template #default="{ props }">
       <draggable-module v-for="module in synthesizer.modules" v-bind="props" :module="module" :sx="SLOT_SIZE" :sy="RACK_HEIGHT">
         <rect :width="module.slots * SLOT_SIZE" :height="RACK_HEIGHT" fill="black" stroke="white" />
@@ -31,5 +31,9 @@ synthesizer.value.modules = await Promise.all(
 
 function onzoom(scale: number) {
   synthesizer.value.scale = scale;
+}
+
+function save() {
+  repositories.synthesizers.update(synthesizer.value);
 }
 </script>

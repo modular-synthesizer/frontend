@@ -5,13 +5,13 @@ export class DragStrategy extends AbstractStrategy {
 
   private sx: number;
   private sy: number;
-  private id: string;
+  private callback: () => void;
 
-  public constructor(target: Draggable, scale: number, sx: number, sy: number) {
+  public constructor(target: Draggable, scale: number, sx: number, sy: number, callback: () => void) {
     super(target, scale);
     this.sx = sx;
     this.sy = sy;
-    this.id = target.id;
+    this.callback = callback;
   }
 
   public override move($event: MouseEvent): void {
@@ -20,8 +20,8 @@ export class DragStrategy extends AbstractStrategy {
     this.target.y = this.round(position.y, this.sy);
   }
   
-  public override end($event: MouseEvent): void {
-    console.log(this.id);
+  public override end(_$event: MouseEvent): void {
+    this.callback();
   }
 
   private round(value: number, step: number): number {

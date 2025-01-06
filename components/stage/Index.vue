@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import type { Draggable, ScaledCoordinates } from '~/types/utils/Coordinates';
+import type { Coordinates, Draggable, ScaledCoordinates } from '~/types/utils/Coordinates';
 import { zoom } from '~/utils/functions/geometry';
 import { scale, translate } from '~/utils/functions/svg';
 import { PanStrategy } from '~/utils/draggables/PanStrategy';
@@ -32,6 +32,7 @@ const { height, target, width } = defineProps({
 
 type Emits = {
   zoom: [ number ],
+  panned: [ Coordinates ]
 }
 
 const emit = defineEmits<Emits>();
@@ -50,10 +51,11 @@ function onmousemove($event: MouseEvent) {
 function onmouseup($event: MouseEvent) {
   strategy.value.end($event);
   strategy.value = new IdleStrategy(target, target.scale);
+  emit('panned', target);
 }
 
-function onclick(draggable: Draggable, sx: number, sy: number, $event: MouseEvent) {
-  strategy.value = new DragStrategy(draggable, target.scale, sx, sy);
+function onclick(draggable: Draggable, sx: number, sy: number, callback: () => void, $event: MouseEvent) {
+  strategy.value = new DragStrategy(draggable, target.scale, sx, sy, callback);
   strategy.value.start($event);
 }
 </script>
