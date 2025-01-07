@@ -7,11 +7,12 @@
       :class="[{ 'no-events': noEvents, path: true, entered }, 'stroke-purple-darken-3']"
       @click.prevent="click(true)"
       v-if="showCable"
+      fill="transparent"
     />
     <circle
       :class="[{ 'no-events': noEvents }, 'stroke-purple-darken-3 fill-shades-white']"
-      :cx="startX"
-      :cy="startY"
+      :cx="start.x"
+      :cy="start.y"
       :r="r"
       stroke-width="6"
       @click="click()"
@@ -19,8 +20,8 @@
     />
     <circle
       :class="[{ 'no-events': noEvents }, 'stroke-purple-darken-3 fill-shades-white']"
-      :cx="endX"
-      :cy="endY"
+      :cx="end.x"
+      :cy="end.y"
       :r="r"
       stroke-width="6"
       @click.prevent="click()"
@@ -30,15 +31,14 @@
 </template>
 
 <script lang="ts">
+import type { Coordinates } from '~/types/utils/Coordinates';
 import { PORT_RADIUS } from '~~/lib/utils/constants';
 
 export default {
   emits: ['click'],
   props: {
-    startX: { type: Number, default: 0 },
-    startY: { type: Number, default: 0 },
-    endX: { type: Number, default: 0 },
-    endY: { type: Number, default: 0 },
+    start: { type: Object as PropType<Coordinates>, required: true },
+    end: { type: Object as PropType<Coordinates>, required: true },
     color: { type: String, default: '#5E35B1' },
     opacity: { type: Number, default: 0.3 },
     noEvents: { type: Boolean },
@@ -55,17 +55,17 @@ export default {
         return PORT_RADIUS - 2
     },
     path(): string {
-      return `M ${this.endX},${this.endY} Q ${this.cx},${this.cy} ${this.startX},${this.startY}`;
+      return `M ${this.end.x},${this.end.y} Q ${this.cx},${this.cy} ${this.start.x},${this.start.y}`;
     },
     distance() {
-      return Math.sqrt((this.startX - this.endX) ** 2 + (this.startY - this.endY) ** 2);
+      return Math.sqrt((this.start.x - this.end.x) ** 2 + (this.start.y - this.end.y) ** 2);
     },
     cx(): number {
-      return (this.endX + this.startX) / 2
+      return (this.end.x + this.start.x) / 2
     },
     cy(): number {
-      const dangle: number = Math.min(this.distance, 125) + 0.5 * Math.abs(this.startY - this.endY)
-      return Math.abs(this.endY + this.startY) / 2 + dangle;
+      const dangle: number = Math.min(this.distance, 125) + 0.5 * Math.abs(this.start.y - this.end.y)
+      return Math.abs(this.end.y + this.start.y) / 2 + dangle;
     }
   },
   methods: {

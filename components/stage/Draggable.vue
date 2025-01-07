@@ -16,11 +16,15 @@ const { click, scale, sx, sy, target } = defineProps({
   target: { type: Object as PropType<Draggable>, required: true },
 });
 
-type Emits = { dropped: [ ] }
+type Emits = { dropped: [ ], moved: [ Draggable ] }
 
 const emit = defineEmits<Emits>();
 
 function onmousedown($event: MouseEvent) {
-  click(new DragStrategy(target, scale, sx, sy, () => emit('dropped')), $event)
+  const callbacks: Record<string, () => void> = {
+    dropped: () => emit('dropped'),
+    moved: () => emit('moved', target),
+  }
+  click(new DragStrategy(target, scale, sx, sy, callbacks), $event)
 }
 </script>
