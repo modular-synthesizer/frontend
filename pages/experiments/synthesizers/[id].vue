@@ -1,12 +1,13 @@
 <template>
-  <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save">
+  <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save" @strategy-changed="onstrategychange">
     <template #default="{ props }">
       <draggable-module v-for="module in synthesizer.modules" v-bind="props" :module="module" :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @moved="move">
         <module :module="module">
-          <control v-for="control in module.controls" v-bind="props" :control="control" :module="module" />
+          <control v-for="control in module.controls" v-bind="props" :control="control" :module="module" :synthesizer="synthesizer" />
         </module>
       </draggable-module>
-      <connection v-for="cable in cables" :start="cable.from" :end="cable.to" />
+      <cable-list :links="links" :synthesizer="synthesizer" />
+      <cable v-if="linking" :start="linkStrategy.origin" :end="linkStrategy.destination" />
     </template>
   </stage>
 </template>
@@ -19,10 +20,9 @@ import { createModule } from '~/utils/factories/modules';
 import type { Generator } from '~/types/Generator';
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import type { LinkPayload } from '~/types/Cable';
-import type { Port } from '~/types/modules/Port';
-import { getAbsoluteCoordinates, getPort } from '~/utils/functions/ports';
-import type { Cable } from '~/types/cables/cables';
 import type { Draggable } from '~/types/utils/Coordinates';
+import type { IStrategy } from '~/utils/draggables/IStrategy';
+import type { LinkCreationStrategy } from '~/utils/draggables/LinkCreationStrategy';
 
 definePageMeta({ layout: false })
 
@@ -54,17 +54,14 @@ function move(module: Draggable) {
   }
 }
 
-const cables: ComputedRef<Array<Cable>> = computed((): Array<Cable> => {
-  return links.value.map((link: LinkPayload) => {
-    const from: Port = getPort(link.from, synthesizer.value.modules) as Port;
-    const to: Port = getPort(link.to, synthesizer.value.modules) as Port;
-    return {
-      id: link.id,
-      from: getAbsoluteCoordinates(from),
-      to: getAbsoluteCoordinates(to),
-    };
-  });
-});
+const linking: Ref<Boolean> = ref(false);
 
-console.log(cables);
+const strategy: Ref<IStrategy> = ref(null as unknown as IStrategy);
+
+const linkStrategy: ComputedRef<LinkCreationStrategy> = computed(() => strategy.value as LinkCreationStrategy);
+
+function onstrategychange(value: IStrategy) {
+  linking.value = (value.constructor.name === 'LinkCreationStrategy');
+  strategy.value = value;
+}
 </script>

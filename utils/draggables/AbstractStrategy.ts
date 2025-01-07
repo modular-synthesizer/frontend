@@ -4,7 +4,7 @@ import type { IStrategy } from "./IStrategy";
 
 export abstract class AbstractStrategy implements IStrategy {
   // The origin coordinates of the item you're dragging.
-  protected origin: Coordinates = { x: 0, y: 0 };
+  public origin: Coordinates = { x: 0, y: 0 };
   // The origin event of the drag.
   protected event!: MouseEvent;
 

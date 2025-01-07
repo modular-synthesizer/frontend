@@ -31,7 +31,8 @@ const { height, target, width } = defineProps({
 
 type Emits = {
   zoom: [ number ],
-  panned: [ Coordinates ]
+  panned: [ Coordinates ],
+  strategyChanged: [ IStrategy ],
 }
 
 const emit = defineEmits<Emits>();
@@ -39,7 +40,7 @@ const emit = defineEmits<Emits>();
 const strategy: Ref<IStrategy> = ref(new IdleStrategy(target, target.scale));
 
 function onmousedown($event: MouseEvent) {
-  strategy.value = new PanStrategy(target, target.scale);
+  setStrategy(new PanStrategy(target, target.scale));
   strategy.value.start($event);
 }
 
@@ -47,14 +48,19 @@ function onmousemove($event: MouseEvent) {
   strategy.value.move($event)
 }
 
+function setStrategy(value: IStrategy) {
+  strategy.value = value;
+  emit('strategyChanged', strategy.value);
+}
+
 function onmouseup($event: MouseEvent) {
   strategy.value.end($event);
-  strategy.value = new IdleStrategy(target, target.scale);
+  setStrategy(new IdleStrategy(target, target.scale));
   emit('panned', target);
 }
 
 function click(s: IStrategy, $event: MouseEvent) {
-  strategy.value = s;
+  setStrategy(s);
   strategy.value.start($event);
 }
 </script>

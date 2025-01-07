@@ -1,9 +1,6 @@
 <template>
-  <g>
     <text :x="x" :y="y - r - 4" text-anchor="middle" class="port-label fill-shades-black stroke-grey-darken-1" font-size="10px">{{ label }}</text>
-    <g
-      :transform="`translate(${x},${y})`"
-    >
+    <g :transform="`translate(${x},${y})`" @mousedown.left.stop="onmousedown">
       <circle
         :r="r"
         :class="`fill-${color}-darken-3`"
@@ -15,31 +12,31 @@
       <circle :r="r - 5" :class="`fill-${color}-darken-3`" />
       <circle :r="r - 7" stroke-width="2" stroke="white" />
       <circle :r="r - 8" />
+
+      <!-- element sur lequel faire les mouseenter/mouseout -->
       <circle
         class="port-event-handler"
         fill-opacity="0"
         fill="white"
         :r="r"
-        @mouseenter="magnetize(port)"
-        @mouseout="unmagnetize()"
-        @mousedown.left.stop="onmousedown"
       />
     </g>
-  </g>
 </template>
 
 <script lang="ts" setup>
 import type { DragDeclaration } from '~/types/draggables/DragDeclaration';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Port } from '~/types/modules/Port';
+import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 import type { Control } from '~/types/tools/Control';
 import { LinkCreationStrategy } from '~/utils/draggables/LinkCreationStrategy';
 import { isInput } from '~/utils/functions/ports';
 
-const { click, control, module } = defineProps({
+const { click, control, module, synthesizer } = defineProps({
   control: { type: Object as PropType<Control>, required: true },
   click: { type: Function as PropType<DragDeclaration>, required: true },
   module: { type: Object as PropType<AudioModule>, required: true },
+  synthesizer: { type: Object as PropType<Synthesizer>, required: true },
 });
 
 const label: string = `${control.payload.label ?? ''}`
@@ -50,7 +47,7 @@ const x: number = +control.payload.x;
 const y: number = +control.payload.y;
 
 function onmousedown($event: MouseEvent) {
-  click(new LinkCreationStrategy(control, port), $event)
+  click(new LinkCreationStrategy(control, port, synthesizer), $event)
 }
 </script>
 
