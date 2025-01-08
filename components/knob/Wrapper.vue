@@ -17,12 +17,15 @@ import type { AudioModule } from '~/types/modules/AudioModule';
 import type { DragDeclaration } from '~/types/draggables/DragDeclaration';
 import { ParamStrategy } from '~/utils/draggables/ParamStrategy';
 import { repositories } from '~/lib/repositories';
+import type { Synthesizer } from '~/types/Index';
+import sendParamEvent from '~/lib/commands/events/sendParamEvent';
 
-const { click, module, r, control } = defineProps({
+const { click, module, r, control, synthesizer } = defineProps({
   r: { type: Number, default: 20 },
   control: { type: Object as PropType<Control>, required: true },
   module: { type: Object as PropType<AudioModule>, required: true },
   click: { type: Function as PropType<DragDeclaration>, required: true },
+  synthesizer: { type: Object as PropType<Synthesizer>, required: true },
 });
 
 const parameter: Parameter = Object.values(module.parameters).find((p: Parameter) => {
@@ -40,6 +43,7 @@ function onmousedown($event: MouseEvent) {
 }
 
 function save() {
+  sendParamEvent('endEdit', parameter, synthesizer)
   repositories.modules.updateParameter(parameter);
 }
 </script>

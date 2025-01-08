@@ -3,6 +3,7 @@ import { AbstractStrategy } from "./AbstractStrategy";
 import type { Parameter } from "~/types/modules/Parameter";
 import { clamp } from "lodash";
 import { setValue } from "../functions/parameters";
+import sendParamEvent from "~/lib/commands/events/sendParamEvent";
 
 export class ParamStrategy extends AbstractStrategy {
 
