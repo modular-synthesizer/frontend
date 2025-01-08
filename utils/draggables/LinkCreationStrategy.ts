@@ -5,19 +5,28 @@ import { getAbsoluteCoordinates } from "../functions/ports";
 import type { Coordinates } from "~/types/utils/Coordinates";
 import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 
+type PortsCallback = (origin: Port, destination: Port) => void;
+
 export class LinkCreationStrategy extends AbstractStrategy {
 
-  private port: Port;
+  public readonly port: Port;
 
   public destination: Coordinates = { x:0, y: 0 };
 
   public synthesizer: Synthesizer;
 
-  public constructor(control: Control, port: Port, synthesizer: Synthesizer) {
+  private magnetized: Boolean = false;
+
+  private destinationPort: Port | undefined = undefined;
+
+  private callback: PortsCallback;
+
+  public constructor(control: Control, port: Port, synthesizer: Synthesizer, callback: PortsCallback) {
     super({ x: +control.payload.x, y: +control.payload.y }, 1.0);
     this.port = port
     this.origin = getAbsoluteCoordinates(port);
     this.synthesizer = synthesizer;
+    this.callback = callback;
   }
 
   public override start($event: MouseEvent): void {
@@ -29,6 +38,7 @@ export class LinkCreationStrategy extends AbstractStrategy {
   }
 
   public override move($event: MouseEvent): void {
+    if (this.magnetized) return;
     this.destination = this.newPosition($event);
   }
 
@@ -38,5 +48,18 @@ export class LinkCreationStrategy extends AbstractStrategy {
       y: this.origin.y + ($event.clientY - this.event.y) / this.synthesizer.scale,
     }
   }
-  public override end($event: MouseEvent): void { }
+
+  public magnetize(port: Port): void {
+    this.magnetized = true;
+    this.destinationPort = port;
+    this.destination = getAbsoluteCoordinates(port);
+  }
+
+  public unmagnetize(): void {
+    this.magnetized = false;
+  }
+  
+  public override end(_$event: MouseEvent): void {
+    if (this.destinationPort !== undefined) this.callback(this.port, this.destinationPort)
+  }
 }

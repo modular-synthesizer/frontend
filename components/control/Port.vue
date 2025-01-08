@@ -19,11 +19,14 @@
         fill-opacity="0"
         fill="white"
         :r="r"
+        @mouseenter="emit('mouseenter', $event)"
+        @mouseout="emit('mouseout', $event)"
       />
     </g>
 </template>
 
 <script lang="ts" setup>
+import type { OptionMergeFunction } from 'vue';
 import type { DragDeclaration } from '~/types/draggables/DragDeclaration';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Port } from '~/types/modules/Port';
@@ -47,8 +50,20 @@ const x: number = +control.payload.x;
 const y: number = +control.payload.y;
 
 function onmousedown($event: MouseEvent) {
-  click(new LinkCreationStrategy(control, port, synthesizer), $event)
+  click(new LinkCreationStrategy(control, port, synthesizer, onCreation), $event)
 }
+
+function onCreation(origin: Port, destination: Port) {
+  emit('linkCreated', origin, destination)
+}
+
+type Emits = {
+  mouseenter: [ MouseEvent ],
+  mouseout: [ MouseEvent ]
+  linkCreated: [ Port, Port ]
+}
+
+const emit = defineEmits<Emits>();
 </script>
 
 <style scoped>
