@@ -1,5 +1,4 @@
-import type { Coordinates } from "~/types/utils/Coordinates";
-import type { ScalablePosition } from "~~/lib/types/ScalablePosition";
+import type { Coordinates, ScaledCoordinates } from "~/types/utils/Coordinates";
 import { MAX_ZOOM_IN, MAX_ZOOM_OUT, ZOOM_RATIO } from "~~/lib/utils/constants";
 
 /**
@@ -9,7 +8,7 @@ import { MAX_ZOOM_IN, MAX_ZOOM_OUT, ZOOM_RATIO } from "~~/lib/utils/constants";
  * @param position The object containing a :scale field to set the value of.
  * @param $event A wheel event (wheel up or wheel down) sent by the UI.
  */
-export function setScale(position: ScalablePosition, $event: WheelEvent) {
+export function setScale(position: ScaledCoordinates, $event: WheelEvent) {
   useStates().setState(SynthState.ZOOMING);
   const delta = $event.deltaY;
 
@@ -31,7 +30,7 @@ function syncPosition(position: Coordinates, { clientX, clientY }: MouseEvent) {
  * @param position the position that will be modified during the drag.
  * @param $event the mouse button down event that contains the coordinates where the drag starts.
  */
-export function dragStart(position: ScalablePosition, $event: MouseEvent) {
+export function dragStart(position: ScaledCoordinates, $event: MouseEvent) {
   useStates().setState(SynthState.DRAGGING_VIEW);
   syncPosition(origin, $event);
 
