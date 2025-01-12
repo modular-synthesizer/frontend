@@ -1,5 +1,5 @@
 <template>
-  <g>
+  <g v-if="port">
     <text :x="x" :y="y - radius - 4" text-anchor="middle" class="port-label fill-shades-black stroke-grey-darken-1" font-size="10px">{{ label }}</text>
     <g
       :transform="`translate(${x},${y})`"
@@ -67,7 +67,7 @@ export default {
       const input: boolean = isInput(this.port)
       return { 'stroke-grey-darken-3': input, 'stroke-indigo-darken-3': !input };
     }
-  }
+  },
 }
 </script>
 
