@@ -13,6 +13,7 @@
 import { clamp } from "lodash";
 import type { Channel } from "~/types/modules/Channel";
 import type { Parameter } from "~/types/modules/Parameter";
+import { nextPowerOfTwo } from "~/utils/functions/maths";
 import { ControlsPayload, KnobPayload } from "~~/lib/types/controls";
 
 const { x, y, target, mod } = defineProps({
@@ -20,11 +21,10 @@ const { x, y, target, mod } = defineProps({
 });
 
 const channel: Channel = mod?.channels[0] as Channel;
+
 const node: AnalyserNode = channel?.nodes[`${target}`] as AnalyserNode;
 
 const frequency: Ref<Parameter> = ref(mod?.parameters['interval'] as Parameter);
-
-const power: Ref<Parameter> = ref(mod?.parameters['power'] as Parameter);
 
 // The results array, mutated when an analyser node is read.
 const arr: Ref<Float32Array> = ref(new Float32Array(node?.fftSize ?? 2048));
@@ -33,13 +33,16 @@ const line: Ref<string> = ref('');
 
 const width: Ref<number> = ref(200);
 
+// The number of frames in the results array
+const length: Ref<Parameter> = ref(mod?.parameters['length'] as Parameter);
+
 function getData() {
-  node.fftSize = 16 * (2 ** power.value.value)
-  arr.value = new Float32Array(node.fftSize);
+  arr.value = new Float32Array(length.value.value);
+  node.fftSize = nextPowerOfTwo(length.value.value)
+  
   node.getFloatTimeDomainData(arr.value);
-  const size: number = 16 * (2 ** power.value.value);
   line.value = 'M0 ' + arr.value[0] * 100 + ' ';
-  for (let i = 1; i <= size; ++i) {
+  for (let i = 1; i <= length.value.value; ++i) {
     const v: number = clamp(100 * arr.value[i], -100, 100)
     line.value += 'L' + (i * (width.value / arr.value.length)) + ' ' + v + ' ';
   }
