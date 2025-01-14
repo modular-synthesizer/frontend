@@ -1,6 +1,6 @@
 import type { Identified } from "../utils/Identified";
 
-export type ComponentNames = 'SmallKnob' | 'Knob' | 'LargeKnob' | 'Port';
+export type ComponentNames = 'SmallKnob' | 'Knob' | 'LargeKnob' | 'Oscilloscope' | 'Port';
 
 export type Control = Identified & {
   // The component name, used to instanciate it in the dynamic component wrapper.

@@ -10,6 +10,7 @@ import {
   ControlsPort,
   ControlsSmallKnob,
   ControlsFader,
+  ControlsOscilloscope
 } from "#components"
 import type { AudioModule } from "~/types/modules/AudioModule";
 import type { Control } from "~/types/tools/Control";
@@ -22,6 +23,7 @@ export default {
     ControlsPort,
     ControlsSmallKnob,
     ControlsFader,
+    ControlsOscilloscope,
   },
   props: {
     control: {

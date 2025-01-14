@@ -41,7 +41,8 @@ export function getControls(param: Parameter): Array<Control> {
 }
 
 export function extractAudioParam(node: AudioNode, field: string): AudioParam|undefined {
-  if (node instanceof AudioWorkletNode) return node.parameters.get(field);
+  if (node instanceof AudioWorkletNode) return node?.parameters.get(field);
+  if (node === undefined) return;
   return node[field as keyof AudioNode] as unknown as AudioParam;
 }
 
