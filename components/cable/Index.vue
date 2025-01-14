@@ -1,5 +1,5 @@
 <template>
-  <g :class="{'no-events': linkCreationState.display}">
+  <g :class="{'no-events': noEvents}">
     <path
       :d="path"
       :opacity="entered ? 1 : opacity"
