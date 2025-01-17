@@ -19,7 +19,6 @@ const { control, mod } = defineProps({
 });
 
 const component: ComputedRef<any> = computed(() => {
-  // @ts-ignore
   return components[control.component]
 })
 </script>

@@ -6,6 +6,6 @@ import Oscilloscope from "./Oscilloscope.vue";
 import Port from "./Port.vue";
 import SmallKnob from "./SmallKnob.vue";
 
-export const components = {
+export const components: Record<string, any> = {
   Knob, Oscilloscope, Port, SmallKnob, LargeKnob, MidiController, Fader
 }
