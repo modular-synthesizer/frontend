@@ -19,9 +19,7 @@
       :clip-path="`url(#clip-${mod.id})`"
     />
     <template v-if="mod.controls.length > 0" v-for="control in mod.controls">
-      <Suspense>
-        <ControlsWrapper :mod="mod" :control="control" />
-      </Suspense>
+      <ControlsWrapper :mod="mod" :control="control" />
     </template>
     <module-screws :slots="mod.slots" />
   </g>
