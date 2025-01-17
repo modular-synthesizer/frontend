@@ -5,8 +5,7 @@
 <script setup lang="ts">
 import type { AudioModule } from "~/types/modules/AudioModule";
 import type { Control } from "~/types/tools/Control";
-
-const components = await import("./index");
+import { components } from "./index";
 
 const { control, mod } = defineProps({
   control: {
