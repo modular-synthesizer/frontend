@@ -1,11 +1,10 @@
 <template>
-  <component :is="component" :control="control" :mod="mod" v-bind="control.payload"/>
+  <component :is="component.default" :control="control" :mod="mod" v-bind="control.payload"/>
 </template>
 
 <script setup lang="ts">
 import type { AudioModule } from "~/types/modules/AudioModule";
 import type { Control } from "~/types/tools/Control";
-import { components } from "./index";
 
 const { control, mod } = defineProps({
   control: {
@@ -18,7 +17,5 @@ const { control, mod } = defineProps({
   }
 });
 
-const component: ComputedRef<any> = computed(() => {
-  return components[control.component]
-})
+const component = await import("./" + control.component + ".vue");
 </script>
