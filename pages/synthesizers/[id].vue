@@ -30,7 +30,9 @@ import { isInput } from '~/utils/functions/ports';
 import type { AudioModule, Cable, Control, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
 import type { Draggable, IStrategy, LinkCreationStrategy } from '~/utils/draggables';
 
-definePageMeta({ layout: false })
+definePageMeta({ layout: false });
+
+await loadProcessors(useAudio().context);
 
 const id: string = useRoute().params.id as string;
 const synthesizer: Ref<Synthesizer> = ref(await repositories.synthesizers.get(id));
