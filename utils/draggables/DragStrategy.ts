@@ -1,4 +1,4 @@
-import type { Coordinates, Draggable } from "~/types/utils/Coordinates";
+import type { Coordinates, PlacedBox } from "~/types/utils/Coordinates";
 import { AbstractStrategy } from "./AbstractStrategy";
 
 type Callbacks = Record<string, () => void>;
@@ -10,7 +10,7 @@ export class DragStrategy extends AbstractStrategy {
   private callbacks: Callbacks;
   private lastPosition: Coordinates = { x: 0, y: 0 };
 
-  public constructor(target: Draggable, scale: number, sx: number, sy: number, callbacks: Callbacks) {
+  public constructor(target: PlacedBox, scale: number, sx: number, sy: number, callbacks: Callbacks) {
     super(target, scale);
     this.sx = sx;
     this.sy = sy;

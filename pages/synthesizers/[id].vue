@@ -28,7 +28,7 @@ import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import { createCable } from '~/utils/factories/cables';
 import { isInput } from '~/utils/functions/ports';
 import type { AudioModule, Cable, Control, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
-import type { Draggable, IStrategy, LinkCreationStrategy } from '~/utils/draggables';
+import type { PlacedBox, IStrategy, LinkCreationStrategy } from '~/utils/draggables';
 
 definePageMeta({ layout: false });
 
@@ -62,7 +62,7 @@ function save() {
   repositories.synthesizers.update(synthesizer.value);
 }
 
-function move(module: Draggable) {
+function move(module: PlacedBox) {
   const found: AudioModule | undefined = synthesizer.value.modules.find((m: AudioModule) => m.id === module.id);
   if (found !== undefined) {
     found.slot = module.x / SLOT_SIZE;

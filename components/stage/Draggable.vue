@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import type { DragDeclaration } from '~/types/draggables/DragDeclaration';
-import type { Draggable } from '~/types/utils/Coordinates';
+import type { PlacedBox } from '~/types/utils/Coordinates';
 import { DragStrategy } from '~/utils/draggables/DragStrategy';
 import { translate } from '~/utils/functions/svg';
 
@@ -13,10 +13,10 @@ const { click, scale, sx, sy, target } = defineProps({
   sx: { type: Number, default: 1 },
   sy: { type: Number, default: 1 },
   scale: { type: Number, default: 1.0 },
-  target: { type: Object as PropType<Draggable>, required: true },
+  target: { type: Object as PropType<PlacedBox>, required: true },
 });
 
-type Emits = { dropped: [ ], moved: [ Draggable ] }
+type Emits = { dropped: [ ], moved: [ PlacedBox ] }
 
 const emit = defineEmits<Emits>();
 

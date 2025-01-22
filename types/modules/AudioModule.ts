@@ -6,6 +6,7 @@ import type { InnerLink } from "../tools/InnerLink";
 import type { InnerNode } from "../tools/InnerNode";
 import type { ToolPort } from "../tools/Port";
 import type { Port } from '~/types/modules/Port';
+import type { PlacedBox } from "../utils/Coordinates";
 
 export type Parameters = Record<string, Parameter>;
 
@@ -28,7 +29,7 @@ export type ModulePayload = ModuleDescription & {
   ports: Array<ToolPort>;
 }
 
-export type AudioModule = ModuleDescription & {
+export type AudioModule = ModuleDescription & PlacedBox & {
   parameters: Parameters;
   channels: Array<Channel>;
   ports: Array<Port>;

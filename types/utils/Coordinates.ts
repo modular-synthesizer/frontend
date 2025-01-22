@@ -8,4 +8,7 @@ export type ScaledCoordinates = Coordinates & {
     scale: number;
 }
 
-export type Draggable = Identified & Coordinates;
+export type PlacedBox = Identified & Coordinates & {
+  width: number;
+  height: number;
+};

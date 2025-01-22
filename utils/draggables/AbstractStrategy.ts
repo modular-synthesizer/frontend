@@ -1,5 +1,5 @@
 import { clone } from "lodash";
-import type { Coordinates, Draggable } from "~/types/utils/Coordinates";
+import type { Coordinates } from "~/types/utils/Coordinates";
 import type { IStrategy } from "./IStrategy";
 
 export abstract class AbstractStrategy implements IStrategy {
