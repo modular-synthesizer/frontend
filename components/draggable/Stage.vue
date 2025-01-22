@@ -11,14 +11,14 @@
     class="bg-grey-darken-1"
   >
     <synthesizer-background :position="position" />
-    <g :transform="`translate(${position.x} ${position.y}) scale(${position.scale} ${position.scale})`" fill="url(#eurorackSlot)">
+    <g :transform="`translate(${position.x} ${position.y}) scale(${position.scale} ${position.scale})`" class="stage-modules" fill="url(#eurorackSlot)">
       <slot></slot>
     </g>
   </svg>
 </template>
 
 <script setup lang="ts">
-import { ScalablePosition } from '~~/lib/types/ScalablePosition';
+import type { ScalablePosition } from '~~/lib/types/ScalablePosition';
 import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
 
 type Dimensions = { width: number, height: number }

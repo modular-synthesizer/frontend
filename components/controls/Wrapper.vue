@@ -1,39 +1,15 @@
 <template>
-  <component :is="'Controls' + control.component" :control="control" :mod="mod" v-bind="control.payload"/>
+  <component :is="component.default" :control="control" :mod="mod" v-bind="control.payload"/>
 </template>
 
-<script lang="ts">
-import {
-  ControlsKnob,
-  ControlsLargeKnob,
-  ControlsMidiController,
-  ControlsPort,
-  ControlsSmallKnob,
-  ControlsFader,
-  ControlsOscilloscope
-} from "#components"
+<script setup lang="ts">
 import type { AudioModule } from "~/types/modules/AudioModule";
 import type { Control } from "~/types/tools/Control";
 
-export default {
-  components: {
-    ControlsKnob,
-    ControlsLargeKnob,
-    ControlsMidiController,
-    ControlsPort,
-    ControlsSmallKnob,
-    ControlsFader,
-    ControlsOscilloscope,
-  },
-  props: {
-    control: {
-      type: Object as PropType<Control>,
-      required: true,
-    },
-    mod: {
-      type: Object as PropType<AudioModule>,
-      required: true,
-    }
-  }
-}
+const { control, mod } = defineProps({
+  control: { type: Object as PropType<Control>, required: true, },
+  mod: { type: Object as PropType<AudioModule>, required: true, }
+});
+
+const component = await import("./" + control.component + ".vue");
 </script>
