@@ -26,7 +26,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { OptionMergeFunction } from 'vue';
 import type { DragDeclaration } from '~/types/draggables/DragDeclaration';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Port } from '~/types/modules/Port';

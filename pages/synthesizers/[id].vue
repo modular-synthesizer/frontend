@@ -1,19 +1,17 @@
 <template>
-  <div @mousedown="initialize" class="full-size">
+  <div @mousedown.capture="initialize" class="full-size">
     <synthesizer-menu :synthesizer="synthesizer"/>
     <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save" @strategy-changed="onstrategychange">
       <template #default="{ props }">
-        <stage-draggable v-for="target in synthesizer.modules" :collides-with="synthesizer.modules" v-bind="props" :target :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @moved="move">
-          <module :module="target">
-            <template v-for="control in target.controls">
-              <control-port
-                v-if="control.component === 'Port'"
-                v-bind="{ control, module: target, synthesizer, ...props }"
-                @mouseenter="magnetize(target, control)"
+        <stage-draggable v-for="module in synthesizer.modules" :collides-with="synthesizer.modules" v-bind="props" :target="module" :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @moved="move">
+          <module :module>
+            <template v-for="control in module.controls">
+              <control
+                v-bind="{ control, module, synthesizer, ...props }"
+                @mouseenter="magnetize(module, control)"
                 @mouseout="unmagnetize()"
                 @link-created="createLink"
               />
-              <control-small-knob v-if="control.component === 'SmallKnob'" v-bind="{ control, module: target, synthesizer, ...props }" />
             </template>
           </module>
         </stage-draggable>

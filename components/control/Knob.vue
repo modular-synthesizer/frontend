@@ -1,5 +1,5 @@
 <template>
-  <knob-wrapper :r="15" v-bind="props" />
+  <knob-wrapper v-bind="props" />
 </template>
 
 <script setup lang="ts">
