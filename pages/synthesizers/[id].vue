@@ -1,25 +1,27 @@
 <template>
-  <synthesizer-menu :synthesizer="synthesizer" />
-  <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save" @strategy-changed="onstrategychange">
-    <template #default="{ props }">
-      <stage-draggable v-for="target in synthesizer.modules" :collides-with="synthesizer.modules" v-bind="props" :target :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @moved="move">
-        <module :module="target">
-          <template v-for="control in target.controls">
-            <control-port
-              v-if="control.component === 'Port'"
-              v-bind="{ control, module: target, synthesizer, ...props }"
-              @mouseenter="magnetize(target, control)"
-              @mouseout="unmagnetize()"
-              @link-created="createLink"
-            />
-            <control-small-knob v-if="control.component === 'SmallKnob'" v-bind="{ control, module: target, synthesizer, ...props }" />
-          </template>
-        </module>
-      </stage-draggable>
-      <cable-list :cables="cables" :synthesizer="synthesizer" />
-      <cable v-if="linking" :start="linkStrategy.origin" :end="linkStrategy.destination" :no-events="true" color="red" />
-    </template>
-  </stage>
+  <div @mousedown="initialize" class="full-size">
+    <synthesizer-menu :synthesizer="synthesizer"/>
+    <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save" @strategy-changed="onstrategychange">
+      <template #default="{ props }">
+        <stage-draggable v-for="target in synthesizer.modules" :collides-with="synthesizer.modules" v-bind="props" :target :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @moved="move">
+          <module :module="target">
+            <template v-for="control in target.controls">
+              <control-port
+                v-if="control.component === 'Port'"
+                v-bind="{ control, module: target, synthesizer, ...props }"
+                @mouseenter="magnetize(target, control)"
+                @mouseout="unmagnetize()"
+                @link-created="createLink"
+              />
+              <control-small-knob v-if="control.component === 'SmallKnob'" v-bind="{ control, module: target, synthesizer, ...props }" />
+            </template>
+          </module>
+        </stage-draggable>
+        <cable-list :cables="cables" :synthesizer="synthesizer" />
+        <cable v-if="linking" :start="linkStrategy.origin" :end="linkStrategy.destination" :no-events="true" color="red" />
+      </template>
+    </stage>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -117,4 +119,20 @@ function buildLink(origin: Port, destination: Port): Cable {
   });
   return insertion;
 }
+
+const initialized: Ref<Boolean> = ref(false);
+
+function initialize() {
+  if (!initialized.value) {
+    useAudio().context.resume();
+    initialized.value = true;
+  }
+}
 </script>
+
+<style scoped>
+.full-size {
+  width: 100vw;
+  height: 100hv;
+}
+</style>
