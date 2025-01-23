@@ -1,4 +1,5 @@
 <template>
+  <synthesizer-menu :synthesizer="synthesizer" />
   <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save" @strategy-changed="onstrategychange">
     <template #default="{ props }">
       <stage-draggable v-for="target in synthesizer.modules" :collides-with="synthesizer.modules" v-bind="props" :target :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @moved="move">
