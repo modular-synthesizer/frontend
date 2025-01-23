@@ -30,6 +30,7 @@ import { createCable } from '~/utils/factories/cables';
 import { isInput } from '~/utils/functions/ports';
 import type { AudioModule, Cable, Control, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
 import type { PlacedBox, IStrategy, LinkCreationStrategy } from '~/utils/draggables';
+import { place } from '~/utils/functions/modules';
 
 definePageMeta({ layout: false });
 
@@ -66,8 +67,7 @@ function save() {
 function move(module: PlacedBox) {
   const found: AudioModule | undefined = synthesizer.value.modules.find((m: AudioModule) => m.id === module.id);
   if (found !== undefined) {
-    found.slot = module.x / SLOT_SIZE;
-    found.rack = module.y / RACK_HEIGHT;
+    place(found, module.x / SLOT_SIZE, module.y / RACK_HEIGHT);
   }
 }
 
