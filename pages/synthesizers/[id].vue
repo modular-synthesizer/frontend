@@ -1,20 +1,20 @@
 <template>
   <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save" @strategy-changed="onstrategychange">
-    <template #default="{ props: { click } }">
-      <draggable-module v-for="module in synthesizer.modules" v-bind="{ click, module }" :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @moved="move">
-        <module :module="module">
-          <template v-for="control in module.controls">
+    <template #default="{ props }">
+      <stage-draggable v-for="target in synthesizer.modules" :collides-with="synthesizer.modules" v-bind="props" :target :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @moved="move">
+        <module :module="target">
+          <template v-for="control in target.controls">
             <control-port
               v-if="control.component === 'Port'"
-              v-bind="{ control, module, synthesizer, click }"
-              @mouseenter="magnetize(module, control)"
+              v-bind="{ control, module: target, synthesizer, ...props }"
+              @mouseenter="magnetize(target, control)"
               @mouseout="unmagnetize()"
               @link-created="createLink"
             />
-            <control-small-knob v-if="control.component === 'SmallKnob'" v-bind="{ control, module, synthesizer, click }" />
+            <control-small-knob v-if="control.component === 'SmallKnob'" v-bind="{ control, module: target, synthesizer, ...props }" />
           </template>
         </module>
-      </draggable-module>
+      </stage-draggable>
       <cable-list :cables="cables" :synthesizer="synthesizer" />
       <cable v-if="linking" :start="linkStrategy.origin" :end="linkStrategy.destination" :no-events="true" color="red" />
     </template>

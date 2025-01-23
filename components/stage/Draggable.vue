@@ -8,12 +8,13 @@ import type { PlacedBox } from '~/types/utils/Coordinates';
 import { DragStrategy } from '~/utils/draggables/DragStrategy';
 import { translate } from '~/utils/functions/svg';
 
-const { click, scale, sx, sy, target } = defineProps({
+const { click, collidesWith, scale, sx, sy, target } = defineProps({
   click: { type: Function as PropType<DragDeclaration>, required: true },
   sx: { type: Number, default: 1 },
   sy: { type: Number, default: 1 },
   scale: { type: Number, default: 1.0 },
   target: { type: Object as PropType<PlacedBox>, required: true },
+  collidesWith: { type: Array<PlacedBox>, default: () => [] },
 });
 
 type Emits = { dropped: [ ], moved: [ PlacedBox ] }
@@ -25,6 +26,6 @@ function onmousedown($event: MouseEvent) {
     dropped: () => emit('dropped'),
     moved: () => emit('moved', target),
   }
-  click(new DragStrategy(target, scale, sx, sy, callbacks), $event)
+  click(new DragStrategy(target, scale, sx, sy, collidesWith, callbacks), $event)
 }
 </script>
