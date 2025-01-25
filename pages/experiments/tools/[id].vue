@@ -2,7 +2,7 @@
   <stage v-if="tool" :target="tool" @zoom="onzoom" @panned="save">
     <template #default="{ props }">
       <stage-draggable v-for="node in tool.nodes" v-bind="props" :target="node" :sx="10" :sy="10" @dropped="saveNode(node)">
-        <rect :width="100" :height="100" fill="black" />
+        <rect :width="node.width" :height="node.height" fill="black" />
       </stage-draggable>
     </template>
   </stage>
@@ -18,6 +18,11 @@ definePageMeta({ layout: false });
 const id: string = useRoute().params.id as string;
 const tool: Ref<Tool> = ref(await repositories.tools.get(id));
 
+tool.value.nodes.forEach((n: InnerNode) => {
+  n.width = 100;
+  n.height = 100;
+})
+
 function onzoom(scale: number) {
   tool.value.scale = scale;
 }
@@ -27,6 +32,6 @@ function save() {
 }
 
 function saveNode(node: InnerNode) {
-  repositories.tool.nodes.update(tool.value, tool.value.nodes, node);
+  // repositories.tool.nodes.update(tool.value, tool.value.nodes, node);
 }
 </script>
