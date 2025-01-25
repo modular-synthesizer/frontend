@@ -1,4 +1,5 @@
 <template>
+  <coordinates />
   <div @mousedown.capture="initialize" class="full-size">
     <synthesizer-menu :synthesizer="synthesizer"/>
     <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save" @strategy-changed="onstrategychange">
@@ -67,7 +68,7 @@ function save() {
 function move(module: PlacedBox) {
   const found: AudioModule | undefined = synthesizer.value.modules.find((m: AudioModule) => m.id === module.id);
   if (found !== undefined) {
-    place(found, module.x / SLOT_SIZE, module.y / RACK_HEIGHT);
+    place(found, module.y / RACK_HEIGHT, module.x / SLOT_SIZE);
   }
 }
 
@@ -126,6 +127,8 @@ function initialize() {
     initialized.value = true;
   }
 }
+
+useCoordinates().setSynthesizer(synthesizer.value);
 </script>
 
 <style scoped>

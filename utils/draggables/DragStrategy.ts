@@ -22,9 +22,10 @@ export class DragStrategy extends AbstractStrategy {
   private sx: number;
   private sy: number;
   private callbacks: Callbacks;
-  private lastPosition: Coordinates = { x: 0, y: 0 };
   private collides: PlacedBox[] = [];
   private box: PlacedBox;
+
+  private offset: Coordinates = { x: 0, y: 0 }
 
   public constructor(target: PlacedBox, scale: number, sx: number, sy: number, collides: PlacedBox[], callbacks: Callbacks) {
     super(target, scale);
@@ -35,23 +36,24 @@ export class DragStrategy extends AbstractStrategy {
     this.box = target;
   }
 
-  public override move($event: MouseEvent): void {
-    const position = this.newPosition($event);
-    const rounded: Coordinates = {
-      x: this.round(position.x, this.sx),
-      y: this.round(position.y, this.sy)
-    }
-    this.lastPosition.x = this.target.x;
-    this.lastPosition.y = this.target.y;
+  public override start($event: MouseEvent): void {
+    super.start($event);
+    this.offset.x = this.coords.x - this.target.x;
+    this.offset.y = this.coords.y - this.target.y;
+  }
 
-    // Call collidesWith to avoid collisions
-    if (collidesWith({...this.box, ...rounded}, this.collides)) return;
+  public override move(): void {
+    const position = {
+      x: this.round(this.coords.x - this.offset.x, this.sx),
+      y: this.round(this.coords.y - this.offset.y, this.sy),
+    };
 
-    this.target.x = rounded.x;
-    this.target.y = rounded.y;
-    if (this.target.x !== this.lastPosition.x || this.target.y !== this.lastPosition.y) {
-      this.callbacks['moved']();
-    }
+    if (position.x === this.target.x && position.y === this.target.y) return;
+    if (collidesWith({...this.box, ...position}, this.collides)) return;
+
+    this.target.x = position.x;
+    this.target.y = position.y;
+    this.callbacks['moved']();
   }
   
   public override end(_$event: MouseEvent): void {
@@ -60,5 +62,10 @@ export class DragStrategy extends AbstractStrategy {
 
   private round(value: number, step: number): number {
     return Math.round(value / step) * step;
+  }
+
+  // The current coordinates of the mouse in the referential of the stage.
+  private get coords(): Coordinates {
+    return useCoordinates().state.value;
   }
 }
