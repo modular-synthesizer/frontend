@@ -21,3 +21,18 @@ export function arcPath(cx: number, cy: number, r: number, angleStart: number, a
 
   return `M${start.x},${start.y}A${r} ${r} 0 ${large} 1 ${end.x} ${end.y}`;
 }
+
+export function subtract(first: Coordinates, second: Coordinates): Coordinates {
+  return { x: first.x - second.x, y: first.y - second.y }
+}
+
+export function equals(first: Coordinates, second: Coordinates): boolean {
+  return first.x === second.x && first.y === second.y;
+}
+
+export function round({x, y }: Coordinates, { sx, sy }: { sx: number, sy: number }): Coordinates {
+  return {
+    x: Math.floor(x / sx) * sx,
+    y: Math.floor(y / sy) * sy,
+  };
+}

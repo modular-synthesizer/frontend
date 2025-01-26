@@ -2,12 +2,12 @@
   <coordinates />
   <div @mousedown.capture="initialize" class="full-size">
     <synthesizer-menu :synthesizer="synthesizer"/>
-    <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save" @strategy-changed="onstrategychange">
+    <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save">
       <template #default="{ props }">
-        <stage-draggable v-for="module in synthesizer.modules" :collides-with="synthesizer.modules" v-bind="props" :target="module" :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @moved="move">
+        <stage-draggable v-for="module in synthesizer.modules" :collides-with="synthesizer.modules" v-bind="props" :target="module" :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @moved="move" @dropped="saveModule(module)">
           <module :module>
             <template v-for="control in module.controls">
-              <control
+              <control-wrapper
                 v-bind="{ control, module, synthesizer, ...props }"
                 @mouseenter="magnetize(module, control)"
                 @mouseout="unmagnetize()"
@@ -72,16 +72,15 @@ function move(module: PlacedBox) {
   }
 }
 
+function saveModule(module: AudioModule) {
+  repositories.modules.update(module);
+}
+
 const linking: Ref<Boolean> = ref(false);
 
 const strategy: Ref<IStrategy> = ref(null as unknown as IStrategy);
 
 const linkStrategy: ComputedRef<LinkCreationStrategy> = computed(() => strategy.value as LinkCreationStrategy);
-
-function onstrategychange(value: IStrategy) {
-  linking.value = (value.constructor.name === 'LinkCreationStrategy');
-  strategy.value = value;
-}
 
 function magnetize(module: AudioModule, control: Control) {
   if (!linking.value) return;

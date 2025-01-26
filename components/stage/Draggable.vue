@@ -3,29 +3,48 @@
 </template>
 
 <script setup lang="ts">
-import type { DragDeclaration } from '~/types/draggables/DragDeclaration';
-import type { PlacedBox } from '~/types/utils/Coordinates';
-import { DragStrategy } from '~/utils/draggables/DragStrategy';
+import { some } from 'lodash';
+import type { Coordinates, PlacedBox } from '~/types/utils/Coordinates';
+import { round, subtract } from '~/utils/functions/geometry';
 import { translate } from '~/utils/functions/svg';
 
-const { click, collidesWith, scale, sx, sy, target } = defineProps({
-  click: { type: Function as PropType<DragDeclaration>, required: true },
+type DragCallback = (callback: (coordinates: Coordinates) => void) => void;
+
+const { dragged, dropped, collidesWith, sx, sy, target } = defineProps({
+  dragged: { type: Function as PropType<DragCallback>, required: true },
+  dropped: { type: Function as PropType<DragCallback>, required: true },
   sx: { type: Number, default: 1 },
   sy: { type: Number, default: 1 },
-  scale: { type: Number, default: 1.0 },
   target: { type: Object as PropType<PlacedBox>, required: true },
   collidesWith: { type: Array<PlacedBox>, default: () => [] },
 });
 
-type Emits = { dropped: [ ], moved: [ PlacedBox ] }
+const offset: Ref<Coordinates> = ref({ x: 0, y: 0 });
 
-const emit = defineEmits<Emits>();
+const emit = defineEmits<{ dropped: [ ], moved: [ PlacedBox ] }>();
 
-function onmousedown($event: MouseEvent) {
-  const callbacks: Record<string, () => void> = {
-    dropped: () => emit('dropped'),
-    moved: () => emit('moved', target),
-  }
-  click(new DragStrategy(target, scale, sx, sy, collidesWith, callbacks), $event)
+function collide(first: PlacedBox, second: PlacedBox): boolean {
+  if (first.id === second.id) return false;
+  if (first.x >= second.x + second.width) return false;
+  if (first.y >= second.y + second.height) return false;
+  return true;
+}
+
+function collides(tested: PlacedBox, colliders: PlacedBox[]): boolean {
+  return some(colliders, (collider: PlacedBox) => {
+    return collide(tested, collider) && collide(collider, tested);
+  })
+}
+
+function onmousedown() {
+  offset.value = subtract(useCoordinates().get(), target);
+  dragged((coordinates: Coordinates) => {
+    const rounded: Coordinates = round(subtract(coordinates, offset.value), { sx, sy });
+    if (collides({ ...target, ...rounded }, collidesWith)) return;
+    target.x = rounded.x;
+    target.y = rounded.y;
+    emit('moved', target);
+  });
+  dropped(() => emit('dropped'));
 }
 </script>
