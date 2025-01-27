@@ -1,5 +1,4 @@
 <template>
-  <coordinates />
   <div @mousedown.capture="initialize" class="full-size">
     <synthesizer-menu :synthesizer="synthesizer"/>
     <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save">
