@@ -1,4 +1,6 @@
 import type { Synthesizer } from "~/types/Index";
+import type { Coordinates } from "~/types/utils/Coordinates";
+import { subtract } from "~/utils/functions/geometry";
 
 type State = { x: number, y: number, synthesizer?: Synthesizer };
 
@@ -17,11 +19,15 @@ export function useCoordinates() {
     state.value.synthesizer = newValue;
   }
 
-  function get() {
+  function get(): Coordinates {
     return {
       x: state.value.x,
       y: state.value.y,
     };
+  }
+
+  function absolute(): Coordinates {
+    return subtract(get(), state.value.synthesizer ?? { x: 0, y: 0});
   }
 
   function update($event: MouseEvent) {
@@ -34,5 +40,5 @@ export function useCoordinates() {
   onMounted(() => window.addEventListener('mousemove', update, { capture: true }));
   onUnmounted(() => window.removeEventListener('mousemove', update))
 
-  return { get, setSynthesizer, state };
+  return { absolute, get, setSynthesizer, state };
 }

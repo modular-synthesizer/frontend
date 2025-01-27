@@ -42,11 +42,12 @@ function getCoordinates(control: ModControl|undefined) {
 
 export function useLinkCreation() {
   return {
-    magnetize, start, unmagnetize,
+    end, magnetize, start, unmagnetize,
     get origin(): Coordinates {
       return getCoordinates(state.value.controls.origin);
     },
     get destination(): Coordinates {
+      if (state.value.ports.destination === undefined) return useCoordinates().absolute();
       return getCoordinates(state.value.controls.destination);
     },
     get magnetized(): boolean {

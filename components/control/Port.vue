@@ -26,14 +26,16 @@
 </template>
 
 <script lang="ts" setup>
+import type { DragCallback } from '~/types/draggables/DragDeclaration';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Port } from '~/types/modules/Port';
 import type { ModControl } from "~/types/tools/Control";
 import { isInput } from '~/utils/functions/ports';
 
-const { control, module } = defineProps({
+const { control, dropped, module } = defineProps({
   control: { type: Object as PropType<ModControl>, required: true },
   module: { type: Object as PropType<AudioModule>, required: true },
+  dropped: { type: Function as DragCallback, required: true }
 });
 
 const label: string = `${control.payload.label ?? ''}`
@@ -45,6 +47,7 @@ const y: number = +control.payload.y;
 
 function onmousedown() {
   useLinkCreation().start(port, control);
+  dropped(() => useLinkCreation().end());
 }
 </script>
 

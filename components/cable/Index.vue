@@ -26,6 +26,7 @@
       stroke-width="6"
       @click.prevent="click()"
       @mouseenter.stop
+      @mouseup="useLinkCreation().end()"
     />
   </g>
 </template>
