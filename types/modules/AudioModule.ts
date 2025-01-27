@@ -1,7 +1,7 @@
 import type { Identified } from "../utils/Identified";
 import type { Channel } from "./Channel";
 import type { Parameter } from "./Parameter";
-import type { Control } from "../tools/Control";
+import type { Control, ModControl } from "../tools/Control";
 import type { InnerLink } from "../tools/InnerLink";
 import type { InnerNode } from "../tools/InnerNode";
 import type { ToolPort } from "../tools/Port";
@@ -18,7 +18,7 @@ export type ModuleCoordinates = Identified & {
 
 export type ModuleDescription = ModuleCoordinates & {
   type: string;
-  controls: Array<Control>;
+  controls: Array<ModControl>;
   category: string;
 }
 

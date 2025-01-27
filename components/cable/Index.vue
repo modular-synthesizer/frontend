@@ -65,7 +65,7 @@ export default {
     },
     cy(): number {
       const dangle: number = Math.min(this.distance, 125) + 0.5 * Math.abs(this.start.y - this.end.y)
-      return Math.abs(this.end.y + this.start.y) / 2 + dangle;
+      return (this.end.y + this.start.y) / 2 + dangle;
     }
   },
   methods: {

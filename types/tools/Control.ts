@@ -1,3 +1,4 @@
+import type { AudioModule } from "../Index";
 import type { Identified } from "../utils/Identified";
 
 export type ComponentNames = 'SmallKnob' | 'Knob' | 'LargeKnob' | 'Oscilloscope' | 'Port';
@@ -9,4 +10,8 @@ export type Control = Identified & {
   payload: Record<string, string|number>;
   // This indicates if the control is currently being edited by the user (TRUE) or not (FALSE).
   editing?: boolean;
+}
+
+export type ModControl = Control & {
+  module: AudioModule,
 }

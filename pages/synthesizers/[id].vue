@@ -7,17 +7,12 @@
         <stage-draggable v-for="module in synthesizer.modules" :collides-with="synthesizer.modules" v-bind="props" :target="module" :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @moved="move" @dropped="saveModule(module)">
           <module :module>
             <template v-for="control in module.controls">
-              <control-wrapper
-                v-bind="{ control, module, synthesizer, ...props }"
-                @mouseenter="magnetize(module, control)"
-                @mouseout="unmagnetize()"
-                @link-created="createLink"
-              />
+              <control-wrapper v-bind="{ control, module, synthesizer, ...props }" />
             </template>
           </module>
         </stage-draggable>
         <cable-list :cables="cables" :synthesizer="synthesizer" />
-        <cable v-if="linking" :start="linkStrategy.origin" :end="linkStrategy.destination" :no-events="true" color="red" />
+        <cable v-if="useLinkCreation().displayed" :start="useLinkCreation().origin" :end="useLinkCreation().destination" :no-events="true" color="red" />
       </template>
     </stage>
   </div>

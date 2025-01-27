@@ -19,26 +19,21 @@
         fill-opacity="0"
         fill="white"
         :r="r"
-        @mouseenter="emit('mouseenter', $event)"
-        @mouseout="emit('mouseout', $event)"
+        @mouseenter="useLinkCreation().magnetize(port, control)"
+        @mouseout="useLinkCreation().unmagnetize()"
       />
     </g>
 </template>
 
 <script lang="ts" setup>
-import type { DragDeclaration } from '~/types/draggables/DragDeclaration';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Port } from '~/types/modules/Port';
-import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
-import type { Control } from '~/types/tools/Control';
-import { LinkCreationStrategy } from '~/utils/draggables/LinkCreationStrategy';
+import type { ModControl } from "~/types/tools/Control";
 import { isInput } from '~/utils/functions/ports';
 
-const { click, control, module, synthesizer } = defineProps({
-  control: { type: Object as PropType<Control>, required: true },
-  click: { type: Function as PropType<DragDeclaration>, required: true },
+const { control, module } = defineProps({
+  control: { type: Object as PropType<ModControl>, required: true },
   module: { type: Object as PropType<AudioModule>, required: true },
-  synthesizer: { type: Object as PropType<Synthesizer>, required: true },
 });
 
 const label: string = `${control.payload.label ?? ''}`
@@ -48,21 +43,9 @@ const color: string = isInput(port) ? 'grey' : 'indigo';
 const x: number = +control.payload.x;
 const y: number = +control.payload.y;
 
-function onmousedown($event: MouseEvent) {
-  click(new LinkCreationStrategy(control, port, synthesizer, onCreation), $event)
+function onmousedown() {
+  useLinkCreation().start(port, control);
 }
-
-function onCreation(origin: Port, destination: Port) {
-  emit('linkCreated', origin, destination)
-}
-
-type Emits = {
-  mouseenter: [ MouseEvent ],
-  mouseout: [ MouseEvent ]
-  linkCreated: [ Port, Port ]
-}
-
-const emit = defineEmits<Emits>();
 </script>
 
 <style scoped>

@@ -23,7 +23,7 @@ export function arcPath(cx: number, cy: number, r: number, angleStart: number, a
 }
 
 export function subtract(first: Coordinates, second: Coordinates): Coordinates {
-  return { x: first.x - second.x, y: first.y - second.y }
+  return { x: (+first.x) - (+second.x), y: (+first.y) - (+second.y) }
 }
 
 export function equals(first: Coordinates, second: Coordinates): boolean {
@@ -32,7 +32,11 @@ export function equals(first: Coordinates, second: Coordinates): boolean {
 
 export function round({x, y }: Coordinates, { sx, sy }: { sx: number, sy: number }): Coordinates {
   return {
-    x: Math.floor(x / sx) * sx,
-    y: Math.floor(y / sy) * sy,
+    x: Math.round(x / sx) * sx,
+    y: Math.round(y / sy) * sy,
   };
+}
+
+export function add(first: Coordinates, second: Coordinates): Coordinates {
+  return { x: (+first.x) + (+second.x), y: (+first.y) + (+second.y) }
 }
