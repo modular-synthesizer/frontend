@@ -23,9 +23,8 @@ import { repositories } from '~/lib/repositories';
 import { createModule } from '~/utils/factories/modules';
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import { createCable } from '~/utils/factories/cables';
-import { isInput } from '~/utils/functions/ports';
-import type { AudioModule, Cable, Control, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
-import type { PlacedBox, IStrategy, LinkCreationStrategy } from '~/utils/draggables';
+import type { AudioModule, Cable, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
+import type { PlacedBox } from '~~/types/utils/PlacedBox';
 import { place } from '~/utils/functions/modules';
 
 definePageMeta({ layout: false });
@@ -69,48 +68,6 @@ function move(module: PlacedBox) {
 
 function saveModule(module: AudioModule) {
   repositories.modules.update(module);
-}
-
-const linking: Ref<Boolean> = ref(false);
-
-const strategy: Ref<IStrategy> = ref(null as unknown as IStrategy);
-
-const linkStrategy: ComputedRef<LinkCreationStrategy> = computed(() => strategy.value as LinkCreationStrategy);
-
-function magnetize(module: AudioModule, control: Control) {
-  if (!linking.value) return;
-  const port: Port | undefined = module.ports.find((p: Port) => p.name === control.payload.target);
-  if (port === undefined || linkStrategy.value.port.kind === port.kind) return;
-  linkStrategy.value.magnetize(port);
-}
-
-function unmagnetize() {
-  if (!linking.value) return;
-  linkStrategy.value.unmagnetize();
-}
-
-function createLink(origin: Port, destination: Port) {
-  if (origin && destination) cables.value.push(buildLink(origin, destination));
-}
-
-function buildLink(origin: Port, destination: Port): Cable {
-  const from = isInput(destination) ? origin : destination;
-  const to = isInput(origin) ? origin : destination;
-  
-  const insertion: Cable = createCable('', from.id, to.id, 'red', ports.value);
-  cables.value.push(insertion);
-
-  const payload = {
-    id: '',
-    from: from.id,
-    to: to.id,
-    synthesizer_id: synthesizer.value.id,
-    color: 'red'
-  }
-  repositories.links.create(payload).then((payload: LinkPayload) => {
-    insertion.id = payload.id;
-  });
-  return insertion;
 }
 
 const initialized: Ref<Boolean> = ref(false);

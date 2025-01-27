@@ -1,4 +1,4 @@
-import type { PlacedBox } from "../utils/Coordinates";
+import type { PlacedBox } from "../utils/PlacedBox";
 
 /**
  * An inner node is the representation of an audio node template in a tool.

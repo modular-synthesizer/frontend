@@ -4,7 +4,8 @@
 
 <script setup lang="ts">
 import { some } from 'lodash';
-import type { Coordinates, PlacedBox } from '~/types/utils/Coordinates';
+import type { Coordinates } from '~/types/utils/Coordinates';
+import type { PlacedBox } from '~/types/utils/PlacedBox';
 import { round, subtract } from '~/utils/functions/geometry';
 import { translate } from '~/utils/functions/svg';
 
