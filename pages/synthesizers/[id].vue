@@ -84,6 +84,6 @@ useCoordinates().setSynthesizer(synthesizer.value);
 <style scoped>
 .full-size {
   width: 100vw;
-  height: 100hv;
+  height: 100vh;
 }
 </style>
