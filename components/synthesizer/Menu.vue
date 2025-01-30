@@ -3,7 +3,7 @@
     <sp-button-with-tooltip label="common.back" icon="chevron-left" to="/synthesizers" />
     <module-creator :tools="tools" :synthesizer="synthesizer" @selected="(m: AudioModule) => emit('inserted', m)" />
     <sp-button-with-tooltip @click="useLinksDisplay().toggle()" :icon="linksIcon" :label="`synthesizers.cables.${cablesLabel}`" />
-    <sp-button-with-tooltip label="synthesizers.center" icon="compass-outline" @click="useSynthesizer().resetReference()" />
+    <sp-button-with-tooltip label="synthesizers.center" icon="compass-outline" @click="reset(synthesizer)" />
   </v-btn-group>
 </template>
 
@@ -11,6 +11,7 @@
 import type { Tool } from '~~/types/tools/Tool';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
+import { reset } from '~/utils/functions/synthesizers';
 
 const { tools, synthesizer } = defineProps({
   tools: { type: Array<Tool>, default: () => [] },
@@ -23,11 +24,11 @@ type EmitType = {
 const emit = defineEmits<EmitType>();
 
 const linksIcon = computed((): string => {
-  return useLinksDisplay().displayed.value ? 'eye-outline' : 'eye-off-outline'
+  return useLinksDisplay().displayed ? 'eye-outline' : 'eye-off-outline'
 });
 
 const cablesLabel = computed((): string => {
-  return useLinksDisplay().displayed.value ? 'hide' : 'show';
+  return useLinksDisplay().displayed ? 'hide' : 'show';
 })
 </script>
 

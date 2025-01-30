@@ -1,5 +1,5 @@
 <template>
-  <cable :start="origin" :end="destination" />
+  <cable :start="origin" :end="destination" :show-cable="useLinksDisplay().displayed" />
 </template>
 
 <script setup lang="ts">

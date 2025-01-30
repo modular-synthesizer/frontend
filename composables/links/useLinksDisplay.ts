@@ -1,10 +1,15 @@
 
-const displayed: Ref<boolean> = ref(true);
+const state: Ref<{ flag: boolean }> = ref({ flag: true })
 
 function toggle() {
-  displayed.value = !displayed.value;
+  state.value.flag = !state.value.flag
 }
 
 export const useLinksDisplay = () => {
-  return { toggle, displayed}
+  return {
+    toggle,
+    get displayed(): boolean {
+      return state.value.flag;
+    }
+  }
 }
