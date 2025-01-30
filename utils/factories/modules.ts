@@ -25,6 +25,7 @@ export async function createModule(details: ModulePayload, generators: Array<Gen
     y: details.rack * RACK_HEIGHT,
     width: details.slots * SLOT_SIZE,
     height: RACK_HEIGHT,
+    deleted: false,
   }
   module.parameters = initParameters(module, details.parameters);
   module.ports = instanciatePorts(module, details.ports);
@@ -63,7 +64,7 @@ function instanciateParameters(module: AudioModule, parameters: Array<ToolParame
 
 export function createEmptyModule(tool: Tool): AudioModule {
   const module: AudioModule = {
-    id: '', type: '', category: '', slot: 0, rack: 0, slots: 2, channels: [], ports: [], parameters: {}, controls: [], height: RACK_HEIGHT, width: 2 * SLOT_SIZE, x: 0, y: 0
+    id: '', type: '', category: '', slot: 0, rack: 0, slots: 2, channels: [], ports: [], parameters: {}, controls: [], height: RACK_HEIGHT, width: 2 * SLOT_SIZE, x: 0, y: 0, deleted: false,
   }
   module.ports = instanciatePorts(module, tool.ports);
   module.parameters = instanciateParameters(module, tool.parameters);

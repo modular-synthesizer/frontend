@@ -33,4 +33,5 @@ export type AudioModule = ModuleDescription & PlacedBox & {
   parameters: Parameters;
   channels: Array<Channel>;
   ports: Array<Port>;
+  deleted: Boolean;
 }

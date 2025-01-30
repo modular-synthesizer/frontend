@@ -21,7 +21,7 @@
           @moved="move"
           @dropped="repositories.modules.update(module)"
         >
-          <module :module>
+          <module v-if="!module.deleted" :module @deleted="deleteModule(module, cables)" @disconnected="disconnectModule(module, cables)">
             <template v-for="control in module.controls">
               <control-wrapper v-bind="{ control, module, synthesizer, ...props }" />
             </template>
@@ -41,7 +41,8 @@ import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import { createCable } from '~/utils/factories/cables';
 import type { AudioModule, Cable, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
 import type { PlacedBox } from '~~/types/utils/PlacedBox';
-import { place } from '~/utils/functions/modules';
+import { disconnectModule, place } from '~/utils/functions/modules';
+import { deleteModule } from '~/utils/functions/modules';
 
 definePageMeta({ layout: false });
 

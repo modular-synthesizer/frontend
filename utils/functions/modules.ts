@@ -3,6 +3,10 @@ import type { Cable } from "~/types/Cable";
 import type { AudioModule, ModuleCoordinates } from "~/types/modules/AudioModule";
 import type { Identified } from "~/types/utils/Identified";
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
+import type { Synthesizer } from '~/types/Index';
+import { deleteCable } from './cables';
+import { remove } from 'lodash';
+import { repositories } from '~/lib/repositories';
 
 type Intersectable = ModuleCoordinates & Identified
 
@@ -44,4 +48,14 @@ export function place(module: AudioModule, rack: number, slot: number) {
   module.slot = slot;
   module.x = slot * SLOT_SIZE;
   module.y = rack * RACK_HEIGHT;
+}
+
+export function disconnectModule(module: AudioModule, cables: Array<Cable>) {
+  getCables(module).forEach((c: Cable) => deleteCable(c, cables));
+}
+
+export function deleteModule(module: AudioModule, cables: Array<Cable>) {
+  disconnectModule(module, cables);
+  module.deleted = true;
+  repositories.modules.delete(module.id);
 }
