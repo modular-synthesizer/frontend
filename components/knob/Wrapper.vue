@@ -1,5 +1,5 @@
 <template>
-  <g v-if="parameter" @mousedown.stop="onmousedown">
+  <g v-if="parameter" @mousedown.stop="onmousedown" @wheel.passive.stop="onwheel">
     <knob-label :x="x" :y="y - r - 6" :label="label" />
     <knob-background :x="x" :y="y" :radius="r" :editing="control.editing" />
     <knob-gauge :x="x" :y="y" :radius="r - 4" :startAngle="30" :endAngle="330" :parameter="parameter" />
@@ -11,14 +11,14 @@
 
 <script setup lang="ts">
 import type { Parameter } from '~/types/modules/Parameter';
-import { clamp, round } from 'lodash';
+import { round } from 'lodash';
 import type { Control } from '~/types/tools/Control';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { DragCallback } from '~/types/draggables/DragDeclaration';
 import { repositories } from '~/lib/repositories';
 import type { Synthesizer } from '~/types/Index';
 import sendParamEvent from '~/lib/commands/events/sendParamEvent';
-import { setValue } from '~/utils/functions/parameters';
+import { moveValue, setValue } from '~/utils/functions/parameters';
 
 const { dragged, dropped, module, r, control, synthesizer } = defineProps({
   r: { type: Number, default: 20 },
@@ -50,9 +50,16 @@ function onmousedown($event: MouseEvent) {
   dragged(($event: MouseEvent) => {
     const delta = Math.round((originalY.value - $event.clientY) / 10);
     const newValue = original.value + delta * parameter.step;
-    setValue(parameter, clamp(newValue, parameter.minimum, parameter.maximum));
+    setValue(parameter, newValue);
   });
   dropped(save);
+}
+
+function onwheel($event: WheelEvent) {
+  const ratio = $event.shiftKey ? 10 : 1;
+  const sign = - $event.deltaY / Math.abs($event.deltaY);
+  moveValue(parameter, sign * parameter.step * ratio);
+  debounce('edit-' + parameter.id, 500, save)
 }
 
 function save() {

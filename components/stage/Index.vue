@@ -1,7 +1,7 @@
 <template>
   <svg
     class="synple-stage"
-    @wheel="emit('zoom', zoom(target, $event))"
+    @wheel.passive="emit('zoom', zoom(target, $event))"
     @mousedown="onmousedown"
     @mousemove="callbacks.dragged"
     @mouseup.capture="onmouseup"
