@@ -23,7 +23,7 @@ const emit = defineEmits<{ deleted: [ AudioModule ], disconnected: [ AudioModule
 function showContext($event: MouseEvent) {
   useContexts().display($event, {
     items: [
-      { label: 'delete', action: () => emit('deleted', module) },
+      { label: 'remove', action: () => emit('deleted', module) },
       { label: 'disconnect', action: () => emit('disconnected', module) },
     ],
     payload: module

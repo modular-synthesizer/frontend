@@ -55,6 +55,10 @@
       "delete": "Supprimer le contrôle",
       "edit": "Editer le contrôle"
     },
+    "disconnect": "Déconnecter les cables",
+    "link": {
+      "remove": "Supprimer le lien"
+    },
     "remove": "Supprimer",
     "resetPosition": "Réinitialiser la position",
     "resetZoom": "Réinitialiser le niveau de zoom",

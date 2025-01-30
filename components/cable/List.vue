@@ -17,7 +17,7 @@ const { cables } = defineProps({
 function showContext($event: MouseEvent, cable: Cable) {
   useContexts().display($event, {
     items: [
-      { label: 'delete', action: (c: Cable) => deleteCable(c, cables) },
+      { label: 'link.remove', action: (c: Cable) => deleteCable(c, cables) },
     ],
     payload: cable
   })

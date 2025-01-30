@@ -3,9 +3,7 @@ import type { Cable } from "~/types/Cable";
 import type { AudioModule, ModuleCoordinates } from "~/types/modules/AudioModule";
 import type { Identified } from "~/types/utils/Identified";
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
-import type { Synthesizer } from '~/types/Index';
 import { deleteCable } from './cables';
-import { remove } from 'lodash';
 import { repositories } from '~/lib/repositories';
 
 type Intersectable = ModuleCoordinates & Identified
