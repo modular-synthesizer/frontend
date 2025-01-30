@@ -47,7 +47,6 @@ const y: number = +control.payload.y;
 
 function onmousedown() {
   useLinkCreation().start(port, control);
-  dropped(() => useLinkCreation().end());
 }
 </script>
 

@@ -8,6 +8,9 @@
     @mouseleave="onmouseup"
   >
     <g :transform="scale(target)">
+      <g :transform="translate({ x: (target.x % bgWidth) - bgWidth, y: (target.y % bgHeight) - bgHeight })">
+        <slot name="background" />
+      </g>
       <g :transform="translate(target)">
         <slot :props="{ dragged, dropped, scale: target.scale }"></slot>
       </g>
@@ -17,14 +20,17 @@
 
 <script setup lang="ts">
 import type { PropType } from 'vue';
+import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import type { Coordinates, ScaledCoordinates } from '~/types/utils/Coordinates';
 import { subtract, zoom } from '~/utils/functions/geometry';
 import { scale, translate } from '~/utils/functions/svg';
 
-const { height, target, width } = defineProps({
+const { bgHeight, bgWidth, height, target, width } = defineProps({
   height: { type: String, default: '100%' },
   target: { type: Object as PropType<ScaledCoordinates>, required: true },
   width: { type: String, default: '100%', },
+  bgHeight: { type: Number, default: RACK_HEIGHT },
+  bgWidth: { type: Number, default: SLOT_SIZE },
 });
 
 type Emits = {

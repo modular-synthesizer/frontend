@@ -11,15 +11,11 @@
       <circle cx="10" cy="390" r="3" class="fill-black" />
     </pattern>
   </defs>
-  <g :transform="`scale(${position.scale} ${position.scale})`">
-    <g :transform="`translate(${origin().x} ${origin().y})`">
-      <rect
-        :height="nbRacks() * RACK_HEIGHT"
-        :width="nbSlots() * SLOT_SIZE"
-        fill="url(#singleSlot)"
-      />
-    </g>
-  </g>
+  <rect
+    :height="nbRacks() * RACK_HEIGHT"
+    :width="nbSlots() * SLOT_SIZE"
+    fill="url(#singleSlot)"
+  />
 </template>
 
 <script setup lang="ts">

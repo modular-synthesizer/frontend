@@ -16,16 +16,11 @@ import type { Control, ModControl } from "~/types/tools/Control";
 
 export async function createModule(details: ModulePayload, generators: Array<Generator>, synthesizer: Synthesizer): Promise<AudioModule> {
   const module: AudioModule = {
-    id: details.id,
-    type: details.type,
-    slots: details.slots,
-    slot: details.slot,
-    rack: details.rack,
+    ...details,
     controls: [],
     parameters: {},
     ports: [],
     channels: await createChannels(details, generators, synthesizer.voices),
-    category: details.category,
     x: details.slot * SLOT_SIZE,
     y: details.rack * RACK_HEIGHT,
     width: details.slots * SLOT_SIZE,

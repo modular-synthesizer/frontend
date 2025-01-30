@@ -5,7 +5,6 @@
       :opacity="entered ? 1 : opacity"
       stroke-width="7"
       :class="[{ 'no-events': noEvents, path: true, entered }, `stroke-${color}-darken-3`]"
-      @click.prevent="click(true)"
       v-if="showCable"
       fill="transparent"
     />
@@ -15,7 +14,6 @@
       :cy="start.y"
       :r="r"
       stroke-width="6"
-      @click="click()"
       @mouseenter.stop
     />
     <circle
@@ -24,7 +22,6 @@
       :cy="end.y"
       :r="r"
       stroke-width="6"
-      @click.prevent="click()"
       @mouseenter.stop
       @mouseup="useLinkCreation().end()"
     />
@@ -69,12 +66,6 @@ export default {
       return (this.end.y + this.start.y) / 2 + dangle;
     }
   },
-  methods: {
-    click(force: boolean = false) {
-      if(this.moved && !force) return;
-      this.$emit('click');
-    },
-  }
 }
 </script>
 

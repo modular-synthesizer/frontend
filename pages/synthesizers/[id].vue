@@ -1,9 +1,26 @@
 <template>
   <div @mousedown.capture="initialize" class="full-size">
     <synthesizer-menu :synthesizer="synthesizer"/>
-    <stage v-if="synthesizer" :target="synthesizer" @zoom="onzoom" @panned="save">
+    <stage
+      v-if="synthesizer"
+      :target="synthesizer"
+      @zoom="onzoom"
+      @panned="repositories.synthesizers.update(synthesizer)"
+    >
+      <template #background>
+        <synthesizer-background :position="synthesizer" />
+      </template>
       <template #default="{ props }">
-        <stage-draggable v-for="module in synthesizer.modules" :collides-with="synthesizer.modules" v-bind="props" :target="module" :sx="SLOT_SIZE" :sy="RACK_HEIGHT" @moved="move" @dropped="saveModule(module)">
+        <stage-draggable
+          v-for="module in synthesizer.modules"
+          :collides-with="synthesizer.modules"
+          v-bind="props"
+          :target="module"
+          :sx="SLOT_SIZE"
+          :sy="RACK_HEIGHT"
+          @moved="move"
+          @dropped="repositories.modules.update(module)"
+        >
           <module :module>
             <template v-for="control in module.controls">
               <control-wrapper v-bind="{ control, module, synthesizer, ...props }" />
@@ -11,7 +28,7 @@
           </module>
         </stage-draggable>
         <cable-list :cables="cables" :synthesizer="synthesizer" />
-        <cable v-if="useLinkCreation().displayed" :start="useLinkCreation().origin" :end="useLinkCreation().destination" :no-events="true" color="red" />
+        <cable-creation v-if="useLinkCreation().displayed" @created="addCable" v-bind="props" :synthesizer="synthesizer" />
       </template>
     </stage>
   </div>
@@ -54,19 +71,9 @@ function onzoom(scale: number) {
   synthesizer.value.scale = scale;
 }
 
-function save() {
-  repositories.synthesizers.update(synthesizer.value);
-}
-
-function move(module: PlacedBox) {
-  const found: AudioModule | undefined = synthesizer.value.modules.find((m: AudioModule) => m.id === module.id);
-  if (found !== undefined) {
-    place(found, module.y / RACK_HEIGHT, module.x / SLOT_SIZE);
-  }
-}
-
-function saveModule(module: AudioModule) {
-  repositories.modules.update(module);
+function move({ x, y, id }: PlacedBox) {
+  const found: AudioModule | undefined = synthesizer.value.modules.find((m: AudioModule) => m.id === id);
+  if (!!found) place(found, y / RACK_HEIGHT, x / SLOT_SIZE);
 }
 
 const initialized: Ref<Boolean> = ref(false);
@@ -76,6 +83,10 @@ function initialize() {
     useAudio().context.resume();
     initialized.value = true;
   }
+}
+
+function addCable(payload: LinkPayload) {
+  cables.value.push(createCable(payload.id, payload.from, payload.to, payload.color, ports.value));
 }
 
 useCoordinates().setSynthesizer(synthesizer.value);

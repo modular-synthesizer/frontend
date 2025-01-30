@@ -7,4 +7,9 @@ export default class LinksRepository extends Repository<LinkPayload> {
   public override async list(synthesizer: Synthesizer): Promise<LinkPayload[]> {
     return super.list({ synthesizer_id: synthesizer.id});
   }
+
+  public override async create(payload: LinkPayload, synthesizer: Synthesizer|null = null) {
+    if (synthesizer === null) return;
+    return await api_post(this.uri(), { ...payload, synthesizer_id: synthesizer.id });
+  }
 }

@@ -55,6 +55,12 @@ export function useLinkCreation() {
     },
     get displayed(): boolean {
       return !!state.value.ports.origin;
+    },
+    get startPort(): Port {
+      return state.value.ports.origin as Port;
+    },
+    get endPort(): Port {
+      return state.value.ports.destination as Port;
     }
   };
 }
