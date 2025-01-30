@@ -16,7 +16,12 @@ export function connectCable(cable: Cable): Cable {
   cable.from.link = cable;
   cable.to.link = cable;
   times(cable.from.mod.channels.length, (index: number) => {
-    getNode(cable.from, index).connect(getNode(cable.to, index), cable.from.index, cable.to.index);
+    if (cable.from.kind === 'input') {
+      getNode(cable.to, index).connect(getNode(cable.from, index), cable.to.index, cable.from.index);
+    }
+    else {
+      getNode(cable.from, index).connect(getNode(cable.to, index), cable.from.index, cable.to.index);
+    }
   });
   return cable;
 }
