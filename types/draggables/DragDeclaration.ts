@@ -1,0 +1,1 @@
+export type DragCallback = PropType<(callback: ($event: MouseEvent) => void) => void>;

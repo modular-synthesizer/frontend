@@ -28,7 +28,7 @@ const props = defineProps({
   node: { type: Object as PropType<InnerNode>, required: true },
   selected: { type: Boolean, default: false},
   tool: { type: Object as PropType<Tool>, required: true }
-})
+});
 
 const emit = defineEmits<{
   select: [item: InnerNode],

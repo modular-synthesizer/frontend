@@ -11,22 +11,24 @@ import type { Tool } from "~/types/tools/Tool";
 import type { Port } from "~/types/modules/Port";
 import type { Parameter } from "~/types/modules/Parameter";
 import type { ToolParameter } from "~/types/tools/Parameter";
+import { RACK_HEIGHT, SLOT_SIZE } from "~/lib/utils/constants";
+import type { Control, ModControl } from "~/types/tools/Control";
 
 export async function createModule(details: ModulePayload, generators: Array<Generator>, synthesizer: Synthesizer): Promise<AudioModule> {
   const module: AudioModule = {
-    id: details.id,
-    type: details.type,
-    slots: details.slots,
-    slot: details.slot,
-    rack: details.rack,
-    controls: details.controls,
+    ...details,
+    controls: [],
     parameters: {},
     ports: [],
     channels: await createChannels(details, generators, synthesizer.voices),
-    category: details.category,
+    x: details.slot * SLOT_SIZE,
+    y: details.rack * RACK_HEIGHT,
+    width: details.slots * SLOT_SIZE,
+    height: RACK_HEIGHT,
   }
   module.parameters = initParameters(module, details.parameters);
   module.ports = instanciatePorts(module, details.ports);
+  module.controls = details.controls.map((c: Control): ModControl => ({ ...c, module }));
 
   usePorts().addModulePorts(module);
   return module;
@@ -61,7 +63,7 @@ function instanciateParameters(module: AudioModule, parameters: Array<ToolParame
 
 export function createEmptyModule(tool: Tool): AudioModule {
   const module: AudioModule = {
-    id: '', type: '', category: '', slot: 0, rack: 0, slots: 2, channels: [], ports: [], parameters: {}, controls: []
+    id: '', type: '', category: '', slot: 0, rack: 0, slots: 2, channels: [], ports: [], parameters: {}, controls: [], height: RACK_HEIGHT, width: 2 * SLOT_SIZE, x: 0, y: 0
   }
   module.ports = instanciatePorts(module, tool.ports);
   module.parameters = instanciateParameters(module, tool.parameters);

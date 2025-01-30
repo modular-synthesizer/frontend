@@ -11,6 +11,7 @@
 
 <script setup lang="ts">
 import type { Parameter } from '~/types/modules/Parameter';
+import { polarToCartesian, arcPath } from '~/utils/functions/geometry'
 
 const { x, y, startAngle, endAngle, radius, parameter } = defineProps({
   x: { type: Number, default: 0 },

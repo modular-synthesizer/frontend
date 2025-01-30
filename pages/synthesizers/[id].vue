@@ -1,85 +1,100 @@
 <template>
-  <div class="wrapper synthesizer-wrapper">
-    <synthesizer-initializer v-if="!loaded" :loading="loading" @interacted="initialize" :id="id" />
-    <template v-else>
-      <synthesizer-stage v-if="synthesizer !== null" :synthesizer="synthesizer" :modules="modules" :links="links" />
-      <synthesizer-menu @inserted="insertModule" :synthesizer="synthesizer" :tools="tools" />
-    </template>
+  <div @mousedown.capture="initialize" class="full-size">
+    <synthesizer-menu :synthesizer="synthesizer"/>
+    <stage
+      v-if="synthesizer"
+      :target="synthesizer"
+      @zoom="onzoom"
+      @panned="repositories.synthesizers.update(synthesizer)"
+    >
+      <template #background>
+        <synthesizer-background :position="synthesizer" />
+      </template>
+      <template #default="{ props }">
+        <stage-draggable
+          v-for="module in synthesizer.modules"
+          :collides-with="synthesizer.modules"
+          v-bind="props"
+          :target="module"
+          :sx="SLOT_SIZE"
+          :sy="RACK_HEIGHT"
+          @moved="move"
+          @dropped="repositories.modules.update(module)"
+        >
+          <module :module>
+            <template v-for="control in module.controls">
+              <control-wrapper v-bind="{ control, module, synthesizer, ...props }" />
+            </template>
+          </module>
+        </stage-draggable>
+        <cable-list :cables="cables" :synthesizer="synthesizer" />
+        <cable-creation v-if="useLinkCreation().displayed" @created="addCable" v-bind="props" :synthesizer="synthesizer" />
+      </template>
+    </stage>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Tool } from '~~/types/tools/Tool';
-import { repositories } from '~~/lib/repositories';
-import type { AudioModule } from '~/types/modules/AudioModule';
+import { repositories } from '~/lib/repositories';
+import { createModule } from '~/utils/factories/modules';
+import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
+import { createCable } from '~/utils/factories/cables';
+import type { AudioModule, Cable, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
+import type { PlacedBox } from '~~/types/utils/PlacedBox';
 import { place } from '~/utils/functions/modules';
 
-// @ts-ignore
-definePageMeta({
-  layout: false,
-  menu: false,
-  middleware: ['websockets'],
-})
+definePageMeta({ layout: false });
+
+await loadProcessors(useAudio().context);
 
 const id: string = useRoute().params.id as string;
+const synthesizer: Ref<Synthesizer> = ref(await repositories.synthesizers.get(id));
+const modules: Ref<Array<ModulePayload>> = ref(await repositories.modules.list(synthesizer.value));
+const generators: Ref<Array<Generator>> = ref(await repositories.generators.list());
+const links: Ref<Array<LinkPayload>> = ref(await repositories.links.list(synthesizer.value));
 
-const loaded: Ref<boolean> = ref(false);
-const loading: Ref<boolean> = ref(false);
-const tools: Tool[] = await repositories.tools.list();
-await useSynthesizer().fetch(id);
-const { modules, links, synthesizer } = useSynthesizer();
+synthesizer.value.modules = await Promise.all(
+  modules.value.map(async (payload: ModulePayload): Promise<AudioModule> => {
+    return await createModule(payload, generators.value, synthesizer.value)
+  })
+);
 
-onBeforeUnmount(useSynthesizer().stop);
-
-onMounted(async () => {
-  await useAudio().context?.suspend();
+const ports: ComputedRef<Array<Port>> = computed(() => {
+  return synthesizer.value.modules.map((m: AudioModule) => m.ports).flat();
 });
 
-function insertModule(mod: AudioModule) {
-  if(synthesizer.value === null) return;
-  modules.value.push(mod);
-  place(mod, mod.rack, mod.slot);
+const cables: Ref<Array<Cable>> = ref(links.value.map((payload: LinkPayload) => {
+  return createCable(payload.id, payload.from, payload.to, payload.color, ports.value);
+}));
+
+function onzoom(scale: number) {
+  synthesizer.value.scale = scale;
 }
 
-async function initialize() {
-  loading.value = true;
-  await useSynthesizer().initialize();
-  loaded.value = true;
+function move({ x, y, id }: PlacedBox) {
+  const found: AudioModule | undefined = synthesizer.value.modules.find((m: AudioModule) => m.id === id);
+  if (!!found) place(found, y / RACK_HEIGHT, x / SLOT_SIZE);
 }
+
+const initialized: Ref<Boolean> = ref(false);
+
+function initialize() {
+  if (!initialized.value) {
+    useAudio().context.resume();
+    initialized.value = true;
+  }
+}
+
+function addCable(payload: LinkPayload) {
+  cables.value.push(createCable(payload.id, payload.from, payload.to, payload.color, ports.value));
+}
+
+useCoordinates().setSynthesizer(synthesizer.value);
 </script>
 
-<style>
-html {
-  overscroll-behavior: none;
-}
-</style>
-
 <style scoped>
-svg, .wrapper {
+.full-size {
   width: 100vw;
   height: 100vh;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-}
-.menu-wrapper {
-  position: absolute;
-}
-
-body, #__nuxt {
-  position: absolute;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  overflow-y: hidden;
-}
-.body {
-  z-index: 1;
-}
-
-#__nuxt {
-  z-index: 2;
-  overscroll-behavior: none;
 }
 </style>

@@ -13,12 +13,10 @@ export function useHover() {
     state,
     mouseenter(mod: AudioModule) {
       useStates().setState(SynthState.HOVERING_MODULE);
-      useModuleDrag().entersOtherModule()
       state.value.next = mod;
       this.update();
     },
     mouseleave() {
-      useModuleDrag().outsOtherModule()
       this.update();
     },
     update() {

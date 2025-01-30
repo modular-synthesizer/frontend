@@ -3,10 +3,7 @@
     <Title>Synple</Title>
     <Meta name="description" content="A modular synthesizer edition engine" />
   </Head>
-  <v-app
-    @mousemove="triggerDragMove"
-    @touchmove.passive="($event: TouchEvent) => triggerDragMove($event.touches[0] as any)"
-  >
+  <v-app>
     <v-layout>
       <NuxtLayout>
         <NuxtPage />

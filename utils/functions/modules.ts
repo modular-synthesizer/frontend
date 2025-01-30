@@ -2,6 +2,7 @@ import type { Port } from '~/types/modules/Port';
 import type { Cable } from "~/types/Cable";
 import type { AudioModule, ModuleCoordinates } from "~/types/modules/AudioModule";
 import type { Identified } from "~/types/utils/Identified";
+import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 
 type Intersectable = ModuleCoordinates & Identified
 
@@ -41,4 +42,6 @@ export function getCables({ ports }: { ports: Array<Port> }): Array<Cable> {
 export function place(module: AudioModule, rack: number, slot: number) {
   module.rack = rack;
   module.slot = slot;
+  module.x = slot * SLOT_SIZE;
+  module.y = rack * RACK_HEIGHT;
 }
