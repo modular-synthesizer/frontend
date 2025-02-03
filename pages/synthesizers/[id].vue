@@ -23,7 +23,7 @@
         >
           <module v-if="!module.deleted" :module @deleted="deleteModule(module, cables)" @disconnected="disconnectModule(module, cables)">
             <template v-for="control in module.controls">
-              <control-wrapper v-bind="{ control, module, synthesizer, ...props }" />
+              <control-wrapper v-bind="{ control, module, synthesizer, ...props, ...control.payload }" />
             </template>
           </module>
         </stage-draggable>
@@ -43,6 +43,7 @@ import type { AudioModule, Cable, Generator, LinkPayload, ModulePayload, Port, S
 import type { PlacedBox } from '~~/types/utils/PlacedBox';
 import { disconnectModule, place } from '~/utils/functions/modules';
 import { deleteModule } from '~/utils/functions/modules';
+import { managers } from '~/lib/managers';
 
 definePageMeta({ layout: false });
 
@@ -91,6 +92,9 @@ function addCable(payload: LinkPayload) {
 }
 
 useCoordinates().setSynthesizer(synthesizer.value);
+
+managers.midi.start();
+managers.keyboard.start();
 </script>
 
 <style scoped>
