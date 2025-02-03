@@ -37,7 +37,6 @@ export default {
     noteTrigger({ note, channel }: any) {
       const c = this.module.channels[channel]
       if (c === undefined) return;
-      console.log(c.nodes, this.envelope, c.nodes[this.envelope]);
       const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode
       gate.offset.setValueAtTime(1, this.ctx.currentTime);
       this.noteChange({ note, channel })
