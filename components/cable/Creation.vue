@@ -12,18 +12,22 @@ const { dropped, synthesizer } = defineProps({
   synthesizer: { type: Object as PropType<Synthesizer>, required: true },
 });
 
-type Emits = { created: [ LinkPayload ] };
+type Emits = { created: [ Cable ] };
 
 const emit = defineEmits<Emits>();
 
 dropped(async () => {
   const { displayed, magnetized } = useLinkCreation();
   if (displayed && magnetized ) {
-    const { startPort, endPort } = useLinkCreation();
-
+    const { startPort, endPort, cable } = useLinkCreation();
+    emit('created', cable);
+    useLinkCreation().resetCable();
+    useLinkCreation().end();
     const results: LinkPayload = await repositories.links.create({ from: startPort.id, to: endPort.id, color: 'red', id: '' }, synthesizer);
-    emit('created', results);
+    cable.id = results.id
   }
-  useLinkCreation().end();
+  else {
+    useLinkCreation().end();
+  }
 })
 </script>

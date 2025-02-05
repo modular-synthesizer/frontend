@@ -87,8 +87,8 @@ function initialize() {
   }
 }
 
-function addCable(payload: LinkPayload) {
-  cables.value.push(createCable(payload.id, payload.from, payload.to, payload.color, ports.value));
+function addCable(cable: Cable) {
+  cables.value.push(cable);
 }
 
 useCoordinates().setSynthesizer(synthesizer.value);

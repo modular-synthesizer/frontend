@@ -20,7 +20,7 @@
         fill="white"
         :r="r"
         @mouseenter="useLinkCreation().magnetize(port, control)"
-        @mouseout="useLinkCreation().unmagnetize()"
+        @mouseleave="useLinkCreation().unmagnetize('mouseout')"
       />
     </g>
 </template>

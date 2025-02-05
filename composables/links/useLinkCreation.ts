@@ -1,11 +1,13 @@
-import type { Port } from "~/types/Index"
+import type { Cable, Port } from "~/types/Index"
 import type { ModControl } from "~/types/tools/Control";
 import type { Coordinates } from "~/types/utils/Coordinates";
+import { connectCable, disconnectCable } from "~/utils/factories/cables";
 import { add } from "~/utils/functions/geometry";
 
 type State = {
   ports: { origin?: Port, destination?: Port},
   controls: { origin?: ModControl, destination?: ModControl},
+  cable?: Cable | undefined,
 };
 
 const state: Ref<State> = ref({
@@ -19,7 +21,8 @@ function start(port: Port, control: ModControl) {
 }
 
 function end() {
-  unmagnetize();
+  console.log("ending");
+  resetDestination();
   state.value.ports.origin = undefined;
   state.value.controls.origin = undefined;
 }
@@ -28,11 +31,28 @@ function magnetize(port: Port, control: ModControl) {
   if (port.kind === state.value.ports.origin?.kind) return;
   state.value.ports.destination = port;
   state.value.controls.destination = control;
+  const { origin: from, destination: to } = state.value.ports;
+  if (from === undefined || to === undefined) return;
+  state.value.cable = { from, to, color: 'red', id: '' };
+  connectCable(state.value.cable);
 }
 
-function unmagnetize() {
+function resetDestination() {
   state.value.ports.destination = undefined;
   state.value.controls.destination = undefined;
+}
+
+function unmagnetize(trace: string = "unknown") {
+  console.log("in unmagnetize : " + trace)
+  resetDestination()
+  if (state.value.cable === undefined) return;
+  console.log("Disconnecting the cable now")
+  disconnectCable(state.value.cable, "unmagnetize");
+  resetCable()
+}
+
+function resetCable() {
+  state.value.cable = undefined;
 }
 
 function getCoordinates(control: ModControl|undefined) {
@@ -42,7 +62,7 @@ function getCoordinates(control: ModControl|undefined) {
 
 export function useLinkCreation() {
   return {
-    end, magnetize, start, unmagnetize,
+    end, magnetize, start, unmagnetize, resetCable,
     get origin(): Coordinates {
       return getCoordinates(state.value.controls.origin);
     },
@@ -61,6 +81,9 @@ export function useLinkCreation() {
     },
     get endPort(): Port {
       return state.value.ports.destination as Port;
+    },
+    get cable(): Cable {
+      return state.value.cable as Cable;
     }
   };
 }
