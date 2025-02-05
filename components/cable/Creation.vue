@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { repositories } from '~/lib/repositories';
 import type { DragCallback } from '~/types/draggables/DragDeclaration';
-import type { LinkPayload, Synthesizer } from '~/types/Index';
+import type { Cable, LinkPayload, Synthesizer } from '~/types/Index';
 
 const { dropped, synthesizer } = defineProps({
   dropped: { type: Function as DragCallback, required: true },
