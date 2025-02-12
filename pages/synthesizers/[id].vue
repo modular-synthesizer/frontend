@@ -91,7 +91,7 @@ function addCable(cable: Cable) {
   cables.value.push(cable);
 }
 
-useCoordinates().setSynthesizer(synthesizer.value);
+useCoordinates().setReference(synthesizer.value);
 
 managers.midi.start();
 managers.keyboard.start();

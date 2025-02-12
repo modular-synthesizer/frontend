@@ -16,6 +16,8 @@
 <script lang="ts" setup>
 useHead({ htmlAttrs: { lang: 'fr' } });
 
+useCoordinates().initUpdates();
+
 window.addEventListener("beforeunload", () => {
   closeWebsocket();
   useKeyboardEvents().cancel();

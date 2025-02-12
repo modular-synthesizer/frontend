@@ -15,8 +15,10 @@ import type { Tool } from '~/types/tools/Tool';
 
 definePageMeta({ layout: false });
 
+
 const id: string = useRoute().params.id as string;
 const tool: Ref<Tool> = ref(await repositories.tools.get(id));
+useCoordinates().setReference(tool.value);
 
 tool.value.nodes.forEach((n: InnerNode) => {
   n.width = 100;
@@ -32,6 +34,6 @@ function save() {
 }
 
 function saveNode(node: InnerNode) {
-  // repositories.tool.nodes.update(tool.value, tool.value.nodes, node);
+  repositories.tool.nodes.update(tool.value, node);
 }
 </script>

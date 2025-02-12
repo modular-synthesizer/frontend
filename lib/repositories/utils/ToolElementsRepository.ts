@@ -17,12 +17,8 @@ export class ToolElementsRepository<T extends Identified> extends BaseRepository
     return await api_post(this.uri(), { ...element, tool_id: tool.id });
   }
 
-  public async update(tool: Tool, collection: T[], item: T): Promise<T> {
-    console.log(this.uri(item.id))
-    const updatedItem: T = await api_put(this.uri(item.id), { ...item, tool_id: tool.id });
-    const index: number = collection.findIndex((e: T) => e.id === item.id);
-    if (index > -1) collection[index] = updatedItem;
-    return updatedItem;
+  public async update(tool: Tool, item: T): Promise<T> {
+    return await api_put(this.uri(item.id), { ...item, tool_id: tool.id });
   }
 
   public async delete(tool: Tool, element: T): Promise<void> {

@@ -42,7 +42,7 @@ function onmousedown() {
   dragged(() => {
     const coordinates: Coordinates = useCoordinates().get();
     const rounded: Coordinates = round(subtract(coordinates, offset.value), { sx, sy });
-    if (collides({ ...target, ...rounded }, collidesWith)) return;
+    if (collidesWith.length > 0 && collides({ ...target, ...rounded }, collidesWith)) return;
     target.x = rounded.x;
     target.y = rounded.y;
     emit('moved', target);
