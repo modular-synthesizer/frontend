@@ -2,7 +2,7 @@
   <stage v-if="tool" :target="tool" @zoom="onzoom" @panned="save">
     <template #default="{ props }">
       <stage-draggable v-for="node in tool.nodes" v-bind="props" :target="node" :sx="10" :sy="10" @dropped="saveNode(node)">
-        <rect :width="node.width" :height="node.height" fill="black" />
+        <tool-inner-node :label="node.name" />
       </stage-draggable>
     </template>
   </stage>
