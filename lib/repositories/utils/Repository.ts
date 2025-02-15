@@ -41,9 +41,11 @@ export class Repository<T extends Identified> extends BaseRepository {
     }
   }
 
-  public add(list: T[]): (details: T) => Promise<void> {
-    return async (details: T) => {
-      list.push(await this.create(details));
+  public add(list: T[]): (details: T) => Promise<T> {
+    return async (details: T): Promise<T> => {
+      const creation: T = await this.create(details)
+      list.push(creation);
+      return creation
     };
   }
 }

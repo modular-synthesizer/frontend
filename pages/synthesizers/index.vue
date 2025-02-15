@@ -8,7 +8,7 @@
     </v-row>
     <v-row>
       <v-col cols="12" sm="6" md="4" v-for="synth in sorted">
-        <synthesizer-card :synthesizer="synth" @delete="remove" />
+        <synthesizer-card :synthesizer="synth" @delete="deleteSynth" />
       </v-col>
     </v-row>
   </v-container>
@@ -17,9 +17,10 @@
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify'
 import { repositories } from '~~/lib/repositories';
-import { sortBy } from 'lodash';
+import { remove, sortBy } from 'lodash';
 import { membershipType } from '~/utils/functions/synthesizers';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
+import { eventbus } from '~/lib/utils/eventbus/EventBus';
 
 const { mobile } = useDisplay()
 const synthesizers: Ref<Array<Synthesizer>> = ref(await repositories.synthesizers.list());
@@ -29,8 +30,16 @@ const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
 const name: string = useAuthentication().username;
 const sorted = computed(() => sortBy(synthesizers.value, (s: Synthesizer) => order[membershipType(s, name)]));
 
-const remove = repositories.synthesizers.remove(synthesizers.value);
+const deleteSynth = repositories.synthesizers.remove(synthesizers.value);
 async function create(details: Synthesizer) {
   synthesizers.value.push(await repositories.synthesizers.create(details));
 }
+
+eventbus.subscribe("synthesizer.membershipCreated", async (data: any) => {
+  synthesizers.value.push(await repositories.synthesizers.get(data.synthesizer_id));
+});
+eventbus.subscribe("synthesizer.membershipDeleted", async (data: any) => {
+  console.log(data);
+  remove(synthesizers.value, { id: data.synthesizer_id });
+})
 </script>

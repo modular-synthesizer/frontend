@@ -1,19 +1,10 @@
-import SynthesizerStartEdit from '~~/lib/commands/synthesizers/StartEdit'
-import SynthesizerEndDrag from '~~/lib/commands/synthesizers/endDrag';
-import SynthesizerEndEdit from '~~/lib/commands/synthesizers/endEdit';
-import SynthesizerStartDrag from '~~/lib/commands/synthesizers/startDrag';
+import { eventbus } from '~/lib/utils/eventbus/EventBus';
 
 let ws: WebSocket;
 
-const commands: { [key: string]: any } = {
-    'synthesizer.startEdit': SynthesizerStartEdit,
-    'synthesizer.endEdit': SynthesizerEndEdit,
-    'synthesizer.startDrag': SynthesizerStartDrag,
-    'synthesizer.endDrag': SynthesizerEndDrag,
-}
-
 function init(): void {
     if (ws !== undefined) return;
+    console.log("Initializing the websocket if needed");
     const uri = useRuntimeConfig().public.ws_url;
     const token = localStorage.getItem('auth-token');
     ws = new WebSocket(`${uri}?auth_token=${token}`);
@@ -23,13 +14,9 @@ function init(): void {
 }
 
 function handleMessage(event: MessageEvent) {
-    const data: any = JSON.parse(event.data)
-    const command: string = `${data.resource}.${data.operation}`;
-    if (command in commands) {
-        const commandClass = commands[command];
-        const instance = new commandClass(data as any);
-        instance.doRun();
-    }
+    const data: any = JSON.parse(event.data);
+    console.log("emitting " + `${data.resource}.${data.operation}`)
+    eventbus.emit(`${data.resource}.${data.operation}`, data);
 }
 
 export function useWebsockets() {

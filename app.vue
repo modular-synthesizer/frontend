@@ -18,6 +18,8 @@ useHead({ htmlAttrs: { lang: 'fr' } });
 
 useCoordinates().initUpdates();
 
+useWebsockets();
+
 window.addEventListener("beforeunload", () => {
   closeWebsocket();
   useKeyboardEvents().cancel();
