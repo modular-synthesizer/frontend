@@ -21,6 +21,7 @@ import { remove, sortBy } from 'lodash';
 import { membershipType } from '~/utils/functions/synthesizers';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 import { eventbus } from '~/lib/utils/eventbus/EventBus';
+import type { Membership } from '~/types/synthesizers/Membership';
 
 const { mobile } = useDisplay()
 const synthesizers: Ref<Array<Synthesizer>> = ref(await repositories.synthesizers.list());
@@ -35,10 +36,11 @@ async function create(details: Synthesizer) {
   synthesizers.value.push(await repositories.synthesizers.create(details));
 }
 
-eventbus.subscribe("synthesizer.membershipCreated", async (data: any) => {
-  synthesizers.value.push(await repositories.synthesizers.get(data.synthesizer_id));
+eventbus.subscribe("add.membership", async (data: Membership) => {
+  console.log(data);
+  // synthesizers.value.push(await repositories.synthesizers.get(data.synthesizer_id));
 });
-eventbus.subscribe("synthesizer.membershipDeleted", async (data: any) => {
+eventbus.subscribe("remove.membership", async (data: any) => {
   console.log(data);
   remove(synthesizers.value, { id: data.synthesizer_id });
 })
