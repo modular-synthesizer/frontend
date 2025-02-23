@@ -36,9 +36,8 @@ async function create(details: Synthesizer) {
   synthesizers.value.push(await repositories.synthesizers.create(details));
 }
 
-eventbus.subscribe("add.membership", async (data: Membership) => {
-  console.log(data);
-  // synthesizers.value.push(await repositories.synthesizers.get(data.synthesizer_id));
+eventbus.subscribe("add.membership", async (data: any) => {
+  synthesizers.value.push(await repositories.synthesizers.get(data.synthesizer.id));
 });
 eventbus.subscribe("remove.membership", async (data: any) => {
   console.log(data);
