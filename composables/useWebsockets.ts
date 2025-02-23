@@ -1,22 +1,27 @@
 import { eventbus } from '~/lib/utils/eventbus/EventBus';
 
-let ws: WebSocket;
+let ws: EventSource;
+
+type Command = {
+    operation: string,
+    payload: Record<string, any>
+}
 
 function init(): void {
     if (ws !== undefined) return;
     console.log("Initializing the websocket if needed");
-    const uri = useRuntimeConfig().public.ws_url;
+    const url = useRuntimeConfig().public.sse_url;
     const token = localStorage.getItem('auth-token');
-    ws = new WebSocket(`${uri}?auth_token=${token}`);
+    ws = new EventSource(url + '?auth_token=' + token);
 
-    ws.onmessage = handleMessage;
-    ws.onclose = init;
+    ws.onmessage = (message) => {
+        console.log("Handling new message : ", message.data)
+        handleMessage(JSON.parse(message.data));
+    }
 }
 
-function handleMessage(event: MessageEvent) {
-    const data: any = JSON.parse(event.data);
-    console.log("emitting " + `${data.resource}.${data.operation}`)
-    eventbus.emit(`${data.resource}.${data.operation}`, data);
+function handleMessage(event: Command) {
+    eventbus.emit(event.operation, event.payload);
 }
 
 export function useWebsockets() {
@@ -25,5 +30,5 @@ export function useWebsockets() {
 }
 
 export function closeWebsocket() {
-    if (ws !== undefined) ws.close(3005, 'page.close');
+    if (ws !== undefined) ws.close();
 }
