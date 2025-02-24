@@ -66,7 +66,6 @@
 import type { Account } from '~/types/authentication/Account'
 import type { Membership } from '~/types/synthesizers/Membership';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
-import { membershipCreatedEvent, membershipDeletedEvent } from '~/utils/events/memberships';
 import { isCreatorMember, isReadMember } from '~/utils/functions/synthesizers';
 import { repositories } from '~~/lib/repositories';
 
@@ -94,12 +93,12 @@ const filteredResults = computed((): Account[] => {
 
 async function addMember(account_id: string, username: string, type: string) {
   const params: Membership = { account_id, synthesizer_id: props.synthesizer.id, type, id: '', username };
-  const results = await repositories.memberships.add(props.synthesizer.members)(params);
-  membershipCreatedEvent(props.synthesizer, results);
+  props.synthesizer.members.push(params);
+  const results = await repositories.memberships.create(params);
+  params.id = results.id;
 }
 
 async function deleteMembership(membership: Membership) {
-  membershipDeletedEvent(props.synthesizer, membership);
   repositories.memberships.remove(props.synthesizer.members)(membership.id);
 }
 

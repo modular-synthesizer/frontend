@@ -37,10 +37,9 @@ async function create(details: Synthesizer) {
 }
 
 eventbus.subscribe("add.membership", async (data: any) => {
-  synthesizers.value.push(await repositories.synthesizers.get(data.synthesizer.id));
+  synthesizers.value.push(data);
 });
 eventbus.subscribe("remove.membership", async (data: any) => {
-  console.log(data);
-  remove(synthesizers.value, { id: data.synthesizer_id });
+  remove(synthesizers.value, { id: data.id });
 })
 </script>
