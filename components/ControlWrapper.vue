@@ -1,16 +1,12 @@
 <template>
-  <template v-if="customComponent">
-    <component :is="customComponent" v-bind="props" />
-  </template>
+  <Suspense><Control v-bind="props" /></Suspense>
 </template>
 
 <script setup lang="ts">
 import type { Synthesizer } from "~/types/Index";
 import type { AudioModule } from "~/types/modules/AudioModule";
 import type { ModControl } from "~/types/tools/Control";
-import * as components from "./index";
 import type { DragCallback } from "~/types/draggables/DragDeclaration";
-
 
 const props = defineProps({
   synthesizer: { type: Object as PropType<Synthesizer>, required: true },
@@ -20,6 +16,7 @@ const props = defineProps({
   module: { type: Object as PropType<AudioModule>, required: true },
 });
 
-// @ts-ignore
-const customComponent = components[props.control.component]
+const Control = defineAsyncComponent(() => {
+  return import(`./control/${props.control.component}.vue`);
+});
 </script>
