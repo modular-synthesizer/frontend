@@ -5,7 +5,3 @@
     <slot></slot>
   </v-main>
 </template>
-
-<script setup lang="ts">
-useWebsockets();
-</script>

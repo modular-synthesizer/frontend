@@ -14,11 +14,13 @@
 </template>
 
 <script lang="ts" setup>
+import { initializeSSE } from '~/utils/functions/sse'
+
 useHead({ htmlAttrs: { lang: 'fr' } });
 
 useCoordinates().initUpdates();
 
-useWebsockets();
+initializeSSE();
 
 window.addEventListener("beforeunload", () => {
   closeWebsocket();
