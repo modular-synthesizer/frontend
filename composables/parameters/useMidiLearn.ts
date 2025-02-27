@@ -1,6 +1,5 @@
 import type { Parameter } from "~/types/modules/Parameter";
 import { setValue } from "~/utils/functions/parameters";
-import sendParamEvent from "~~/lib/commands/events/sendParamEvent";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
 
 type Handlers = {[key: string]: {[key: string]: Function}};
@@ -33,8 +32,7 @@ export function useMidiLearn() {
       setValue(parameter, flooredValue);
       
       state.value.timeout = window.setTimeout(() => {
-        saveParameter(parameter);
-        sendParamEvent('endEdit', parameter);
+        // saveParameter(parameter);
         state.value.timeout = -1;
       }, 250);
     }
