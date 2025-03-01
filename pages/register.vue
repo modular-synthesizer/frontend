@@ -72,7 +72,7 @@ import { email, minLength, required } from '@vuelidate/validators';
 import { split } from 'lodash';
 import { repositories } from '~~/lib/repositories';
 
-definePageMeta({ middleware: ['already-logged'], layout: 'anonymous' });
+definePageMeta({ middleware: ['already-logged'] });
 
 const account = reactive({
   id: '',

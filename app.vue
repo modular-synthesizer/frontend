@@ -23,7 +23,6 @@ useCoordinates().initUpdates();
 initializeSSE();
 
 window.addEventListener("beforeunload", () => {
-  closeWebsocket();
   useKeyboardEvents().cancel();
 });
 </script>

@@ -41,7 +41,7 @@ import useVuelidate from '@vuelidate/core';
 import { minLength, required } from '@vuelidate/validators';
 import type { LoginAttempt } from '~/types/authentication/Account';
 
-definePageMeta({ middleware: ['already-logged'], layout: 'anonymous' });
+definePageMeta({ middleware: ['already-logged'] });
 
 const account: Ref<LoginAttempt> = ref({ username: '', password: '' });
 
@@ -60,7 +60,7 @@ async function submitLogin() {
   await v$.value.$validate();
   if (v$.value.$error) return;
   loading.value = true;
-  useAuthentication().login(account.value.username, account.value.password)
+  useSession().authenticate(account.value.username, account.value.password)
     .catch((error: any) => {
         const [ key, message ]: [ string, string ] = error.statusMessage.split('.');
         $externalResults.value = { [key]: message };

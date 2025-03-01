@@ -23,8 +23,7 @@ export type Command = { tabId: string } & Record<string, any>;
 export function initializeSSE(): void {
     if (source !== undefined) return;
     const url = useRuntimeConfig().public.sse_url;
-    const token = localStorage.getItem('auth-token');
-    source = new EventSource(url + '?auth_token=' + token);
+    source = new EventSource(`${url}?auth_token=${useSession().token}`);
 
     source.onmessage = (message: MessageEvent) => {
         const { operation, tabId, payload }: ParsedMessage = JSON.parse(message.data);

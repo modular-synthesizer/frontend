@@ -28,7 +28,7 @@ const synthesizers: Ref<Array<Synthesizer>> = ref(await repositories.synthesizer
 
 // Gets the list of memberships of the current account in the correct order.
 const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
-const name: string = useAuthentication().username;
+const name: string = useSession().username;
 const sorted = computed(() => sortBy(synthesizers.value, (s: Synthesizer) => order[membershipType(s, name)]));
 
 const deleteSynth = repositories.synthesizers.remove(synthesizers.value);

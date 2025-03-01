@@ -32,7 +32,7 @@
         </v-menu>
         
       </template>
-      <v-btn @click="useAuthentication().logout">{{ $t('common.logout') }}</v-btn>
+      <v-btn @click="useSession().reset">{{ $t('common.logout') }}</v-btn>
       <language-switch />
     </template>
   </v-app-bar>
@@ -42,10 +42,10 @@
 import { useDisplay } from 'vuetify';
 
 const items = [
-  ...(!useAuthentication().admin ? [] : [
+  ...(!useSession().admin ? [] : [
     { label: 'menus.tools', url: '/tools' },
     { label: 'common.admin', url: '/admin' },
   ]),
-  { click: useAuthentication().logout, label: 'common.logout' },
+  { click: useSession().reset, label: 'common.logout' },
 ];
 </script>
