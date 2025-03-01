@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware((_to, _from) => {
-  if (process.client && localStorage.getItem('auth-token') !== null) {
+  if (process.client && useSession().authenticated) {
     return navigateTo('/');
   }
 });

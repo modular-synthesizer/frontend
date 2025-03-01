@@ -24,13 +24,6 @@
 
 
 <script lang="ts" setup>
-definePageMeta({ layout: useAuthentication().authenticated ? 'default' : 'anonymous' });
-
-// watch(useAuthentication(), (store) => {
-//   setPageLayout(store.authenticated ? 'default' : 'anonymous');
-// })
-
-if (useAuthentication().authenticated) setPageLayout('default');
 
 const blocks = ['simple', 'powerful', 'customizable'];
 

@@ -19,20 +19,20 @@
       <v-btn variant="text" to="/synthesizers" class="ml-2">{{ $t('menus.synthesizers') }}</v-btn>
     </template>
     <template v-slot:append>
-      <template v-if="hasRight('resources::admin')">
+      <template v-if="useSession().can('resources::admin')">
         <v-btn to="/tools" aria-label="tools link">{{ $t('menus.tools') }}</v-btn>
         <v-menu>
           <template v-slot:activator="{ props }">
             <v-btn v-bind="props">{{ $t('common.admin') }}</v-btn>
           </template>
           <v-list>
-            <v-list-item v-if="hasRight('groups::read')" to="/groups">Groupes</v-list-item>
+            <v-list-item v-if="useSession().can('groups::read')" to="/groups">Groupes</v-list-item>
             <v-list-item to="/admin">Autre</v-list-item>
           </v-list>
         </v-menu>
         
       </template>
-      <v-btn @click="useAuthentication().logout">{{ $t('common.logout') }}</v-btn>
+      <v-btn @click="useSession().logout">{{ $t('common.logout') }}</v-btn>
       <language-switch />
     </template>
   </v-app-bar>
@@ -42,10 +42,10 @@
 import { useDisplay } from 'vuetify';
 
 const items = [
-  ...(!useAuthentication().admin ? [] : [
+  ...(!useSession().admin ? [] : [
     { label: 'menus.tools', url: '/tools' },
     { label: 'common.admin', url: '/admin' },
   ]),
-  { click: useAuthentication().logout, label: 'common.logout' },
+  { click: useSession().reset, label: 'common.logout' },
 ];
 </script>

@@ -1,5 +1,6 @@
 <template>
-  <menu-when-logged />
+  <menu-when-logged v-if="authenticated" />
+  <menu-when-anonymous v-else />
   <!-- This makes the application wait for the token to be refreshed before display-->
   <v-main class="d-flex flex-column">
     <slot></slot>
@@ -7,5 +8,5 @@
 </template>
 
 <script setup lang="ts">
-useWebsockets();
+const authenticated: ComputedRef<boolean> = computed(() => useSession().authenticated);
 </script>

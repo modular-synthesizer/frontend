@@ -103,10 +103,10 @@ async function deleteMembership(membership: Membership) {
 }
 
 const isReadOnly = computed(() => {
-  return isReadMember(props.synthesizer, useAuthentication().username);
+  return isReadMember(props.synthesizer, useSession().username);
 });
 
 const isCreator = computed(() => {
-  return isCreatorMember(props.synthesizer, useAuthentication().username);
+  return isCreatorMember(props.synthesizer, useSession().username);
 });
 </script>

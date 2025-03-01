@@ -17,7 +17,6 @@ import type { AudioModule } from '~/types/modules/AudioModule';
 import type { DragCallback } from '~/types/draggables/DragDeclaration';
 import { repositories } from '~/lib/repositories';
 import type { Synthesizer } from '~/types/Index';
-import sendParamEvent from '~/lib/commands/events/sendParamEvent';
 import { moveValue, setValue } from '~/utils/functions/parameters';
 
 const { dragged, dropped, module, r, control, synthesizer } = defineProps({
@@ -63,7 +62,6 @@ function onwheel($event: WheelEvent) {
 }
 
 function save() {
-  sendParamEvent('endEdit', parameter, synthesizer)
   repositories.modules.updateParameter(parameter);
 }
 </script>
