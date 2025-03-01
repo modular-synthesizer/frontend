@@ -36,10 +36,22 @@ export function useSession() {
           navigateTo("/")
         });
     },
+    async logout() {
+      await repositories.sessions.delete(storage.value.token);
+      this.reset();
+    },
     reset() {
-      repositories.sessions.delete(storage.value.token);
       storage.value = defaultSession;
       navigateTo('/');
+    },
+    refresh() {
+      if (storage.value.token !== '') {
+        repositories.sessions.get(storage.value.token)
+          .catch(() => {
+            console.log("Session invalide trouvée, redirection");
+            this.reset()
+          })
+      }
     }
   }
 }

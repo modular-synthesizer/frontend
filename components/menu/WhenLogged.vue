@@ -32,7 +32,7 @@
         </v-menu>
         
       </template>
-      <v-btn @click="useSession().reset">{{ $t('common.logout') }}</v-btn>
+      <v-btn @click="useSession().logout">{{ $t('common.logout') }}</v-btn>
       <language-switch />
     </template>
   </v-app-bar>

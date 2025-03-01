@@ -45,6 +45,7 @@ export async function make_request(method: HttpMethod, url: string, payload: any
   }
   catch (exception: any) {
     const { key, message } = exception.response.data;
+    if (key === 'auth_token') return useSession().reset()
     throw createError({
       statusCode: exception.response.status,
       statusMessage: `${key}.${message}`,
