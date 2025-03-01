@@ -35,7 +35,7 @@ export async function api_put(uri: string, payload: any = {}): Promise<any> {
  */
 function createPayload(rawPayload: Record<string, any>) {
   return {
-    ...rawPayload, auth_token: useSession().token, tabId: useTab().id
+    ...rawPayload, auth_token: useSession().token, tab_id: useTab().id
   }
 }
 

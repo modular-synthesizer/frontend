@@ -27,6 +27,7 @@ export function initializeSSE(): void {
 
     source.onmessage = (message: MessageEvent) => {
         const { operation, tabId, payload }: ParsedMessage = JSON.parse(message.data);
+        console.log({ operation, tabId, payload })
         eventbus.emit(operation, { ...payload, tabId: tabId ?? '' } as Command)
     }
 }

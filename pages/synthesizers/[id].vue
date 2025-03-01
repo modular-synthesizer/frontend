@@ -44,6 +44,9 @@ import type { PlacedBox } from '~~/types/utils/PlacedBox';
 import { disconnectModule, place } from '~/utils/functions/modules';
 import { deleteModule } from '~/utils/functions/modules';
 import { managers } from '~/lib/managers';
+import { eventbus } from '~/lib/utils/eventbus/EventBus';
+import type { Command } from '~/utils/functions/sse';
+import { find } from 'lodash';
 
 definePageMeta({ layout: false });
 
@@ -95,6 +98,15 @@ useCoordinates().setReference(synthesizer.value);
 
 managers.midi.start();
 managers.keyboard.start();
+
+eventbus.subscribe('add.module', async (payload: ModulePayload & { synthesizer_id: string }) => {
+  const idsMatch: boolean = payload.synthesizer_id === synthesizer.value.id;
+  const moduleAlreadyExists: boolean = !!find(modules.value, { id: payload.id });
+  if (idsMatch && !moduleAlreadyExists) {
+    const instance: AudioModule = await createModule(payload, generators.value, synthesizer.value);
+    synthesizer.value.modules.push(instance);
+  }
+})
 </script>
 
 <style scoped>

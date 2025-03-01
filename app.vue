@@ -21,7 +21,7 @@ useHead({ htmlAttrs: { lang: 'fr' } });
 useCoordinates().initUpdates();
 useSession().refresh();
 
-initializeSSE();
+if (useSession().authenticated) initializeSSE();
 
 window.addEventListener("beforeunload", () => {
   useKeyboardEvents().cancel();
