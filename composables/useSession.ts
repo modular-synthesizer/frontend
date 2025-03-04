@@ -3,6 +3,7 @@ import { find } from "lodash";
 import { repositories } from "~/lib/repositories";
 import type { Session } from "~/types/authentication/Session"
 import type { Right } from "~/types/permissions/Right";
+import { initializeSSE } from "~/utils/functions/sse";
 
 const defaultSession: Session = {
   id: '', token: '', admin: false, rights: [], account: {
@@ -33,6 +34,7 @@ export function useSession() {
       repositories.sessions.auth(username, password)
         .then((session: Session) => {
           storage.value = session
+          initializeSSE();
           navigateTo("/")
         });
     },
