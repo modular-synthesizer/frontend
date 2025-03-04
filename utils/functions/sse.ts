@@ -30,4 +30,5 @@ export function initializeSSE(): void {
         console.log({ operation, tabId, payload })
         eventbus.emit(operation, { ...payload, tabId: tabId ?? '' } as Command)
     }
+    console.log("SSE connection initialized")
 }
