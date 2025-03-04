@@ -102,6 +102,11 @@ eventbus.subscribe(`${synthesizer.value.id}.add.module`, async (payload: ModuleP
   if (!find(modules.value, { id: payload.id })) {
     synthesizer.value.modules.push(await createModule(payload, generators.value, synthesizer.value));
   }
+});
+
+eventbus.subscribe(`${synthesizer.value.id}.remove.module`, async (payload: ModulePayload) => {
+  const found: AudioModule|undefined = find(synthesizer.value.modules, { id: payload.id });
+  if (found) deleteModule(found, cables.value);
 })
 </script>
 
