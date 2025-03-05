@@ -40,7 +40,6 @@ import { createModule } from '~/utils/factories/modules';
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import { createCable } from '~/utils/factories/cables';
 import type { AudioModule, Cable, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
-import type { PlacedBox } from '~~/types/utils/PlacedBox';
 import { disconnectModule, place } from '~/utils/functions/modules';
 import { deleteModule } from '~/utils/functions/modules';
 import { managers } from '~/lib/managers';
@@ -48,6 +47,7 @@ import { eventbus } from '~/lib/utils/eventbus/EventBus';
 import { find } from 'lodash';
 import type { Identified } from '~/types/utils/Identified';
 import type { Coordinates } from '~/types/utils/Coordinates';
+import type { Membership } from '~/types/synthesizers/Membership';
 
 definePageMeta({ layout: false });
 
@@ -114,6 +114,10 @@ eventbus.subscribe(`${synthesizer.value.id}.remove.module`, async (payload: Modu
 eventbus.subscribe(`${synthesizer.value.id}.update.module`, async (payload: ModulePayload) => {
   move({ x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT, id: payload.id });
 });
+
+eventbus.subscribe(`remove.membership`, async(membership: Membership) => {
+  navigateTo('/synthesizers');
+})
 </script>
 
 <style scoped>
