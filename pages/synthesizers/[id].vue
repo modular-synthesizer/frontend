@@ -116,7 +116,7 @@ eventbus.subscribe(`${synthesizer.value.id}.update.module`, async (payload: Modu
 });
 
 eventbus.subscribe(`remove.membership`, async(membership: Membership) => {
-  navigateTo('/synthesizers');
+  if (membership.account_id === useSession().accountId) navigateTo('/synthesizers');
 })
 </script>
 

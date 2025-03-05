@@ -11,6 +11,11 @@ const defaultSession: Session = {
   }
 }
 
+function reset() {
+  storage.value = defaultSession;
+  navigateTo('/');
+}
+
 const storage = useStorage('session', defaultSession, localStorage, { mergeDefaults: true });
 
 export function useSession() {
@@ -27,6 +32,9 @@ export function useSession() {
     get username(): string {
       return storage.value.account.username;
     },
+    get accountId(): string {
+      return storage.value.account.id;
+    },
     can(right: string): boolean {
       return !!find(storage.value.rights, (r: Right) => r.label === right)
     },
@@ -40,18 +48,15 @@ export function useSession() {
     },
     async logout() {
       await repositories.sessions.delete(storage.value.token);
-      this.reset();
+      reset();
     },
-    reset() {
-      storage.value = defaultSession;
-      navigateTo('/');
-    },
+    reset,
     refresh() {
       if (storage.value.token !== '') {
         repositories.sessions.get(storage.value.token)
           .catch(() => {
             console.log("Session invalide trouvée, redirection");
-            this.reset()
+            reset()
           })
       }
     }
