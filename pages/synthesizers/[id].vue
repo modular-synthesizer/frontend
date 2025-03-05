@@ -46,6 +46,8 @@ import { deleteModule } from '~/utils/functions/modules';
 import { managers } from '~/lib/managers';
 import { eventbus } from '~/lib/utils/eventbus/EventBus';
 import { find } from 'lodash';
+import type { Identified } from '~/types/utils/Identified';
+import type { Coordinates } from '~/types/utils/Coordinates';
 
 definePageMeta({ layout: false });
 
@@ -75,7 +77,7 @@ function onzoom(scale: number) {
   synthesizer.value.scale = scale;
 }
 
-function move({ x, y, id }: PlacedBox) {
+function move({ x, y, id }: Identified & Coordinates) {
   const found: AudioModule | undefined = synthesizer.value.modules.find((m: AudioModule) => m.id === id);
   if (!!found) place(found, y / RACK_HEIGHT, x / SLOT_SIZE);
 }
@@ -108,6 +110,10 @@ eventbus.subscribe(`${synthesizer.value.id}.remove.module`, async (payload: Modu
   const found: AudioModule|undefined = find(synthesizer.value.modules, { id: payload.id });
   if (found) deleteModule(found, cables.value);
 })
+
+eventbus.subscribe(`${synthesizer.value.id}.update.module`, async (payload: ModulePayload) => {
+  move({ x: payload.rack * RACK_HEIGHT, y: payload.slot * SLOT_SIZE, id: payload.id });
+});
 </script>
 
 <style scoped>
