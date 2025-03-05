@@ -115,9 +115,7 @@ eventbus.subscribe(`${synthesizer.value.id}.update.module`, async (payload: Modu
   move({ x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT, id: payload.id });
 });
 
-eventbus.subscribe(`remove.membership`, async(membership: Membership) => {
-  if (membership.account_id === useSession().accountId) navigateTo('/synthesizers');
-})
+eventbus.subscribe(`remove.membership`, () => navigateTo('/synthesizers'));
 </script>
 
 <style scoped>
