@@ -112,7 +112,7 @@ eventbus.subscribe(`${synthesizer.value.id}.remove.module`, async (payload: Modu
 })
 
 eventbus.subscribe(`${synthesizer.value.id}.update.module`, async (payload: ModulePayload) => {
-  move({ x: payload.rack * RACK_HEIGHT, y: payload.slot * SLOT_SIZE, id: payload.id });
+  move({ x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT, id: payload.id });
 });
 </script>
 
