@@ -21,10 +21,12 @@ import { remove, sortBy } from 'lodash';
 import { membershipType } from '~/utils/functions/synthesizers';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 import { eventbus } from '~/lib/utils/eventbus/EventBus';
-import type { Membership } from '~/types/synthesizers/Membership';
 
 const { mobile } = useDisplay()
-const synthesizers: Ref<Array<Synthesizer>> = ref(await repositories.synthesizers.list());
+const synthesizers: Ref<Array<Synthesizer>> = ref([]);
+repositories.synthesizers.list().then((list: Synthesizer[]) => {
+  synthesizers.value = list;
+})
 
 // Gets the list of memberships of the current account in the correct order.
 const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
