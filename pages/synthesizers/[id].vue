@@ -21,7 +21,7 @@
           @moved="move"
           @dropped="repositories.modules.update(module)"
         >
-          <module v-if="!module.deleted" :module @deleted="deleteModule(module, cables)" @disconnected="disconnectModule(module, cables)">
+          <module v-if="!module.deleted" :module @deleted="() => removeModule(module)" @disconnected="disconnectModule(module, cables)">
             <template v-for="control in module.controls">
               <control-wrapper v-bind="{ control, module, synthesizer, ...props, ...control.payload }" />
             </template>
@@ -44,10 +44,9 @@ import { disconnectModule, place } from '~/utils/functions/modules';
 import { deleteModule } from '~/utils/functions/modules';
 import { managers } from '~/lib/managers';
 import { eventbus } from '~/lib/utils/eventbus/EventBus';
-import { find } from 'lodash';
+import { find, remove } from 'lodash';
 import type { Identified } from '~/types/utils/Identified';
 import type { Coordinates } from '~/types/utils/Coordinates';
-import type { Membership } from '~/types/synthesizers/Membership';
 
 definePageMeta({ layout: false });
 
@@ -108,8 +107,13 @@ eventbus.subscribe(`${synthesizer.value.id}.add.module`, async (payload: ModuleP
 
 eventbus.subscribe(`${synthesizer.value.id}.remove.module`, async (payload: ModulePayload) => {
   const found: AudioModule|undefined = find(synthesizer.value.modules, { id: payload.id });
-  if (found) deleteModule(found, cables.value);
-})
+  if (found) removeModule(found)
+});
+
+function removeModule(module: AudioModule) {
+    remove(synthesizer.value.modules, { id: module.id })
+    deleteModule(module, cables.value);
+}
 
 eventbus.subscribe(`${synthesizer.value.id}.update.module`, async (payload: ModulePayload) => {
   move({ x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT, id: payload.id });
