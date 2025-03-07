@@ -23,7 +23,7 @@
         >
           <module v-if="!module.deleted" :module @deleted="() => removeModule(module)" @disconnected="disconnectModule(module, cables)">
             <template v-for="control in module.controls">
-              <control-wrapper v-bind="{ control, module, synthesizer, ...props, ...control.payload }" />
+              <sp-control-wrapper v-bind="{ control, module, synthesizer, ...props, ...control.payload }" />
             </template>
           </module>
         </stage-draggable>
