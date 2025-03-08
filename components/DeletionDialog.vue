@@ -1,11 +1,11 @@
 <template>
   <v-btn :icon="icon" :size="size" variant="text">
-    <template v-if="icon">
-      <v-tooltip activator="parent" location="bottom">
-        <slot></slot>
-      </v-tooltip>
-      <v-icon color="red">mdi-delete</v-icon>
-    </template>
+      <template v-if="icon">
+        <v-tooltip v-if="text" activator="parent" location="bottom">
+          <slot></slot>
+        </v-tooltip>
+        <v-icon color="red">mdi-delete</v-icon>
+      </template>
     <slot v-else></slot>
     <v-dialog v-model="dialog" activator="parent" width="500">
       <v-card>
@@ -28,7 +28,7 @@ defineProps({
   },
   text: {
     type: String,
-    default: 'cet élément'
+    default: ''
   },
   size: {
     type: String,

@@ -7,49 +7,20 @@
       </v-col>
     </v-row>
     <v-row class="mt-5">
-      <v-col cols="10" offset="1">
-        <Loader url="/tools">
+      <v-col cols="8" offset="2">
+        <list-loader :repository="repositories.tools">
           <template #success="{ props }">
-            <v-table>
-              <thead>
-                <tr>
-                  <th>UUID</th>
-                  <th>&nbsp;</th>
-                  <th>Nom</th>
-                  <th>Largeur</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="tool in props.content">
-                  <td>{{ tool.id }}</td>
-                  <td><v-icon v-if=tool.experimental color="red">mdi-alert</v-icon></td>
-                  <td>{{ tool.name }}</td>
-                  <td>{{ tool.slots }}</td>
-                  <td>
-                    <deletion-dialog
-                      :url="`/tools/${tool.id}`"
-                      size="small"
-                      icon
-
-                      :text="`l'outil '${tool.name}'`"
-                    >
-                      <v-icon>mdi-delete</v-icon>
-                    </deletion-dialog>
-                    <v-btn :to="`/tools/${tool.id}`" icon variant="plain" size="small">
-                      <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                  </td>
-                </tr>
-              </tbody>
-            </v-table>
+            <tool-table>
+              <tool-table-row v-for="tool in props.content" :tool="(tool as Tool)" @deleted="props.remove(tool)" />
+            </tool-table>
           </template>
-        </Loader>
+        </list-loader>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import Loader from '~/design_system/Loader.vue';
+import { repositories } from '~/lib/repositories';
+import type { Tool } from '~/types/tools/Tool';
 </script>
