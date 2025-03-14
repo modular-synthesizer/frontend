@@ -7,6 +7,9 @@ import type { Synthesizer } from "~/types/Index";
 import type { AudioModule } from "~/types/modules/AudioModule";
 import type { ModControl } from "~/types/tools/Control";
 import type { DragCallback } from "~/types/draggables/DragDeclaration";
+import type { Parameter } from "~/types/modules/Parameter";
+import { eventbus } from "~/lib/utils/eventbus/EventBus";
+import { setValue } from "~/utils/functions/parameters";
 
 const props = defineProps({
   synthesizer: { type: Object as PropType<Synthesizer>, required: true },
@@ -19,4 +22,11 @@ const props = defineProps({
 const Control = defineAsyncComponent(() => {
   return import(`../control/${props.control.component}.vue`);
 });
+
+const parameter: Parameter|undefined = props.module.parameters[props.control.payload.target];
+if (parameter) {
+  eventbus.subscribe(`${parameter.id}.update.parameter`, (p: Parameter) => {
+    setValue(parameter, p.value)
+  })
+}
 </script>
