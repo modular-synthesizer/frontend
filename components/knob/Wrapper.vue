@@ -62,6 +62,6 @@ function onwheel($event: WheelEvent) {
 }
 
 function save() {
-  repositories.modules.updateParameter(parameter);
+  repositories.parameters.update(parameter);
 }
 </script>

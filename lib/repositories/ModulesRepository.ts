@@ -17,10 +17,4 @@ export class ModulesRepository extends Repository<ModulePayload> {
   public override async update({ rack, slot, id }: ModuleDescription): Promise<ModulePayload> {
     return await api_put(this.uri(id), { slot, rack });
   }
-
-  public async updateParameter(parameter: Parameter): Promise<Parameter> {
-    const { id, mod, value } = parameter;
-    await api_put(this.uri(mod.id), { parameters: [ { id, value } ] });
-    return parameter;
-  }
 }

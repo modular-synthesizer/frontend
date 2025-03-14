@@ -30,7 +30,7 @@ export class Repository<T extends Identified> extends BaseRepository {
     return await api_post(this.uri(), payload);
   }
 
-  public async update(payload: T): Promise<T> {
+  public async update(payload: T): Promise<any> {
     return await api_put(this.uri(payload.id), payload);
   }
 

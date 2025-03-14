@@ -17,6 +17,7 @@ import type { Control } from "~/types/tools/Control";
 import type { Membership } from "~/types/synthesizers/Membership";
 import type { Right } from "~/types/permissions/Right";
 import type { Group } from "~/types/permissions/Group";
+import { ParametersRepository } from "./ParametersRepository";
 
 export type Repositories = Record<string, Repository<any>>;
 
@@ -29,6 +30,7 @@ export const repositories = {
   links: new LinksRepository('links'),
   memberships: new Repository<Membership>('memberships'),
   modules: new ModulesRepository('modules'),
+  parameters: new ParametersRepository(),
   tool: {
     controls: new ToolElementsRepository<Control>('controls'),
     links: new ToolElementsRepository<InnerLink>('links'),
