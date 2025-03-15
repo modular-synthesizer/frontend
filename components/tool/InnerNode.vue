@@ -2,8 +2,8 @@
   <g ref="label">
     <rect stroke="white" v-bind="rect" />
     <g :transform="translate(10, 10)">
-      <text fill="white" class="label-text" @click="onclick">{{ label }}</text>
-      <text :y="30" fill="white" class="label-text" @click="onclick">{{ label }}</text>
+      <text fill="white" class="label-text">{{ label }}</text>
+      <text :y="30" fill="white" class="label-text">{{ label }}</text>
     </g>
   </g>
 </template>
@@ -27,10 +27,5 @@ const rect = computed(() => {
     x: box.x - 10,
     y: box.y - 10,
   };
-})
-
-function onclick() {
-  console.log(labelRef.value.getBBox())
-  console.log(labelRef.value.getBoundingClientRect())
-}
+});
 </script>

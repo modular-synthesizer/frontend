@@ -53,11 +53,7 @@ export function useSession() {
     reset,
     refresh() {
       if (storage.value.token !== '') {
-        repositories.sessions.get(storage.value.token)
-          .catch(() => {
-            console.log("Session invalide trouvée, redirection");
-            reset()
-          })
+        repositories.sessions.get(storage.value.token).catch(reset)
       }
     }
   }
