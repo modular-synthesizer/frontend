@@ -36,11 +36,10 @@
 
 <script setup lang="ts">
 import { repositories } from '~/lib/repositories';
-import { createModule } from '~/utils/factories/modules';
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import { createCable } from '~/utils/factories/cables';
 import type { AudioModule, Cable, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
-import { disconnectModule, place } from '~/utils/functions/modules';
+import { appendModule, appendModules, disconnectModule, place } from '~/utils/functions/modules';
 import { deleteModule } from '~/utils/functions/modules';
 import { managers } from '~/lib/managers';
 import { eventbus } from '~/lib/utils/eventbus/EventBus';
@@ -58,11 +57,7 @@ const modules: Ref<Array<ModulePayload>> = ref(await repositories.modules.list(s
 const generators: Ref<Array<Generator>> = ref(await repositories.generators.list());
 const links: Ref<Array<LinkPayload>> = ref(await repositories.links.list(synthesizer.value));
 
-synthesizer.value.modules = await Promise.all(
-  modules.value.map(async (payload: ModulePayload): Promise<AudioModule> => {
-    return await createModule(payload, generators.value, synthesizer.value)
-  })
-);
+await appendModules(synthesizer.value, modules.value, generators.value);
 
 const ports: ComputedRef<Array<Port>> = computed(() => {
   return synthesizer.value.modules.map((m: AudioModule) => m.ports).flat();
@@ -100,9 +95,7 @@ managers.midi.start();
 managers.keyboard.start();
 
 eventbus.subscribe(`${synthesizer.value.id}.add.module`, async (payload: ModulePayload) => {
-  if (!find(modules.value, { id: payload.id })) {
-    synthesizer.value.modules.push(await createModule(payload, generators.value, synthesizer.value));
-  }
+  appendModule(synthesizer.value, payload, generators.value);
 });
 
 eventbus.subscribe(`${synthesizer.value.id}.remove.module`, async (payload: ModulePayload) => {
@@ -120,6 +113,8 @@ eventbus.subscribe(`${synthesizer.value.id}.update.module`, async (payload: Modu
 });
 
 eventbus.subscribe(`remove.membership`, () => navigateTo('/synthesizers'));
+
+managers.init(synthesizer.value);
 </script>
 
 <style scoped>

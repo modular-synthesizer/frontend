@@ -1,10 +1,13 @@
 import type { Port } from '~/types/modules/Port';
 import type { Cable } from "~/types/Cable";
-import type { AudioModule, ModuleCoordinates } from "~/types/modules/AudioModule";
+import type { AudioModule, ModuleCoordinates, ModulePayload } from "~/types/modules/AudioModule";
 import type { Identified } from "~/types/utils/Identified";
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import { deleteCable } from './cables';
 import { repositories } from '~/lib/repositories';
+import type { Generator, Synthesizer } from '~/types/Index';
+import { createModule } from '../factories/modules';
+import { find } from 'lodash';
 
 type Intersectable = ModuleCoordinates & Identified
 
@@ -56,4 +59,25 @@ export function deleteModule(module: AudioModule, cables: Array<Cable>) {
   disconnectModule(module, cables);
   module.deleted = true;
   repositories.modules.delete(module.id);
+}
+
+/**
+ * Instanciates and appends a module from the API in a given synthesizer.
+ * It will first "instanciate" it (create the polyphony voices, the nodes, mlinking them, etc.),
+ * then add it to the modules of the synthesizer so that he can manage it.
+ * 
+ * @param synthesizer the synthesizer receiving the newly instanciated module.
+ * @param module the payload (informations) of the module to instanciate.
+ */
+export async function appendModule(synthesizer: Synthesizer, module: ModulePayload, generators: Generator[]) {
+  if (find(synthesizer.modules, { id: module.id })) return;
+  if (synthesizer.modules === undefined) synthesizer.modules = []
+  const instance: AudioModule = await createModule(module, generators, synthesizer);
+  synthesizer.modules.push(instance);
+}
+
+export async function appendModules(synthesizer: Synthesizer, modules: ModulePayload[], generators: Generator[]) {
+  await Promise.all(modules.map(async (payload: ModulePayload) => {
+    await appendModule(synthesizer, payload, generators)
+  }));
 }
