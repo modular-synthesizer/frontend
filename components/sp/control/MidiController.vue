@@ -7,11 +7,11 @@ import { eventbus } from '~~/lib/utils/eventbus/EventBus';
 import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
 import type { Channel } from '~/types/modules/Channel';
 import type { AudioModule } from '~/types/modules/AudioModule';
+import type { Control } from '~/types/Index';
 
 export default {
   props: {
-    pitch: { type: String, required: true},
-    envelope: { type: String, required: true},
+    control: { type: Object as PropType<Control>, required: true },
     modwheel: { type: String, required: true },
     module: { type: Object as PropType<AudioModule>, required: true }
   },
@@ -87,6 +87,12 @@ export default {
     ctx(): AudioContext {
       return useAudio().context;
     },
+    envelope(): string {
+      return `${this.control.payload.envelope}`;
+    },
+    pitch(): string {
+      return `${this.control.payload.pitch}`;
+    }
   }
 }
 </script>
