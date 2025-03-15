@@ -21,7 +21,7 @@
           @moved="({ x, y }) => move(module, { x, y })"
           @dropped="() => save(module)"
         >
-          <module v-if="!module.deleted" :module @deleted="() => removeModule(module)" @disconnected="disconnectModule(module, cables)">
+          <module v-if="!module.deleted" :module @deleted="() => deleteModule(module, cables)" @disconnected="disconnectModule(module, cables)">
             <template v-for="control in module.controls">
               <sp-control-wrapper v-bind="{ control, module, synthesizer, ...props, ...control.payload }" />
             </template>
@@ -98,23 +98,16 @@ managers.keyboard.start();
 
 eventbus.subscribe(`${synthesizer.value.id}.add.module`, async (payload: ModulePayload) => {
   await appendModule(synthesizer.value, payload, generators.value);
-  console.log(synthesizer.value.modules)
 });
 
 eventbus.subscribe(`${synthesizer.value.id}.remove.module`, async (payload: ModulePayload) => {
   const found: AudioModule|undefined = find(synthesizer.value.modules, { id: payload.id });
-  if (found) removeModule(found)
+  if (found) deleteModule(found, cables.value)
 });
 
-function removeModule(module: AudioModule) {
-    remove(synthesizer.value.modules, { id: module.id })
-    deleteModule(module, cables.value);
-}
-
 eventbus.subscribe(`${synthesizer.value.id}.update.module`, async (payload: ModulePayload) => {
-  const found: AudioModule|undefined = find(synthesizer.value.modules, { id: module.id });
-  if (found === undefined) return;
-  move(found, { x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT });
+  const found: AudioModule|undefined = find(synthesizer.value.modules, { id: payload.id });
+  if (found) move(found, { x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT });
 });
 
 eventbus.subscribe(`remove.membership`, () => navigateTo('/synthesizers'));
