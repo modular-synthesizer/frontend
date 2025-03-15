@@ -44,7 +44,6 @@ import { deleteModule } from '~/utils/functions/modules';
 import { managers } from '~/lib/managers';
 import { eventbus } from '~/lib/utils/eventbus/EventBus';
 import { find, remove } from 'lodash';
-import type { Identified } from '~/types/utils/Identified';
 import type { Coordinates } from '~/types/utils/Coordinates';
 
 definePageMeta({ layout: false });

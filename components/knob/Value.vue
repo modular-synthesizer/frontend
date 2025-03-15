@@ -2,7 +2,7 @@
     <text
       :class="['value', { small }, 'fill-grey-lighten-2', 'stroke-grey-lighten-1']"
       :x="x"
-      :y="y + (small ? 2 : 5)"
+      :y="y + 1"
       text-anchor="middle"
       alignment-baseline="middle"
     >
