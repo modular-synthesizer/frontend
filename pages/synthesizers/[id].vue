@@ -18,8 +18,8 @@
           :target="module"
           :sx="SLOT_SIZE"
           :sy="RACK_HEIGHT"
-          @moved="move"
-          @dropped="repositories.modules.update(module)"
+          @moved="({ x, y }) => move(module, { x, y })"
+          @dropped="() => save(module)"
         >
           <module v-if="!module.deleted" :module @deleted="() => removeModule(module)" @disconnected="disconnectModule(module, cables)">
             <template v-for="control in module.controls">
@@ -71,9 +71,12 @@ function onzoom(scale: number) {
   synthesizer.value.scale = scale;
 }
 
-function move({ x, y, id }: Identified & Coordinates) {
-  const found: AudioModule | undefined = synthesizer.value.modules.find((m: AudioModule) => m.id === id);
-  if (!!found) place(found, y / RACK_HEIGHT, x / SLOT_SIZE);
+function move(module: AudioModule, { x, y }: Coordinates) {
+  place(module, y / RACK_HEIGHT, x / SLOT_SIZE);
+}
+
+function save(module: AudioModule) {
+  repositories.modules.update(module)
 }
 
 const initialized: Ref<Boolean> = ref(false);
@@ -109,7 +112,9 @@ function removeModule(module: AudioModule) {
 }
 
 eventbus.subscribe(`${synthesizer.value.id}.update.module`, async (payload: ModulePayload) => {
-  move({ x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT, id: payload.id });
+  const found: AudioModule|undefined = find(synthesizer.value.modules, { id: module.id });
+  if (found === undefined) return;
+  move(found, { x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT });
 });
 
 eventbus.subscribe(`remove.membership`, () => navigateTo('/synthesizers'));

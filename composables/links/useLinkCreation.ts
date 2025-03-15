@@ -17,11 +17,9 @@ const state: Ref<State> = ref({
 function start(port: Port, control: ModControl) {
   state.value.ports.origin = port;
   state.value.controls.origin = control;
-  console.log("Début de la création");
 }
 
 function end() {
-  console.log("ending");
   resetDestination();
   state.value.ports.origin = undefined;
   state.value.controls.origin = undefined;
@@ -42,11 +40,9 @@ function resetDestination() {
   state.value.controls.destination = undefined;
 }
 
-function unmagnetize(trace: string = "unknown") {
-  console.log("in unmagnetize : " + trace)
+function unmagnetize(_: string = "unknown") {
   resetDestination()
   if (state.value.cable === undefined) return;
-  console.log("Disconnecting the cable now")
   disconnectCable(state.value.cable, "unmagnetize");
   resetCable()
 }

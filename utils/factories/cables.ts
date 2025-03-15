@@ -30,8 +30,7 @@ function getNode(port: Port, index: number): AudioNode {
   return port.mod.channels[index].nodes[port.target];
 }
 
-export function disconnectCable(cable: Cable, origin: string = "unknown"): Cable {
-  console.log(origin);
+export function disconnectCable(cable: Cable, _: string = "unknown"): Cable {
   cable.from.link = cable;
   cable.to.link = cable;
   times(cable.from.mod.channels.length, (index: number) => {
