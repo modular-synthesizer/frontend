@@ -48,6 +48,7 @@ import type { ModulePayload } from '~/types/modules/AudioModule';
 import { createModule } from '~/utils/factories/modules';
 import { firstFreeSlot } from '~/utils/functions/synthesizers';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
+import { appendModule } from '~/utils/functions/modules';
 
 export default {
   data: () => ({
@@ -76,7 +77,7 @@ export default {
       };
       const response: ModulePayload = await repositories.modules.createInSynthesizer(payload)
       const generators: Generator[] = await repositories.generators.list();
-      this.synthesizer.modules.push(await createModule(response, generators, this.synthesizer));
+      appendModule(this.synthesizer, response, generators);
       this.close();
     },
     categories(tools: Tool[]) {

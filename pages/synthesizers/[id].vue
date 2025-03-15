@@ -97,7 +97,8 @@ managers.midi.start();
 managers.keyboard.start();
 
 eventbus.subscribe(`${synthesizer.value.id}.add.module`, async (payload: ModulePayload) => {
-  appendModule(synthesizer.value, payload, generators.value);
+  await appendModule(synthesizer.value, payload, generators.value);
+  console.log(synthesizer.value.modules)
 });
 
 eventbus.subscribe(`${synthesizer.value.id}.remove.module`, async (payload: ModulePayload) => {
