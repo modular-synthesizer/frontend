@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { repositories } from '~/lib/repositories';
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
-import { createCable } from '~/utils/factories/cables';
+import { disconnectCable } from '~/utils/factories/cables';
 import type { AudioModule, Cable, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
 import { appendModule, appendModules, disconnectModule, place } from '~/utils/functions/modules';
 import { deleteModule } from '~/utils/functions/modules';
@@ -45,6 +45,7 @@ import { managers } from '~/lib/managers';
 import { eventbus } from '~/lib/utils/eventbus/EventBus';
 import { find, remove } from 'lodash';
 import type { Coordinates } from '~/types/utils/Coordinates';
+import { appendCable, appendCables } from '~/utils/functions/cables';
 
 definePageMeta({ layout: false });
 
@@ -55,16 +56,14 @@ const synthesizer: Ref<Synthesizer> = ref(await repositories.synthesizers.get(id
 const modules: Ref<Array<ModulePayload>> = ref(await repositories.modules.list(synthesizer.value));
 const generators: Ref<Array<Generator>> = ref(await repositories.generators.list());
 const links: Ref<Array<LinkPayload>> = ref(await repositories.links.list(synthesizer.value));
-
-await appendModules(synthesizer.value, modules.value, generators.value);
+const cables: Ref<Cable[]> = ref([]);
 
 const ports: ComputedRef<Array<Port>> = computed(() => {
   return synthesizer.value.modules.map((m: AudioModule) => m.ports).flat();
 });
 
-const cables: Ref<Array<Cable>> = ref(links.value.map((payload: LinkPayload) => {
-  return createCable(payload.id, payload.from, payload.to, payload.color, ports.value);
-}));
+await appendModules(synthesizer.value, modules.value, generators.value);
+await appendCables(links.value, cables.value, ports.value);
 
 function onzoom(scale: number) {
   synthesizer.value.scale = scale;
@@ -88,7 +87,7 @@ function initialize() {
 }
 
 function addCable(cable: Cable) {
-  cables.value.push(cable);
+  if (!find(cables.value, { id: cable.id })) cables.value.push(cable);
 }
 
 useCoordinates().setReference(synthesizer.value);
@@ -109,6 +108,17 @@ eventbus.subscribe(`${synthesizer.value.id}.update.module`, async (payload: Modu
   const found: AudioModule|undefined = find(synthesizer.value.modules, { id: payload.id });
   if (found) move(found, { x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT });
 });
+
+eventbus.subscribe(`${synthesizer.value.id}.add.cable`, async(payload: LinkPayload) => {
+  appendCable(payload, cables.value, ports.value);
+});
+
+eventbus.subscribe(`${synthesizer.value.id}.remove.cable`, (payload: LinkPayload) => {
+  const found: Cable|undefined = find(cables.value, { id: payload.id });
+  if (!found) return;
+  disconnectCable(found);
+  remove(cables.value, { id: found.id })
+})
 
 eventbus.subscribe(`remove.membership`, () => navigateTo('/synthesizers'));
 
