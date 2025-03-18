@@ -33,8 +33,8 @@ export const repositories = {
   groups: new Repository<Group>('groups'),
   links: new LinksRepository('links'),
   memberships: new Repository<Membership>('memberships'),
-  modules: new ModulesRepository('modules'),
-  parameters: new ParametersRepository(),
+  modules: new ModulesRepository(api),
+  parameters: new ParametersRepository(api),
   tool: {
     controls: new ToolElementsRepository<Control>('controls'),
     links: new ToolElementsRepository<InnerLink>('links'),

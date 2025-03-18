@@ -59,7 +59,7 @@ export function createChannels(details: ModulePayload, generators: Array<Generat
 }
 
 function instanciateParameters(module: AudioModule, parameters: Array<ToolParameter>): Parameters {
-  return initParameters(module, parameters.map((tp: ToolParameter): Parameter => ({ ...tp, mod: module, value: tp.default })));
+  return initParameters(module, parameters.map((tp: ToolParameter): Parameter => ({ ...tp, mod: module, value: tp.default, t: Date.now() })));
 }
 
 export function createEmptyModule(tool: Tool): AudioModule {

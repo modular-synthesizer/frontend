@@ -51,5 +51,8 @@ export function initParameters(module: AudioModule, parameters: Array<Parameter>
     p.mod = module;
     setValue(p, p.value);
   })
-  return Object.fromEntries(parameters.map((p: Parameter) => [p.name, p]))
+  return Object.fromEntries(parameters.map((p: Parameter) => {
+    const t: number = parseInt(`${p.t}`);
+    return [p.name, { ...p, t }]
+  }))
 }

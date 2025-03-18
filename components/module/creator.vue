@@ -75,8 +75,8 @@ export default {
         rack: 0,
         slot: firstFreeSlot(this.synthesizer, tool.slots),
       };
-      const response: ModulePayload = await repositories.modules.createInSynthesizer(payload)
-      const generators: Generator[] = await repositories.generators.list();
+      const response: ModulePayload = await repositories.modules.create(payload, useSession().token)
+      const generators: Generator[] = await repositories.generators.list(useSession().token);
       appendModule(this.synthesizer, response, generators);
       this.close();
     },

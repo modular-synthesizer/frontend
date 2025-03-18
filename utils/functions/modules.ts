@@ -58,7 +58,7 @@ export function disconnectModule(module: AudioModule, cables: Array<Cable>) {
 export function deleteModule(module: AudioModule, cables: Array<Cable>) {
   disconnectModule(module, cables);
   module.deleted = true;
-  repositories.modules.delete(module.id);
+  repositories.modules.delete(module.id, useSession().token);
 }
 
 /**

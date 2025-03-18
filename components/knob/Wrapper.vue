@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import type { Parameter } from '~/types/modules/Parameter';
-import { round } from 'lodash';
+import { pick, round } from 'lodash';
 import type { Control } from '~/types/tools/Control';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { DragCallback } from '~/types/draggables/DragDeclaration';
@@ -62,6 +62,7 @@ function onwheel($event: WheelEvent) {
 }
 
 function save() {
-  repositories.parameters.update(parameter);
+  parameter.t = Date.now()
+  repositories.parameters.update(pick(parameter, [ 'id', 'value', 't' ]), useSession().token);
 }
 </script>

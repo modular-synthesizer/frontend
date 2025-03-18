@@ -6,4 +6,6 @@ export type Parameter = ToolParameter & {
   value: number;
   // The module in which the parameter is declared.
   mod: AudioModule;
+
+  t: number;
 }

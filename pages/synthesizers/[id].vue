@@ -43,7 +43,7 @@ import { appendModule, appendModules, disconnectModule, place } from '~/utils/fu
 import { deleteModule } from '~/utils/functions/modules';
 import { managers } from '~/lib/managers';
 import { eventbus } from '~/lib/utils/eventbus/EventBus';
-import { find, remove } from 'lodash';
+import { find, pick, remove } from 'lodash';
 import type { Coordinates } from '~/types/utils/Coordinates';
 import { appendCable, appendCables } from '~/utils/functions/cables';
 
@@ -51,10 +51,12 @@ definePageMeta({ layout: false });
 
 await loadProcessors(useAudio().context);
 
+const { token } = useSession();
+
 const id: string = useRoute().params.id as string;
 const synthesizer: Ref<Synthesizer> = ref(await repositories.synthesizers.get(id));
-const modules: Ref<Array<ModulePayload>> = ref(await repositories.modules.list(synthesizer.value));
-const generators: Ref<Array<Generator>> = ref(await repositories.generators.list());
+const modules: Ref<Array<ModulePayload>> = ref(await repositories.modules.list(token, synthesizer.value));
+const generators: Ref<Array<Generator>> = ref(await repositories.generators.list(token));
 const links: Ref<Array<LinkPayload>> = ref(await repositories.links.list(synthesizer.value));
 const cables: Ref<Cable[]> = ref([]);
 
@@ -74,7 +76,7 @@ function move(module: AudioModule, { x, y }: Coordinates) {
 }
 
 function save(module: AudioModule) {
-  repositories.modules.update(module)
+  repositories.modules.update(pick(module, [ 'id', 'rack', 'slot' ]), useSession().token)
 }
 
 const initialized: Ref<Boolean> = ref(false);

@@ -46,8 +46,8 @@ export function useSynthesizer() {
 
   async function fetchChildren(synthesizer: Synthesizer): Promise<any> {
     return await Promise.all([
-      repositories.generators.list(),
-      repositories.modules.list(synthesizer),
+      repositories.generators.list(useSession().token),
+      repositories.modules.list(useSession().token, synthesizer),
       repositories.links.list(synthesizer),
     ]);
   }
@@ -103,7 +103,7 @@ export function useSynthesizer() {
   async function removeModule(mod: AudioModule) {
     disconnectModule(mod);
     remove(modules.value, { id: mod.id });
-    await repositories.modules.delete(mod.id);
+    await repositories.modules.delete(mod.id, useSession().token);
   }
 
   async function disconnectModule(mod: AudioModule) {

@@ -26,7 +26,16 @@ const Control = defineAsyncComponent(() => {
 const parameter: Parameter|undefined = props.module.parameters[props.control.payload.target];
 if (parameter) {
   eventbus.subscribe(`${parameter.id}.update.parameter`, (p: Parameter) => {
-    setValue(parameter, p.value)
+    const newT: number = parseInt(`${p.t}`)
+    /**
+     * This mecanism does avoid putting the responsibility of the order of updates on the network
+     * By assigning them a timestamp and comparing it, we can eliminate "less recent" updates that
+     * were made by another user earlier in time, but delayed by the network.
+     */
+    if (parameter.t < newT) {
+      setValue(parameter, p.value)
+      parameter.t = newT
+    }
   })
 }
 </script>
