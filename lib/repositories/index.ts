@@ -18,14 +18,18 @@ import type { Membership } from "~/types/synthesizers/Membership";
 import type { Right } from "~/types/permissions/Right";
 import type { Group } from "~/types/permissions/Group";
 import { ParametersRepository } from "./ParametersRepository";
+import { GeneratorsRepository } from "@jsynple/core";
+import { Api } from "@jsynple/core/dist/network/Api";
 
 export type Repositories = Record<string, Repository<any>>;
+
+export const api = new Api(window.fetch.bind(window));
 
 export const repositories = {
   accounts: new AccountsRepository('accounts'),
   applications: new Repository<Application>('applications'),
   categories: new Repository<Category>('categories'),
-  generators: new Repository<Generator>('generators'),
+  generators: new GeneratorsRepository(api),
   groups: new Repository<Group>('groups'),
   links: new LinksRepository('links'),
   memberships: new Repository<Membership>('memberships'),
