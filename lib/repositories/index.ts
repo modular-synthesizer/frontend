@@ -17,9 +17,9 @@ import type { Control } from "~/types/tools/Control";
 import type { Membership } from "~/types/synthesizers/Membership";
 import type { Right } from "~/types/permissions/Right";
 import type { Group } from "~/types/permissions/Group";
-import { ParametersRepository } from "./ParametersRepository";
 import { GeneratorsRepository } from "@jsynple/core";
 import { Api } from "@jsynple/core/dist/network/Api";
+import { ParametersRepository } from "@jsynple/core"
 
 export type Repositories = Record<string, Repository<any>>;
 

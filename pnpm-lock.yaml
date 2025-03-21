@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@jsynple/core':
-        specifier: 0.4.2
-        version: 0.4.2(vitest@2.1.9(@types/node@22.13.10)(sass@1.82.0)(terser@5.39.0))
+        specifier: 0.4.3
+        version: 0.4.3(vitest@2.1.9(@types/node@22.13.10)(sass@1.82.0)(terser@5.39.0))
       '@mdi/font':
         specifier: 7.4.47
         version: 7.4.47
@@ -552,8 +552,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@jsynple/core@0.4.2':
-    resolution: {integrity: sha512-c/TtfAyIfUzkxfJ0t/3uCRt552kegL1uU/s1ZmH8hCnSrMLKhj4R2wmnHtUn9GopOWai3IaghIQMsKhXgE5Zfg==}
+  '@jsynple/core@0.4.3':
+    resolution: {integrity: sha512-qxLBoTxEVeDQFwmKjeXDWvkZhZqFPHY4mPSc9yh89QxSimf22P60A/DeAO4/sMu4KzqJisUm9EUK+UINj8SAPg==}
 
   '@kwsites/file-exists@1.1.1':
     resolution: {integrity: sha512-m9/5YGR18lIwxSFDwfE3oA7bWuq9kdau6ugN4H2rJeyhFQZcG9AgSHkQtSD15a8WvTgfz9aikZMrKPHvbpqFiw==}
@@ -3878,7 +3878,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@jsynple/core@0.4.2(vitest@2.1.9(@types/node@22.13.10)(sass@1.82.0)(terser@5.39.0))':
+  '@jsynple/core@0.4.3(vitest@2.1.9(@types/node@22.13.10)(sass@1.82.0)(terser@5.39.0))':
     dependencies:
       '@jsynple/core': 'link:'
       '@synple/core': 'link:'
