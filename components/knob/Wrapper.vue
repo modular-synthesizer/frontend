@@ -1,9 +1,9 @@
 <template>
   <g v-if="parameter" @mousedown.stop="onmousedown" @wheel.passive.stop="onwheel">
-    <knob-label :x="x" :y="y - r - 6" :label="label" />
-    <knob-background :x="x" :y="y" :radius="r" :editing="control.editing" />
-    <knob-gauge :x="x" :y="y" :radius="r - 4" :startAngle="30" :endAngle="330" :parameter="parameter" />
-    <knob-value :x="x" :y="y" :small="r <= 15" :value="value">
+    <knob-label :y="- r - 6" :label="label" />
+    <knob-background :radius="r" :editing="control.editing" />
+    <knob-gauge :radius="r - 4" :startAngle="30" :endAngle="330" :parameter="parameter" />
+    <knob-value :small="r <= 15" :value="value">
       <slot :value="value">{{ value }}</slot>
     </knob-value>
   </g>

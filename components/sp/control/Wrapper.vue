@@ -1,5 +1,7 @@
 <template>
-  <Suspense><Control v-bind="props" /></Suspense>
+  <g :transform="translate(control.payload as Coordinates)" class="control-wrapper">
+    <Suspense><Control v-bind="props" /></Suspense>
+  </g>
 </template>
 
 <script setup lang="ts">
@@ -10,6 +12,8 @@ import type { DragCallback } from "~/types/draggables/DragDeclaration";
 import type { Parameter } from "~/types/modules/Parameter";
 import { eventbus } from "~/lib/utils/eventbus/EventBus";
 import { setValue } from "~/utils/functions/parameters";
+import { translate } from "~/utils/functions/svg";
+import type { Coordinates } from "~/types/utils/Coordinates";
 
 const props = defineProps({
   synthesizer: { type: Object as PropType<Synthesizer>, required: true },
