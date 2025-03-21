@@ -1,6 +1,6 @@
 <template>
-    <text :x="x" :y="y - r - 4" text-anchor="middle" class="port-label fill-shades-black stroke-grey-darken-1" font-size="10px">{{ label }}</text>
-    <g :transform="`translate(${x},${y})`" @mousedown.left.stop="onmousedown">
+    <text :y="- r - 4" text-anchor="middle" class="port-label fill-shades-black stroke-grey-darken-1" font-size="10px">{{ label }}</text>
+    <g @mousedown.left.stop="onmousedown">
       <circle
         :r="r"
         :class="`fill-${color}-darken-3`"

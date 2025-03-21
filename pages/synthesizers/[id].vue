@@ -22,9 +22,9 @@
           @dropped="() => save(module)"
         >
           <module v-if="!module.deleted" :module @deleted="() => deleteModule(module, cables)" @disconnected="disconnectModule(module, cables)">
-            <template v-for="control in module.controls">
+            <g v-for="control in module.controls" :transform="translate({ x: +control.payload.x, y: +control.payload.y})">
               <sp-control-wrapper v-bind="{ control, module, synthesizer, ...props, ...control.payload }" />
-            </template>
+            </g>
           </module>
         </stage-draggable>
         <cable-list :cables="cables" :synthesizer="synthesizer" />
@@ -46,6 +46,7 @@ import { eventbus } from '~/lib/utils/eventbus/EventBus';
 import { find, pick, remove } from 'lodash';
 import type { Coordinates } from '~/types/utils/Coordinates';
 import { appendCable, appendCables } from '~/utils/functions/cables';
+import { translate } from "~/utils/functions/svg"
 
 definePageMeta({ layout: false });
 
