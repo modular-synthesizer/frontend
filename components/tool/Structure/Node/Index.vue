@@ -1,5 +1,5 @@
 <template>
-  <g :transform="`translate(${$props.node.x} ${$props.node.y})`" @click="emit('select', node)" @click.right.prevent.stop="openMenu">
+  <g @click.right.prevent.stop="openMenu">
     <rect :height="getNodeHeight(node, tool)" width="180" fill="black" stroke="white" />
     <text x="10" y="20" fill="white">{{ node.name }}</text>
     <g v-for="(param, i) in parametersFor(node, tool)" :transform="`translate(10, ${(i * PARAM_HEIGHT) + TITLE_HEIGHT})`">
