@@ -131,6 +131,7 @@ const itemTranslate = computed(() => `${innerTarget.value.x}px ${innerTarget.val
   background-color: cadetblue;
   height: v-bind('height');
   width: v-bind('width');
+  position: relative;
 }
 
 .transform {
