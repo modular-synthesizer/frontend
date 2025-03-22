@@ -1,9 +1,10 @@
 <template>
   <v-row class="main-row no-gutters" v-if="props.tool">
     <v-col cols="12">
-      <sp-stage :target="referential" @click="useSelectables().reset">
-        <sp-stage-draggable v-for="control in controls" :target="control" :sx="10" :sy="10">
-          <sp-control-wrapper :synthesizer :module :dragged :dropped="dragged" :control />
+      <sp-stage :target="referential">
+        <rect :x="0" :y="0" :width="tool.slots * SLOT_SIZE" :height="RACK_HEIGHT" fill="white" />
+        <sp-stage-draggable v-for="control in controls" :target="control" :sx="5" :sy="5" capture>
+          <sp-control-wrapper :synthesizer :module :dragged :dropped="dragged" :control="(control as unknown as ModControl)" no-events />
         </sp-stage-draggable>
       </sp-stage>
     </v-col>
@@ -11,8 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Control } from '~/types/Index';
-import type { ModControl } from '~/types/tools/Control';
+import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
+import type { Control, ModControl } from '~/types/tools/Control';
 import type { ScaledCoordinates } from '~/types/utils/Coordinates';
 import type { PlacedBox } from '~/types/utils/PlacedBox';
 import { createEmptyModule } from '~/utils/factories/modules';
@@ -23,17 +24,39 @@ const props = defineProps({
   creationMode: { type: Boolean, default: false },
 });
 
+console.log(props.tool)
+
 const referential: Ref<ScaledCoordinates> = ref({ x: 100, y: 100, scale: 1 });
 const synthesizer = createEmptySynthesizer();
 const module = createEmptyModule(props.tool);
 
+useCoordinates().setReference(referential.value)
+
 const dragged = () => { }
 
-console.log(props.tool.controls);
+type PlacedControl = ModControl & PlacedBox
 
-const controls: (ModControl & PlacedBox)[] = props.tool.controls.map((c: Control) => ({
-  ...c, x: +c.payload.x, y: +c.payload.y, width: 0, height: 0, module
-}))
+const controls: Ref<PlacedControl[]> = ref([]);
+
+props.tool.controls.forEach((c: Control) => {
+  if (!validPayload(c)) return;
+  const val = {
+    ...c,
+    module,
+    x: +c?.payload?.x || 0,
+    y: +c?.payload?.y || 0,
+    width: 0,
+    height: 0,
+    id: c.id
+  }
+  controls.value.push(val);
+})
+
+function validPayload(control: Control) {
+  return control.payload.x !== undefined && control.payload.y !== undefined
+}
+
+console.log(controls);
 </script>
 
 <style scoped lang="scss">

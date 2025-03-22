@@ -17,6 +17,7 @@ const props = defineProps({
   dragged: { type: Function as DragCallback, required: true },
   dropped: { type: Function as DragCallback, required: true },
   module: { type: Object as PropType<AudioModule>, required: true },
+  noEvents: { type: Boolean, default: false}
 });
 
 const Control = defineAsyncComponent(() => {

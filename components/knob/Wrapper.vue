@@ -63,6 +63,6 @@ function onwheel($event: WheelEvent) {
 
 function save() {
   parameter.t = Date.now()
-  repositories.parameters.update(pick(parameter, [ 'id', 'value', 't' ]), useSession().token);
+  repositories.parameters.update(parameter, useSession().token);
 }
 </script>

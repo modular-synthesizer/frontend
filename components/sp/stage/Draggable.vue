@@ -1,9 +1,10 @@
 <template>
-  <g @mousedown.prevent.stop="onmousedown" :transform="translate(innerTarget)"><slot /></g>
+  <g v-if="capture" @mousedown.capture.prevent.stop="onmousedown" :transform="translate(innerTarget)"><slot /></g>
+  <g v-else @mousedown.prevent.stop="onmousedown" :transform="translate(innerTarget)"><slot /></g>
 </template>
 
 <script setup lang="ts">
-import { map, some } from 'lodash';
+import { some } from 'lodash';
 import type { Coordinates } from '~/types/utils/Coordinates';
 import type { PlacedBox } from '~/types/utils/PlacedBox';
 import { round, subtract } from '~/utils/functions/geometry';
@@ -16,6 +17,7 @@ const { collidesWith, sx, sy, target } = defineProps({
   sy: { type: Number, default: 1 },
   target: { type: Object as PropType<PlacedBox>, required: true },
   collidesWith: { type: Array<PlacedBox>, default: () => [] },
+  capture: { type: Boolean, default: false }
 });
 
 const dragged: DragCallback = inject('dragged') as DragCallback;
@@ -41,6 +43,7 @@ function collides(tested: PlacedBox, colliders: PlacedBox[]): boolean {
 }
 
 function onmousedown() {
+  console.log("passage ici ?");
   offset.value = subtract(useCoordinates().get(), target);
   dragged(() => {
     const coordinates: Coordinates = useCoordinates().get();
