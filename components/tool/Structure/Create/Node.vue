@@ -35,7 +35,7 @@ import { repositories } from '~~/lib/repositories';
 
 const emit = defineEmits<{ created: [ node: InnerNode]}>();
 
-const generators: Generator[] = sortBy(await repositories.generators.list(), "name");
+const generators: Generator[] = sortBy(await repositories.generators.list(useSession().token), "name");
 const node: Ref<InnerNode> = ref(createEmptyNode());
 function createEmptyNode(): InnerNode {
   return {
@@ -45,7 +45,9 @@ function createEmptyNode(): InnerNode {
     y: 0,
     inputs: 1,
     outputs: 1,
-    id: ''
+    id: '',
+    width: 0,
+    height: 0
   };
 }
 
