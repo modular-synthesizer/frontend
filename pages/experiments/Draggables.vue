@@ -4,9 +4,11 @@
       <v-col cols="6"><pre>{{ targets }}</pre></v-col>
       <v-col cols="6"><pre>{{ coords }}</pre></v-col>
     </v-row>
-    <sp-stage :target="coords">
-      <sp-stage-draggable v-for="target in targets" :target="target" :sx="10" :sy="10" :collides-with="targets" @dropped="saveItem">
-        <rect :height="target.height" :width="target.width" fill="black" />
+    <sp-stage :target="coords" mode="html">
+      <sp-stage-draggable v-for="target in targets" :target="target" :sx="10" :sy="10" @dropped="saveItem">
+        <v-card max-width="400">
+          <v-card-title>{{ target.label }}</v-card-title>
+        </v-card>
       </sp-stage-draggable>
     </sp-stage>
   </v-app>

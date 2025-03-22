@@ -1,6 +1,6 @@
 <template>
-  <g v-if="capture" @mousedown.capture.prevent.stop="onmousedown" :transform="translate(innerTarget)"><slot /></g>
-  <g v-else @mousedown.prevent.stop="onmousedown" :transform="translate(innerTarget)"><slot /></g>
+  <node v-if="capture" @mousedown.capture.prevent.stop="onmousedown" class="draggable-wrapper"><slot /></node>
+  <node v-else @mousedown.prevent.stop="onmousedown" class="draggable-wrapper"><slot /></node>
 </template>
 
 <script setup lang="ts">
@@ -8,7 +8,6 @@ import { some } from 'lodash';
 import type { Coordinates } from '~/types/utils/Coordinates';
 import type { PlacedBox } from '~/types/utils/PlacedBox';
 import { round, subtract } from '~/utils/functions/geometry';
-import { translate } from '~/utils/functions/svg';
 
 type DragCallback = (callback: (coordinates: Coordinates) => void) => void;
 
@@ -22,6 +21,9 @@ const { collidesWith, sx, sy, target } = defineProps({
 
 const dragged: DragCallback = inject('dragged') as DragCallback;
 const dropped: DragCallback = inject('dropped') as DragCallback;
+const mode: 'html'|'svg'|undefined = inject('mode');
+
+const node: VNode = h(mode === 'html' ? 'div' : 'g')
 
 const innerTarget: Ref<PlacedBox> = ref(target)
 
@@ -43,7 +45,6 @@ function collides(tested: PlacedBox, colliders: PlacedBox[]): boolean {
 }
 
 function onmousedown() {
-  console.log("passage ici ?");
   offset.value = subtract(useCoordinates().get(), target);
   dragged(() => {
     const coordinates: Coordinates = useCoordinates().get();
@@ -55,4 +56,14 @@ function onmousedown() {
   });
   dropped(() => emit('dropped', innerTarget.value));
 }
+
+const translateDraggable = computed(() => {
+  return `${innerTarget.value.x}px ${innerTarget.value.y}px`
+})
 </script>
+
+<style>
+.draggable-wrapper {
+  translate: v-bind(translateDraggable)
+}
+</style>

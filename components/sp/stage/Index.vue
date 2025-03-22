@@ -1,5 +1,5 @@
 <template>
-  <svg
+  <rootNode
     class="synple-stage"
     @wheel.passive="onwheel"
     @mousedown="onmousedown"
@@ -7,15 +7,15 @@
     @mouseup.capture="onmouseup"
     @mouseleave="onmouseup"
   >
-    <g :transform="scale(innerTarget)">
-      <g :transform="translate({ x: (innerTarget.x % bgWidth) - bgWidth, y: (innerTarget.y % bgHeight) - bgHeight })">
+    <scaleNode class="transform">
+      <bgNode class="bg-translate">
         <slot name="background" />
-      </g>
-      <g :transform="translate(innerTarget)">
+      </bgNode>
+      <translateNode class="item-translate">
         <slot></slot>
-      </g>
-    </g>
-  </svg>
+      </translateNode>
+    </scaleNode>
+  </rootNode>
 </template>
 
 <script setup lang="ts">
@@ -23,22 +23,37 @@ import type { PropType } from 'vue';
 import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import type { Coordinates, ScaledCoordinates } from '~/types/utils/Coordinates';
 import { subtract, zoom } from '~/utils/functions/geometry';
-import { scale, translate } from '~/utils/functions/svg';
+import { translate } from '~/utils/functions/svg';
 
-const { bgHeight, bgWidth, height, target, width } = defineProps({
+type Mode = "html"|"svg"
+
+const { bgHeight, bgWidth, height, mode, target, width } = defineProps({
   height: { type: String, default: '100%' },
   target: { type: Object as PropType<ScaledCoordinates>, required: true },
   width: { type: String, default: '100%', },
   bgHeight: { type: Number, default: RACK_HEIGHT },
   bgWidth: { type: Number, default: SLOT_SIZE },
+  mode: { type: String as PropType<Mode>, default: "svg" }
 });
+
+const innerTarget: Ref<ScaledCoordinates> = ref(target);
+
+const tags: Record<string, Record<Mode, VNode>> = {
+  root: { html: h('div'), svg: h('svg') },
+  scale: { html: h('div'), svg: h('g') },
+  bg: { html: h('div'), svg: h('g') },
+  translate: { html: h('div'), svg: h('g') },
+};
+
+const rootNode = tags.root[mode];
+const scaleNode = tags.scale[mode];
+const bgNode = tags.bg[mode];
+const translateNode = tags.translate[mode];
 
 type Emits = {
   zoom: [ number ],
   panned: [ Coordinates ],
 }
-
-const innerTarget: Ref<ScaledCoordinates> = ref(target)
 
 const emit = defineEmits<Emits>();
 
@@ -97,13 +112,36 @@ function dropped(callback: Callback) {
 
 provide("dropped", dropped);
 
-useCoordinates().setReference(target)
+useCoordinates().setReference(target);
+
+const numericScale = computed(() => innerTarget.value.scale);
+
+const bgTranslate = computed(() => translate({
+  x: (innerTarget.value.x - 1) * bgWidth,
+  y: (innerTarget.value.y - 1) * bgHeight,
+}));
+
+provide("mode", mode)
+
+const itemTranslate = computed(() => `${innerTarget.value.x}px ${innerTarget.value.y}px`);
 </script>
 
-<style scoped>
+<style>
 .synple-stage {
   background-color: cadetblue;
   height: v-bind('height');
   width: v-bind('width');
+}
+
+.transform {
+  transform: scale(v-bind(numericScale));
+}
+
+.translate-bg {
+  transform: v-bind(bgTranslate);
+}
+
+.item-translate {
+  translate: v-bind(itemTranslate);
 }
 </style>
