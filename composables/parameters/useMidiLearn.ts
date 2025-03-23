@@ -34,6 +34,7 @@ export function useMidiLearn() {
       setValue(parameter, flooredValue);
       
       state.value.timeout = window.setTimeout(() => {
+        parameter.t = Date.now();
         repositories.parameters.update(parameter, useSession().token)
         state.value.timeout = -1;
       }, 250);
