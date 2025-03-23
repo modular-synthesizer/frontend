@@ -1,3 +1,4 @@
+import { has } from "lodash";
 import type { Parameter } from "~/types/modules/Parameter";
 import { setValue } from "~/utils/functions/parameters";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
@@ -50,11 +51,12 @@ export function useMidiLearn() {
       eventbus.subscribe("midi/generalpurpose", fct)
     },
     unlearn(parameter: Parameter) {
-      if(!(parameter.id in this.handlers)) return;
-      const keys: string[] = Object.keys(this.handlers[parameter.id]);
+      const handlers = state.value.handlers;
+      if(!has(handlers, parameter.id)) return;
+      const keys: string[] = Object.keys(handlers[parameter.id]);
       keys.forEach((k: string) => {
-        eventbus.unsubscribe(`midi/generalpurpose/${k}`, this.handlers[parameter.id][k]);
-        delete this.handlers[parameter.id][k];
+        eventbus.unsubscribe(`midi/generalpurpose/${k}`, handlers[parameter.id][k]);
+        delete handlers[parameter.id][k];
       })
     },
     messageHandler,

@@ -1,5 +1,5 @@
 <template>
-  <g v-if="parameter" @mousedown.stop="onmousedown" @wheel.passive.stop="onwheel">
+  <g v-if="parameter" @mousedown.stop="onmousedown" @wheel.passive.stop="onwheel" @click.right.prevent.stop="onrightclick">
     <knob-label :y="- r - 6" :label="label" />
     <knob-background :radius="r" :editing="control.editing" />
     <knob-gauge :radius="r - 4" :startAngle="30" :endAngle="330" :parameter="parameter" />
@@ -19,7 +19,7 @@ import { repositories } from '~/lib/repositories';
 import type { Synthesizer } from '~/types/Index';
 import { moveValue, setValue } from '~/utils/functions/parameters';
 
-const { dragged, dropped, module, r, control, synthesizer } = defineProps({
+const { dragged, dropped, module, r, control } = defineProps({
   r: { type: Number, default: 20 },
   control: { type: Object as PropType<Control>, required: true },
   module: { type: Object as PropType<AudioModule>, required: true },
@@ -59,6 +59,16 @@ function onwheel($event: WheelEvent) {
   const sign = - $event.deltaY / Math.abs($event.deltaY);
   moveValue(parameter, sign * parameter.step * ratio);
   debounce('edit-' + parameter.id, 500, save)
+}
+
+function onrightclick($event: MouseEvent) {
+  useContexts().display($event, {
+    items: [
+      {label: 'bind', action: useMidiLearn().learn},
+      {label: 'unbind', action: useMidiLearn().unlearn}
+    ],
+    payload: parameter,
+  })
 }
 
 function save() {
