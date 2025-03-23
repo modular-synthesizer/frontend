@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import type { Parameter } from '~/types/modules/Parameter';
-import { pick, round } from 'lodash';
+import { round } from 'lodash';
 import type { Control } from '~/types/tools/Control';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { DragCallback } from '~/types/draggables/DragDeclaration';

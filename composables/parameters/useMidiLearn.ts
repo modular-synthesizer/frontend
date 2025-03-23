@@ -1,4 +1,5 @@
 import { has } from "lodash";
+import { repositories } from "~/lib/repositories";
 import type { Parameter } from "~/types/modules/Parameter";
 import { setValue } from "~/utils/functions/parameters";
 import { eventbus } from "~~/lib/utils/eventbus/EventBus";
@@ -33,7 +34,7 @@ export function useMidiLearn() {
       setValue(parameter, flooredValue);
       
       state.value.timeout = window.setTimeout(() => {
-        // saveParameter(parameter);
+        repositories.parameters.update(parameter, useSession().token)
         state.value.timeout = -1;
       }, 250);
     }
