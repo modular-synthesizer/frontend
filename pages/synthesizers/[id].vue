@@ -90,6 +90,8 @@ function initialize() {
 }
 
 function addCable(cable: Cable) {
+  if (cable === undefined) return;
+  
   if (!find(cables.value, { id: cable.id })) cables.value.push(cable);
 }
 
