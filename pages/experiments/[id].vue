@@ -7,6 +7,9 @@
       @zoom="onzoom"
       @panned="repositories.synthesizers.update(synthesizer)"
     >
+      <template #background>
+        <synthesizer-background :position="synthesizer" />
+      </template>
       <sp-stage-svg-layer name="modules">
         <sp-stage-draggable
           v-for="module in synthesizer.modules"
@@ -28,7 +31,8 @@
         <cable-list :cables="cables" :synthesizer="synthesizer" />
         <cable-creation v-if="useLinkCreation().displayed" @created="addCable" :synthesizer="synthesizer" />
       </sp-stage-svg-layer>
-      <sp-stage-svg-layer name="forefront" />
+      <sp-stage-svg-layer name="forefront">
+      </sp-stage-svg-layer>
     </sp-stage>
   </div>
 </template>
