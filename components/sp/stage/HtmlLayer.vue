@@ -1,7 +1,7 @@
 <template>
-  <div class="layer-wrapper" :id="name">
+  <div class="layer-wrapper">
     <div class="layer-scale">
-      <div class="layer-translate">
+      <div class="layer-translate" :id="name">
         <slot></slot>
       </div>
     </div>

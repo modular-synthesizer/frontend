@@ -1,7 +1,7 @@
 <template>
   <div @mousedown.capture="initialize" class="full-size">
     <synthesizer-menu :synthesizer="synthesizer"/>
-    <stage
+    <sp-stage
       v-if="synthesizer"
       :target="synthesizer"
       @zoom="onzoom"
@@ -10,11 +10,10 @@
       <template #background>
         <synthesizer-background :position="synthesizer" />
       </template>
-      <template #default="{ props }">
-        <stage-draggable
+      <sp-stage-svg-layer name="modules">
+        <sp-stage-draggable
           v-for="module in synthesizer.modules"
           :collides-with="synthesizer.modules"
-          v-bind="props"
           :target="module"
           :sx="SLOT_SIZE"
           :sy="RACK_HEIGHT"
@@ -23,14 +22,18 @@
         >
           <module v-if="!module.deleted" :module @deleted="() => deleteModule(module, cables)" @disconnected="disconnectModule(module, cables)">
             <g v-for="control in module.controls" :transform="translate({ x: +control.payload.x, y: +control.payload.y})">
-              <sp-control-wrapper v-bind="{ control, module, synthesizer, ...props, ...control.payload }" />
+              <sp-control-wrapper v-bind="{ control, module, synthesizer, ...control.payload }" />
             </g>
           </module>
-        </stage-draggable>
+        </sp-stage-draggable>
+      </sp-stage-svg-layer>
+      <sp-stage-svg-layer name="cables">
         <cable-list :cables="cables" :synthesizer="synthesizer" />
-        <cable-creation v-if="useLinkCreation().displayed" @created="addCable" v-bind="props" :synthesizer="synthesizer" />
-      </template>
-    </stage>
+        <cable-creation v-if="useLinkCreation().displayed" @created="addCable" :synthesizer="synthesizer" />
+      </sp-stage-svg-layer>
+      <sp-stage-svg-layer name="forefront">
+      </sp-stage-svg-layer>
+    </sp-stage>
   </div>
 </template>
 

@@ -4,17 +4,19 @@
 
 <script setup lang="ts">
 import { repositories } from '~/lib/repositories';
-import type { DragCallback } from '~/types/draggables/DragDeclaration';
 import type { Cable, LinkPayload, Synthesizer } from '~/types/Index';
 
-const { dropped, synthesizer } = defineProps({
-  dropped: { type: Function as DragCallback, required: true },
+type DragCallback = (callback: ($event: MouseEvent) => void) => void
+
+const { synthesizer } = defineProps({
   synthesizer: { type: Object as PropType<Synthesizer>, required: true },
 });
 
 type Emits = { created: [ Cable ] };
 
 const emit = defineEmits<Emits>();
+
+const dropped: DragCallback = inject('dropped') as DragCallback;
 
 dropped(async () => {
   const { displayed, magnetized } = useLinkCreation();

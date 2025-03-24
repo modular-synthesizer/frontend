@@ -1,7 +1,7 @@
 <template>
-  <svg class="layer-wrapper" :id="name">
+  <svg class="layer-wrapper">
     <g class="layer-scale" :transform="scale(targetRef)">
-      <g class="layer-translate" :transform="translate(targetRef)">
+      <g class="layer-translate" :transform="translate(targetRef)" :id="name">
         <slot></slot>
       </g>
     </g>
