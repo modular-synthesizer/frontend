@@ -8,16 +8,17 @@ import { some } from 'lodash';
 import type { Coordinates } from '~/types/utils/Coordinates';
 import type { PlacedBox } from '~/types/utils/PlacedBox';
 import { round, subtract } from '~/utils/functions/geometry';
-
-type DragCallback = (callback: (coordinates: Coordinates) => void) => void;
+import type { Callback } from './Index.vue';
 
 type Props = {
-  sx: number, sy: number, target: Draggable, collidesWith?: Draggable[], capture?: boolean, passive?: boolean
+  sx?: number, sy?: number, target: Draggable, collidesWith?: Draggable[], capture?: boolean, passive?: boolean
 }
-const { collidesWith = [], sx, sy, target, passive = false, capture = false } = defineProps<Props>();
+const { collidesWith = [], sx = 1, sy = 1, target, passive = false, capture = false } = defineProps<Props>();
 
-const dragged: DragCallback = inject('dragged') as DragCallback;
-const dropped: DragCallback = inject('dropped') as DragCallback;
+type DragFunction = (callback: Callback) => void
+
+const dragged: DragFunction = inject('dragged') as DragFunction;
+const dropped: DragFunction = inject('dropped') as DragFunction;
 const mode: 'html'|'svg'|undefined = inject('mode');
 
 const node: VNode = h(mode === 'html' ? 'div' : 'g')
@@ -42,14 +43,17 @@ function collides(tested: PlacedBox, colliders: PlacedBox[]): boolean {
 }
 
 function onmousedown() {
+  console.log("bla bla")
   offset.value = subtract(useCoordinates().get(), target);
-  dragged(() => {
+  dragged(($event: MouseEvent) => {
+    console.log("dragging " + innerTarget.value.id)
     const coordinates: Coordinates = useCoordinates().get();
     const rounded: Coordinates = round(subtract(coordinates, offset.value), { sx, sy });
     if (collidesWith.length > 0 && collides({ ...target, ...rounded }, collidesWith)) return;
     innerTarget.value.x = rounded.x;
     innerTarget.value.y = rounded.y;
     emit('moved', target);
+    $event.stopPropagation();
   });
   dropped(() => emit('dropped', target));
 }
@@ -64,7 +68,8 @@ const y = computed(() => `${innerTarget.value.y}px`)
 
 <style>
 g.draggable-wrapper {
-  translate: v-bind(translateDraggable)
+  translate: v-bind(translateDraggable);
+  pointer-events: all;
 }
 div.draggable-wrapper {
   display: inline-block;
