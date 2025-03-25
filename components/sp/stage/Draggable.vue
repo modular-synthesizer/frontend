@@ -1,33 +1,32 @@
 <template>
-  <g v-if="capture" @mousedown.capture.prevent.stop="onmousedown" :transform="translate(innerTarget)"><slot /></g>
-  <g v-else @mousedown.prevent.stop="onmousedown" :transform="translate(innerTarget)"><slot /></g>
+  <node v-if="capture" @mousedown.capture.prevent.stop="onmousedown" class="draggable-wrapper"><slot /></node>
+  <node v-else @mousedown.prevent.stop="onmousedown" class="draggable-wrapper"><slot /></node>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="Draggable extends PlacedBox">
 import { some } from 'lodash';
 import type { Coordinates } from '~/types/utils/Coordinates';
 import type { PlacedBox } from '~/types/utils/PlacedBox';
 import { round, subtract } from '~/utils/functions/geometry';
-import { translate } from '~/utils/functions/svg';
 
 type DragCallback = (callback: (coordinates: Coordinates) => void) => void;
 
-const { collidesWith, sx, sy, target } = defineProps({
-  sx: { type: Number, default: 1 },
-  sy: { type: Number, default: 1 },
-  target: { type: Object as PropType<PlacedBox>, required: true },
-  collidesWith: { type: Array<PlacedBox>, default: () => [] },
-  capture: { type: Boolean, default: false }
-});
+type Props = {
+  sx: number, sy: number, target: Draggable, collidesWith?: Draggable[], capture?: boolean, passive?: boolean
+}
+const { collidesWith = [], sx, sy, target, passive = false, capture = false } = defineProps<Props>();
 
 const dragged: DragCallback = inject('dragged') as DragCallback;
 const dropped: DragCallback = inject('dropped') as DragCallback;
+const mode: 'html'|'svg'|undefined = inject('mode');
 
-const innerTarget: Ref<PlacedBox> = ref(target)
+const node: VNode = h(mode === 'html' ? 'div' : 'g')
+
+const innerTarget: Ref<PlacedBox> = ref(target as PlacedBox)
 
 const offset: Ref<Coordinates> = ref({ x: 0, y: 0 });
 
-const emit = defineEmits<{ dropped: [ PlacedBox ], moved: [ PlacedBox ] }>();
+const emit = defineEmits<{ dropped: [ Draggable ], moved: [ Draggable ] }>();
 
 function collide(first: PlacedBox, second: PlacedBox): boolean {
   if (first.id === second.id) return false;
@@ -43,7 +42,6 @@ function collides(tested: PlacedBox, colliders: PlacedBox[]): boolean {
 }
 
 function onmousedown() {
-  console.log("passage ici ?");
   offset.value = subtract(useCoordinates().get(), target);
   dragged(() => {
     const coordinates: Coordinates = useCoordinates().get();
@@ -51,8 +49,27 @@ function onmousedown() {
     if (collidesWith.length > 0 && collides({ ...target, ...rounded }, collidesWith)) return;
     innerTarget.value.x = rounded.x;
     innerTarget.value.y = rounded.y;
-    emit('moved', innerTarget.value);
+    emit('moved', target);
   });
-  dropped(() => emit('dropped', innerTarget.value));
+  dropped(() => emit('dropped', target));
 }
+
+const translateDraggable = computed(() => {
+  return `${innerTarget.value.x}px ${innerTarget.value.y}px`
+})
+
+const x = computed(() => `${innerTarget.value.x}px`)
+const y = computed(() => `${innerTarget.value.y}px`)
 </script>
+
+<style>
+g.draggable-wrapper {
+  translate: v-bind(translateDraggable)
+}
+div.draggable-wrapper {
+  display: inline-block;
+  position: absolute;
+  left: v-bind(x);
+  top: v-bind(y);
+}
+</style>
