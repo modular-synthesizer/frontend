@@ -330,6 +330,13 @@
     "list": {
       "others": "Other synthesizers",
       "owned": "My synthesizers"
+    },
+    "loader": {
+      "cables": "Plugging cables",
+      "generators": "Loading sound generators",
+      "modules": "Instanciating modules",
+      "ports": "Listing available ports",
+      "synthesizer": "Fetching synthesizer informations"
     }
   },
   "tools": {

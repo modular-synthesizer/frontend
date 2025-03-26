@@ -1,11 +1,12 @@
 <template>
   <v-layout class="d-flex flex-column justify-center align-center" v-if="loading">
     <v-progress-circular indeterminate size="80" class="mb-8" />
-    <div>Chargement des générateurs... <span class="text-green" v-if="!loads.generators">OK</span></div>
-    <div>Chargement du synthétiseur... <span class="text-green" v-if="!loads.synthesizer">OK</span></div>
-    <div>Chargement des modules... <span class="text-green" v-if="!loads.modules">OK</span></div>
-    <div>Chargement des cables... <span class="text-green" v-if="!loads.cables">OK</span></div>
-    <div>Chargement des ports... <span class="text-green" v-if="!loads.ports">OK</span></div>
+    <div>
+      <div class="d-flex" v-for="(loader, name) in loads">
+        <div class="flex-0-1 pr-8">{{ useI18n().t(`synthesizers.loader.${name}`) }}</div>
+        <div class="flex-1-0 text-right text-green" v-if="!loader">OK</div>
+      </div>
+    </div>
   </v-layout>
   <div v-else @mousedown.capture="initialize" class="full-size">
     <sp-stage
@@ -56,6 +57,7 @@ import { appendCable } from '~/utils/functions/cables';
 import { translate } from "~/utils/functions/svg"
 import { createModule as instanciateModule } from '~/utils/factories/modules';
 import type { Identified } from '@jsynple/core';
+import { useI18n } from 'vue-i18n';
 
 type PromisedRef<T> = Promise<Ref<T>>;
 
@@ -96,8 +98,8 @@ async function loadPorts(modulesPromise: PromisedRef<AudioModule[]>): PromisedRe
 type LoaderKey = 'generators'|'modules'|'synthesizer'|'cables'|'ports'
 const loads: Ref<Record<LoaderKey, boolean>> = ref({
   generators: true,
-  modules: true,
   synthesizer: true,
+  modules: true,
   cables: true,
   ports: true,
 })
