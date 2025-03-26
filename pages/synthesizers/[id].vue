@@ -8,7 +8,6 @@
     <div>Chargement des ports... <span class="text-green" v-if="!loads.ports">OK</span></div>
   </v-layout>
   <div v-else @mousedown.capture="initialize" class="full-size">
-    <synthesizer-menu v-if="synthesizer.id" :synthesizer="synthesizer"/>
     <sp-stage
       v-if="synthesizer"
       :target="synthesizer"
@@ -38,6 +37,7 @@
       </sp-stage-svg-layer>
       <sp-stage-svg-layer name="forefront" />
     </sp-stage>
+    <synthesizer-menu v-if="synthesizer.id" :synthesizer="synthesizer" @created="createModule" />
   </div>
 </template>
 

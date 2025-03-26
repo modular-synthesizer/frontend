@@ -45,10 +45,10 @@ import type { Generator } from '~/types/Generator';
 import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
 import type { ModulePayload } from '~/types/modules/AudioModule';
-import { createModule } from '~/utils/factories/modules';
 import { firstFreeSlot } from '~/utils/functions/synthesizers';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 import { appendModule } from '~/utils/functions/modules';
+import { createModule } from '~/utils/factories/modules';
 
 export default {
   data: () => ({
@@ -75,9 +75,7 @@ export default {
         rack: 0,
         slot: firstFreeSlot(this.synthesizer, tool.slots),
       };
-      const response: ModulePayload = await repositories.modules.create(payload, useSession().token)
-      const generators: Generator[] = await repositories.generators.list(useSession().token);
-      appendModule(this.synthesizer, response, generators);
+      this.$emit('selected', await repositories.modules.create(payload, useSession().token));
       this.close();
     },
     categories(tools: Tool[]) {
