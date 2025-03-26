@@ -26,6 +26,7 @@ function end() {
 }
 
 function magnetize(port: Port, control: ModControl) {
+  console.log("magnetize");
   if (port.kind === state.value.ports.origin?.kind) return;
   state.value.ports.destination = port;
   state.value.controls.destination = control;

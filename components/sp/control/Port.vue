@@ -2,7 +2,11 @@
   <text :y="- r - 4" text-anchor="middle" class="port-label fill-shades-black stroke-grey-darken-1" font-size="10px">
     {{ label }}
   </text>
-  <g @mousedown.left.stop="onmousedown">
+  <g
+    @mousedown.left.stop="onmousedown"
+    @mouseenter="useLinkCreation().magnetize(port, control)"
+    @mouseleave="useLinkCreation().unmagnetize('mouseout')"
+  >
     <circle
       :r="r"
       :class="`fill-${color}-darken-3`"
@@ -19,11 +23,10 @@
       <!-- element sur lequel faire les mouseenter/mouseout -->
       <circle
         class="port-event-handler"
-        fill-opacity="0"
-        fill="white"
+        :fill-opacity="0"
         :r="r"
-        @mouseenter="useLinkCreation().magnetize(port, control)"
-        @mouseleave="useLinkCreation().unmagnetize('mouseout')"
+        :cx="eventX"
+        :cy="eventY"
       />
     </Teleport>
   </g>
@@ -46,6 +49,9 @@ const label: string = `${control.payload.label ?? ''}`
 const r: number = PORT_RADIUS * 2;
 const port: Port = module.ports.find((p: Port) => p.name === control.payload.target) as Port;
 const color: string = isInput(port) ? 'grey' : 'indigo';
+
+const eventX: ComputedRef<number> = computed(() => +control.payload.x + module.x)
+const eventY: ComputedRef<number> = computed(() => +control.payload.y + module.y)
 
 function onmousedown() {
   useLinkCreation().start(port, control);

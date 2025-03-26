@@ -4,25 +4,23 @@
       :d="path"
       :opacity="entered ? 1 : opacity"
       stroke-width="7"
-      :class="[{ 'no-events': noEvents, path: true, entered }, `stroke-${color}-darken-3`]"
+      :class="[`stroke-${color}-darken-3`]"
       v-if="showCable"
       fill="transparent"
     />
     <circle
-      :class="[{ 'no-events': true }, `stroke-${color}-darken-3 fill-shades-white`]"
+      :class="[`stroke-${color}-darken-3 fill-shades-white`]"
       :cx="start.x"
       :cy="start.y"
       :r="r"
       stroke-width="6"
-      @mouseenter.stop
     />
     <circle
-      :class="[{ 'no-events': noEvents }, `stroke-${color}-darken-3 fill-shades-white`]"
+      :class="[ `stroke-${color}-darken-3 fill-shades-white`]"
       :cx="end.x"
       :cy="end.y"
       :r="r"
       stroke-width="6"
-      @mouseenter.stop
       @mouseup="useLinkCreation().end()"
     />
   </g>
