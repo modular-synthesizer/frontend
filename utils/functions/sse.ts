@@ -6,10 +6,10 @@ let source: EventSource;
 type ParsedMessage = {
     operation: string,
     tabId: string,
-    payload: Record<string, any>,
+    payload: Record<string, unknown>,
 }
 
-export type Command = { tabId: string } & Record<string, any>;
+export type Command = { tabId: string } & Record<string, unknown>;
 
 /**
  * Initializes the SSE connection to the server. Connections will stay open as long as the server
