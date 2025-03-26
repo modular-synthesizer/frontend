@@ -1,5 +1,13 @@
 <template>
-  <div @mousedown.capture="initialize" class="full-size">
+  <v-layout class="d-flex flex-column justify-center align-center" v-if="loading">
+    <v-progress-circular indeterminate size="80" class="mb-5" />
+    <div>Chargement des générateurs... <span class="text-green" v-if="!loads.generators">OK</span></div>
+    <div>Chargement du synthétiseur... <span class="text-green" v-if="!loads.synthesizer">OK</span></div>
+    <div>Chargement des modules... <span class="text-green" v-if="!loads.modules">OK</span></div>
+    <div>Chargement des cables... <span class="text-green" v-if="!loads.cables">OK</span></div>
+    <div>Chargement des ports... <span class="text-green" v-if="!loads.ports">OK</span></div>
+  </v-layout>
+  <div v-else @mousedown.capture="initialize" class="full-size">
     <synthesizer-menu :synthesizer="synthesizer"/>
     <sp-stage
       v-if="synthesizer"
@@ -84,19 +92,60 @@ async function loadPorts(modulesPromise: PromisedRef<AudioModule[]>): PromisedRe
   return ref(modules.flatMap((m: AudioModule) => m.ports));
 }
 
-const generatorsPromise = loadGenerators()
-const modulesPromise = loadModules(id, generatorsPromise)
-const synthesizerPromise = loadSynthesizer(id)
-const cablespromise = loadCables(id, modulesPromise)
-const portsPromise = loadPorts(modulesPromise)
+const loads: Ref<Record<string, boolean>> = ref({
+  generators: true,
+  modules: true,
+  synthesizer: true,
+  cables: true,
+  ports: true,
+})
 
-const [ _, synthesizer, modules, cables, ports ] = await Promise.all([
+const generatorsPromise = loadGenerators().then((generators) => {
+  loads.value.generators = false
+  return generators
+})
+const modulesPromise = loadModules(id, generatorsPromise).then((modules) => {
+  loads.value.modules = false
+  return modules
+})
+const synthesizerPromise = loadSynthesizer(id).then((synth) => {
+  loads.value.synthesizer = false
+  return synth
+})
+const cablespromise = loadCables(id, modulesPromise).then((cables) => {
+  loads.value.cables = false
+  return cables
+})
+const portsPromise = loadPorts(modulesPromise).then((ports) => {
+  loads.value.ports = false
+  return ports
+})
+
+const loadAll = Promise.all([
   generatorsPromise,
   synthesizerPromise,
   modulesPromise,
   cablespromise,
   portsPromise
 ]);
+
+const synthesizer: Ref<Synthesizer> = ref(createEmptySynthesizer());
+const modules: Ref<AudioModule[]> = ref([]);
+const cables: Ref<Cable[]> = ref([]);
+const ports: Ref<Port[]> = ref([])
+
+const loading = ref(true);
+
+loadAll.then(([ _, synth, mods, links, ps ]) => {
+  synthesizer.value = synth.value;
+  modules.value = mods.value;
+  cables.value = links.value;
+  ports.value = ps.value;
+  setTimeout(() => {
+    loading.value = false;
+  }, 100)
+  
+})
 
 function onzoom(scale: number) {
   synthesizer.value.scale = scale;
