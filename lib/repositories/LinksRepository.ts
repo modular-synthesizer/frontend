@@ -4,8 +4,8 @@ import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 
 export default class LinksRepository extends Repository<LinkPayload> {
     
-  public override async list(synthesizer: Synthesizer): Promise<LinkPayload[]> {
-    return super.list({ synthesizer_id: synthesizer.id});
+  public override async list(id: string): Promise<LinkPayload[]> {
+    return super.list({ synthesizer_id: id});
   }
 
   public override async create(payload: LinkPayload, synthesizer: Synthesizer|null = null) {

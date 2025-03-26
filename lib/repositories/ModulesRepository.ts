@@ -10,8 +10,8 @@ export class ModulesRepository extends Repository<ModulePayload, CreationPayload
     super('modules', api)
   }
 
-  public override async list(token: string, synthesizer: Synthesizer): Promise<ModulePayload[]> {
-    return super.list(token, { synthesizer_id: synthesizer.id});
+  public override async list(token: string, { id }: { id: string }): Promise<ModulePayload[]> {
+    return super.list(token, { synthesizer_id: id });
   }
 }
 

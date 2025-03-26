@@ -20,14 +20,6 @@ export default defineNuxtConfig({
       'process.env.DEBUG': false,
     },
   },
-  vue: {
-    compilerOptions: {
-      isCustomElement: tag => [
-        'v-card-header',
-        'v-card-header-text',
-      ].includes(tag)
-    }
-  },
   runtimeConfig: {
     public: {
       api_uri: process.env.API_URL || 'https://synple.app/api',

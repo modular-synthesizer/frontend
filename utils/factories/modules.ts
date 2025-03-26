@@ -14,13 +14,13 @@ import type { ToolParameter } from "~/types/tools/Parameter";
 import { RACK_HEIGHT, SLOT_SIZE } from "~/lib/utils/constants";
 import type { Control, ModControl } from "~/types/tools/Control";
 
-export async function createModule(details: ModulePayload, generators: Array<Generator>, synthesizer: Synthesizer): Promise<AudioModule> {
+export async function createModule(details: ModulePayload, generators: Promise<Ref<Generator[]>>,): Promise<AudioModule> {
   const module: AudioModule = {
     ...details,
     controls: [],
     parameters: {},
     ports: [],
-    channels: await createChannels(details, generators, synthesizer.voices),
+    channels: await createChannels(details, (await generators).value, details.voices),
     x: details.slot * SLOT_SIZE,
     y: details.rack * RACK_HEIGHT,
     width: details.slots * SLOT_SIZE,

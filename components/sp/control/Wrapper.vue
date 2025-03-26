@@ -1,5 +1,5 @@
 <template>
-  <Suspense><Control v-bind="props" /></Suspense>
+  <Suspense><Control v-bind="props" :dragged :dropped /></Suspense>
 </template>
 
 <script setup lang="ts">
@@ -14,8 +14,6 @@ import { setValue } from "~/utils/functions/parameters";
 const props = defineProps({
   synthesizer: { type: Object as PropType<Synthesizer>, required: true },
   control: { type: Object as PropType<ModControl>, required: true, },
-  dragged: { type: Function as DragCallback, required: true },
-  dropped: { type: Function as DragCallback, required: true },
   module: { type: Object as PropType<AudioModule>, required: true },
   noEvents: { type: Boolean, default: false}
 });
@@ -23,6 +21,11 @@ const props = defineProps({
 const Control = defineAsyncComponent(() => {
   return import(`../control/${props.control.component}.vue`);
 });
+
+const dragged: DragCallback = inject('dragged') as DragCallback;
+const dropped: DragCallback = inject('dropped') as DragCallback;
+
+console.log(dragged, dropped);
 
 const parameter: Parameter|undefined = props.module.parameters[props.control.payload.target];
 if (parameter) {

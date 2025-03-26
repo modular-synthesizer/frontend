@@ -24,7 +24,7 @@ import { eventbus } from '~/lib/utils/eventbus/EventBus';
 
 const { mobile } = useDisplay()
 const synthesizers: Ref<Array<Synthesizer>> = ref([]);
-repositories.synthesizers.list().then((list: Synthesizer[]) => {
+repositories.synthesizers.list(useSession().token).then((list: Synthesizer[]) => {
   synthesizers.value = list;
 })
 
@@ -33,15 +33,15 @@ const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
 const name: string = useSession().username;
 const sorted = computed(() => sortBy(synthesizers.value, (s: Synthesizer) => order[membershipType(s, name)]));
 
-const deleteSynth = repositories.synthesizers.remove(synthesizers.value);
+const deleteSynth = (id: string) => repositories.synthesizers.delete(id, useSession().token);
 async function create(details: Synthesizer) {
-  synthesizers.value.push(await repositories.synthesizers.create(details));
+  synthesizers.value.push(await repositories.synthesizers.create(details, useSession().token));
 }
 
-eventbus.subscribe("add.membership", async (data: any) => {
+eventbus.subscribe("add.membership", async (data: Synthesizer) => {
   synthesizers.value.push(data);
 });
-eventbus.subscribe("remove.membership", async (data: any) => {
+eventbus.subscribe("remove.membership", async (data: Synthesizer) => {
   remove(synthesizers.value, { id: data.id });
 })
 </script>

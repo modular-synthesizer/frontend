@@ -1,5 +1,5 @@
 <template>
-  <g :class="{'no-events': noEvents}">
+  <g>
     <path
       :d="path"
       :opacity="entered ? 1 : opacity"
@@ -9,7 +9,7 @@
       fill="transparent"
     />
     <circle
-      :class="[{ 'no-events': noEvents }, `stroke-${color}-darken-3 fill-shades-white`]"
+      :class="[{ 'no-events': true }, `stroke-${color}-darken-3 fill-shades-white`]"
       :cx="start.x"
       :cy="start.y"
       :r="r"

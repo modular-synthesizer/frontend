@@ -1,6 +1,6 @@
 <template>
-  <g v-for="cable in cables" @click.right.stop.prevent="showContext($event, cable)">
-    <cable-between-ports v-bind="cable" no-events />
+  <g v-for="cable in cables" @click.right.capture.stop.prevent="showContext($event, cable)" @mouseup.capture.stop>
+    <cable-between-ports v-bind="cable" />
   </g>
 </template>
 

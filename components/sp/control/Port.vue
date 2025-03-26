@@ -15,15 +15,17 @@
     <circle :r="r - 7" stroke-width="2" stroke="white" />
     <circle :r="r - 8" />
 
-    <!-- element sur lequel faire les mouseenter/mouseout -->
-    <circle
-      class="port-event-handler"
-      fill-opacity="0"
-      fill="white"
-      :r="r"
-      @mouseenter="useLinkCreation().magnetize(port, control)"
-      @mouseleave="useLinkCreation().unmagnetize('mouseout')"
-    />
+    <Teleport to="#forefront">
+      <!-- element sur lequel faire les mouseenter/mouseout -->
+      <circle
+        class="port-event-handler"
+        fill-opacity="0"
+        fill="white"
+        :r="r"
+        @mouseenter="useLinkCreation().magnetize(port, control)"
+        @mouseleave="useLinkCreation().unmagnetize('mouseout')"
+      />
+    </Teleport>
   </g>
 </template>
 
@@ -44,8 +46,6 @@ const label: string = `${control.payload.label ?? ''}`
 const r: number = PORT_RADIUS * 2;
 const port: Port = module.ports.find((p: Port) => p.name === control.payload.target) as Port;
 const color: string = isInput(port) ? 'grey' : 'indigo';
-const x: number = +control.payload.x;
-const y: number = +control.payload.y;
 
 function onmousedown() {
   useLinkCreation().start(port, control);
