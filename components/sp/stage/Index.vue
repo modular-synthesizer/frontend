@@ -58,7 +58,6 @@ function onmousedown($event: MouseEvent) {
 }
 
 function onmouseup($event: MouseEvent) {
-  console.log("mouse leave");
   callbacks.value.dropped($event);
   callbacks.value.dragged = () => { };
   callbacks.value.dropped = () => { }

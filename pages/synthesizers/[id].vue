@@ -1,6 +1,6 @@
 <template>
   <v-layout class="d-flex flex-column justify-center align-center" v-if="loading">
-    <v-progress-circular indeterminate size="80" class="mb-5" />
+    <v-progress-circular indeterminate size="80" class="mb-8" />
     <div>Chargement des générateurs... <span class="text-green" v-if="!loads.generators">OK</span></div>
     <div>Chargement du synthétiseur... <span class="text-green" v-if="!loads.synthesizer">OK</span></div>
     <div>Chargement des modules... <span class="text-green" v-if="!loads.modules">OK</span></div>
@@ -8,7 +8,7 @@
     <div>Chargement des ports... <span class="text-green" v-if="!loads.ports">OK</span></div>
   </v-layout>
   <div v-else @mousedown.capture="initialize" class="full-size">
-    <synthesizer-menu :synthesizer="synthesizer"/>
+    <synthesizer-menu v-if="synthesizer.id" :synthesizer="synthesizer"/>
     <sp-stage
       v-if="synthesizer"
       :target="synthesizer"
@@ -54,7 +54,7 @@ import { find, pick, remove } from 'lodash';
 import type { Coordinates } from '~/types/utils/Coordinates';
 import { appendCable } from '~/utils/functions/cables';
 import { translate } from "~/utils/functions/svg"
-import { createModule } from '~/utils/factories/modules';
+import { createModule as instanciateModule } from '~/utils/factories/modules';
 
 type PromisedRef<T> = Promise<Ref<T>>;
 
@@ -75,7 +75,7 @@ async function loadGenerators(): PromisedRef<Generator[]> {
 async function loadModules(id: string, generatorsPromise: PromisedRef<Generator[]>): PromisedRef<AudioModule[]> {
   const payloads: ModulePayload[] = await repositories.modules.list(useSession().token, { id });
   return ref(await Promise.all(payloads.map(async (payload: ModulePayload) => {
-    return createModule(payload, generatorsPromise)
+    return instanciateModule(payload, generatorsPromise)
   })))
 }
 
@@ -141,11 +141,45 @@ loadAll.then(([ _, synth, mods, links, ps ]) => {
   modules.value = mods.value;
   cables.value = links.value;
   ports.value = ps.value;
-  setTimeout(() => {
-    loading.value = false;
-  }, 100)
-  
+
+  managers.init(synthesizer.value);
+
+  useCoordinates().setReference(synthesizer.value);
+
+  // This little timeout is just here so that every "loaded OK" has the time to be seen.
+  setTimeout(() => { loading.value = false; }, 100);
+
+  eventbus.subscribe(`${synthesizer.value.id}.add.module`, createModule);
+
+  eventbus.subscribe(`${synthesizer.value.id}.remove.module`, removeModule);
+
+  eventbus.subscribe(`${synthesizer.value.id}.update.module`, updateModule);
+
+  eventbus.subscribe(`${synthesizer.value.id}.add.cable`, createcable);
+
+  eventbus.subscribe(`${synthesizer.value.id}.remove.cable`, removeCable)
 })
+
+async function createModule (payload: ModulePayload) {
+  await appendModule(await modulesPromise, payload, generatorsPromise);
+}
+
+function updateModule(payload: ModulePayload) {
+  const found: AudioModule|undefined = find(synthesizer.value.modules, { id: payload.id });
+  if (found) move(found, { x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT });
+}
+
+function removeCable(payload: LinkPayload) {
+  const found: Cable|undefined = find(cables.value, { id: payload.id });
+  if (!found) return;
+  disconnectCable(found);
+  remove(cables.value, { id: found.id })
+}
+
+function removeModule (payload: ModulePayload) {
+  const found: AudioModule|undefined = find(modules.value, { id: payload.id });
+  if (found) deleteModule(found, cables.value)
+}
 
 function onzoom(scale: number) {
   synthesizer.value.scale = scale;
@@ -168,45 +202,19 @@ function initialize() {
   }
 }
 
-function addCable(cable: Cable) {
-  if (cable === undefined) return;
-  
-  if (!find(cables.value, { id: cable.id })) cables.value.push(cable);
+function createcable(payload: LinkPayload) {
+  appendCable(payload, cables.value, ports.value);
 }
 
-useCoordinates().setReference(synthesizer.value);
+function addCable(cable: Cable) {
+  if (cable === undefined) return;
+  if (!find(cables.value, { id: cable.id })) cables.value.push(cable);
+}
 
 managers.midi.start();
 managers.keyboard.start();
 
-eventbus.subscribe(`${synthesizer.value.id}.add.module`, async (payload: ModulePayload) => {
-  await appendModule(await modulesPromise, payload, generatorsPromise);
-});
-
-eventbus.subscribe(`${synthesizer.value.id}.remove.module`, async (payload: ModulePayload) => {
-  const found: AudioModule|undefined = find(modules.value, { id: payload.id });
-  if (found) deleteModule(found, cables.value)
-});
-
-eventbus.subscribe(`${synthesizer.value.id}.update.module`, async (payload: ModulePayload) => {
-  const found: AudioModule|undefined = find(synthesizer.value.modules, { id: payload.id });
-  if (found) move(found, { x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT });
-});
-
-eventbus.subscribe(`${synthesizer.value.id}.add.cable`, async(payload: LinkPayload) => {
-  appendCable(payload, cables.value, ports.value);
-});
-
-eventbus.subscribe(`${synthesizer.value.id}.remove.cable`, (payload: LinkPayload) => {
-  const found: Cable|undefined = find(cables.value, { id: payload.id });
-  if (!found) return;
-  disconnectCable(found);
-  remove(cables.value, { id: found.id })
-})
-
 eventbus.subscribe("remove.membership", () => navigateTo('/synthesizers'));
-
-managers.init(synthesizer.value);
 </script>
 
 <style scoped>

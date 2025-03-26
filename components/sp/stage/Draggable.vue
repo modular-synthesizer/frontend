@@ -43,10 +43,8 @@ function collides(tested: PlacedBox, colliders: PlacedBox[]): boolean {
 }
 
 function onmousedown() {
-  console.log("bla bla")
   offset.value = subtract(useCoordinates().get(), target);
   dragged(($event: MouseEvent) => {
-    console.log("dragging " + innerTarget.value.id)
     const coordinates: Coordinates = useCoordinates().get();
     const rounded: Coordinates = round(subtract(coordinates, offset.value), { sx, sy });
     if (collidesWith.length > 0 && collides({ ...target, ...rounded }, collidesWith)) return;

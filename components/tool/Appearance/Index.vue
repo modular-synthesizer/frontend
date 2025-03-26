@@ -24,8 +24,6 @@ const props = defineProps({
   creationMode: { type: Boolean, default: false },
 });
 
-console.log(props.tool)
-
 const referential: Ref<ScaledCoordinates> = ref({ x: 100, y: 100, scale: 1 });
 const synthesizer = createEmptySynthesizer();
 const module = createEmptyModule(props.tool);
@@ -55,8 +53,6 @@ props.tool.controls.forEach((c: Control) => {
 function validPayload(control: Control) {
   return control.payload.x !== undefined && control.payload.y !== undefined
 }
-
-console.log(controls);
 </script>
 
 <style scoped lang="scss">

@@ -95,14 +95,13 @@ export default {
       return - (KNOB_SIZE / 2);
     },
     parameter(): Parameter {
-      console.log(this.module, this.target);
       return this.module.parameters[this.target]
     },
-    value(): Number {
+    value(): number {
       return round(this.parameter.value, this.parameter.precision);
     },
     target(): string {
-      return '' + this.control.payload.target;
+      return `${this.control.payload.target}`;
     }
   },
   data: () => ({

@@ -25,12 +25,10 @@ const Control = defineAsyncComponent(() => {
 const dragged: DragCallback = inject('dragged') as DragCallback;
 const dropped: DragCallback = inject('dropped') as DragCallback;
 
-console.log(dragged, dropped);
-
 const parameter: Parameter|undefined = props.module.parameters[props.control.payload.target];
 if (parameter) {
   eventbus.subscribe(`${parameter.id}.update.parameter`, (p: Parameter) => {
-    const newT: number = parseInt(`${p.t}`)
+    const newT: number = Number.parseInt(`${p.t}`)
     /**
      * This mecanism does avoid putting the responsibility of the order of updates on the network
      * By assigning them a timestamp and comparing it, we can eliminate "less recent" updates that
