@@ -50,11 +50,12 @@ import { appendModule, disconnectModule, place } from '~/utils/functions/modules
 import { deleteModule } from '~/utils/functions/modules';
 import { managers } from '~/lib/managers';
 import { eventbus } from '~/lib/utils/eventbus/EventBus';
-import { find, pick, remove } from 'lodash';
+import { find, pick } from 'lodash';
 import type { Coordinates } from '~/types/utils/Coordinates';
 import { appendCable } from '~/utils/functions/cables';
 import { translate } from "~/utils/functions/svg"
 import { createModule as instanciateModule } from '~/utils/factories/modules';
+import type { Identified } from '@jsynple/core';
 
 type PromisedRef<T> = Promise<Ref<T>>;
 
@@ -92,7 +93,8 @@ async function loadPorts(modulesPromise: PromisedRef<AudioModule[]>): PromisedRe
   return ref(modules.flatMap((m: AudioModule) => m.ports));
 }
 
-const loads: Ref<Record<string, boolean>> = ref({
+type LoaderKey = 'generators'|'modules'|'synthesizer'|'cables'|'ports'
+const loads: Ref<Record<LoaderKey, boolean>> = ref({
   generators: true,
   modules: true,
   synthesizer: true,
@@ -100,26 +102,17 @@ const loads: Ref<Record<string, boolean>> = ref({
   ports: true,
 })
 
-const generatorsPromise = loadGenerators().then((generators) => {
-  loads.value.generators = false
-  return generators
-})
-const modulesPromise = loadModules(id, generatorsPromise).then((modules) => {
-  loads.value.modules = false
-  return modules
-})
-const synthesizerPromise = loadSynthesizer(id).then((synth) => {
-  loads.value.synthesizer = false
-  return synth
-})
-const cablespromise = loadCables(id, modulesPromise).then((cables) => {
-  loads.value.cables = false
-  return cables
-})
-const portsPromise = loadPorts(modulesPromise).then((ports) => {
-  loads.value.ports = false
-  return ports
-})
+function markedLoaded(key: LoaderKey): () => void {
+  return () => {
+    loads.value[key] = false;
+  }
+}
+
+const generatorsPromise = loadGenerators().finally(markedLoaded('generators'))
+const modulesPromise = loadModules(id, generatorsPromise).finally(markedLoaded('modules'))
+const synthesizerPromise = loadSynthesizer(id).finally(markedLoaded('synthesizer'))
+const cablespromise = loadCables(id, modulesPromise).finally(markedLoaded('cables'))
+const portsPromise = loadPorts(modulesPromise).finally(markedLoaded('ports'))
 
 const loadAll = Promise.all([
   generatorsPromise,
@@ -150,13 +143,9 @@ loadAll.then(([ _, synth, mods, links, ps ]) => {
   setTimeout(() => { loading.value = false; }, 100);
 
   eventbus.subscribe(`${synthesizer.value.id}.add.module`, createModule);
-
   eventbus.subscribe(`${synthesizer.value.id}.remove.module`, removeModule);
-
   eventbus.subscribe(`${synthesizer.value.id}.update.module`, updateModule);
-
   eventbus.subscribe(`${synthesizer.value.id}.add.cable`, createcable);
-
   eventbus.subscribe(`${synthesizer.value.id}.remove.cable`, removeCable)
 })
 
@@ -169,11 +158,15 @@ function updateModule(payload: ModulePayload) {
   if (found) move(found, { x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT });
 }
 
+function removeIfFound<T extends Identified, Item extends Identified>(list: T[], item: Item) {
+  const index: number = list.findIndex((i: T) => i.id === item.id);
+  const found = list[index]
+  if (index >= 0) list.splice(index, 1);
+  return found;
+}
+
 function removeCable(payload: LinkPayload) {
-  const found: Cable|undefined = find(cables.value, { id: payload.id });
-  if (!found) return;
-  disconnectCable(found);
-  remove(cables.value, { id: found.id })
+  disconnectCable(removeIfFound(cables.value, payload));
 }
 
 function removeModule (payload: ModulePayload) {
