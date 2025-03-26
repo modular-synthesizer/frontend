@@ -17,11 +17,11 @@ import type { Control } from "~/types/tools/Control";
 import type { Membership } from "~/types/synthesizers/Membership";
 import type { Right } from "~/types/permissions/Right";
 import type { Group } from "~/types/permissions/Group";
-import { GeneratorsRepository } from "@jsynple/core";
+import { GeneratorsRepository, type Identified } from "@jsynple/core";
 import { Api } from "@jsynple/core/dist/network/Api";
 import { ParametersRepository } from "@jsynple/core"
 
-export type Repositories = Record<string, Repository<any>>;
+export type Repositories = Record<string, Repository<Identified>>;
 
 export const api = new Api(window.fetch.bind(window));
 
@@ -44,6 +44,6 @@ export const repositories = {
   },
   rights: new Repository<Right>('rights'),
   sessions: new SessionsRepository('sessions'),
-  synthesizers: new SynthesizersRepository('synthesizers'),
+  synthesizers: new SynthesizersRepository(api),
   tools: new ToolsRepository('tools'),
 }

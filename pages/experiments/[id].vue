@@ -7,9 +7,6 @@
       @zoom="onzoom"
       @panned="repositories.synthesizers.update(synthesizer)"
     >
-      <template #background>
-        <synthesizer-background :position="synthesizer" />
-      </template>
       <sp-stage-svg-layer name="modules">
         <sp-stage-draggable
           v-for="module in synthesizer.modules"
@@ -53,6 +50,8 @@ import { translate } from "~/utils/functions/svg"
 
 definePageMeta({ layout: false });
 
+// First, we create an empty synthesizer so that something is displayed, and we set the state to loading.
+
 await loadProcessors(useAudio().context);
 
 const { token } = useSession();
@@ -65,7 +64,7 @@ const links: Ref<Array<LinkPayload>> = ref(await repositories.links.list(synthes
 const cables: Ref<Cable[]> = ref([]);
 
 const ports: ComputedRef<Array<Port>> = computed(() => {
-  return synthesizer.value.modules.map((m: AudioModule) => m.ports).flat();
+  return synthesizer.value.modules.flatMap((m: AudioModule) => m.ports)
 });
 
 await appendModules(synthesizer.value, modules.value, generators.value);
@@ -83,7 +82,7 @@ function save(module: AudioModule) {
   repositories.modules.update(pick(module, [ 'id', 'rack', 'slot' ]), useSession().token)
 }
 
-const initialized: Ref<Boolean> = ref(false);
+const initialized: Ref<boolean> = ref(false);
 
 function initialize() {
   if (!initialized.value) {
@@ -128,7 +127,7 @@ eventbus.subscribe(`${synthesizer.value.id}.remove.cable`, (payload: LinkPayload
   remove(cables.value, { id: found.id })
 })
 
-eventbus.subscribe(`remove.membership`, () => navigateTo('/synthesizers'));
+eventbus.subscribe("remove.membership", () => navigateTo('/synthesizers'));
 
 managers.init(synthesizer.value);
 </script>

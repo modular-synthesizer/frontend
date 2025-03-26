@@ -27,11 +27,12 @@ export type ModulePayload = ModuleDescription & {
   nodes: Array<InnerNode>;
   links: Array<InnerLink>;
   ports: Array<ToolPort>;
+  voices: number;
 }
 
 export type AudioModule = ModuleDescription & PlacedBox & {
   parameters: Parameters;
   channels: Array<Channel>;
   ports: Array<Port>;
-  deleted: Boolean;
+  deleted: boolean;
 }

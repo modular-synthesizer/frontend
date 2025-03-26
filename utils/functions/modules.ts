@@ -52,7 +52,9 @@ export function place(module: AudioModule, rack: number, slot: number) {
 }
 
 export function disconnectModule(module: AudioModule, cables: Array<Cable>) {
-  getCables(module).forEach((c: Cable) => deleteCable(c, cables));
+  for (const cable of getCables(module)) {
+    deleteCable(cable, cables);
+  }
 }
 
 export function deleteModule(module: AudioModule, cables: Array<Cable>) {
@@ -69,15 +71,9 @@ export function deleteModule(module: AudioModule, cables: Array<Cable>) {
  * @param synthesizer the synthesizer receiving the newly instanciated module.
  * @param module the payload (informations) of the module to instanciate.
  */
-export async function appendModule(synthesizer: Synthesizer, module: ModulePayload, generators: Generator[]) {
-  if (find(synthesizer.modules, { id: module.id })) return;
-  if (synthesizer.modules === undefined) synthesizer.modules = []
-  const instance: AudioModule = await createModule(module, generators, synthesizer);
-  synthesizer.modules.push(instance);
-}
-
-export async function appendModules(synthesizer: Synthesizer, modules: ModulePayload[], generators: Generator[]) {
-  await Promise.all(modules.map(async (payload: ModulePayload) => {
-    await appendModule(synthesizer, payload, generators)
-  }));
+export async function appendModule(modules: Ref<AudioModule[]>, module: ModulePayload, generators: Promise<Ref<Generator[]>>) {
+  if (find(modules.value, { id: module.id })) return;
+  if (modules.value === undefined) modules.value = []
+  const instance: AudioModule = await createModule(module, generators);
+  modules.value.push(instance);
 }
