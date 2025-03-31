@@ -43,8 +43,6 @@ function createEmptyNode(): InnerNode {
     generator: generators[0].name,
     x: 0,
     y: 0,
-    inputs: 1,
-    outputs: 1,
     id: '',
     width: 0,
     height: 0
