@@ -14,7 +14,7 @@ import { useI18n } from 'vue-i18n';
 import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
 import { required } from '~~/lib/rules';
-import type { ToolTabs } from '~~/lib/types/ToolTabs';
+import type { ToolTabs } from '~/types/tools/ToolTabs';
 
 const props = defineProps({
   modelValue: { type: Object as PropType<Tool>, required: true },

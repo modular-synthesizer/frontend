@@ -9,11 +9,16 @@
 </template>
 
 <script setup lang="ts">
+import type { AudioModule, Control } from "~/types/Index";
 import type { Parameter } from "~/types/modules/Parameter";
-import { ControlsPayload, KnobPayload } from "~~/lib/types/controls";
 
 const { x, y, target, mod } = defineProps({
-  ...KnobPayload, ...ControlsPayload
+  target: { type: String, default: '' },
+  label: { type: String, default: '' },
+  mod: { type: Object as PropType<AudioModule>, required: true },
+  control: { type: Object as PropType<Control>, required: true },
+  x: { type: Number, default: 0 },
+  y: { type: Number, default: 0 },
 });
 
 const frequency: Ref<Parameter> = ref(mod?.parameters['interval'] as Parameter);

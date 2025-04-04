@@ -41,7 +41,7 @@ import type { InnerNode } from '~~/types/tools/InnerNode';
 import type { ToolParameter } from '~~/types/tools/Parameter';
 import type { ToolPort } from '~~/types/tools/Port';
 import { repositories } from '~~/lib/repositories';
-import type { ToolTabs } from '~~/lib/types/ToolTabs';
+import type { ToolTabs } from '~/types/tools/ToolTabs';
 
 const { tool, mode, creationMode } = defineProps({
   tool: { type: Object as PropType<Tool>, required: true },
