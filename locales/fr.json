@@ -339,6 +339,13 @@
     "list": {
       "others": "Autres synthétiseurs",
       "owned": "Mes synthétiseurs"
+    },
+    "loader": {
+      "cables": "Branchement des cables",
+      "generators": "Chargement des générateurs de son",
+      "modules": "Instanciation des modules sonores",
+      "ports": "Recensement des ports disponibles",
+      "synthesizer": "Récupération des informations du synthétiseur"
     }
   },
   "tools": {
