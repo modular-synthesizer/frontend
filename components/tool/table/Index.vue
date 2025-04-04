@@ -2,10 +2,10 @@
   <v-table>
     <thead>
       <tr>
-        <th>{{ t('common.uuid') }}</th>
-        <th>{{ t('common.name') }}</th>
-        <th>{{ t('tools.headers.slots') }}</th>
-        <th>{{ t('common.actions') }}</th>
+        <th id="uuid">{{ t('common.uuid') }}</th>
+        <th id="name">{{ t('common.name') }}</th>
+        <th id="slots">{{ t('tools.headers.slots') }}</th>
+        <th id="actions">{{ t('common.actions') }}</th>
       </tr>
     </thead>
     <tbody>
