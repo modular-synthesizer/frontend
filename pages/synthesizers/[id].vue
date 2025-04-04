@@ -49,7 +49,7 @@ import { createCable, disconnectCable } from '~/utils/factories/cables';
 import type { AudioModule, Cable, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
 import { appendModule, disconnectModule, place } from '~/utils/functions/modules';
 import { deleteModule } from '~/utils/functions/modules';
-import { managers } from '~/lib/managers';
+import { initManagers, managers } from '~/utils/midi';
 import { eventbus } from '~/lib/utils/eventbus/EventBus';
 import { find, pick } from 'lodash';
 import type { Coordinates } from '~/types/utils/Coordinates';
@@ -137,7 +137,7 @@ loadAll.then(([ _, synth, mods, links, ps ]) => {
   cables.value = links.value;
   ports.value = ps.value;
 
-  managers.init(synthesizer.value);
+  initManagers(synthesizer.value);
 
   useCoordinates().setReference(synthesizer.value);
 

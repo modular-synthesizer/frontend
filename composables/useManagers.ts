@@ -1,6 +1,6 @@
 import { values } from "lodash";
 import type { IStartable, IStoppable } from "~/utils/interfaces/IManageable";
-import { managers } from "~~/lib/managers";
+import { managers } from "~/utils/midi";
 
 export function startManagers() {
   values(managers).forEach((m: IStartable) => m.start());
