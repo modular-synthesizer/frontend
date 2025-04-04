@@ -1,7 +1,6 @@
 import { difference, findIndex, indexOf, last } from "lodash";
 import { POLYPHONY_CHANNELS } from "../utils/constants";
 import { eventbus } from "../utils/eventbus/EventBus";
-import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 
 export default class MidiDevice {
 
@@ -10,20 +9,15 @@ export default class MidiDevice {
   private pressed: number[] = [];
 
   // All polyphony channels are marked as empty at first, signaled by -1
-  private channels = Array.from(Array(POLYPHONY_CHANNELS)).map(_ => -1);
+  private voices: number[] = [];
 
   constructor(midichannel: number) {
     this.midichannel = midichannel;
+    this.setVoices(POLYPHONY_CHANNELS)
   }
 
-  public setSynthesizer(synthesizer: Synthesizer) {
-    if (synthesizer.voices > this.channels.length) {
-      const newArray = Array.from(Array(synthesizer.voices - this.channels.length)).map(_ => -1);
-      this.channels = [...this.channels, ...newArray];
-    }
-    else if (synthesizer.voices < this.channels.length) {
-      this.channels = this.channels.slice(0, synthesizer.voices);
-    }
+  public setVoices(size: number) {
+    this.voices = Array.from(Array(size)).map(_ => -1);
   }
 
   public message(kind: number, payload: Uint8Array) {
@@ -47,13 +41,13 @@ export default class MidiDevice {
     let channel = this.getFreePolyphonyChannel();
 
     if (channel === -1) {
-      channel = this.channels.length - 1;
+      channel = this.voices.length - 1;
       eventbus.emit(`midi/note-change/${this.midichannel}`, { note, channel })
     }
     else {
       eventbus.emit(`midi/trigger/${this.midichannel}`, { note, channel });
     }
-    this.channels[channel] = note;
+    this.voices[channel] = note;
   }
 
   public noteOff(note: number) {
@@ -61,15 +55,15 @@ export default class MidiDevice {
     const channel = this.getChannelForNote(note);
     if (channel === -1) return;
 
-    const diff = difference(this.pressed, this.channels);
-    this.channels[channel] = (diff.length ? last(diff) : -1) || -1;
+    const diff = difference(this.pressed, this.voices);
+    this.voices[channel] = (diff.length ? last(diff) : -1) || -1;
 
-    if (this.channels[channel] === -1) {
+    if (this.voices[channel] === -1) {
       eventbus.emit(`midi/release/${this.midichannel}`, { note, channel });
     }
     else {
       eventbus.emit(`midi/note-change/${this.midichannel}`, {
-        note: this.channels[channel], channel
+        note: this.voices[channel], channel
       })
     }
   }
@@ -102,15 +96,15 @@ export default class MidiDevice {
       this.noteOff(p);
     })
     this.pressed = []
-    this.channels = Array.from(Array(POLYPHONY_CHANNELS)).map(i => -1);
+    this.voices = Array.from(Array(POLYPHONY_CHANNELS)).map(i => -1);
   }
 
   private getFreePolyphonyChannel(): number {
-    if (this.channels.length === 1) return 0;
-    return findIndex(this.channels, ch => ch === -1);
+    if (this.voices.length === 1) return 0;
+    return findIndex(this.voices, ch => ch === -1);
   }
 
   private getChannelForNote(note: number): number {
-    return findIndex(this.channels, ch => ch === note);
+    return findIndex(this.voices, ch => ch === note);
   }
 }

@@ -38,8 +38,8 @@ export default class KeyboardManager implements IManageable {
     }
   }
 
-  public setSynthesizer(synth: Synthesizer) {
-    this.device.setSynthesizer(synth);
+  public setVoices(voices: number) {
+    this.device.setVoices(voices);
   }
 
   /**
