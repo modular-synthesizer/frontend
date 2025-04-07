@@ -57,7 +57,7 @@ import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Parameter } from '~/types/modules/Parameter';
 import type { Control } from '~/types/tools/Control';
 import { setValue } from '~/utils/functions/parameters';
-import { DEFAULT_FADER_HEIGHT } from '~~/lib/utils/constants';
+import { DEFAULT_FADER_HEIGHT } from '~/utils/constants';
 
 const KNOB_SIZE = 26;
 

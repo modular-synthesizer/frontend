@@ -2,7 +2,7 @@ import { has } from "lodash";
 import { repositories } from "~/lib/repositories";
 import type { Parameter } from "~/types/modules/Parameter";
 import { setValue } from "~/utils/functions/parameters";
-import { eventbus } from "~~/lib/utils/eventbus/EventBus";
+import { eventbus } from "~/utils/eventbus/EventBus";
 
 type Handlers = {[key: string]: {[key: string]: Function}};
 

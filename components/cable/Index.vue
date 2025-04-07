@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import type { Coordinates } from '~/types/utils/Coordinates';
-import { PORT_RADIUS } from '~~/lib/utils/constants';
+import { PORT_RADIUS } from '~/utils/constants';
 
 export default {
   emits: ['click'],

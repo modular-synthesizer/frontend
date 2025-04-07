@@ -1,4 +1,4 @@
-import { eventbus } from "~~/lib/utils/eventbus/EventBus";
+import { eventbus } from "~/utils/eventbus/EventBus";
 import MidiDevice from "~/utils/midi/MidiDevice";
 import type { IManageable } from "~/utils/interfaces/IManageable";
 

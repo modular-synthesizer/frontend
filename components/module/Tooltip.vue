@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import type { AudioModule } from '~/types/modules/AudioModule';
-import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
+import { RACK_HEIGHT, SLOT_SIZE } from '~/utils/constants';
 
 const props = defineProps({
   mod: { type: Object as PropType<AudioModule>, required: true },

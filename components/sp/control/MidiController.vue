@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts">
-import { eventbus } from '~~/lib/utils/eventbus/EventBus';
-import { POLYPHONY_CHANNELS } from '~~/lib/utils/constants';
+import { eventbus } from '~/utils/eventbus/EventBus';
+import { POLYPHONY_CHANNELS } from '~/utils/constants';
 import type { Channel } from '~/types/modules/Channel';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Control } from '~/types/Index';

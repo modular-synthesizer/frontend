@@ -1,4 +1,4 @@
-import { ZOOM_RATIO, MAX_ZOOM_OUT, MAX_ZOOM_IN } from "~/lib/utils/constants";
+import { ZOOM_RATIO, MAX_ZOOM_OUT, MAX_ZOOM_IN } from "~/utils/constants";
 import type { Coordinates, ScaledCoordinates } from "~/types/utils/Coordinates";
 
 export function zoom(target: ScaledCoordinates, $event: WheelEvent) {

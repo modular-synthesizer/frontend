@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
+import { RACK_HEIGHT, SLOT_SIZE } from '~/utils/constants';
 import type { Control, ModControl } from '~/types/tools/Control';
 import type { ScaledCoordinates } from '~/types/utils/Coordinates';
 import type { PlacedBox } from '~/types/utils/PlacedBox';

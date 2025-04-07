@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import type { Coordinates, ScaledCoordinates } from '~/types/utils/Coordinates';
-import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
+import { RACK_HEIGHT, SLOT_SIZE } from '~/utils/constants';
 
 type Dimensions = { width: number, height: number }
 

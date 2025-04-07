@@ -2,7 +2,7 @@ import type { Port } from '~/types/modules/Port';
 import type { Cable } from "~/types/Cable";
 import type { AudioModule, ModuleCoordinates, ModulePayload } from "~/types/modules/AudioModule";
 import type { Identified } from "~/types/utils/Identified";
-import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
+import { RACK_HEIGHT, SLOT_SIZE } from '~/utils/constants';
 import { deleteCable } from './cables';
 import { repositories } from '~/lib/repositories';
 import type { Generator, Synthesizer } from '~/types/Index';
