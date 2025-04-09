@@ -16,7 +16,7 @@ import { RACK_HEIGHT, SLOT_SIZE } from '~/lib/utils/constants';
 import type { Coordinates, ScaledCoordinates } from '~/types/utils/Coordinates';
 import { subtract, zoom } from '~/utils/functions/geometry';
 
-const { bgHeight, bgWidth, height, target, width } = defineProps({
+const { height, target, width } = defineProps({
   height: { type: String, default: '100%' },
   target: { type: Object as PropType<ScaledCoordinates>, required: true },
   width: { type: String, default: '100%', },
@@ -95,7 +95,6 @@ useCoordinates().setReference(target);
 
 <style>
 .events-wrapper {
-  background-color: cadetblue;
   height: v-bind('height');
   width: v-bind('width');
   position: relative;

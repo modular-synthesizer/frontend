@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 400">
+  <rect width="20" height="20" fill="#424242" />
+  <rect width="20" height="20" y="380" fill="#424242" />
+  <rect width="20" height="19" fill="#E0E0E0" />
+  <rect width="20" height="18" y="381" fill="#E0E0E0" />
+  <circle cx="10" cy="10" r="5" fill="#757575" />
+  <circle cx="10" cy="10" r="3" fill="black" />
+  <circle cx="10" cy="390" r="5" fill="#757575" />
+  <circle cx="10" cy="390" r="3" fill="black" />
+</svg>

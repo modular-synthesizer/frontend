@@ -15,6 +15,7 @@
       @zoom="onzoom"
       @panned="repositories.synthesizers.update(synthesizer)"
     >
+      <synthesizer-background />
       <sp-stage-svg-layer name="modules">
         <sp-stage-draggable
           v-for="module in modules"
