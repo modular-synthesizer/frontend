@@ -11,7 +11,7 @@ import type { Tool } from "~/types/tools/Tool";
 import type { Port } from "~/types/modules/Port";
 import type { Parameter } from "~/types/modules/Parameter";
 import type { ToolParameter } from "~/types/tools/Parameter";
-import { RACK_HEIGHT, SLOT_SIZE } from "~/lib/utils/constants";
+import { RACK_HEIGHT, SLOT_SIZE } from "~/utils/constants";
 import type { Control, ModControl } from "~/types/tools/Control";
 
 export async function createModule(details: ModulePayload, generators: Promise<Ref<Generator[]>>,): Promise<AudioModule> {

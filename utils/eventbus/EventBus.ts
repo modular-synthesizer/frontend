@@ -1,6 +1,8 @@
 import { flatten, map, uniq } from "lodash";
 import EventFragment from "./EventFragment"
 
+export type EventBusCallback = (payload: unknown) => void;
+
 export default class EventBus {
 
   // The root fragment against which all paths are matched.
@@ -14,19 +16,19 @@ export default class EventBus {
    *   the subscription, if a path does not exist it will be created in the bus and listened on.
    * @param callback the function to call when the path is compatible with an emitted message.
    */
-  public subscribe(path: string, callback: Function) {
+  public subscribe(path: string, callback: EventBusCallback) {
     this.getOrCreate(path).addCallback(callback);
   }
 
-  public unsubscribe(path: string, callback: Function) {
+  public unsubscribe(path: string, callback: EventBusCallback) {
     this.getOrCreate(path).removeCallback(callback);
   }
 
   public getOrCreate(path: string): EventFragment {
     let fragment: EventFragment = this.root;
-    path.split("/").forEach((part: string) => {
+    for(const part of path.split("/")) {
       fragment = fragment.getOrCreate(part, fragment);
-    });
+    }
     return fragment;
   }
 
@@ -37,10 +39,10 @@ export default class EventBus {
    * @param path the path of the emitted message used to route it to the desired clients.
    * @param payload the additional payload sent with the event, sent to the callback function chen matched.
    */
-  public emit(path: string, payload: Object = {}): boolean {
+  public emit(path: string, payload: Record<string, unknown> = {}): boolean {
     const parts: string[] = path.split('/');
     let fragments: EventFragment[] = [ this.root ]
-    for (let part of parts) {
+    for (const part of parts) {
       // This unicity function will help avoid double invocations.
       fragments = uniq([
         ...fragments,
@@ -52,9 +54,7 @@ export default class EventBus {
         ),
       ]);
     }
-    fragments.forEach((fragment: EventFragment) => {
-      fragment.trigger(path, payload);
-    })
+    for(const fragment of fragments) fragment.trigger(path, payload);
     return true
   }
 

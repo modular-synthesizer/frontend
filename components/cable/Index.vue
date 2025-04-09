@@ -28,7 +28,8 @@
 
 <script lang="ts">
 import type { Coordinates } from '~/types/utils/Coordinates';
-import { PORT_RADIUS } from '~~/lib/utils/constants';
+import { PORT_RADIUS } from '~/utils/constants';
+import { getCatenaryCurve, type CatenaryCurveQuadraticResult as Curve } from "catenary-curve";
 
 export default {
   emits: ['click'],
@@ -51,7 +52,10 @@ export default {
         return PORT_RADIUS - 2
     },
     path(): string {
-      return `M ${this.end.x},${this.end.y} Q ${this.cx},${this.cy} ${this.start.x},${this.start.y}`;
+      const curve: Curve = getCatenaryCurve(this.start, this.end, this.distance * 1.6) as Curve;
+      let path = `M ${curve.start[0]} ${curve.start[1]} `;
+      for (const part of curve.curves) path += `Q ${part[0]} ${part[1]}, ${[part[2]]} ${part[3]}`;
+      return path;
     },
     distance() {
       return Math.sqrt((this.start.x - this.end.x) ** 2 + (this.start.y - this.end.y) ** 2);

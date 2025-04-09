@@ -1,9 +1,10 @@
 import { filter, find } from "lodash";
+import type { EventBusCallback } from "./EventBus";
 
 export default class EventFragment {
   private content: string;
   private children: EventFragment[] = [];
-  private callbacks: Function[] = [];
+  private callbacks: EventBusCallback[] = [];
   private parent?: EventFragment;
 
   public constructor(content: string, parent?: EventFragment) {
@@ -20,11 +21,11 @@ export default class EventFragment {
     return fragment;
   }
 
-  public addCallback(callback: Function) {
+  public addCallback(callback: EventBusCallback) {
     this.callbacks.push(callback);
   }
 
-  public removeCallback(callback: Function) {
+  public removeCallback(callback: EventBusCallback) {
     this.callbacks = this.callbacks.filter(c => c !== callback);
   }
 
@@ -44,10 +45,8 @@ export default class EventFragment {
     return /^\[[a-z]+\]$/.test(this.content) || this.content === content;
   }
 
-  public trigger(_path: string, payload: Object) {
-    this.callbacks.forEach((callback: Function) => {
-      callback(payload);
-    });
+  public trigger(_path: string, payload: Record<string, unknown>) {
+    for(const callback of this.callbacks) callback(payload);
   }
 
   public get path(): string {
@@ -62,9 +61,9 @@ export default class EventFragment {
     }
     const splitted: string[] = fragment.split("/");
     if (this.has(splitted[0])) {
-      this.get(splitted[0]).forEach((f: EventFragment) => {
+      for (const f of this.get(splitted[0])) {
         f.remove(splitted.slice(1).join("/"))
-      });
+      }
     }
   }
 }

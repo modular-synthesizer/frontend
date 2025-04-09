@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { RACK_HEIGHT, SLOT_SIZE } from '~~/lib/utils/constants';
+import { RACK_HEIGHT, SLOT_SIZE } from '~/utils/constants';
 
 export default {
   props: {

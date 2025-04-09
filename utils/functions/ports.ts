@@ -1,5 +1,5 @@
 import { find } from "lodash";
-import { RACK_HEIGHT, SLOT_SIZE } from "~/lib/utils/constants";
+import { RACK_HEIGHT, SLOT_SIZE } from "~/utils/constants";
 import type { AudioModule } from "~/types/modules/AudioModule";
 import type { Port } from '~/types/modules/Port';
 import type { Control } from "~/types/tools/Control";

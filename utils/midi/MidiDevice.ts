@@ -1,6 +1,6 @@
 import { difference, findIndex, indexOf, last } from "lodash";
-import { POLYPHONY_CHANNELS } from "../../lib/utils/constants";
-import { eventbus } from "../../lib/utils/eventbus/EventBus";
+import { POLYPHONY_CHANNELS } from "../constants";
+import { eventbus } from "../eventbus/EventBus";
 
 export default class MidiDevice {
 

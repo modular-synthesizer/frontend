@@ -20,7 +20,7 @@ import { repositories } from '~~/lib/repositories';
 import { remove, sortBy } from 'lodash';
 import { membershipType } from '~/utils/functions/synthesizers';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
-import { eventbus } from '~/lib/utils/eventbus/EventBus';
+import { eventbus } from '~/utils/eventbus/EventBus';
 
 const { mobile } = useDisplay()
 const synthesizers: Ref<Array<Synthesizer>> = ref([]);

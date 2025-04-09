@@ -8,7 +8,7 @@ import type { AudioModule } from "~/types/modules/AudioModule";
 import type { ModControl } from "~/types/tools/Control";
 import type { DragCallback } from "~/types/draggables/DragDeclaration";
 import type { Parameter } from "~/types/modules/Parameter";
-import { eventbus } from "~/lib/utils/eventbus/EventBus";
+import { eventbus } from "~/utils/eventbus/EventBus";
 import { setValue } from "~/utils/functions/parameters";
 
 const props = defineProps({

@@ -16,6 +16,7 @@
     "@vuelidate/validators": "2.0.4",
     "@vueuse/core": "^12.7.0",
     "axios": "1.7.9",
+    "catenary-curve": "^2.0.2",
     "lodash": "4.17.21",
     "nuxt": "3.14.1592",
     "paho": "^1.0.0",
