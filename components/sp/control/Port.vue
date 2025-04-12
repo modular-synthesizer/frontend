@@ -4,7 +4,7 @@
   </text>
   <g
     @mousedown.left.stop="onmousedown"
-    @mouseenter="useLinkCreation().magnetize(port, control)"
+    @mouseenter="magnetize"
     @mouseleave="useLinkCreation().unmagnetize('mouseout')"
   >
     <circle
@@ -55,6 +55,11 @@ const eventY: ComputedRef<number> = computed(() => +control.payload.y + module.y
 
 function onmousedown() {
   useLinkCreation().start(port, control);
+}
+
+function magnetize() {
+  if (port.link) return;
+  useLinkCreation().magnetize(port, control)
 }
 </script>
 
