@@ -31,8 +31,6 @@ function getNode(port: Port, index: number): AudioNode {
 }
 
 export function disconnectCable(cable: Cable, _: string = "unknown"): Cable {
-  cable.from.link = cable;
-  cable.to.link = cable;
   times(cable.from.mod.channels.length, (index: number) => {
     if (cable.from.kind === 'input') {
       getNode(cable.to, index).disconnect(getNode(cable.from, index), cable.to.index, cable.from.index);
@@ -41,5 +39,7 @@ export function disconnectCable(cable: Cable, _: string = "unknown"): Cable {
       getNode(cable.from, index).disconnect(getNode(cable.to, index), cable.from.index, cable.to.index);
     }
   });
+  cable.from.link = undefined;
+  cable.to.link = undefined;
   return cable;
 }
