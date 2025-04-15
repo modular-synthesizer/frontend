@@ -27,6 +27,7 @@
     </v-btn>
     <v-spacer></v-spacer>
     <template v-if="!creationMode">
+      {{ mode }}
       <v-btn @click="emit('modeChanged', 'infos')">Infos</v-btn>
       <v-btn @click="emit('modeChanged', 'structure')">Structure</v-btn>
       <v-btn @click="emit('modeChanged', 'appearance')">Appearance</v-btn>
@@ -49,7 +50,7 @@ const { tool, mode, creationMode } = defineProps({
   mode: { type: String as PropType<ToolTabs>, default: 'infos' }
 });
 
-const emit = defineEmits<{ modeChanged: [ ToolTabs ], save: [ Tool ] }>();
+const emit = defineEmits<{ modeChanged: [ string ], save: [ Tool ] }>();
 
 const open = ref([]);
 

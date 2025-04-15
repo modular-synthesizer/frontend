@@ -1,14 +1,16 @@
 <template>
   <sp-stage :target="referential" @click="useSelectables().reset">
-    <sp-stage-draggable v-for="node in tool.nodes" :target="node" :sx="10" :sy="10">
-      <tool-structure-node
-        :node="node"
-        :selected="false"
-        :tool="tool"
-      />
-    </sp-stage-draggable>
-    <tool-structure-link-list :tool="tool" />
-    <tool-structure-port-list :ports="tool.ports" :tool="tool" @edit="editPort" />
+    <sp-stage-svg-layer name="tool">
+      <sp-stage-draggable v-for="node in tool.nodes" :target="node" :sx="10" :sy="10">
+        <tool-structure-node
+          :node="node"
+          :selected="false"
+          :tool="tool"
+        />
+      </sp-stage-draggable>
+      <tool-structure-link-list :tool="tool" />
+      <tool-structure-port-list :ports="tool.ports" :tool="tool" @edit="editPort" />
+    </sp-stage-svg-layer>
   </sp-stage>
   <tool-structure-dialogs-port
     v-if="p !== null"

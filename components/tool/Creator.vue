@@ -1,11 +1,11 @@
 <template>
-  <tool-menu :tool="tool" @mode-changed="changeMode" @save="onSaveRequest" :creation-mode="createMode" :mode="mode" />
+  <tool-menu :tool="tool" @mode-changed="changeMode" @save="onSaveRequest" :creation-mode="!tool.id" :mode="mode" />
   <div class="global-wrapper" v-if="modelValue">
     <v-form v-model="valid" ref="form" v-if="mode === 'infos'" @submit.prevent.stop>
       <tool-informations v-model="tool" :rules="rules" />
     </v-form>
     <tool-structure v-else-if="mode === 'structure'" :tool="tool" />
-    <tool-appearance v-else :tool="tool" :creation-mode="createMode" />
+    <tool-appearance v-else :tool="tool" :creation-mode="!tool.id" />
   </div>
 </template>
 
@@ -18,20 +18,19 @@ import type { ToolTabs } from '~/types/tools/ToolTabs';
 
 const props = defineProps({
   modelValue: { type: Object as PropType<Tool>, required: true },
-  creationMode: { type: Boolean, default: false },
 });
 
 const tool = ref(props.modelValue);
 const mode: Ref<ToolTabs> = ref(tool.value.id === '' ? 'infos': 'appearance');
 const valid: Ref<boolean|null> = ref(null);
 const form = ref<HTMLFormElement|null>(null);
-const createMode: Ref<boolean> = ref(props.creationMode);
 
 const rules: {[key: string]: Function[]} = {
   name: [ required('pouet', useI18n()) ]
 }
 
 function changeMode(m: ToolTabs) {
+  console.log(mode);
   mode.value = m;
 }
 
@@ -42,10 +41,9 @@ async function onSaveRequest(t: Tool) {
 }
 
 async function save() {
-  if (props.creationMode) {
+  if (!props.modelValue.id) {
     const creation: Tool = await repositories.tools.create(props.modelValue);
     props.modelValue.id = creation.id;
-    createMode.value = false;
   }
   else repositories.tools.update(props.modelValue);
 }
