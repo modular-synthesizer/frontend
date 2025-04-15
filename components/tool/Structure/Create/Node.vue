@@ -1,7 +1,9 @@
 <template>
   <v-dialog max-width="500">
     <template v-slot:activator="{ props: dialogProps }">
-      <v-list-item v-bind="dialogProps">Noeud</v-list-item>
+      <v-btn v-bind="dialogProps" :key icon>
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
     </template>
     <template v-slot:default="{ isActive }">
       <v-form @submit.prevent.stop="save(isActive)">
@@ -32,6 +34,8 @@ import { clone, sortBy } from 'lodash';
 import type { Generator } from '~/types/Generator';
 import type { InnerNode } from '~~/types/tools/InnerNode';
 import { repositories } from '~~/lib/repositories';
+
+const { key } = defineProps<{ key: number }>()
 
 const emit = defineEmits<{ created: [ node: InnerNode]}>();
 

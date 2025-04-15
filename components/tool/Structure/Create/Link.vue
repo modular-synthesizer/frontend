@@ -1,7 +1,9 @@
 <template>
   <v-dialog max-width="800">
     <template v-slot:activator="{ props: dialogProps }">
-      <v-list-item v-bind="dialogProps">Lien</v-list-item>
+      <v-btn v-bind="dialogProps" :key icon>
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
     </template>
     <template v-slot:default="{ isActive }">
       <v-form @submit.prevent.stop="create(isActive)" v-model="form">
@@ -44,7 +46,8 @@ import type { InnerNode } from '~~/types/tools/InnerNode';
 const form: Ref = ref();
 
 const props = defineProps({
-  tool: { type: Object as PropType<Tool>, required: true }
+  tool: { type: Object as PropType<Tool>, required: true },
+  key: { type: Number },
 })
 
 function createEmptyLink(): InnerLink {

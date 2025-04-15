@@ -50,7 +50,7 @@ const { tool, mode, creationMode } = defineProps({
   mode: { type: String as PropType<ToolTabs>, default: 'infos' }
 });
 
-const emit = defineEmits<{ modeChanged: [ string ], save: [ Tool ] }>();
+const emit = defineEmits<{ modeChanged: [ ToolTabs ], save: [ Tool ] }>();
 
 const open = ref([]);
 
