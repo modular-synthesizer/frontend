@@ -41,12 +41,10 @@ export default {
     noEvents: { type: Boolean },
     showCable: { type: Boolean, default: true },
   },
-  data: function () {
-    return {
-      entered: false,
-      moved: false,
-    };
-  },
+  data: () => ({
+    entered: false,
+    moved: false,
+  }),
   computed: {
     r(): number {
         return 2 * PORT_RADIUS - 2
