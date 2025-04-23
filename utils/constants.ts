@@ -21,10 +21,17 @@ export const MAX_ZOOM_IN = 2;
 // don't want to duplicate magic value so we store it here.
 export const TOPBAR_HEIGHT = 64;
 
-export const PORT_RADIUS = 13;
+export const PORT_RADIUS = 6;
 
 export const POLYPHONY_CHANNELS = 16;
 
 export const GATES_INTERVAL = 5;
 
 export const DEFAULT_FADER_HEIGHT = 180;
+
+export const TITLE_HEIGHT = 40;
+export const PARAM_HEIGHT = 30;
+export const PORT_HEIGHT = 20;
+export const NODE_WIDTH = 180;
+
+export const BG_SIZE = 60;

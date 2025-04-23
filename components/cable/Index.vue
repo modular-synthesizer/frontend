@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     r(): number {
-        return PORT_RADIUS - 2
+        return 2 * PORT_RADIUS - 2
     },
     path(): string {
       const curve: Curve = getCatenaryCurve(this.start, this.end, this.distance * 1.6) as Curve;
