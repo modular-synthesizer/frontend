@@ -1,5 +1,5 @@
 <template>
-  <v-dialog max-width="600" :model-value="modelValue">
+  <v-dialog max-width="600" activator="parent">
     <v-form @submit.prevent.stop="validate" v-model="form">
       <v-card title="Créer un port d'entrée/sortie">
         <v-card-text>
@@ -39,7 +39,6 @@ import type { ToolPort } from '~~/types/tools/Port';
 const form: Ref = ref();
 
 const props = defineProps({
-  modelValue: { type: Boolean, default: false },
   port: { type: Object as PropType<ToolPort>, required: true },
   tool: { type: Object as PropType<Tool>, required: true }
 });

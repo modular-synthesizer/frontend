@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <v-btn @click="dialog = true" :key icon>
-      <v-icon>mdi-plus</v-icon>
+    <v-btn :key icon>
+      <v-icon>mdi-audio-input-xlr</v-icon>
+      <tool-structure-dialogs-port :port="port" :tool="tool" @cancelled="cancel" @validated="create" />
     </v-btn>
-    <tool-structure-dialogs-port :port="port" :tool="tool" v-model="dialog" @cancelled="cancel" @validated="create" />
-  </div>
 </template>
 
 <script setup lang="ts">

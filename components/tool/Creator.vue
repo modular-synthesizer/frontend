@@ -4,7 +4,6 @@
       <v-tab :value="'infos'">Informations</v-tab>
       <v-tab :value="'structure'">Structure</v-tab>
       <v-tab :value="'appearance'">Apparence</v-tab>
-      <v-tab>{{ mode }}</v-tab>
     </v-tabs>
     <v-tabs-window v-model="mode">
       <v-tabs-window-item value="infos">
@@ -19,6 +18,7 @@
         <div class="content-wrapper"><tool-appearance :tool="tool" :creation-mode="!tool.id" /></div>
       </v-tabs-window-item>
     </v-tabs-window>
+    
 
     <v-fab app size="large" color="primary" icon="$menu" location="right bottom">
       <v-icon>$menu</v-icon>
