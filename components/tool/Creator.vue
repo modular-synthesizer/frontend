@@ -12,7 +12,7 @@
         </v-form>
       </v-tabs-window-item>
       <v-tabs-window-item value="structure">
-        <div class="content-wrapper"><tool-structure :tool="tool" /></div>
+        <div class="content-wrapper"><tool-structure :tool="tool" @moved="moved" @panned="c => applyPanning(c)" /></div>
       </v-tabs-window-item>
       <v-tabs-window-item value="appearance">
         <div class="content-wrapper"><tool-appearance :tool="tool" :creation-mode="!tool.id" /></div>
@@ -25,7 +25,7 @@
       <v-speed-dial location="top center" transition="slide-y-reverse-transition" v-model="dial" activator="parent">
         <v-tooltip text="Save">
           <template v-slot:activator="{ props: tooltipProps }">
-            <v-btn key="1" color="success" icon v-bind="tooltipProps" @click="onSaveRequest">
+            <v-btn key="1" color="success" icon v-bind="tooltipProps" @click="onSaveRequest(tool)">
               <v-icon>mdi-content-save-outline</v-icon>
             </v-btn>
           </template>
@@ -79,11 +79,21 @@ async function createLink(link: InnerLink) {
 }
 
 async function save() {
-  if (!props.modelValue.id) {
-    const creation: Tool = await repositories.tools.create(props.modelValue);
-    props.modelValue.id = creation.id;
+  if (!tool.value.id) {
+    const creation: Tool = await repositories.tools.create(tool.value);
+    tool.value.id = creation.id;
   }
-  else repositories.tools.update(props.modelValue);
+  else repositories.tools.update(tool.value);
+}
+
+async function moved(coords: PlacedBox) {
+  await repositories.tools.updateNode(tool.value, coords)
+}
+
+async function applyPanning(c: Coordinates) {
+  tool.value.x = c.x;
+  tool.value.y = c.y;
+  onSaveRequest(tool.value);
 }
 </script>
 

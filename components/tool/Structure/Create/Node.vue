@@ -1,6 +1,6 @@
 <template>
   <v-btn :key icon>
-    <v-icon>mdi-music-box-outlined</v-icon>
+    <v-icon>mdi-dock-window</v-icon>
     <v-dialog max-width="500" activator="parent">
       <template v-slot:default="{ isActive }">
         <v-form @submit.prevent.stop="save(isActive)">
