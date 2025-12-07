@@ -26,7 +26,7 @@ const radius = computed(() => `${RADIUS}px`)
 const parameter = props.control.payload.target
 const value = computed(() => getValue(parameter))
 
-const labelTranslation = computed(px(x, y.value + DIAMETER))
+const labelTranslation = computed(px(x, y.value + DIAMETER + 2))
 </script>
 
 <style scoped>
@@ -37,8 +37,9 @@ const labelTranslation = computed(px(x, y.value + DIAMETER))
   translate: v-bind(translate);
 }
 .wrapper {
-  background-color: pink;
+  background-color: #CCC;
   border-radius: v-bind(radius);
+  outline: 1px solid black;
 }
 .selected {
   box-sizing: border-box;
@@ -56,7 +57,8 @@ const labelTranslation = computed(px(x, y.value + DIAMETER))
   translate: v-bind(labelTranslation);
   width: v-bind(diameter);
   text-align: center;
-  font-size: 10px;
+  font-size: 9px;
+  font-weight: 600;
   color: black;
   user-select: none;
 }

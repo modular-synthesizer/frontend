@@ -38,8 +38,9 @@ const labelTranslation = computed(px(x, y.value + DIAMETER))
   translate: v-bind(translate);
 }
 .wrapper {
-  background-color: pink;
+  background-color: #CCC;
   border-radius: v-bind(radius);
+  outline: 1px solid black;
 }
 .selected {
   box-sizing: border-box;
