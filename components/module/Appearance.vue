@@ -1,6 +1,5 @@
 <template>
-  <div class="module" @mouseover.stop.prevent="emit('select', module)">
-    <div :class="['background', { selected }]" />
+  <div :class="[' module', 'background', { selected }]" @mouseover.stop.prevent="emit('select', module)">
     <slot />
   </div>
 </template>
@@ -29,16 +28,12 @@ const height = `${RACK_HEIGHT}px`
 .module {
   width: v-bind(width);
   height: v-bind(height);
-}
-.module > .background {
+  outline: 2px solid #555555;
   background-color: #777777;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  outline-offset: -2px;
 }
 .selected {
-  border: 5px solid black;
+  outline: 3px solid black;
+  outline-offset: -3px;
 }
 </style>
