@@ -5,7 +5,7 @@
     @mousedown.right.capture.prevent.stop
     @mouseover.prevent.stop="useSelection().select(control)"
     @wheel.passive.stop="onwheelevent"
-    @click.right.prevent.stop.capture="onclick"
+    @click.right.prevent.stop.capture="show"
   >
     <slot />
   </component>
@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import type { BootedSynthesizer } from "@jsynple/audio/dist/types/BootedSynthesizer.type";
 import type { Knob, LargeKnob, Module, SmallKnob } from "@jsynple/core"
+import { useParameterEdition } from "~/composables/parameters/edition";
 
 type Props = {
   control: SmallKnob | Knob | LargeKnob
@@ -28,6 +29,8 @@ const tag: string = kind === 'html' ? 'div' : 'g'
 const parameter = control.payload.target
 
 const origin: Ref<{ value: number, y: number}> = ref({ value: 0, y: 0 })
+
+const { show } = useParameterEdition()
 
 function onmousedown($event: MouseEvent) {
   useSelection().lock()
@@ -49,9 +52,5 @@ function drop() {
 function onwheelevent(event: WheelEvent) {
   const delta = event.deltaY / Math.abs(event.deltaY)
   features.modules.parameters.moveValue(parameter, delta * parameter.step)
-}
-
-function onclick(event: MouseEvent) {
-  console.log("test")
 }
 </script>

@@ -6,6 +6,7 @@
         <v-snackbar-queue v-model="useSnack().queue.value">
           <template #text="{ item }">{{ $t(item.text) }}</template>
         </v-snackbar-queue>
+        <dialog-parameter-edition />
       </nuxt-layout>
     </v-layout>
   </v-app>
