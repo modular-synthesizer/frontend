@@ -5,7 +5,7 @@
     @mousedown.right.capture.prevent.stop
     @mouseover.prevent.stop="useSelection().select(control)"
     @wheel.passive.stop="onwheelevent"
-    @click.right.prevent.stop.capture="show"
+    @click.right.prevent.stop.capture="() => show(parameter)"
   >
     <slot />
   </component>

@@ -1,20 +1,22 @@
 type UseParameterState = {
   model: Ref
-  show: () => void
+  parameter: Ref<Parameter>
+  show: (parameter: Parameter) => void
 }
 
 function useParameterEditionTemplate(): () => UseParameterState {
 
-  const model = ref(false)
+  const model = ref(false);
 
-  function show() {
-    console.log(model.value)
+  const parameter: Ref = ref(null)
+
+  function show(p: Parameter) {
     model.value = true;
-    console.log(model.value)
+    parameter.value = p
   }
 
   return () => ({
-    model, show
+    model, show, parameter
   })
 }
 
