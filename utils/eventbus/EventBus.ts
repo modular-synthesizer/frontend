@@ -1,7 +1,7 @@
 import { flatten, map, uniq } from "lodash";
 import EventFragment from "./EventFragment"
 
-export type EventBusCallback = (payload: unknown) => void;
+export type EventBusCallback<T> = (payload: T) => void;
 
 export default class EventBus {
 
@@ -16,11 +16,11 @@ export default class EventBus {
    *   the subscription, if a path does not exist it will be created in the bus and listened on.
    * @param callback the function to call when the path is compatible with an emitted message.
    */
-  public subscribe(path: string, callback: EventBusCallback) {
+  public subscribe<T>(path: string, callback: EventBusCallback<T>) {
     this.getOrCreate(path).addCallback(callback);
   }
 
-  public unsubscribe(path: string, callback: EventBusCallback) {
+  public unsubscribe<T>(path: string, callback: EventBusCallback<T>) {
     this.getOrCreate(path).removeCallback(callback);
   }
 

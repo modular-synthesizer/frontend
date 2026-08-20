@@ -9,7 +9,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@jsynple/core": "0.4.3",
+    "@jsynple/core": "2.9.0",
     "@mdi/font": "7.4.47",
     "@types/lodash": "4.17.13",
     "@vuelidate/core": "2.0.3",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.6.1",
+    "typescript": "^6.0.3",
     "unctx": "^2.4.0",
     "vitest": "^2.1.8"
   },

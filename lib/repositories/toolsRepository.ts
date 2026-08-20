@@ -1,5 +1,6 @@
-import type { Tool, UncategorizedTool } from "~/types/tools/Tool";
+import type { Tool } from "~/types/tools/Tool";
 import { Repository } from "./utils/Repository";
+import type { InnerNode } from "~/types/tools/InnerNode";
 
 export default class ToolsRepository extends Repository<Tool> {
   public override async create(tool: Tool): Promise<Tool> {

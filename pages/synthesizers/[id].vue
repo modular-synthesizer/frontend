@@ -57,7 +57,6 @@ import type { Coordinates } from '~/types/utils/Coordinates';
 import { appendCable } from '~/utils/functions/cables';
 import { translate } from "~/utils/functions/svg"
 import { createModule as instanciateModule } from '~/utils/factories/modules';
-import type { Identified } from '@jsynple/core';
 import { useI18n } from 'vue-i18n';
 
 type PromisedRef<T> = Promise<Ref<T>>;
@@ -69,7 +68,7 @@ await loadProcessors(useAudio().context);
 const id: string = useRoute().params.id as string;
 
 async function loadSynthesizer(id: string): PromisedRef<Synthesizer> {
-  return ref(await repositories.synthesizers.get(id, useSession().token))
+  return ref(await repositories.synthesizers.get(id))
 }
 
 async function loadGenerators(): PromisedRef<Generator[]> {
@@ -77,7 +76,7 @@ async function loadGenerators(): PromisedRef<Generator[]> {
 }
 
 async function loadModules(id: string, generatorsPromise: PromisedRef<Generator[]>): PromisedRef<AudioModule[]> {
-  const payloads: ModulePayload[] = await repositories.modules.list(useSession().token, { id });
+  const payloads: ModulePayload[] = await repositories.modules.list({ id });
   return ref(await Promise.all(payloads.map(async (payload: ModulePayload) => {
     return instanciateModule(payload, generatorsPromise)
   })))
@@ -161,7 +160,7 @@ function updateModule(payload: ModulePayload) {
   if (found) move(found, { x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT });
 }
 
-function removeIfFound<T extends Identified, Item extends Identified>(list: T[], item: Item) {
+function removeIfFound<T extends {id: string}, Item extends {id: string}>(list: T[], item: Item) {
   const index: number = list.findIndex((i: T) => i.id === item.id);
   const found = list[index]
   if (index >= 0) list.splice(index, 1);
@@ -186,7 +185,7 @@ function move(module: AudioModule, { x, y }: Coordinates) {
 }
 
 function save(module: AudioModule) {
-  repositories.modules.update(pick(module, [ 'id', 'rack', 'slot' ]), useSession().token)
+  // repositories.modules.update(pick(module, [ 'id', 'rack', 'slot', 'slots' ]))
 }
 
 const initialized: Ref<boolean> = ref(false);

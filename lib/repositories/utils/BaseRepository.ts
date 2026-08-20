@@ -1,5 +1,3 @@
-import type { LinkPayload, Synthesizer } from "~/types/Index";
-
 export class BaseRepository {
 
     public readonly resource: string = '';

@@ -1,15 +1,12 @@
-import type { Generator } from "../../types/Generator"
 import type { ToolPort } from '~~/types/tools/Port';
 import type { ToolParameter } from '~~/types/tools/Parameter';
 import type { InnerLink } from '~~/types/tools/InnerLink';
 import type { InnerNode } from '~~/types/tools/InnerNode';
 import LinksRepository from "./LinksRepository"
-import { ModulesRepository } from "./ModulesRepository"
 import { Repository } from "./utils/Repository"
 import type { Application } from "../../types/Application"
 import AccountsRepository from "./AccountsRepository"
 import SessionsRepository from "./SessionsRepository"
-import SynthesizersRepository from "./SynthesizersRepository"
 import ToolsRepository from "./toolsRepository"
 import { ToolElementsRepository } from "./utils/ToolElementsRepository"
 import type { Category } from "~/types/tools/Category";
@@ -17,24 +14,21 @@ import type { Control } from "~/types/tools/Control";
 import type { Membership } from "~/types/synthesizers/Membership";
 import type { Right } from "~/types/permissions/Right";
 import type { Group } from "~/types/permissions/Group";
-import { GeneratorsRepository, type Identified } from "@jsynple/core";
-import { Api } from "@jsynple/core/dist/network/Api";
-import { ParametersRepository } from "@jsynple/core"
+import type { Generator, ModulePayload, Synthesizer } from '~/types/Index';
+import type { Parameter } from '~/types/modules/Parameter';
 
-export type Repositories = Record<string, Repository<Identified>>;
-
-export const api = new Api(window.fetch.bind(window));
+export type Repositories = Record<string, Repository<{ id: string }>>;
 
 export const repositories = {
   accounts: new AccountsRepository('accounts'),
   applications: new Repository<Application>('applications'),
   categories: new Repository<Category>('categories'),
-  generators: new GeneratorsRepository(api),
+  generators: new Repository<Generator>('generators'),
   groups: new Repository<Group>('groups'),
   links: new LinksRepository('links'),
   memberships: new Repository<Membership>('memberships'),
-  modules: new ModulesRepository(api),
-  parameters: new ParametersRepository("parameters", api),
+  modules: new Repository<ModulePayload>('modules'),
+  parameters: new Repository<Parameter>('modules/parameters'),
   tool: {
     controls: new ToolElementsRepository<Control>('controls'),
     links: new ToolElementsRepository<InnerLink>('links'),
@@ -44,6 +38,6 @@ export const repositories = {
   },
   rights: new Repository<Right>('rights'),
   sessions: new SessionsRepository('sessions'),
-  synthesizers: new SynthesizersRepository(api),
+  synthesizers: new Repository<Synthesizer>('synthesizers'),
   tools: new ToolsRepository('tools'),
 }
