@@ -76,7 +76,7 @@ async function loadGenerators(): PromisedRef<Generator[]> {
 }
 
 async function loadModules(id: string, generatorsPromise: PromisedRef<Generator[]>): PromisedRef<AudioModule[]> {
-  const payloads: ModulePayload[] = await repositories.modules.list({ id });
+  const payloads: ModulePayload[] = await repositories.modules.list({ synthesizer_id: id });
   return ref(await Promise.all(payloads.map(async (payload: ModulePayload) => {
     return instanciateModule(payload, generatorsPromise)
   })))
@@ -184,8 +184,8 @@ function move(module: AudioModule, { x, y }: Coordinates) {
   place(module, y / RACK_HEIGHT, x / SLOT_SIZE);
 }
 
-function save(module: AudioModule) {
-  // repositories.modules.update(pick(module, [ 'id', 'rack', 'slot', 'slots' ]))
+async function save(module: AudioModule) {
+  await api_put(`/proxy/modules/${module.id}`, pick(module, [ 'id', 'rack', 'slot', 'slots' ]))
 }
 
 const initialized: Ref<boolean> = ref(false);

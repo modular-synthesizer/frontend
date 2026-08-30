@@ -42,7 +42,7 @@ export function useSession() {
       repositories.sessions.auth(username, password)
         .then((session: Session) => {
           storage.value = session
-          initializeSSE();
+          // initializeSSE();
           navigateTo("/")
         });
     },

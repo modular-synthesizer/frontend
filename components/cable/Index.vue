@@ -52,7 +52,9 @@ export default {
     path(): string {
       const curve: Curve = getCatenaryCurve(this.start, this.end, this.distance * 1.6) as Curve;
       let path = `M ${curve.start[0]} ${curve.start[1]} `;
-      for (const part of curve.curves) path += `Q ${part[0]} ${part[1]}, ${[part[2]]} ${part[3]}`;
+      if (curve.curves) {
+        for (const part of curve.curves) path += `Q ${part[0]} ${part[1]}, ${[part[2]]} ${part[3]}`;
+      }
       return path;
     },
     distance() {
