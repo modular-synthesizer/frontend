@@ -71,8 +71,8 @@ function onrightclick($event: MouseEvent) {
   })
 }
 
-function save() {
+async function save() {
   parameter.t = Date.now()
-  repositories.parameters.update(parameter, useSession().token);
+  await api_put(`/proxy/parameters/${parameter.id}`, { value: parameter.value })
 }
 </script>
