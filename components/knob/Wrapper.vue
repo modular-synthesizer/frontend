@@ -18,6 +18,7 @@ import type { DragCallback } from '~/types/draggables/DragDeclaration';
 import { repositories } from '~/lib/repositories';
 import type { Synthesizer } from '~/types/Index';
 import { moveValue, setValue } from '~/utils/functions/parameters';
+import { eventbus } from '~/utils/eventbus/EventBus';
 
 const { dragged, dropped, module, r, control } = defineProps({
   r: { type: Number, default: 20 },
@@ -74,5 +75,6 @@ function onrightclick($event: MouseEvent) {
 async function save() {
   parameter.t = Date.now()
   await api_put(`/proxy/parameters/${parameter.id}`, { value: parameter.value })
+  eventbus.emit(`parameters/update/${module.id}/channel`, { value: parameter.value })
 }
 </script>

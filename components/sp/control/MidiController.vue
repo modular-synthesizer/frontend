@@ -23,9 +23,11 @@ export default {
     }
   },
   created() {
+    console.log("midi controller created")
     const midichannel: number = this.module.parameters.channel.value ?? -1;
     this.declareKeyEvents(midichannel);
     eventbus.subscribe(`parameters/update/${this.module.id}/channel`, ({ value }: any) => {
+      console.log("parameter changed")
       this.removeKeyEvents();
       this.declareKeyEvents(value);
     });
