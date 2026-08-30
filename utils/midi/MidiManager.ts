@@ -69,8 +69,8 @@ export default class MidiManager implements IManageable {
   private getOrCreateDevice(midichannel: number) {
     if (this.devices[midichannel] === undefined) {
       this.devices[midichannel] = new MidiDevice(midichannel);
+      this.devices[midichannel].setVoices(this.voices);
     }
-    this.devices[midichannel].setVoices(this.voices);
     return this.devices[midichannel];
   }
 
