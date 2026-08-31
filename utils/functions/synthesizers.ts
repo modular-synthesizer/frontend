@@ -5,13 +5,15 @@ import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 import type { Membership } from "~/types/synthesizers/Membership";
 import { repositories } from "~/lib/repositories";
 
-export function hasRoom(synthesizer: Synthesizer, coordinates: ModuleCoordinates): boolean {
-  return !some(synthesizer.modules, (module: AudioModule) => intersect(module, coordinates));
+export function hasRoom(modules: AudioModule[], coordinates: ModuleCoordinates): boolean {
+  return !some(modules, (module: AudioModule) => {
+    return intersect(module, coordinates)
+  });
 }
 
-export function firstFreeSlot(synthesizer: Synthesizer, slots: number) {
+export function firstFreeSlot(modules: AudioModule[], slots: number) {
   let slot = 0;
-  while(!hasRoom(synthesizer, { rack: 0, slot, slots, id: '' })) slot ++;
+  while(!hasRoom(modules, { rack: 0, slot, slots, id: '' })) slot ++;
   return slot;
 }
 

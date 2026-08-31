@@ -1,7 +1,7 @@
 <template>
   <v-btn-group divided class="position-absolute menu-btn-group" color="deep-purple darken-2" rounded="pill">
     <sp-button-with-tooltip label="common.back" icon="chevron-left" to="/synthesizers" />
-    <module-creator :synthesizer="synthesizer" @selected="(m: ModulePayload) => emit('created', m)" />
+    <module-creator :synthesizer="synthesizer" :modules @selected="(m: ModulePayload) => emit('created', m)" />
     <sp-button-with-tooltip @click="useLinksDisplay().toggle()" :icon="linksIcon" :label="`synthesizers.cables.${cablesLabel}`" />
     <sp-button-with-tooltip label="synthesizers.center" icon="compass-outline" @click="reset(synthesizer)" />
   </v-btn-group>
@@ -14,6 +14,7 @@ import { reset } from '~/utils/functions/synthesizers';
 
 const { synthesizer } = defineProps({
   synthesizer: { type: Object as PropType<Synthesizer>, required: true },
+  modules: { type: Array<AudioModule>, default: [] }
 });
 
 type EmitType = {

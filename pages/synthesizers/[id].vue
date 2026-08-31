@@ -39,7 +39,7 @@
       </sp-stage-svg-layer>
       <sp-stage-svg-layer name="forefront" />
     </sp-stage>
-    <synthesizer-menu v-if="synthesizer.id" :synthesizer="synthesizer" @created="createModule" />
+    <synthesizer-menu v-if="synthesizer.id" :synthesizer="synthesizer" :modules="modules" @created="createModule" />
   </div>
 </template>
 

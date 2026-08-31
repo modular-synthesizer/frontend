@@ -41,14 +41,11 @@
 
 <script lang="ts">
 import { groupBy } from 'lodash';
-import type { Generator } from '~/types/Generator';
 import type { Tool } from '~~/types/tools/Tool';
 import { repositories } from '~~/lib/repositories';
-import type { ModulePayload } from '~/types/modules/AudioModule';
 import { firstFreeSlot } from '~/utils/functions/synthesizers';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
-import { appendModule } from '~/utils/functions/modules';
-import { createModule } from '~/utils/factories/modules';
+import type { AudioModule } from '~/types/Index';
 
 export default {
   data: () => ({
@@ -60,6 +57,10 @@ export default {
     synthesizer: {
       type: Object as PropType<Synthesizer>,
       required: true
+    },
+    modules: {
+      type: Array<AudioModule>,
+      default: () => []
     }
   },
   methods: {
@@ -73,9 +74,10 @@ export default {
         tool_id: tool.id,
         synthesizer_id: this.synthesizer.id,
         rack: 0,
-        slot: firstFreeSlot(this.synthesizer, tool.slots),
+        slot: firstFreeSlot(this.modules, tool.slots),
       };
-      this.$emit('selected', await repositories.modules.create(payload, useSession().token));
+      const created = await api_post("/proxy/modules", payload)
+      this.$emit('selected', created);
       this.close();
     },
     categories(tools: Tool[]) {
