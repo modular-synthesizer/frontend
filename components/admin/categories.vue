@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Category } from '~/types/tools/Category';
+import type { Category } from '~/types/blueprints/Category';
 import { repositories } from '~~/lib/repositories';
 
 const { categories: repo } = repositories;

@@ -1,4 +1,4 @@
-import type { Control } from "~/types/tools/Control";
+import type { Control } from "~/types/blueprints/Control";
 
 export type ControlEditionState = {
   control?: Control,

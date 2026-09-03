@@ -20,7 +20,7 @@
     </template>
     <template v-slot:append>
       <template v-if="useSession().can('resources::admin')">
-        <v-btn to="/tools" aria-label="tools link">{{ $t('menus.tools') }}</v-btn>
+        <v-btn to="/blueprints" aria-label="blueprints link">{{ $t('menus.blueprints') }}</v-btn>
         <v-menu>
           <template v-slot:activator="{ props }">
             <v-btn v-bind="props">{{ $t('common.admin') }}</v-btn>
@@ -43,7 +43,7 @@ import { useDisplay } from 'vuetify';
 
 const items = [
   ...(!useSession().admin ? [] : [
-    { label: 'menus.tools', url: '/tools' },
+    { label: 'menus.blueprints', url: '/blueprints' },
     { label: 'common.admin', url: '/admin' },
   ]),
   { click: useSession().reset, label: 'common.logout' },

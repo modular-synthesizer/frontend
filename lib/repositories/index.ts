@@ -1,7 +1,7 @@
-import type { ToolPort } from '~~/types/tools/Port';
-import type { ToolParameter } from '~~/types/tools/Parameter';
-import type { InnerLink } from '~~/types/tools/InnerLink';
-import type { InnerNode } from '~~/types/tools/InnerNode';
+import type { ToolPort } from '~~/types/blueprints/Port';
+import type { ToolParameter } from '~~/types/blueprints/Parameter';
+import type { InnerLink } from '~~/types/blueprints/InnerLink';
+import type { InnerNode } from '~~/types/blueprints/InnerNode';
 import LinksRepository from "./LinksRepository"
 import { Repository } from "./utils/Repository"
 import type { Application } from "../../types/Application"
@@ -9,8 +9,8 @@ import AccountsRepository from "./AccountsRepository"
 import SessionsRepository from "./SessionsRepository"
 import ToolsRepository from "./toolsRepository"
 import { ToolElementsRepository } from "./utils/ToolElementsRepository"
-import type { Category } from "~/types/tools/Category";
-import type { Control } from "~/types/tools/Control";
+import type { Category } from "~/types/blueprints/Category";
+import type { Control } from "~/types/blueprints/Control";
 import type { Membership } from "~/types/synthesizers/Membership";
 import type { Right } from "~/types/permissions/Right";
 import type { Group } from "~/types/permissions/Group";
@@ -29,7 +29,7 @@ export const repositories = {
   memberships: new Repository<Membership>('memberships'),
   modules: new Repository<ModulePayload>('modules'),
   parameters: new Repository<Parameter>('modules/parameters'),
-  tool: {
+  blueprint: {
     controls: new ToolElementsRepository<Control>('controls'),
     links: new ToolElementsRepository<InnerLink>('links'),
     nodes: new ToolElementsRepository<InnerNode>('nodes'),
@@ -39,5 +39,5 @@ export const repositories = {
   rights: new Repository<Right>('rights'),
   sessions: new SessionsRepository('sessions'),
   synthesizers: new Repository<Synthesizer>('synthesizers'),
-  tools: new ToolsRepository('tools'),
+  blueprints: new ToolsRepository('blueprints'),
 }

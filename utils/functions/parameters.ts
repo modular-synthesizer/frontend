@@ -1,7 +1,7 @@
 import { clamp } from "lodash";
 import type { Channel } from "~/types/modules/Channel";
 import type { Parameter } from "~/types/modules/Parameter";
-import type { Control } from "~/types/tools/Control";
+import type { Control } from "~/types/blueprints/Control";
 import type { Parameters, AudioModule } from "~/types/modules/AudioModule";
 
 /**

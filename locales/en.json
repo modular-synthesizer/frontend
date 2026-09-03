@@ -4,7 +4,7 @@
       "applications": "Applications",
       "categories": "Categories",
       "parameters": "Parameters",
-      "tools": "Tools"
+      "blueprints": "Blueprints"
     }
   },
   "applications": {
@@ -95,11 +95,11 @@
       },
       "powerful": {
         "title": "Powerful",
-        "text": "We provide you with a complete set of tools so that you can let your imagination run free and create music !"
+        "text": "We provide you with a complete set of blueprints so that you can let your imagination run free and create music !"
       },
       "customizable": {
         "title": "Customizable",
-        "text": "Despite all our efforts, you don't find suitable tools ? No problem, you can create your own ones with the provided editor !"
+        "text": "Despite all our efforts, you don't find suitable blueprints ? No problem, you can create your own ones with the provided editor !"
       }
     },
     "subtitle": "Modular synthesis, simple and accessible"
@@ -134,7 +134,7 @@
   "menus": {
     "sandbox": "Sandbox",
     "synthesizers": "Synthesizers",
-    "tools": "Toolbox"
+    "blueprints": "Toolbox"
   },
   "modules": {
     "add": "Add new modules",
@@ -212,7 +212,7 @@
       "analyser": {
         "short": "Oscilloscope",
         "title": "Oscilloscope",
-        "description": "A tool to visualize the form of a signal input into it."
+        "description": "A blueprint to visualize the form of a signal input into it."
       },
       "clock": {
         "short": "Clock",
@@ -254,7 +254,7 @@
       },
       "fields": {
         "default": {
-          "hint": "This value will be set on the parameter when instanciating this tool",
+          "hint": "This value will be set on the parameter when instanciating this blueprint",
           "label": "Défault value"
         },
         "field": {
@@ -339,7 +339,7 @@
       "synthesizer": "Fetching synthesizer informations"
     }
   },
-  "tools": {
+  "blueprints": {
     "dialog": {
       "headers": {
         "descriptor": "Descriptor",
@@ -373,7 +373,7 @@
         },
         "name": {
           "hint": "Six characters or more",
-          "label": "Name of the tool"
+          "label": "Name of the blueprint"
         },
         "node": {
           "label": "Node"
@@ -402,7 +402,7 @@
         "parameters": "Parameters",
         "ports": "Ports"
       },
-      "title": "Create new tool"
+      "title": "Create new blueprint"
     },
     "headers": {
       "category": "Category",

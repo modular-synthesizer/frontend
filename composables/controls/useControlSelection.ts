@@ -1,7 +1,7 @@
-import type { Tool } from '~~/types/tools/Tool';
+import type { Blueprint } from '~~/types/blueprints/Blueprint';
 import { repositories } from "~~/lib/repositories";
 import type { Coordinates } from "~/types/utils/Coordinates";
-import type { Control } from '~/types/tools/Control';
+import type { Control } from '~/types/blueprints/Control';
 
 const selected: Ref<Control|undefined> = ref();
 
@@ -13,9 +13,9 @@ function selectControl(control: Control, $event: MouseEvent) {
   origin.value.y = (($event.clientY - 48) / 1.5 - 50) - +control.payload.y;
 }
 
-function reset(tool: Tool) {
+function reset(blueprint: Blueprint) {
   if (selected.value !== undefined) {
-    repositories.tool.controls.update(tool, tool.controls, selected.value);
+    repositories.blueprint.controls.update(blueprint, blueprint.controls, selected.value);
   }
   selected.value = undefined;
 }

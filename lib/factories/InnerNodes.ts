@@ -1,6 +1,6 @@
 import { find } from "lodash";
 import type { Generator } from "../../types/Generator";
-import type { InnerNode } from '~~/types/tools/InnerNode';
+import type { InnerNode } from '~~/types/blueprints/InnerNode';
 import { useAudio } from "~~/composables/synthesizers/useAudio";
 
 class InnerNodesFactory {

@@ -11,8 +11,8 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
-      <template v-if="tools">
-        <v-container v-for="(category, name) in categories(tools)">
+      <template v-if="blueprints">
+        <v-container v-for="(category, name) in categories(blueprints)">
           <v-row>
             <v-col cols="12">
               <div class="text-h4">{{ $t(`categories.names.${name}`) }}</div>
@@ -23,12 +23,12 @@
               <v-list>
                 <v-list-item
                   :disabled="loading"
-                  v-for="tool in category"
-                  :key="`${name}.${tool.name}`"
-                  :value="tool"
-                  :title="$t(`modules.${name}.${tool.name}.title`)"
-                  :subtitle="$t(`modules.${name}.${tool.name}.description`)"
-                  @click="select(tool)"
+                  v-for="blueprint in category"
+                  :key="`${name}.${blueprint.name}`"
+                  :value="blueprint"
+                  :title="$t(`modules.${name}.${blueprint.name}.title`)"
+                  :subtitle="$t(`modules.${name}.${blueprint.name}.description`)"
+                  @click="select(blueprint)"
                 />
               </v-list>
             </v-col>
@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { groupBy } from 'lodash';
-import type { Tool } from '~~/types/tools/Tool';
+import type { Blueprint } from '~~/types/blueprints/Blueprint';
 import { repositories } from '~~/lib/repositories';
 import { firstFreeSlot } from '~/utils/functions/synthesizers';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
@@ -51,7 +51,7 @@ export default {
   data: () => ({
     display: false,
     loading: false,
-    tools: [] as Tool[],
+    blueprints: [] as Blueprint[],
   }),
   props: {
     synthesizer: {
@@ -68,24 +68,24 @@ export default {
       this.loading = false;
       this.display = false;
     },
-    async select(tool: Tool) {
+    async select(blueprint: Blueprint) {
       this.loading = true;
       const payload = {
-        tool_id: tool.id,
+        tool_id: blueprint.id,
         synthesizer_id: this.synthesizer.id,
         rack: 0,
-        slot: firstFreeSlot(this.modules, tool.slots),
+        slot: firstFreeSlot(this.modules, blueprint.slots),
       };
       const created = await api_post("/proxy/modules", payload)
       this.$emit('selected', created);
       this.close();
     },
-    categories(tools: Tool[]) {
-      return groupBy(tools, tool => tool.category.name);
+    categories(blueprints: Blueprint[]) {
+      return groupBy(blueprints, blueprint => blueprint.category.name);
     },
   },
   async mounted() {
-    this.tools = await repositories.tools.list();
+    this.blueprints = await repositories.blueprints.list();
   }
 }
 </script>

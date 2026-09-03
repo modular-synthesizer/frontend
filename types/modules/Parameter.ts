@@ -1,4 +1,4 @@
-import type { ToolParameter } from "../tools/Parameter";
+import type { ToolParameter } from "../blueprints/Parameter";
 import type { AudioModule } from "./AudioModule";
 
 export type Parameter = ToolParameter & {

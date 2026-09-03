@@ -1,4 +1,4 @@
-import type { InnerLink } from "../tools/InnerLink";
+import type { InnerLink } from "../blueprints/InnerLink";
 
 export type ChannelNodes = Record<string, AudioNode>;
 

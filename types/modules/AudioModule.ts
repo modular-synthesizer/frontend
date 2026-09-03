@@ -1,10 +1,10 @@
 import type { Identified } from "../utils/Identified";
 import type { Channel } from "./Channel";
 import type { Parameter } from "./Parameter";
-import type { ModControl } from "../tools/Control";
-import type { InnerLink } from "../tools/InnerLink";
-import type { InnerNode } from "../tools/InnerNode";
-import type { ToolPort } from "../tools/Port";
+import type { ModControl } from "../blueprints/Control";
+import type { InnerLink } from "../blueprints/InnerLink";
+import type { InnerNode } from "../blueprints/InnerNode";
+import type { ToolPort } from "../blueprints/Port";
 import type { Port } from '~/types/modules/Port';
 import type { PlacedBox } from "../utils/PlacedBox";
 

@@ -6,7 +6,7 @@
 import type { DragCallback } from '~/types/draggables/DragDeclaration';
 import type { Synthesizer } from '~/types/Index';
 import type { AudioModule } from '~/types/modules/AudioModule';
-import type { Control } from '~/types/tools/Control';
+import type { Control } from '~/types/blueprints/Control';
 
 const props = defineProps({
   control: { type: Object as PropType<Control>, required: true },

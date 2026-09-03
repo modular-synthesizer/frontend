@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import type { Synthesizer } from "~/types/Index";
 import type { AudioModule } from "~/types/modules/AudioModule";
-import type { ModControl } from "~/types/tools/Control";
+import type { ModControl } from "~/types/blueprints/Control";
 import type { DragCallback } from "~/types/draggables/DragDeclaration";
 import type { Parameter } from "~/types/modules/Parameter";
 import { eventbus } from "~/utils/eventbus/EventBus";

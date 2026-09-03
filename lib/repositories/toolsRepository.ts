@@ -1,19 +1,19 @@
-import type { Tool } from "~/types/tools/Tool";
+import type { Blueprint } from "~/types/blueprints/Blueprint";
 import { Repository } from "./utils/Repository";
-import type { InnerNode } from "~/types/tools/InnerNode";
+import type { InnerNode } from "~/types/blueprints/InnerNode";
 
-export default class ToolsRepository extends Repository<Tool> {
-  public override async create(tool: Tool): Promise<Tool> {
-    const { name, slots } = tool
-    return await api_post(this.uri(), { name, slots, categoryId: tool.category.id });
+export default class ToolsRepository extends Repository<Blueprint> {
+  public override async create(blueprint: Blueprint): Promise<Blueprint> {
+    const { name, slots } = blueprint
+    return await api_post(this.uri(), { name, slots, categoryId: blueprint.category.id });
   }
 
-  public override async update(tool: Tool): Promise<Tool> {
-    const payload = { ...tool, categoryId: tool.category.id}
-    return await api_put(this.uri(payload.id), tool);
+  public override async update(blueprint: Blueprint): Promise<Blueprint> {
+    const payload = { ...blueprint, categoryId: blueprint.category.id}
+    return await api_put(this.uri(payload.id), blueprint);
   }
 
-  public async updateNode(tool: Tool, node: InnerNode): Promise<InnerNode> {
-    return await api_put(this.uri(`/nodes/${node.id}`), { ...node, tool_id: tool.id })
+  public async updateNode(blueprint: Blueprint, node: InnerNode): Promise<InnerNode> {
+    return await api_put(this.uri(`/nodes/${node.id}`), { ...node, tool_id: blueprint.id })
   }
 }

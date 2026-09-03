@@ -2,8 +2,8 @@ import { find } from "lodash";
 import { RACK_HEIGHT, SLOT_SIZE } from "~/utils/constants";
 import type { AudioModule } from "~/types/modules/AudioModule";
 import type { Port } from '~/types/modules/Port';
-import type { Control } from "~/types/tools/Control";
-import type { ToolPort } from "~/types/tools/Port";
+import type { Control } from "~/types/blueprints/Control";
+import type { ToolPort } from "~/types/blueprints/Port";
 import type { Coordinates } from "~/types/utils/Coordinates";
 
 export function isInput(port: ToolPort|Port) {

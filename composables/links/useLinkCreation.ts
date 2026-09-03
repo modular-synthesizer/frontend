@@ -1,5 +1,5 @@
 import type { Cable, Port } from "~/types/Index"
-import type { ModControl } from "~/types/tools/Control";
+import type { ModControl } from "~/types/blueprints/Control";
 import type { Coordinates } from "~/types/utils/Coordinates";
 import { connectCable, disconnectCable } from "~/utils/factories/cables";
 import { add } from "~/utils/functions/geometry";

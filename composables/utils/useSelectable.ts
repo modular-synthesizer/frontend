@@ -1,14 +1,14 @@
 import { repositories } from "~/lib/repositories";
 import type { ToolElementsRepository } from "~/lib/repositories/utils/ToolElementsRepository";
-import type { InnerLink } from "~/types/tools/InnerLink";
-import type { InnerNode } from "~/types/tools/InnerNode";
-import type { ToolPort } from "~/types/tools/Port";
-import type { Tool } from "~/types/tools/Tool";
+import type { InnerLink } from "~/types/blueprints/InnerLink";
+import type { InnerNode } from "~/types/blueprints/InnerNode";
+import type { ToolPort } from "~/types/blueprints/Port";
+import type { Blueprint } from "~/types/blueprints/Blueprint";
 import type { Identified } from "~/types/utils/Identified";
 
 export interface ISelector {
   item?: any;
-  delete(tool: Tool): void;
+  delete(blueprint: Blueprint): void;
   select(item: any): void;
   reset(): void;
 }
@@ -16,16 +16,16 @@ export interface ISelector {
 export class Selector<T extends Identified> implements ISelector {
   public item?: T;
   public readonly repository: ToolElementsRepository<T>;
-  public readonly collection: keyof Tool;
+  public readonly collection: keyof Blueprint;
 
-  public constructor(repository: ToolElementsRepository<any>, collection: keyof Tool) {
+  public constructor(repository: ToolElementsRepository<any>, collection: keyof Blueprint) {
     this.repository = repository;
     this.collection = collection;
   }
 
-  public delete(tool: Tool): void {
+  public delete(blueprint: Blueprint): void {
     if (this.item !== undefined) {
-      this.repository.remove(tool, tool[this.collection] as any[], this.item);
+      this.repository.remove(blueprint, blueprint[this.collection] as any[], this.item);
     }
     this.reset();
   }
@@ -41,16 +41,16 @@ export class Selector<T extends Identified> implements ISelector {
 }
 
 const state: Ref<Record<string, ISelector>> = ref({
-  links: new Selector<InnerLink>(repositories.tool.links, 'links'),
-  nodes: new Selector<InnerNode>(repositories.tool.nodes, 'nodes'),
-  ports: new Selector<ToolPort>(repositories.tool.ports, 'ports'),
+  links: new Selector<InnerLink>(repositories.blueprint.links, 'links'),
+  nodes: new Selector<InnerNode>(repositories.blueprint.nodes, 'nodes'),
+  ports: new Selector<ToolPort>(repositories.blueprint.ports, 'ports'),
 });
 
 export function useSelectables() {
   return {
     state,
-    delete(tool: Tool): void {
-      Object.values(state.value).forEach((s: ISelector) => s.delete(tool));
+    delete(blueprint: Blueprint): void {
+      Object.values(state.value).forEach((s: ISelector) => s.delete(blueprint));
     },
     reset() {
       Object.values(state.value).forEach((s: ISelector) => s.reset());

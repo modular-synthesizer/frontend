@@ -36,7 +36,7 @@
 import type { DragCallback } from '~/types/draggables/DragDeclaration';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Port } from '~/types/modules/Port';
-import type { ModControl } from "~/types/tools/Control";
+import type { ModControl } from "~/types/blueprints/Control";
 import { isInput } from '~/utils/functions/ports';
 
 const { control, module } = defineProps({

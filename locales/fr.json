@@ -4,7 +4,7 @@
       "applications": "Applications",
       "categories": "Catégories",
       "parameters": "Paramètres",
-      "tools": "Outils"
+      "blueprints": "Outils"
     }
   },
   "applications": {
@@ -134,7 +134,7 @@
   "menus": {
     "sandbox": "Bac à sable",
     "synthesizers": "Synthétiseurs",
-    "tools": "Outils"
+    "blueprints": "Outils"
   },
   "modules": {
     "add": "Ajouter des modules",
@@ -348,7 +348,7 @@
       "synthesizer": "Récupération des informations du synthétiseur"
     }
   },
-  "tools": {
+  "blueprints": {
     "dialog": {
       "headers": {
         "descriptor": "Descripteur",

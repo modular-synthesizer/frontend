@@ -1,32 +1,32 @@
 import { remove } from "lodash";
 import { BaseRepository } from "./BaseRepository";
-import type { Tool } from "~/types/tools/Tool";
+import type { Blueprint } from "~/types/blueprints/Blueprint";
 import type { Identified } from "~/types/utils/Identified"
 
 /**
- * This repository holds all the specific logic for elements embedded in a tool (nodes, links, parameters, etc.).
+ * This repository holds all the specific logic for elements embedded in a blueprint (nodes, links, parameters, etc.).
  * @author Vincent Courtois <courtois.vincent@outlook.com>
  */
 export class ToolElementsRepository<T extends Identified> extends BaseRepository {
 
   constructor(path: string) {
-    super(`tools/${path}`)
+    super(`blueprints/${path}`)
   }
 
-  public async create(tool: Tool, element: T): Promise<T> {
-    return await api_post(this.uri(), { ...element, tool_id: tool.id });
+  public async create(blueprint: Blueprint, element: T): Promise<T> {
+    return await api_post(this.uri(), { ...element, tool_id: blueprint.id });
   }
 
-  public async update(tool: Tool, item: T): Promise<T> {
-    return await api_put(this.uri(item.id), { ...item, tool_id: tool.id });
+  public async update(blueprint: Blueprint, item: T): Promise<T> {
+    return await api_put(this.uri(item.id), { ...item, tool_id: blueprint.id });
   }
 
-  public async delete(tool: Tool, element: T): Promise<void> {
-    return await api_delete(this.uri(element.id), { tool_id: tool.id });
+  public async delete(blueprint: Blueprint, element: T): Promise<void> {
+    return await api_delete(this.uri(element.id), { tool_id: blueprint.id });
   }
 
-  public async remove(tool: Tool, list: T[], element: T): Promise<void> {
-    await this.delete(tool, element);
+  public async remove(blueprint: Blueprint, list: T[], element: T): Promise<void> {
+    await this.delete(blueprint, element);
     remove(list, (i: T) => i.id === element.id);
   }
 }

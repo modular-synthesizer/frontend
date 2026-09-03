@@ -55,7 +55,7 @@ import { repositories } from '~/lib/repositories';
 import type { DragCallback } from '~/types/draggables/DragDeclaration';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Parameter } from '~/types/modules/Parameter';
-import type { Control } from '~/types/tools/Control';
+import type { Control } from '~/types/blueprints/Control';
 import { setValue } from '~/utils/functions/parameters';
 import { DEFAULT_FADER_HEIGHT } from '~/utils/constants';
 

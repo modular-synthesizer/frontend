@@ -1,4 +1,4 @@
-import type { InnerLink } from '~~/types/tools/InnerLink';
+import type { InnerLink } from '~~/types/blueprints/InnerLink';
 import type { ChannelNodes } from '~/types/modules/Channel';
 import { extractAudioParam } from '~/utils/functions/parameters';
 

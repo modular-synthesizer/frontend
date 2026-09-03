@@ -1,18 +1,18 @@
 import type { AudioModule, ModulePayload, Parameters } from "~/types/modules/AudioModule";
 import type { Channel } from "~/types/modules/Channel";
-import type { InnerLink } from "~/types/tools/InnerLink";
+import type { InnerLink } from "~/types/blueprints/InnerLink";
 import InnerNodesFactory from '~~/lib/factories/InnerNodes';
 import InnerLinksFactory from '~~/lib/factories/InnerLinks';
 import type { Generator } from '~~/types/Generator';
 import { initParameters } from "../functions/parameters";
-import type { ToolPort } from "~/types/tools/Port";
+import type { ToolPort } from "~/types/blueprints/Port";
 import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
-import type { Tool } from "~/types/tools/Tool";
+import type { Blueprint } from "~/types/blueprints/Blueprint";
 import type { Port } from "~/types/modules/Port";
 import type { Parameter } from "~/types/modules/Parameter";
-import type { ToolParameter } from "~/types/tools/Parameter";
+import type { ToolParameter } from "~/types/blueprints/Parameter";
 import { RACK_HEIGHT, SLOT_SIZE } from "~/utils/constants";
-import type { Control, ModControl } from "~/types/tools/Control";
+import type { Control, ModControl } from "~/types/blueprints/Control";
 
 export async function createModule(details: ModulePayload, generators: Promise<Ref<Generator[]>>,): Promise<AudioModule> {
   const module: AudioModule = {
@@ -41,7 +41,7 @@ function instanciatePorts(module: AudioModule, ports: Array<ToolPort>): Array<Po
 
 /**
  * Creates all the polyphony channels used in the synthesizer. Every channel holds a full copy of the nodes and links
- * declared in the modules, themselves derived from the template of nodes and links created in the corresponding tool.
+ * declared in the modules, themselves derived from the template of nodes and links created in the corresponding blueprint.
  * 
  * @param details The details about the modules. TODO : replace the interface with a type.
  * @param generators The list of generators to get the code to instanciate the inner nodes in each channel.
@@ -62,11 +62,11 @@ function instanciateParameters(module: AudioModule, parameters: Array<ToolParame
   return initParameters(module, parameters.map((tp: ToolParameter): Parameter => ({ ...tp, mod: module, value: tp.default, t: Date.now() })));
 }
 
-export function createEmptyModule(tool: Tool): AudioModule {
+export function createEmptyModule(blueprint: Blueprint): AudioModule {
   const module: AudioModule = {
     id: '', type: '', category: '', slot: 0, rack: 0, slots: 2, channels: [], ports: [], parameters: {}, controls: [], height: RACK_HEIGHT, width: 2 * SLOT_SIZE, x: 0, y: 0, deleted: false,
   }
-  module.ports = instanciatePorts(module, tool.ports);
-  module.parameters = instanciateParameters(module, tool.parameters);
+  module.ports = instanciatePorts(module, blueprint.ports);
+  module.parameters = instanciateParameters(module, blueprint.parameters);
   return module;
 }
