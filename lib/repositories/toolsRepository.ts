@@ -14,6 +14,6 @@ export default class ToolsRepository extends Repository<Blueprint> {
   }
 
   public async updateNode(blueprint: Blueprint, node: InnerNode): Promise<InnerNode> {
-    return await api_put(this.uri(`/nodes/${node.id}`), { ...node, tool_id: blueprint.id })
+    return await api_put(this.uri(`/nodes/${node.id}`), { ...node, blueprint_id: blueprint.id })
   }
 }

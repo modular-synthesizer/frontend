@@ -127,11 +127,11 @@ export default {
         const newValue = this.original + delta * this.parameter.step;
         setValue(this.parameter, newValue);
       });
-      this.dropped(() => this.save(this.parameter));
+      this.dropped(() => this.save(this.parameter, this.module));
     },
-    save(parameter: Parameter) {
+    save(parameter: Parameter, module: AudioModule) {
       parameter.t = Date.now()
-      repositories.parameters.update(parameter, useSession().token);
+      api_put(`/parameters/${parameter.id}`, { value: this.value, module_id: module.id })
     }
   }
 }

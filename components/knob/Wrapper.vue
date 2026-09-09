@@ -74,7 +74,7 @@ function onrightclick($event: MouseEvent) {
 
 async function save() {
   parameter.t = Date.now()
-  await api_put(`/proxy/parameters/${parameter.id}`, { value: parameter.value })
+  await api_put(`/proxy/parameters/${parameter.id}`, { value: parameter.value, module_id: module.id })
   eventbus.emit(`parameters/update/${module.id}/channel`, { value: parameter.value })
 }
 </script>

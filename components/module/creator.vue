@@ -71,7 +71,7 @@ export default {
     async select(blueprint: Blueprint) {
       this.loading = true;
       const payload = {
-        tool_id: blueprint.id,
+        blueprint_id: blueprint.id,
         synthesizer_id: this.synthesizer.id,
         rack: 0,
         slot: firstFreeSlot(this.modules, blueprint.slots),

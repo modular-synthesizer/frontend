@@ -14,15 +14,15 @@ export class ToolElementsRepository<T extends Identified> extends BaseRepository
   }
 
   public async create(blueprint: Blueprint, element: T): Promise<T> {
-    return await api_post(this.uri(), { ...element, tool_id: blueprint.id });
+    return await api_post(this.uri(), { ...element, blueprint_id: blueprint.id });
   }
 
   public async update(blueprint: Blueprint, item: T): Promise<T> {
-    return await api_put(this.uri(item.id), { ...item, tool_id: blueprint.id });
+    return await api_put(this.uri(item.id), { ...item, blueprint_id: blueprint.id });
   }
 
   public async delete(blueprint: Blueprint, element: T): Promise<void> {
-    return await api_delete(this.uri(element.id), { tool_id: blueprint.id });
+    return await api_delete(this.uri(element.id), { blueprint_id: blueprint.id });
   }
 
   public async remove(blueprint: Blueprint, list: T[], element: T): Promise<void> {

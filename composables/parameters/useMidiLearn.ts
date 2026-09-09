@@ -1,8 +1,8 @@
 import { has } from "lodash";
-import { repositories } from "~/lib/repositories";
 import type { Parameter } from "~/types/modules/Parameter";
 import { setValue } from "~/utils/functions/parameters";
 import { eventbus } from "~/utils/eventbus/EventBus";
+import type { AudioModule } from "~/types/Index";
 
 type Handlers = {[key: string]: {[key: string]: Function}};
 
@@ -16,13 +16,13 @@ const state: Ref<State> = useState<State>('useMidiLearn', () => ({
 }))
 
 export function useMidiLearn() {
-  function bindMidiLearn(k: number, parameter: Parameter) {
+  function bindMidiLearn(k: number, parameter: Parameter, module: AudioModule) {
     if (!(parameter.id in state.value.handlers)) state.value.handlers[parameter.id] = {};
 
-    state.value.handlers[parameter.id][k] = messageHandler(parameter);
+    state.value.handlers[parameter.id][k] = messageHandler(parameter, module);
     eventbus.subscribe(`midi/generalpurpose/${k}`, state.value.handlers[parameter.id][k]);
   }
-  function messageHandler(parameter: Parameter) {
+  function messageHandler(parameter: Parameter, module: AudioModule) {
     return ({ amount }: any) => {
       if (state.value.timeout !== -1) window.clearTimeout(state.value.timeout);
       const ratio: number = amount / 127;
@@ -35,7 +35,7 @@ export function useMidiLearn() {
       
       state.value.timeout = window.setTimeout(() => {
         parameter.t = Date.now();
-        repositories.parameters.update(parameter, useSession().token)
+        api_put(`/parameters/${parameter.id}`, { value: parameter.value, module_id: module.id })
         state.value.timeout = -1;
       }, 250);
     }
