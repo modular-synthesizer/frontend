@@ -52,27 +52,33 @@ function onmousedown($event: MouseEvent) {
     const newValue = original.value + delta * parameter.step;
     setValue(parameter, newValue);
   });
-  dropped(save);
+  dropped(() => save(parameter));
 }
 
 function onwheel($event: WheelEvent) {
   const ratio = $event.shiftKey ? 10 : 1;
   const sign = - $event.deltaY / Math.abs($event.deltaY);
   moveValue(parameter, sign * parameter.step * ratio);
-  debounce('edit-' + parameter.id, 500, save)
+  debounce('edit-' + parameter.id, 500, () => save(parameter))
 }
 
 function onrightclick($event: MouseEvent) {
   useContexts().display($event, {
     items: [
-      {label: 'bind', action: useMidiLearn().learn},
-      {label: 'unbind', action: useMidiLearn().unlearn}
+      { label: 'bind', action: useMidiLearn().learn },
+      { label: 'unbind', action: useMidiLearn().unlearn },
+      { label: 'reset', action: resetValue },
     ],
     payload: parameter,
   })
 }
 
-async function save() {
+function resetValue(parameter: Parameter) {
+  setValue(parameter, parameter.default)
+  save(parameter)
+}
+
+async function save(parameter: Parameter) {
   parameter.t = Date.now()
   await api_put(`/proxy/parameters/${parameter.id}`, { value: parameter.value, module_id: module.id })
   eventbus.emit(`parameters/update/${module.id}/channel`, { value: parameter.value })

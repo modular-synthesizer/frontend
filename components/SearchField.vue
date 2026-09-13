@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Ref } from "vue";
+import type { Ref } from "vue";
 
 const search: Ref<string> = ref('');
 const emit = defineEmits<{search: [query: string]}>();

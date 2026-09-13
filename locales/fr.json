@@ -63,6 +63,7 @@
     "resetPosition": "Réinitialiser la position",
     "resetZoom": "Réinitialiser le niveau de zoom",
     "unbind": "Délier tous les boutons",
+    "reset": "Réinitialiser à la valeur par défaut",
     "unlink": "Supprimer tous les liens"
   },
   "errors": {

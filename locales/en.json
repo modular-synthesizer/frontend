@@ -63,6 +63,7 @@
     "resetPosition": "Reset position",
     "resetZoom": "Reset zoom",
     "unbind": "Unbind all MIDI knobs",
+    "reset": "Reset to the default value",
     "unlink": "Delete all links"
   },
   "errors": {

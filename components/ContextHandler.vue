@@ -65,7 +65,6 @@ export default {
   .main-menu-wrapper {
     position: absolute;
     font-size: 13px;
-    width: 200px;
     background-color: white;
     border: 1px solid silver;
   }
