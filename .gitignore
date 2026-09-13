@@ -8,3 +8,4 @@ node_modules
 dist
 .vscode/
 public/json/controls.json
+.tool-versions
