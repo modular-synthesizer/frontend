@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Blueprint } from '~/types/blueprints/Blueprint'
+import type { Blueprint } from '~/types/blueprints/Blueprint'
 
 const { blueprint } = defineProps({
   blueprint: { type: Object as PropType<Blueprint>, required: true }

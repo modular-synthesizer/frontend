@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { ContextItem } from '~~/composables/useContexts';
+import { useContexts, type ContextItem } from '~~/composables/useContexts';
 
 const WIDTH = 200;
 
