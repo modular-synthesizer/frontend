@@ -4,19 +4,19 @@
       :d="path"
       :opacity="entered ? 1 : opacity"
       stroke-width="7"
-      :class="[`stroke-${color}-darken-3`]"
+      :class="[`stroke-${color}-darken-3`, 'events-wrapper']"
       v-if="showCable"
       fill="transparent"
     />
     <circle
-      :class="[`stroke-${color}-darken-3 fill-shades-white`]"
+      :class="[`stroke-${color}-darken-3 fill-shades-white`, 'full-events-wrapper']"
       :cx="start.x"
       :cy="start.y"
       :r="r"
       stroke-width="6"
     />
     <circle
-      :class="[ `stroke-${color}-darken-3 fill-shades-white`]"
+      :class="[ `stroke-${color}-darken-3 fill-shades-white`, 'full-events-wrapper']"
       :cx="end.x"
       :cy="end.y"
       :r="r"
@@ -66,16 +66,18 @@ export default {
     cy(): number {
       const dangle: number = Math.min(this.distance, 125) + 0.5 * Math.abs(this.start.y - this.end.y)
       return (this.end.y + this.start.y) / 2 + dangle;
-    }
+    },
   },
 }
 </script>
 
 <style scoped>
-.no-events {
-  pointer-events: none;
+.events-wrapper {
+  pointer-events: stroke;
 }
-
+.full-events-wrapper {
+  pointer-events: all;
+}
 .path {
   opacity: 0.35;
 }
