@@ -5,7 +5,7 @@
   <g
     @mousedown.left.stop="onmousedown"
     @mouseenter="magnetize"
-    @mouseleave="useLinkCreation().unmagnetize('mouseout')"
+    @mouseleave="unmagnetize"
   >
     <circle
       :r="r"
@@ -38,6 +38,7 @@ import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Port } from '~/types/modules/Port';
 import type { ModControl } from "~/types/blueprints/Control";
 import { isInput } from '~/utils/functions/ports';
+import { useCableCreation } from '~/composables/links/useLinkCreation';
 
 const { control, module } = defineProps({
   control: { type: Object as PropType<ModControl>, required: true },
@@ -50,16 +51,21 @@ const r: number = PORT_RADIUS * 2;
 const port: Port = module.ports.find((p: Port) => p.name === control.payload.target) as Port;
 const color: string = isInput(port) ? 'grey' : 'indigo';
 
-const eventX: ComputedRef<number> = computed(() => +control.payload.x + module.x)
-const eventY: ComputedRef<number> = computed(() => +control.payload.y + module.y)
+const eventX: ComputedRef<number> = computed(() => +(control.payload.x || 0) + module.x)
+const eventY: ComputedRef<number> = computed(() => +(control.payload.y || 0) + module.y)
 
 function onmousedown() {
-  useLinkCreation().start(port, control);
+  useCableCreation().start(port, control);
 }
 
 function magnetize() {
-  if (port.link) return;
-  useLinkCreation().magnetize(port, control)
+  useCableCreation().magnetize(port, control)
+}
+function unmagnetize() {
+  useCableCreation().unmagnetize()
+}
+function onmouseout() {
+  console.log("out")
 }
 </script>
 

@@ -1,8 +1,9 @@
 <template>
-  <cable :start="useLinkCreation().origin" :end="useLinkCreation().destination" :no-events="true" color="red" />
+  <template v-if="start && end"><cable :start="start" :end="end" :no-events="true" color="red" /></template>
 </template>
 
 <script setup lang="ts">
+import { useCableCreation } from '~/composables/links/useLinkCreation';
 import { repositories } from '~/lib/repositories';
 import type { Cable, LinkPayload, Synthesizer } from '~/types/Index';
 
@@ -19,17 +20,15 @@ const emit = defineEmits<Emits>();
 const dropped: DragCallback = inject('dropped') as DragCallback;
 
 dropped(async () => {
-  const { displayed, magnetized } = useLinkCreation();
-  if (displayed && magnetized ) {
-    const { startPort, endPort, cable } = useLinkCreation();
+  const { displayed, magnetized, startPort, endPort, cable  } = useCableCreation();
+  if (displayed && magnetized && startPort && endPort && cable ) {
     emit('created', cable);
-    useLinkCreation().resetCable();
-    useLinkCreation().end();
     const results: LinkPayload = await repositories.links.create({ from: startPort.id, to: endPort.id, color: 'red', id: '' }, synthesizer);
     cable.id = results.id
   }
-  else {
-    useLinkCreation().end();
-  }
+  useCableCreation().end();
 })
+
+const start = computed(() => useCableCreation().origin)
+const end = computed(() => useCableCreation().destination)
 </script>

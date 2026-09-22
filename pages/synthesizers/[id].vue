@@ -27,7 +27,7 @@
           @dropped="() => save(module)"
         >
           <module v-if="!module.deleted" :module @deleted="() => deleteModule(module, cables)" @disconnected="disconnectModule(module, cables)">
-            <g v-for="control in module.controls" :transform="translate({ x: +control.payload.x, y: +control.payload.y})">
+            <g v-for="control in module.controls" :transform="translate({ x: +(control.payload.x || 0), y: +(control.payload.y || 0)})">
               <sp-control-wrapper v-bind="{ control, module, synthesizer, ...control.payload }" />
             </g>
           </module>
@@ -35,7 +35,7 @@
       </sp-stage-svg-layer>
       <sp-stage-svg-layer name="cables">
         <cable-list :cables="cables" :synthesizer="synthesizer" />
-        <cable-creation v-if="useLinkCreation().displayed" @created="addCable" :synthesizer="synthesizer" />
+        <cable-creation v-if="useCableCreation().displayed" @created="addCable" :synthesizer="synthesizer" />
       </sp-stage-svg-layer>
       <sp-stage-svg-layer name="forefront" />
     </sp-stage>
@@ -58,6 +58,7 @@ import { appendCable } from '~/utils/functions/cables';
 import { translate } from "~/utils/functions/svg"
 import { createModule as instanciateModule } from '~/utils/factories/modules';
 import { useI18n } from 'vue-i18n';
+import { useCableCreation } from '~/composables/links/useLinkCreation';
 
 type PromisedRef<T> = Promise<Ref<T>>;
 
@@ -168,7 +169,8 @@ function removeIfFound<T extends {id: string}, Item extends {id: string}>(list: 
 }
 
 function removeCable(payload: LinkPayload) {
-  disconnectCable(removeIfFound(cables.value, payload));
+  const found = removeIfFound(cables.value, payload)
+  if (found) disconnectCable(found);
 }
 
 function removeModule (payload: ModulePayload) {
