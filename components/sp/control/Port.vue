@@ -4,8 +4,6 @@
   </text>
   <g
     @mousedown.left.stop="onmousedown"
-    @mouseenter="magnetize"
-    @mouseleave="unmagnetize"
   >
     <circle
       :r="r"
@@ -22,11 +20,13 @@
     <Teleport to="#forefront">
       <!-- element sur lequel faire les mouseenter/mouseout -->
       <circle
-        class="port-event-handler"
-        :fill-opacity="0"
+        :class="{'port-event-handler': started}"
+        fill-opacity="0"
         :r="r"
         :cx="eventX"
         :cy="eventY"
+        @mouseenter="magnetize"
+        @mouseout="unmagnetize"
       />
     </Teleport>
   </g>
@@ -64,9 +64,8 @@ function magnetize() {
 function unmagnetize() {
   useCableCreation().unmagnetize()
 }
-function onmouseout() {
-  console.log("out")
-}
+
+const started = computed(() => useCableCreation().displayed)
 </script>
 
 <style scoped>
@@ -74,5 +73,8 @@ function onmouseout() {
   font-size: 9px;
   user-select: none;
   paint-order: stroke;
+}
+.port-event-handler {
+  pointer-events: all;
 }
 </style>
