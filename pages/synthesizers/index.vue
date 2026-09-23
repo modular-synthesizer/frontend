@@ -2,13 +2,17 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <div class="text-h3 mb-5">Votre collection</div>
+        <div class="text-h3 mb-4 mt-4">Votre collection</div>
         <synthesizer-creator @created="create" :floating="mobile" />
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" sm="6" md="4" v-for="synth in sorted">
+      <v-col v-if="sorted.length" cols="12" sm="6" md="4" v-for="synth in sorted">
         <synthesizer-card :synthesizer="synth" @delete="deleteSynth" />
+      </v-col>
+      <v-col v-else>
+        <p>Vous n'avez actuellement aucun synthétiseur dans votre collection.</p>
+        <p class="mt-2">Commencez par en créer un en cliquant sur le bouton en bas à droite de votre interface.</p>
       </v-col>
     </v-row>
   </v-container>
