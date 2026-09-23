@@ -4,8 +4,6 @@
   </text>
   <g
     @mousedown.left.stop="onmousedown"
-    @mouseenter="magnetize"
-    @mouseleave="useLinkCreation().unmagnetize('mouseout')"
   >
     <circle
       :r="r"
@@ -22,11 +20,13 @@
     <Teleport to="#forefront">
       <!-- element sur lequel faire les mouseenter/mouseout -->
       <circle
-        class="port-event-handler"
-        :fill-opacity="0"
+        :class="{'port-event-handler': started}"
+        fill-opacity="0"
         :r="r"
         :cx="eventX"
         :cy="eventY"
+        @mouseenter="magnetize"
+        @mouseout="unmagnetize"
       />
     </Teleport>
   </g>
@@ -38,6 +38,7 @@ import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Port } from '~/types/modules/Port';
 import type { ModControl } from "~/types/blueprints/Control";
 import { isInput } from '~/utils/functions/ports';
+import { useCableCreation } from '~/composables/links/useLinkCreation';
 
 const { control, module } = defineProps({
   control: { type: Object as PropType<ModControl>, required: true },
@@ -50,17 +51,21 @@ const r: number = PORT_RADIUS * 2;
 const port: Port = module.ports.find((p: Port) => p.name === control.payload.target) as Port;
 const color: string = isInput(port) ? 'grey' : 'indigo';
 
-const eventX: ComputedRef<number> = computed(() => +control.payload.x + module.x)
-const eventY: ComputedRef<number> = computed(() => +control.payload.y + module.y)
+const eventX: ComputedRef<number> = computed(() => +(control.payload.x || 0) + module.x)
+const eventY: ComputedRef<number> = computed(() => +(control.payload.y || 0) + module.y)
 
 function onmousedown() {
-  useLinkCreation().start(port, control);
+  useCableCreation().start(port, control);
 }
 
 function magnetize() {
-  if (port.link) return;
-  useLinkCreation().magnetize(port, control)
+  useCableCreation().magnetize(port, control)
 }
+function unmagnetize() {
+  useCableCreation().unmagnetize()
+}
+
+const started = computed(() => useCableCreation().displayed)
 </script>
 
 <style scoped>
@@ -68,5 +73,8 @@ function magnetize() {
   font-size: 9px;
   user-select: none;
   paint-order: stroke;
+}
+.port-event-handler {
+  pointer-events: all;
 }
 </style>

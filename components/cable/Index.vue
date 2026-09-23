@@ -1,27 +1,27 @@
 <template>
-  <g>
+  <g :class="{'no-events': noEvents}">
     <path
       :d="path"
       :opacity="entered ? 1 : opacity"
       stroke-width="7"
-      :class="[`stroke-${color}-darken-3`, 'events-wrapper']"
+      :class="[`stroke-${color}-darken-3`]"
       v-if="showCable"
       fill="transparent"
     />
     <circle
-      :class="[`stroke-${color}-darken-3 fill-shades-white`, 'full-events-wrapper']"
+      :class="[`stroke-${color}-darken-3 fill-shades-white`]"
       :cx="start.x"
       :cy="start.y"
       :r="r"
       stroke-width="6"
     />
     <circle
-      :class="[ `stroke-${color}-darken-3 fill-shades-white`, 'full-events-wrapper']"
+      :class="[ `stroke-${color}-darken-3 fill-shades-white`]"
       :cx="end.x"
       :cy="end.y"
       :r="r"
       stroke-width="6"
-      @mouseup="useLinkCreation().end()"
+      @mouseup="validateCreation"
     />
   </g>
 </template>
@@ -30,6 +30,7 @@
 import type { Coordinates } from '~/types/utils/Coordinates';
 import { PORT_RADIUS } from '~/utils/constants';
 import { getCatenaryCurve, type CatenaryCurveQuadraticResult as Curve } from "catenary-curve";
+import { useCableCreation } from '~/composables/links/useLinkCreation';
 
 export default {
   emits: ['click'],
@@ -68,15 +69,26 @@ export default {
       return (this.end.y + this.start.y) / 2 + dangle;
     },
   },
+  methods: {
+    validateCreation() {
+      useCableCreation().end()
+    }
+  }
 }
 </script>
 
 <style scoped>
-.events-wrapper {
+path {
   pointer-events: stroke;
 }
-.full-events-wrapper {
+circle {
   pointer-events: all;
+}
+.no-events path {
+  pointer-events: none !important;
+}
+.no-events circle {
+  pointer-events: none !important;
 }
 .path {
   opacity: 0.35;
