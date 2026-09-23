@@ -51,6 +51,12 @@
   },
   "contexts": {
     "bind": "MIDI learn",
+    "colors": {
+      "blue": "color in blue",
+      "green": "color in green",
+      "red": "color in red",
+      "yellow": "color in yellow"
+    },
     "controls": {
       "delete": "Delete control",
       "edit": "Edit control"

@@ -51,6 +51,12 @@
   },
   "contexts": {
     "bind": "Lier un bouton MIDI",
+    "colors": {
+      "blue": "colorer en bleu",
+      "green": "colorer en vert",
+      "red": "colorer en rouge",
+      "yellow": "colorer en jaune"
+    },
     "controls": {
       "delete": "Supprimer le contrôle",
       "edit": "Editer le contrôle"
