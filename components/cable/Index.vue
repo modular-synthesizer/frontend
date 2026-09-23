@@ -30,7 +30,7 @@
 import type { Coordinates } from '~/types/utils/Coordinates';
 import { PORT_RADIUS } from '~/utils/constants';
 import { getCatenaryCurve, type CatenaryCurveQuadraticResult as Curve } from "catenary-curve";
-import { useCableCreation } from '~/composables/links/useLinkCreation';
+import { useCableCreation } from '~/composables/links/useCableCreation.composable';
 
 export default {
   emits: ['click'],

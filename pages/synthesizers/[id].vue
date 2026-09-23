@@ -58,7 +58,7 @@ import { appendCable } from '~/utils/functions/cables';
 import { translate } from "~/utils/functions/svg"
 import { createModule as instanciateModule } from '~/utils/factories/modules';
 import { useI18n } from 'vue-i18n';
-import { useCableCreation } from '~/composables/links/useLinkCreation';
+import { useCableCreation } from '~/composables/links/useCableCreation.composable';
 
 type PromisedRef<T> = Promise<Ref<T>>;
 

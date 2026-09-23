@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { useCableCreation } from '~/composables/links/useLinkCreation';
+import { useCableCreation } from '~/composables/links/useCableCreation.composable';
 import { repositories } from '~/lib/repositories';
 import type { Cable, LinkPayload, Synthesizer } from '~/types/Index';
 

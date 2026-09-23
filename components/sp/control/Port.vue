@@ -38,7 +38,7 @@ import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Port } from '~/types/modules/Port';
 import type { ModControl } from "~/types/blueprints/Control";
 import { isInput } from '~/utils/functions/ports';
-import { useCableCreation } from '~/composables/links/useLinkCreation';
+import { useCableCreation } from '~/composables/links/useCableCreation.composable';
 
 const { control, module } = defineProps({
   control: { type: Object as PropType<ModControl>, required: true },
