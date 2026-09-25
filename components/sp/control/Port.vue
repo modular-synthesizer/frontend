@@ -69,8 +69,10 @@ const activated = ref(true)
 
 function onrightmousedown($event: MouseEvent) {
   activated.value = false
-  const path: Element | undefined = document.elementsFromPoint($event.screenX, $event.screenY).find(p => p.nodeName === 'path')
-  if (path) path.dispatchEvent($event)
+  const path: Element | undefined = document
+    .elementsFromPoint($event.screenX, $event.screenY)
+    .find(p => p.nodeName === 'path')
+  if (path) path.dispatchEvent(new MouseEvent("mousedown", { ...$event }))
   useContexts().onHide(() => (activated.value = true))
 }
 </script>

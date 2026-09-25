@@ -51,6 +51,9 @@ export default {
         return 2 * PORT_RADIUS - 2
     },
     path(): string {
+      if (this.start.x === this.end.x) {
+        return `M ${this.start.x} ${this.start.y} ${this.end.x} ${this.end.y}`
+      }
       const curve: Curve = getCatenaryCurve(this.start, this.end, this.distance * 1.6) as Curve;
       let path = `M ${curve.start[0]} ${curve.start[1]} `;
       if (curve.curves) {
