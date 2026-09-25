@@ -67,8 +67,10 @@ function unmagnetize() {
 
 const activated = ref(true)
 
-function onrightmousedown() {
+function onrightmousedown($event: MouseEvent) {
   activated.value = false
+  const path: Element | undefined = document.elementsFromPoint($event.screenX, $event.screenY).find(p => p.nodeName === 'path')
+  if (path) path.dispatchEvent($event)
   useContexts().onHide(() => (activated.value = true))
 }
 </script>
