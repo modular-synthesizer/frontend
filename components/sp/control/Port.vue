@@ -69,9 +69,8 @@ const activated = ref(true)
 
 function onrightmousedown() {
   activated.value = false
+  useContexts().onHide(() => (activated.value = true))
 }
-
-const started = computed(() => useCableCreation().displayed)
 </script>
 
 <style scoped>
