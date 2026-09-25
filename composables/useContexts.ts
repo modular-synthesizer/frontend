@@ -25,7 +25,7 @@ const state: Ref<State> = ref({
 function hide(unblock: boolean = false) {
   if (unblock) useStates().unblock();
   state.value.visible = false;
-  state.value.onHide.forEach(c => c())
+  state.value.onHide?.forEach(c => c())
   state.value.onHide = []
 }
 
