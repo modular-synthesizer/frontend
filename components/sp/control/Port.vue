@@ -2,9 +2,7 @@
   <text :y="- r - 4" text-anchor="middle" class="port-label fill-shades-black stroke-grey-darken-1" font-size="10px">
     {{ label }}
   </text>
-  <g
-    @mousedown.left.stop="onmousedown"
-  >
+  <g>
     <circle
       :r="r"
       :class="`fill-${color}-darken-3`"
@@ -20,13 +18,15 @@
     <Teleport to="#forefront">
       <!-- element sur lequel faire les mouseenter/mouseout -->
       <circle
-        :class="{'port-event-handler': started}"
+        :class="{'port-event-handler': activated}"
         fill-opacity="0"
         :r="r"
         :cx="eventX"
         :cy="eventY"
         @mouseenter="magnetize"
         @mouseout="unmagnetize"
+        @mousedown.left.stop="onmousedown"
+        @mousedown.right.stop="onrightmousedown"
       />
     </Teleport>
   </g>
@@ -63,6 +63,12 @@ function magnetize() {
 }
 function unmagnetize() {
   useCableCreation().unmagnetize()
+}
+
+const activated = ref(true)
+
+function onrightmousedown() {
+  activated.value = false
 }
 
 const started = computed(() => useCableCreation().displayed)
