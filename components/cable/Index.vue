@@ -7,6 +7,7 @@
       :class="[`stroke-${color}-darken-3`]"
       v-if="showCable"
       fill="transparent"
+      @mousedown.left.stop.prevent="onleftmousedown"
     />
     <circle
       :class="[`stroke-${color}-darken-3 fill-shades-white`]"
@@ -75,6 +76,13 @@ export default {
   methods: {
     validateCreation() {
       useCableCreation().end()
+    },
+    onleftmousedown($event: MouseEvent) {
+      const port: Element | undefined = document
+        .elementsFromPoint($event.screenX, $event.screenY)
+        .find(p => (p.attributes.getNamedItem("class")?.value === "port-event-handler"))
+        console.log(port)
+      if (port) port.dispatchEvent(new MouseEvent("mousedown", { ...$event }))
     }
   }
 }

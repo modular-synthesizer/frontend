@@ -1,4 +1,5 @@
 <template>
+  <div class="backdrop" v-show="useContexts().visible" @mousedown.prevent.stop="hideAndForward"></div>
   <div class="main-menu-wrapper" :style="coordinates" v-show="useContexts().visible">
     <div class="background-shadow"></div>
     <div class="items-wrapper">
@@ -26,6 +27,13 @@ export default {
     t(item: any): string {
       return this.$t(`contexts.${item.label}`);
     },
+    hideAndForward($event: MouseEvent) {
+      useContexts().hide()
+      const element: Element | undefined = document
+        .elementsFromPoint($event.screenX, $event.screenY)
+        .find(p => (p.attributes.getNamedItem("class")?.value.match(/drag-starter/)))
+      if (element) element.dispatchEvent(new MouseEvent($event.type, $event))
+    }
   },
   computed: {
     x() {
@@ -62,6 +70,13 @@ export default {
 </script>
 
 <style scoped>
+  .backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+  }
   .main-menu-wrapper {
     position: absolute;
     font-size: 13px;

@@ -1,11 +1,21 @@
 <template>
-  <g v-if="parameter" @mousedown.stop="onmousedown" @wheel.passive.stop="onwheel" @click.right.prevent.stop="onrightclick">
+  <g v-if="parameter">
     <knob-label :y="- r - 6" :label="label" />
     <knob-background :radius="r" :editing="control.editing" />
     <knob-gauge :radius="r - 4" :startAngle="30" :endAngle="330" :parameter="parameter" />
     <knob-value :small="r <= 15" :value="value">
       <slot :value="value">{{ value }}</slot>
     </knob-value>
+    <circle
+      :cx="0"
+      :cy="0"
+      :r="r"
+      fill="transparent"
+      @mousedown.stop="onmousedown"
+      @wheel.passive.stop="onwheel"
+      @click.right.prevent.stop="onrightclick"
+      class="drag-starter"
+    />
   </g>
 </template>
 
@@ -15,7 +25,6 @@ import { round } from 'lodash';
 import type { Control } from '~/types/blueprints/Control';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { DragCallback } from '~/types/draggables/DragDeclaration';
-import { repositories } from '~/lib/repositories';
 import type { Synthesizer } from '~/types/Index';
 import { moveValue, setValue } from '~/utils/functions/parameters';
 import { eventbus } from '~/utils/eventbus/EventBus';

@@ -10,7 +10,7 @@ export interface ContextOptions {
 }
 
 type State = {
-  x: number, y: number, visible: boolean, items: any[], payload: any, onHide: HideFct[]
+  x: number, y: number, visible: boolean, items: any[], payload: any
 }
 
 const state: Ref<State> = ref({
@@ -19,27 +19,17 @@ const state: Ref<State> = ref({
   visible: false,
   items: [] as any[],
   payload: null as any,
-  onHide: []
 });
 
 function hide(unblock: boolean = false) {
   if (unblock) useStates().unblock();
   state.value.visible = false;
-  state.value.onHide?.forEach(c => c())
-  state.value.onHide = []
-}
-
-type HideFct = () => void
-
-export function onHide(fct: HideFct) {
-  state.value.onHide.push(fct)
 }
 
 export function useContexts() {
   window.addEventListener('click', () => hide());
   return {
     state,
-    onHide,
     display($event: MouseEvent, options: ContextOptions) {
       useStates().setState(SynthState.DISPLAYING_CONTEXT);
       state.value.x = $event.clientX;

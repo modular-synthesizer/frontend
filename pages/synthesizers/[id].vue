@@ -33,11 +33,11 @@
           </module>
         </sp-stage-draggable>
       </sp-stage-svg-layer>
+      <sp-stage-svg-layer name="forefront" />
       <sp-stage-svg-layer name="cables">
         <cable-list :cables="cables" :synthesizer="synthesizer" />
         <cable-creation v-if="useCableCreation().displayed" @created="addCable" :synthesizer="synthesizer" />
       </sp-stage-svg-layer>
-      <sp-stage-svg-layer name="forefront" />
     </sp-stage>
     <synthesizer-menu v-if="synthesizer.id" :synthesizer="synthesizer" :modules="modules" @created="createModule" />
   </div>

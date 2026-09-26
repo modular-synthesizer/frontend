@@ -18,7 +18,7 @@
     <Teleport to="#forefront">
       <!-- element sur lequel faire les mouseenter/mouseout -->
       <circle
-        :class="{'port-event-handler': activated}"
+        class="port-event-handler drag-starter"
         fill-opacity="0"
         :r="r"
         :cx="eventX"
@@ -26,7 +26,6 @@
         @mouseenter="magnetize"
         @mouseout="unmagnetize"
         @mousedown.left.stop="onmousedown"
-        @mousedown.right.stop="onrightmousedown"
       />
     </Teleport>
   </g>
@@ -63,17 +62,6 @@ function magnetize() {
 }
 function unmagnetize() {
   useCableCreation().unmagnetize()
-}
-
-const activated = ref(true)
-
-function onrightmousedown($event: MouseEvent) {
-  activated.value = false
-  const path: Element | undefined = document
-    .elementsFromPoint($event.screenX, $event.screenY)
-    .find(p => p.nodeName === 'path')
-  if (path) path.dispatchEvent(new MouseEvent("mousedown", { ...$event }))
-  useContexts().onHide(() => (activated.value = true))
 }
 </script>
 

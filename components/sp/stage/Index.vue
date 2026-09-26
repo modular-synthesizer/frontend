@@ -1,5 +1,5 @@
 <template>
-  <div class="events-wrapper"
+  <div class="events-wrapper drag-starter"
     @wheel.passive="onwheel"
     @mousedown="onmousedown"
     @mousemove.capture="callbacks.dragged"
