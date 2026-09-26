@@ -27,7 +27,10 @@ function hide(unblock: boolean = false) {
 }
 
 export function useContexts() {
-  window.addEventListener('mousedown', () => hide(), true);
+  window.addEventListener('mousedown', ($event: MouseEvent) => {
+    const element = $event.target as Element
+    if (!element.attributes.getNamedItem("class")?.value.match(/item-wrapper/)) hide()
+  }, true);
   return {
     state,
     display($event: MouseEvent, options: ContextOptions) {
