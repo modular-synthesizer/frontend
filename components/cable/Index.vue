@@ -81,7 +81,6 @@ export default {
       const port: Element | undefined = document
         .elementsFromPoint($event.screenX, $event.screenY)
         .find(p => (p.attributes.getNamedItem("class")?.value === "port-event-handler"))
-        console.log(port)
       if (port) port.dispatchEvent(new MouseEvent("mousedown", { ...$event }))
     }
   }

@@ -4,7 +4,7 @@
       <sp-stage :target="referential">
         <sp-stage-svg-layer name="appearance">
           <rect :x="0" :y="0" :width="blueprint.slots * SLOT_SIZE" :height="RACK_HEIGHT" fill="white" />
-          <sp-stage-draggable v-for="control in controls" :target="control" :sx="5" :sy="5" capture @dropped="dropped">
+          <sp-stage-draggable v-for="control in controls" :target="control" :sx="5" :sy="5" capture>
             <sp-control-wrapper :module :synthesizer :control="(control as unknown as ModControl)" no-events />
           </sp-stage-draggable>
         </sp-stage-svg-layer>
@@ -31,10 +31,6 @@ const synthesizer = createEmptySynthesizer();
 const module = createEmptyModule(props.blueprint);
 
 useCoordinates().setReference(referential.value)
-
-const dropped = () => {
-  console.log("saving controls")
-}
 
 type PlacedControl = ModControl & PlacedBox
 
