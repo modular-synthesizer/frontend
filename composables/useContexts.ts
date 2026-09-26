@@ -27,7 +27,7 @@ function hide(unblock: boolean = false) {
 }
 
 export function useContexts() {
-  window.addEventListener('click', () => hide());
+  window.addEventListener('mousedown', () => hide(), true);
   return {
     state,
     display($event: MouseEvent, options: ContextOptions) {
