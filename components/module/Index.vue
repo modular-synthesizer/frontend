@@ -1,12 +1,12 @@
 <template>
   <defs>
-    <path :id="module.id" :d="`M 0 0 H ${module.width} V ${module.height} H 0 V 0`" />
+    <path :id="module.id" :d="`M 0 0 H ${module.width + 1} V ${module.height} H 0 V 0`" />
     <clipPath :id="`clip-${module.id}`">
       <use :xlink:href="`#${module.id}`" />
     </clipPath>
   </defs>
   <g @click.right.prevent.stop="showContext">
-    <rect :clip-path="`url(#clip-${module.id})`" :x="0" :y="0" :height="module.height" :width="module.width" class="stroke-shades-black fill-grey" stroke-width="2" />
+    <rect :clip-path="`url(#clip-${module.id})`" :x="0" :y="-1" :height="module.height + 1" :width="module.width + 1" class="stroke-shades-black fill-grey" stroke-width="1" />
     <slot></slot>
   </g>
 </template>
