@@ -22,12 +22,13 @@ const dropped: DragCallback = inject('dropped') as DragCallback;
 dropped(async () => {
   const { displayed, magnetized, startPort, endPort, cable  } = useCableCreation();
   console.log(displayed, magnetized, startPort, endPort, cable)
-  if (displayed && magnetized && startPort && endPort && cable ) {
-    const results: LinkPayload = await repositories.links.create({ from: startPort.id, to: endPort.id, color: 'red', id: '' }, synthesizer);
-    cable.id = results.id
-    emit('created', cable);
-  }
   useCableCreation().end();
+  if (displayed && magnetized && startPort && endPort && cable ) {
+    emit('created', cable);
+    repositories.links.create({ from: startPort.id, to: endPort.id, color: 'red', id: '' }, synthesizer).then(res => {
+      cable.id = res.id
+    })
+  }
 })
 
 const start = computed(() => useCableCreation().origin)

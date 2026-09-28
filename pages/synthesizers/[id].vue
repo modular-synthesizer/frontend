@@ -204,6 +204,7 @@ function createcable(payload: LinkPayload) {
 }
 
 function addCable(cable: Cable) {
+  console.log(cable)
   if (cable === undefined) return;
   if (!find(cables.value, { id: cable.id })) cables.value.push(cable);
 }
