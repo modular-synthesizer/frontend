@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { useCableCreation } from '~/composables/links/useCableCreation.composable';
 import { repositories } from '~/lib/repositories';
-import type { Cable, LinkPayload, Synthesizer } from '~/types/Index';
+import type { Cable, Synthesizer } from '~/types/Index';
 
 type DragCallback = (callback: ($event: MouseEvent) => void) => void
 
@@ -21,7 +21,6 @@ const dropped: DragCallback = inject('dropped') as DragCallback;
 
 dropped(async () => {
   const { displayed, magnetized, startPort, endPort, cable  } = useCableCreation();
-  console.log(displayed, magnetized, startPort, endPort, cable)
   useCableCreation().end();
   if (displayed && magnetized && startPort && endPort && cable ) {
     emit('created', cable);

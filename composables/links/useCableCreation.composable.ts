@@ -16,7 +16,6 @@ type CableState = Readonly<
 const cableState: Ref<CableState> = ref({ type: 'void' })
 
 function setState(newState: CableState) {
-  console.log(newState)
   cableState.value = newState
 }
 
@@ -45,14 +44,12 @@ function disconnectAudio() {
 }
 
 function unmagnetizeCable() {
-  console.log("unmagnetized", cableState.value.type)
   if (cableState.value.type !== 'magnetized') return
   disconnectAudio()
   setState({ type: 'started', origin: cableState.value.origin })
 }
 
 function cancelCableCreation() {
-  console.log("cancellation")
   setState({ type: 'void' })
 }
 
