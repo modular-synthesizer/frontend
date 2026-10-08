@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest"
 import { create } from "../create.process"
-import type { InnerNode, InnerNodeTemplate, NodeGenerator } from "~/features/core/data/InnerNode.type"
+import type { InnerNode, InnerNodeTemplate } from "~/features/core/data/InnerNode.type"
 import type { Uuid } from "~/features/core/data/Uuid.type"
 
 describe("create", async () => {
