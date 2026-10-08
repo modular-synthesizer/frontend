@@ -1,14 +1,19 @@
 import { describe, expect, it, vi } from "vitest"
 import { create } from "../create.process"
-import type { InnerNode, InnerNodeTemplate } from "~/features/core/data/InnerNode.type"
+import type { Connectable, Disconnectable, InnerNode, InnerNodeTemplate, NodeGenerator } from "~/features/core/data/InnerNode.type"
 import type { Uuid } from "~/features/core/data/Uuid.type"
 
+// The future node that will be created by the generator
+const futureNode: Connectable & Disconnectable<string> = {
+  connect: vi.fn(), disconnect: vi.fn()
+}
+
 describe("create", async () => {
-  const returnedNode: AudioNode = vi.fn() as unknown as AudioNode
-  const generator = vi.fn().mockReturnValue(returnedNode)
-  const template: InnerNodeTemplate = { name: "test template", id: "testId" as Uuid, generator }
+  // Mocks a generator function that always returns the same AudioNode-like object
+  const generator: NodeGenerator<string> = vi.fn().mockReturnValue(futureNode)
+  const template: InnerNodeTemplate<string> = { name: "test template", id: "testId" as Uuid, generator }
   const spy = vi.spyOn(template, "generator")
-  const innerNode: InnerNode = await create(template)
+  const innerNode: InnerNode<string> = await create(template)
 
   it("Has the same name than the template", () => {
     expect(innerNode.name).toEqual('test template')
@@ -20,6 +25,6 @@ describe("create", async () => {
     expect(spy).toHaveBeenCalledOnce()
   })
   it('Has created the node correctly', () => {
-    expect(innerNode.audioNode).toEqual(returnedNode)
+    expect(innerNode.audioNode).toEqual(futureNode)
   })
 })

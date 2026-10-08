@@ -10,7 +10,7 @@ import type { InLayer, PolyphonyLayer } from "../../data/AudioModule.type";
  * 
  * @return A promise to create the inner node. For some nodes (eg. microphone entries)
  */
-export const create = async (template: InnerNodeTemplate): Promise<InnerNode> => {
+export const create = async <T = AudioNode>(template: InnerNodeTemplate<T>): Promise<InnerNode<T>> => {
   return {
     id: template.id,
     name: template.name,
@@ -18,6 +18,6 @@ export const create = async (template: InnerNodeTemplate): Promise<InnerNode> =>
   }
 }
 
-export const createInLayer = async (template: InnerNodeTemplate, layer: PolyphonyLayer): Promise<InLayer<InnerNode>> => {
+export const createInLayer = async <T = AudioNode>(template: InnerNodeTemplate<T>, layer: PolyphonyLayer): Promise<InLayer<InnerNode<T>>> => {
   return { layer, ...(await create(template)) }
 }
