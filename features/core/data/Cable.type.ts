@@ -1,5 +1,4 @@
 import type { Port } from "./Control.type"
-import type { Synthesizer } from "./Synthesizer.type"
 import type { Uuid } from "./Uuid.type"
 
 /**
@@ -8,7 +7,6 @@ import type { Uuid } from "./Uuid.type"
  * origin and destination nodes being in separate polyphonic layers of the module.
  */
 export type Cable = {
-  synthesizer: Synthesizer
   /** The unique identifier used to delete or edit the cable */
   id: Uuid
   /** The output port of the module producing the signal transmitted in the cable. */

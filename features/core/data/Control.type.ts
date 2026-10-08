@@ -1,4 +1,3 @@
-import type { AudioModule } from "./AudioModule.type"
 import type { InnerNodeTemplate } from "./InnerNode.type"
 
 export type Port = {
@@ -7,6 +6,5 @@ export type Port = {
   target: InnerNodeTemplate
 }
 
-export type Control = { audioModule: AudioModule } & (
+export type Control =
   | Port
-)

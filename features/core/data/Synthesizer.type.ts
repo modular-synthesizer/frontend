@@ -10,13 +10,15 @@ import type { Uuid } from "./Uuid.type"
  * status indicating if the user can interact with the modules and cables.
  */
 export type Synthesizer = {
-  audioModules: AudioModule[]
-  cables: Cable[]
+  audioModules: InSynthesizer<AudioModule>[]
+  cables: InSynthesizer<Cable>[]
   /** The position determines where the module set in its entirety will be represented on screen. */
   position: Position
   /** The scale is the zoom level, 1 is not zoom, < 1 is zommed out, > 1 is zoomed in. */
   scale: number
   name: string
-  memberships: Membership[]
+  memberships: InSynthesizer<Membership>[]
   id: Uuid
 }
+
+export type InSynthesizer<T> = T & { synthesizer: Synthesizer }
