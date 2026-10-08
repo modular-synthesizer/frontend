@@ -19,7 +19,7 @@ describe("populateLayer", () => {
     const generator = vi.fn().mockReturnValue(futureNode)
     const template: InnerNodeTemplate<string> = { id: uuid, name: "template name", generator }
     const layer: PolyphonyLayer<string> = await populateLayer([ template ])
-    
+
     expect(layer).toMatchObject({
       innerNodes: [ { id: "templateId", name: "template name", audioNode: futureNode } ]
     })
