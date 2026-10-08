@@ -1,5 +1,6 @@
-import type { PolyphonyLayer } from "./AudioModule.type"
 import type { Uuid } from "./Uuid.type"
+
+export type NodeGenerator = () => Promise<AudioNode>
 
 /**
  * A node template is a template to create wrapped audio nodes in a layer in the corresponding
@@ -12,7 +13,7 @@ export type InnerNodeTemplate = {
   /** The name to be given to audio nodes created with this template. */
   name: string
   /** The function generating a Web Audio API AudioNode object to be able to work with audio signals. */
-  generator: () => Promise<AudioNode>
+  generator: NodeGenerator
 }
 
 /**
