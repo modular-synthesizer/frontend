@@ -7,7 +7,7 @@ export type NodeGenerator<T> = () => Promise<T>
  * audio module. The created nodes are then linked to other nodes using inner links templates
  * to determine the path of the signal in the nodes infrastructure.
  */
-export type InnerNodeTemplate<T = AudioNode> = {
+export type InnerNodeTemplate<T extends CustomAudioNode> = {
   /** A unique identifier used by controls to know on which node they must act */
   id: Uuid
   /** The name to be given to audio nodes created with this template. */
@@ -17,26 +17,22 @@ export type InnerNodeTemplate<T = AudioNode> = {
 }
 
 /** Connection function, compatible with the AudioNode connect function */
-type ConnectFct = 
-| ((other: Connectable) => Connectable | undefined)
-| ((other: Connectable, output: number) => Connectable | undefined)
-| ((other: Connectable, output: number, input: number) => Connectable | undefined)
+type ConnectFct = (other: Connectable, output?: number, input?: number) => Connectable | undefined
 
 export type Connectable = { connect: ConnectFct }
 
 /** Disconnection function, compatible with the AudioNode disconnect function */
-type DisconnectFct<T> =
-  | ((other: T) => undefined)
-  | ((other: T, output: number) => undefined)
-  | ((other: T, output: number, index: number) => undefined)
+type DisconnectFct<T> =(other: T, output?: number, index?: number) => undefined
 
 export type Disconnectable<T> = { disconnect: DisconnectFct<T> }
+
+export type CustomAudioNode = Connectable & Disconnectable<AudioNode>
 
 /**
  * An instanciated node, holding the representation of the web audio API node producing or
  * treating the signal. It will then be linked to other nodes to make the full path of the signal.
  */
-export type InnerNode<T = AudioNode> = {
+export type InnerNode<T extends CustomAudioNode> = {
   /** The identifier of the inner node template reproduced in every layer to search for nodes */
   id: Uuid
   /** The name of the inner node identifying it. */

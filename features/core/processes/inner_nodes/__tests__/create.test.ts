@@ -4,16 +4,14 @@ import type { Connectable, Disconnectable, InnerNode, InnerNodeTemplate, NodeGen
 import type { Uuid } from "~/features/core/data/Uuid.type"
 
 // The future node that will be created by the generator
-const futureNode: Connectable & Disconnectable<string> = {
-  connect: vi.fn(), disconnect: vi.fn()
-}
+const futureNode = { connect: vi.fn(), disconnect: vi.fn() }
 
 describe("create", async () => {
   // Mocks a generator function that always returns the same AudioNode-like object
-  const generator: NodeGenerator<string> = vi.fn().mockReturnValue(futureNode)
-  const template: InnerNodeTemplate<string> = { name: "test template", id: "testId" as Uuid, generator }
+  const generator: NodeGenerator<typeof futureNode> = vi.fn().mockReturnValue(futureNode)
+  const template: InnerNodeTemplate<typeof futureNode> = { name: "test template", id: "testId" as Uuid, generator }
   const spy = vi.spyOn(template, "generator")
-  const innerNode: InnerNode<string> = await create(template)
+  const innerNode: InnerNode<typeof futureNode> = await create(template)
 
   it("Has the same name than the template", () => {
     expect(innerNode.name).toEqual('test template')
