@@ -4,6 +4,7 @@ import type { InnerNodeTemplate } from "~/features/core/data/InnerNode.type"
 import type { Uuid } from "~/features/core/data/Uuid.type"
 import { getLayer } from "../getLayer.process"
 import { mockAudioNode } from "../../../../utils/tests/mockAudioNode"
+import { initializeModule } from "../initializeModule.process"
 
 const futureNode = mockAudioNode()
 
@@ -17,23 +18,11 @@ describe("getLayer", () => {
 
   describe("With only one inner node", () => {
 
-    beforeEach(() => {
-      template.generator = vi.fn().mockResolvedValue(futureNode)
-    })
-
-    const audioModule: AudioModule = {
-      id: "moduleId" as Uuid,
-      controls: [],
-      layers: [],
-      nodeTemplates: [],
-      linkTemplates: []
-    }
+    const audioModule: AudioModule = initializeModule("moduleId" as Uuid)
 
     audioModule.nodeTemplates = [ { ...template, audioModule } ]
 
-    beforeEach(() => {
-      audioModule.layers = []
-    })
+    beforeEach(() => (audioModule.layers = []))
 
     it("Creates a layer in a module", async () => {
       const layer = await getLayer(audioModule, 0)
@@ -60,20 +49,14 @@ describe("getLayer", () => {
 
   describe("With two nodes and an inner link", () => {
 
-    const audioModule: AudioModule = {
-      id: "moduleId" as Uuid,
-      controls: [],
-      layers: [],
-      nodeTemplates: [],
-      linkTemplates: []
-    }
+    const audioModule: AudioModule = initializeModule("moduleId" as Uuid)
 
     const otherfutureNode = mockAudioNode()
 
     const otherTemplate: InnerNodeTemplate = {
       id: "otherId" as Uuid,
       name: "other name",
-      generator: vi.fn(async () => otherfutureNode)
+      generator: vi.fn().mockResolvedValue(otherfutureNode)
     }
 
     audioModule.nodeTemplates = [
@@ -87,11 +70,7 @@ describe("getLayer", () => {
 
     const connectSpy = vi.spyOn(futureNode, "connect")
 
-    beforeEach(() => {
-      audioModule.layers = []
-      template.generator = vi.fn().mockResolvedValue(futureNode)
-      otherTemplate.generator = vi.fn().mockResolvedValue(otherfutureNode)
-    })
+    beforeEach(() => (audioModule.layers = []))
 
     it("Connects the nodes only once per layer", async () => {
       await getLayer(audioModule, 0)
