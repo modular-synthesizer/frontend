@@ -1,10 +1,11 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 import type { AudioModule } from "~/features/core/data/AudioModule.type"
 import type { InnerNodeTemplate } from "~/features/core/data/InnerNode.type"
 import type { Uuid } from "~/features/core/data/Uuid.type"
 import { getLayer } from "../getLayer.process"
 import { mockAudioNode } from "../../../../utils/tests/mockAudioNode"
 import { initializeModule } from "../initializeModule.process"
+import type { InnerLink } from "~/features/core/data/InnerLink.type"
 
 const futureNode = mockAudioNode()
 
@@ -18,9 +19,10 @@ describe("getLayer", () => {
 
   describe("With only one inner node", () => {
 
-    const audioModule: AudioModule = initializeModule("moduleId" as Uuid)
-
-    audioModule.nodeTemplates = [ { ...template, audioModule } ]
+    const audioModule: AudioModule = initializeModule({
+      id: "moduleId" as Uuid,
+      nodeTemplates: [ template ]
+    })
 
     beforeEach(() => (audioModule.layers = []))
 
@@ -49,8 +51,6 @@ describe("getLayer", () => {
 
   describe("With two nodes and an inner link", () => {
 
-    const audioModule: AudioModule = initializeModule("moduleId" as Uuid)
-
     const otherfutureNode = mockAudioNode()
 
     const otherTemplate: InnerNodeTemplate = {
@@ -59,14 +59,13 @@ describe("getLayer", () => {
       generator: vi.fn().mockResolvedValue(otherfutureNode)
     }
 
-    audioModule.nodeTemplates = [
-      { ...template, audioModule },
-      { ...otherTemplate, audioModule }
-    ]
+    const link: InnerLink = { from: { name: "template name" }, to: { name: "other name" } }
 
-    audioModule.linkTemplates = [
-      { from: { name: "template name" }, to: { name: "other name" }, audioModule }
-    ]
+    const audioModule: AudioModule = initializeModule({
+      id: "moduleId" as Uuid,
+      nodeTemplates: [ template, otherTemplate ],
+      linkTemplates: [ link ]
+    })
 
     const connectSpy = vi.spyOn(futureNode, "connect")
 
