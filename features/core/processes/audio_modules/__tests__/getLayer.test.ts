@@ -49,4 +49,10 @@ describe("getLayer", () => {
     await getLayer(audioModule, 0)
     expect(audioModule.layers.length).toEqual(1)
   })
+  it("Does not create all layers between two indexes, only the needed ones", async () => {
+    await getLayer(audioModule, 0)
+    await getLayer(audioModule, 2)
+    expect(audioModule.layers.length).toEqual(3)
+    expect(audioModule.layers[1]).toEqual(undefined)
+  })
 })
