@@ -1,4 +1,5 @@
 import type { Control } from "./Control.type"
+import type { InnerLink } from "./InnerLink.type"
 import type { InnerNode, InnerNodeTemplate } from "./InnerNode.type"
 import type { Uuid } from "./Uuid.type"
 
@@ -12,6 +13,7 @@ export type AudioModule = {
   controls: InModule<Control>[]
   layers: InModule<PolyphonyLayer>[]
   nodeTemplates: InModule<InnerNodeTemplate>[]
+  linkTemplates: InModule<InnerLink>[]
 }
 
 export type InModule<T> = T & { audioModule: AudioModule }

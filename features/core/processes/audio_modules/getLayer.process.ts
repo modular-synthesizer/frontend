@@ -1,4 +1,5 @@
 import type { AudioModule, PolyphonyLayer } from "../../data/AudioModule.type"
+import { connectLayer } from "./connectLayer.process"
 import { populateLayer } from "./populateLayer.process"
 
 /**
@@ -16,10 +17,11 @@ import { populateLayer } from "./populateLayer.process"
  * 
  * @returns a polyphony layer with all inner nodes created and linked with inner links.
  */
-export const getLayer = async (audioModule: AudioModule, index: number): Promise<PolyphonyLayer<AudioNode>> => {
+export const getLayer = async (audioModule: AudioModule, index: number): Promise<PolyphonyLayer> => {
   if (!audioModule.layers[index]) {
     const layer = await populateLayer(audioModule.nodeTemplates)
     audioModule.layers[index] = { ...layer, audioModule }
+    connectLayer(audioModule.layers[index] as PolyphonyLayer, audioModule.linkTemplates)
   }
-  return audioModule.layers[index]
+  return audioModule.layers[index] as PolyphonyLayer
 }

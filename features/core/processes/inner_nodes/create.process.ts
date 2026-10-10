@@ -1,4 +1,3 @@
-import { template } from "lodash";
 import type { InnerNode, InnerNodeTemplate } from "../../data/InnerNode.type";
 import type { InLayer, PolyphonyLayer } from "../../data/AudioModule.type";
 
@@ -10,14 +9,16 @@ import type { InLayer, PolyphonyLayer } from "../../data/AudioModule.type";
  * 
  * @return A promise to create the inner node. For some nodes (eg. microphone entries)
  */
-export const create = async <T = AudioNode>(template: InnerNodeTemplate<T>): Promise<InnerNode<T>> => {
-  return {
+export const create = async (template: InnerNodeTemplate): Promise<InnerNode> => {
+  const innerNode = {
     id: template.id,
     name: template.name,
     audioNode: await template.generator()
   }
+
+  return innerNode
 }
 
-export const createInLayer = async <T = AudioNode>(template: InnerNodeTemplate<T>, layer: PolyphonyLayer): Promise<InLayer<InnerNode<T>>> => {
+export const createInLayer = async (template: InnerNodeTemplate, layer: PolyphonyLayer): Promise<InLayer<InnerNode>> => {
   return { layer, ...(await create(template)) }
 }

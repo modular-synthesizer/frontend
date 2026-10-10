@@ -23,7 +23,7 @@ const templates: InnerNodeTemplate[] = [
 
 const spies = [ vi.spyOn(nodes.first, "connect"), vi.spyOn(nodes.second, "connect") ]
 
-const layer = await populateLayer<typeof nodes.first>(templates)
+const layer = await populateLayer(templates)
 
 describe("connectLayer", () => {
   beforeEach(() => {
