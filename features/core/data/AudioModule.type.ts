@@ -21,8 +21,8 @@ export type InModule<T> = T & { audioModule: AudioModule }
  * nodes and the connections between them to manage the audio signal. The nodes are created from inner node templates
  * and connected from inner link templates.
  */
-export type PolyphonyLayer<T = AudioNode> = {
-  innerNodes: InLayer<InnerNode<T>>[]
+export type PolyphonyLayer = {
+  innerNodes: InLayer<InnerNode>[]
 }
 
 export type InLayer<T> = T & { layer: PolyphonyLayer }

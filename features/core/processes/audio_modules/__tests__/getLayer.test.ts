@@ -1,22 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import type { AudioModule } from "~/features/core/data/AudioModule.type"
-import type { CustomAudioNode, InnerNode, InnerNodeTemplate } from "~/features/core/data/InnerNode.type"
+import type { InnerNode, InnerNodeTemplate } from "~/features/core/data/InnerNode.type"
 import type { Uuid } from "~/features/core/data/Uuid.type"
 import { getLayer } from "../getLayer.process"
+import { mockAudioNode } from "../../../../utils/tests/mockAudioNode"
 
 describe("getLayer", () => {
 
-  const futureNode: CustomAudioNode = {
-    connect: vi.fn(), disconnect: vi.fn()
-  }
+  const futureNode = mockAudioNode()
 
-  const innerNode: InnerNode<CustomAudioNode> = {
+  const innerNode: InnerNode = {
     id: "templateId" as Uuid,
     name: "template name",
     audioNode: futureNode
   }
 
-  const template: InnerNodeTemplate<CustomAudioNode> = {
+  const template: InnerNodeTemplate = {
     id: "templateId" as Uuid,
     name: "template name",
     generator: vi.fn().mockReturnValue(innerNode)
@@ -26,8 +25,10 @@ describe("getLayer", () => {
     id: "moduleId" as Uuid,
     controls: [],
     layers: [],
-    nodeTemplates: [ template ]
+    nodeTemplates: [ ]
   }
+  
+  audioModule.nodeTemplates = [ { ...template, audioModule } ]
 
   beforeEach(() => {
     audioModule.layers = []

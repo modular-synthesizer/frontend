@@ -16,7 +16,7 @@ import { populateLayer } from "./populateLayer.process"
  * 
  * @returns a polyphony layer with all inner nodes created and linked with inner links.
  */
-export const getLayer = async (audioModule: AudioModule, index: number): Promise<PolyphonyLayer> => {
+export const getLayer = async (audioModule: AudioModule, index: number): Promise<PolyphonyLayer<AudioNode>> => {
   if (!audioModule.layers[index]) {
     const layer = await populateLayer(audioModule.nodeTemplates)
     audioModule.layers[index] = { ...layer, audioModule }
