@@ -1,6 +1,6 @@
 import type { Control } from "./Control.type"
 import type { InnerLink } from "./InnerLink.type"
-import type { InnerNode, InnerNodeTemplate } from "./InnerNode.type"
+import type { InnerNodeTemplate } from "./InnerNode.type"
 import type { Uuid } from "./Uuid.type"
 
 /**
@@ -11,20 +11,8 @@ import type { Uuid } from "./Uuid.type"
 export type AudioModule = {
   id: Uuid
   controls: InModule<Control>[]
-  layers: InModule<PolyphonyLayer>[]
   nodeTemplates: InModule<InnerNodeTemplate>[]
   linkTemplates: InModule<InnerLink>[]
 }
 
 export type InModule<T> = T & { audioModule: AudioModule }
-
-/**
- * A polyphonic layer is the internal structure of the audio node of a polyphonic layer. A layer holds all the audio
- * nodes and the connections between them to manage the audio signal. The nodes are created from inner node templates
- * and connected from inner link templates.
- */
-export type PolyphonyLayer = {
-  innerNodes: InLayer<InnerNode>[]
-}
-
-export type InLayer<T> = T & { layer: PolyphonyLayer }

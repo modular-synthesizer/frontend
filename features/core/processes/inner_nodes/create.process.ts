@@ -1,5 +1,7 @@
 import type { InnerNode, InnerNodeTemplate } from "../../data/InnerNode.type";
-import type { InLayer, PolyphonyLayer } from "../../data/AudioModule.type";
+import type { InVoice, PolyphonyVoice } from "../../data/Synthesizer.type";
+
+export type CreateNodeFct = (t: InnerNodeTemplate) => Promise<InnerNode>;
 
 /**
  * Instanciates an audio node inside a polyphony layer from an inner node template providing the
@@ -9,7 +11,7 @@ import type { InLayer, PolyphonyLayer } from "../../data/AudioModule.type";
  * 
  * @return A promise to create the inner node. For some nodes (eg. microphone entries)
  */
-export const create = async (template: InnerNodeTemplate): Promise<InnerNode> => {
+export const createNode: CreateNodeFct = async (template) => {
   const innerNode = {
     id: template.id,
     name: template.name,
@@ -19,6 +21,16 @@ export const create = async (template: InnerNodeTemplate): Promise<InnerNode> =>
   return innerNode
 }
 
-export const createInLayer = async (template: InnerNodeTemplate, layer: PolyphonyLayer): Promise<InLayer<InnerNode>> => {
-  return { layer, ...(await create(template)) }
+export type CreateInVoiceFct = (t: InnerNodeTemplate, v: PolyphonyVoice) => Promise<InVoice<InnerNode>>;
+
+/**
+ * Makes the backlink in the template to acess the voice directly.
+ * 
+ * @param template the template to link to the voice.
+ * @param voice  the voice to link to the template.
+ * 
+ * @returns the node linked to the voice so that the voice can be accessed back.
+ */
+export const createInVoice: CreateInVoiceFct = async (template, voice) => {
+  return { voice, ...(await createNode(template)) }
 }

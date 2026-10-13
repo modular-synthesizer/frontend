@@ -37,22 +37,25 @@ export default {
   },
   methods: {
     noteTrigger({ note, channel }: any) {
-      const c = this.module.channels[channel]
+      const voice = channel > this.voices ? this.voices : channel
+      const c = this.module.channels[voice]
       if (c === undefined) return;
       const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode
       gate.offset.setValueAtTime(1, this.ctx.currentTime);
-      this.noteChange({ note, channel })
+      this.noteChange({ note, voice })
     },
     noteChange({ note, channel }: any) {
+      const voice = channel > this.voices ? this.voices : channel
       const voltage: number = (note - 69) / 12;
-      const c = this.module.channels[channel]
+      const c = this.module.channels[voice]
       if (!c) return;
       const pitch: ConstantSourceNode = c.nodes[this.pitch] as ConstantSourceNode
       pitch.offset.cancelScheduledValues(this.ctx.currentTime);
       pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
     },
     noteRelease({ channel }: any) {
-      const c = this.module.channels[channel]
+      const voice = channel > this.voices ? this.voices : channel
+      const c = this.module.channels[voice]
       if (c === undefined) return;
       const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode
       gate.offset.cancelScheduledValues(this.ctx.currentTime);
@@ -86,6 +89,9 @@ export default {
     }
   },
   computed: {
+    voices(): number {
+      return this.module?.parameters[this.control.payload.voices]?.value || 1
+    },
     ctx(): AudioContext {
       return useAudio().context;
     },
