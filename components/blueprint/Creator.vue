@@ -69,7 +69,8 @@ async function createPort(port: ToolPort) {
   blueprint.value.ports.push(await repositories.blueprint.ports.create(blueprint.value, port));
 }
 async function createParameter(parameter: ToolParameter) {
-  blueprint.value.parameters.push(await repositories.blueprint.parameters.create(blueprint.value, parameter));
+  const result = await api_post(`/proxy/blueprints/${blueprint.value.id}/parameters`, parameter)
+  blueprint.value.parameters.push(result);
 }
 async function createNode(node: InnerNode) {
   blueprint.value.nodes.push(await repositories.blueprint.nodes.create(blueprint.value, node));

@@ -1,5 +1,5 @@
 <template>
-  <v-btn :key icon>
+  <v-btn icon>
     <v-icon>mdi-dock-window</v-icon>
     <v-dialog max-width="500" activator="parent">
       <template v-slot:default="{ isActive }">
@@ -32,8 +32,6 @@ import { clone, sortBy } from 'lodash';
 import type { Generator } from '~/types/Generator';
 import type { InnerNode } from '~~/types/blueprints/InnerNode';
 import { repositories } from '~~/lib/repositories';
-
-const { key } = defineProps<{ key: number }>()
 
 const emit = defineEmits<{ created: [ node: InnerNode]}>();
 
