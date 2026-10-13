@@ -1,5 +1,6 @@
 import type { AudioModule } from "./AudioModule.type"
 import type { Cable } from "./Cable.type"
+import type { InnerNode } from "./InnerNode.type"
 import type { Membership } from "./Membership.type"
 import type { Position } from "./Position.type"
 import type { Uuid } from "./Uuid.type"
@@ -38,7 +39,7 @@ export type InSynthesizer<T> = T & { synthesizer: Synthesizer }
  */
 export type PolyphonyVoice = {
   /** The audio nodes for this polyphony voice, treating and transforming the signal. */
-  nodes: {[key: string]: AudioNode}
+  nodes: {[key: string]: InnerNode}
 }
 
 export type InVoice<T> = T & { voice: PolyphonyVoice }
