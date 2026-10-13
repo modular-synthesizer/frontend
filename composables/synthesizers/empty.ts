@@ -7,6 +7,6 @@ import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
  */
 export function createEmptySynthesizer(): Synthesizer {
   return {
-    id: "", name: "", x: 0, y: 0, scale: 1, voices: 1, members: [], modules: []
+    id: "", name: "", x: 0, y: 0, scale: 1, voices: 16, members: [], modules: []
   }
 }

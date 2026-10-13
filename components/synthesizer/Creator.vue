@@ -21,17 +21,6 @@
               required
               class="mb-3"
             />
-            <v-text-field
-              v-model="synthesizer.voices"
-              type="number"
-              variant="outlined"
-              density="comfortable"
-              :label="$t('synthesizers.create.labels.voices')"
-              :min=1
-              :max=32
-              class="mb-3"
-              :rules="rules.voices"
-            />
           </v-card-text>
           <v-card-actions>
             <v-btn type="submit" color="primary">{{ $t('common.create') }}</v-btn>

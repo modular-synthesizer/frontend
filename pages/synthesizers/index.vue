@@ -38,8 +38,9 @@ const name: string = useSession().username;
 const sorted = computed(() => sortBy(synthesizers.value, (s: Synthesizer) => order[membershipType(s, name)]));
 
 const deleteSynth = (id: string) => repositories.synthesizers.delete(id, useSession().token);
+
 async function create(details: Synthesizer) {
-  synthesizers.value.push(await repositories.synthesizers.create(details, useSession().token));
+  synthesizers.value.push(await api_post("/proxy/synthesizers", { name: details.name, voices: 16 }))
 }
 
 eventbus.subscribe("add.membership", async (data: Synthesizer) => {
