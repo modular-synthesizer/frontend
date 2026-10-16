@@ -1,0 +1,36 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "version": "1.0.0",
+    "title": "Synthesizers API OpenAPI specifications"
+  },
+  "paths": {
+    "/synthesizers": {
+      "post": {
+        "summary": "Creates a new synthesizer from its name and number of polyphony voices",
+        "operationId": "create.synthesizer",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/synthesizer"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "synthesizer": {
+        "properties": {
+          "name": {
+            "description": "Simple representation of a synthesizer",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
