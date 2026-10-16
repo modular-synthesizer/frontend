@@ -1,7 +1,7 @@
-import type { InnerNodeTemplate } from "~/features/core/data/InnerNode.type"
-import type { AudioModule } from "../../core/data/AudioModule.type"
-import type { Uuid } from "../../core/data/Uuid.type"
-import type { InnerLink } from "~/features/core/data/InnerLink.type"
+import type { InnerNodeTemplate } from "~/features/synthesizers/core/data/InnerNode.type"
+import type { AudioModule } from "../../synthesizers/core/data/AudioModule.type"
+import type { Uuid } from "../../synthesizers/core/data/Uuid.type"
+import type { InnerLink } from "~/features/synthesizers/core/data/InnerLink.type"
 
 type MockAudioModuleFct = (id?: string, nodes?: InnerNodeTemplate[], links?: InnerLink[]) => AudioModule
 

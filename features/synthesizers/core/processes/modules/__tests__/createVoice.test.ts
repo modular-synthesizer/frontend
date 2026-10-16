@@ -1,8 +1,8 @@
 import { expect, describe, it, vi, beforeEach } from "vitest"
 import { createVoiceTemplate } from "../createVoice.process"
-import { mockAudioModule } from "../../../../utils/tests/mockAudioModule"
-import { mockSynthesizer } from "../../../../utils/tests/mockSynthesizer"
-import { mockInnerNode } from "../../../../utils/tests/mockInnerNode"
+import { mockAudioModule } from "../../../../../shared/tests/mockAudioModule"
+import { mockSynthesizer } from "../../../../../shared/tests/mockSynthesizer"
+import { mockInnerNode } from "../../../../../shared/tests/mockInnerNode"
 import type { InnerLink } from "../../../data/InnerLink.type"
 
 const mocks = { connectNodes: vi.fn() }

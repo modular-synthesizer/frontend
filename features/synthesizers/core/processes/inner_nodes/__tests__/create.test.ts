@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest"
 import type { InnerNode, InnerNodeTemplate, NodeGenerator } from "~/features/core/data/InnerNode.type"
 import type { Uuid } from "~/features/core/data/Uuid.type"
-import { mockAudioNode } from "../../../../utils/tests/mockAudioNode"
+import { mockAudioNode } from "../../../../../shared/tests/mockAudioNode"
 import { createNode } from "../create.process"
 
 // The future node that will be created by the generator

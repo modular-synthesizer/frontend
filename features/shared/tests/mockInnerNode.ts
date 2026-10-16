@@ -1,6 +1,6 @@
 import { vi } from "vitest"
-import type { InnerNodeTemplate, NodeGenerator } from "../../core/data/InnerNode.type"
-import type { Uuid } from "~/features/core/data/Uuid.type"
+import type { InnerNodeTemplate, NodeGenerator } from "../../synthesizers/core/data/InnerNode.type"
+import type { Uuid } from "~/features/synthesizers/core/data/Uuid.type"
 import { mockAudioNode } from "./mockAudioNode"
 
 export function mockInnerNode(index: number = 0): InnerNodeTemplate {

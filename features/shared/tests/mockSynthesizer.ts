@@ -1,6 +1,6 @@
-import type { AudioModule } from "../../core/data/AudioModule.type"
-import type { Synthesizer } from "../../core/data/Synthesizer.type"
-import type { Uuid } from "../../core/data/Uuid.type"
+import type { AudioModule } from "../../synthesizers/core/data/AudioModule.type"
+import type { Synthesizer } from "../../synthesizers/core/data/Synthesizer.type"
+import type { Uuid } from "../../synthesizers/core/data/Uuid.type"
 
 export type MockSynthesizerFct = (name?: string, audioModules?: AudioModule[]) => Synthesizer
 
