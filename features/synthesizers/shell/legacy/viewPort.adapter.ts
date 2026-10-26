@@ -23,7 +23,7 @@ export type ResetSynthesizerFct = (s: Synthesizer) => Promise<void>
 
 export const resetSynthesizer: ResetSynthesizerFct = async synth => {
   const viewport = toViewport(synth)
-  const effectPromises = reset(synth.id as Uuid, viewport).effects.map(runEffect)
-  applyViewport(synth, DEFAULT_VIEWPORT)
-  await Promise.all(effectPromises)
+  const facts = reset(synth.id as Uuid, viewport)
+  applyViewport(synth, facts.viewport)
+  await Promise.all(facts.effects.map(runEffect))
 }
