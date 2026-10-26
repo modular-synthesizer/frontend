@@ -8,7 +8,7 @@ import type { Uuid } from "./Uuid.type"
 /**
  * Positions and scales the synthesizer in a screen.
  */
-export type ViewPort = {
+export type Viewport = {
   /** The position determines where the module set in its entirety will be represented on screen. */
   position: Position
   /** The scale is the zoom level, 1 is not zoom, < 1 is zommed out, > 1 is zoomed in. */
@@ -20,7 +20,7 @@ export type ViewPort = {
  * and a set of cables that link said modules. The permissions are managed by the memberships and their current
  * status indicating if the user can interact with the modules and cables.
  */
-export type Synthesizer = ViewPort & {
+export type Synthesizer = Viewport & {
   /** Modules are the basic building brick of the synthesizer. */
   audioModules: InSynthesizer<AudioModule>[]
   /** The different cables linking modules with one another. */

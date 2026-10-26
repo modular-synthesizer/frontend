@@ -1,24 +1,19 @@
-import type { Effect, Facts } from "../../../../shared/facts"
-import type { ViewPort } from "../../data/Synthesizer.type"
+import type { Facts } from "../../../../shared/facts"
+import type { SynthesizersEffects } from "../../data/Effect.type"
+import type { Viewport } from "../../data/Synthesizer.type"
 import type { Uuid } from "../../data/Uuid.type"
 import { DEFAULT_VIEWPORT } from "../../shared/Constants"
 
-export type SynthesizersEffects = Effect & (
-  | { type: "synthesizers.viewport.save", id: Uuid, viewPort: ViewPort }
-)
-
 export type SynthesizerFacts = Facts<SynthesizersEffects>
 
-export type ResetFct = (id: Uuid, viewPort: ViewPort) => SynthesizerFacts
+export type ResetFct = (id: Uuid, viewport: Viewport) => SynthesizerFacts
 
-function isDefault(viewPort: ViewPort): boolean {
-  return viewPort.position.x == DEFAULT_VIEWPORT.position.x &&
-    viewPort.position.y == DEFAULT_VIEWPORT.position.y &&
-    viewPort.scale == DEFAULT_VIEWPORT.scale
+function isDefault(viewport: Viewport): boolean {
+  return viewport.position.x == DEFAULT_VIEWPORT.position.x &&
+    viewport.position.y == DEFAULT_VIEWPORT.position.y &&
+    viewport.scale == DEFAULT_VIEWPORT.scale
 }
 
-export const noFacts = () => ({ mutations: [], effects: [] })
-
-export const reset: ResetFct = (id, viewPort) => ({
-  effects: isDefault(viewPort) ? [] : [ { type: "synthesizers.viewport.save", id, viewPort: DEFAULT_VIEWPORT } ]
+export const reset: ResetFct = (id, viewport) => ({
+  effects: isDefault(viewport) ? [] : [ { type: "synthesizers.viewport.save", id, viewport: DEFAULT_VIEWPORT } ]
 })
