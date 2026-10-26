@@ -9,3 +9,4 @@ dist
 .vscode/
 public/json/controls.json
 .tool-versions
+docs/ARCHITECTURE.md
