@@ -13,13 +13,13 @@ const recorder = (response: Result<unknown, HttpError>) => {
   return { put, calls }
 }
 
-it("n'envoie que x, y et scale", async () => {
+it("only sends x, y coordinates, and scale", async () => {
   const { put, calls } = recorder(ok({}))
   await saveViewport(put)(ID, { position: { x: 3, y: 4 }, scale: 2 })
   expect(calls).toEqual([{ url: `/proxy/synthesizers/${ID}`, body: { x: 3, y: 4, scale: 2 } }])
 })
 
-it("renvoie ko sur une 500", async () => {
+it("returns an error if the underlying request raises an error", async () => {
   const { put } = recorder(ko({ status: 500 }))
   expect((await saveViewport(put)(ID, DEFAULT_VIEWPORT)).ok).toBe(false)
 })
