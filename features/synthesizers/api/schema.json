@@ -19,6 +19,45 @@
           }
         }
       }
+    },
+    "/synthesizers/{uuid}": {
+      "parameters": [
+        {
+          "name": "uuid",
+          "in": "path",
+          "required": true,
+          "description": "The UUID of the synthesizer to edit",
+          "schema": { "type": "string", "format": "uuid" }
+        }
+      ],
+      "put": {
+        "summary": "Edits a synthesizer's position and zoome level",
+        "operationId": "edit.synthesizer",
+        
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number",
+                    "description": "The X coordinate for the synthesizer"
+                  },
+                  "y": {
+                    "type": "number",
+                    "description": "The Y Coordinate for the synthesizer"
+                  },
+                  "scale": {
+                    "type": "number",
+                    "description": "The zoom level for the synthesizer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

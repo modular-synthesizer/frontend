@@ -6,19 +6,25 @@ import type { Position } from "./Position.type"
 import type { Uuid } from "./Uuid.type"
 
 /**
- * A synthesizer holds several displayed audio modules that can be interacted with, and placed by the user,
- * and a set of cables that link said modules. The permissions are managed by the memberships and their current
- * status indicating if the user can interact with the modules and cables.
+ * Positions and scales the synthesizer in a screen.
  */
-export type Synthesizer = {
-  /** Modules are the basic building brick of the synthesizer. */
-  audioModules: InSynthesizer<AudioModule>[]
-  /** The different cables linking modules with one another. */
-  cables: InSynthesizer<Cable>[]
+export type ViewPort = {
   /** The position determines where the module set in its entirety will be represented on screen. */
   position: Position
   /** The scale is the zoom level, 1 is not zoom, < 1 is zommed out, > 1 is zoomed in. */
   scale: number
+}
+
+/**
+ * A synthesizer holds several displayed audio modules that can be interacted with, and placed by the user,
+ * and a set of cables that link said modules. The permissions are managed by the memberships and their current
+ * status indicating if the user can interact with the modules and cables.
+ */
+export type Synthesizer = ViewPort & {
+  /** Modules are the basic building brick of the synthesizer. */
+  audioModules: InSynthesizer<AudioModule>[]
+  /** The different cables linking modules with one another. */
+  cables: InSynthesizer<Cable>[]
   /** The name of the synthesizer, supposed to be uniq for the user */
   name: string
   /** The representation of the different memberships for users in this synthesizer. */
