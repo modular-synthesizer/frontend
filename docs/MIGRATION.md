@@ -58,14 +58,74 @@ Les tests de `reset` restent inchangés et verts après le passage à `isDefault
 
 ### 2. Shell : transmettre la position de départ depuis `sp-stage`
 
-Dans [`components/sp/stage/Index.vue`](../components/sp/stage/Index.vue) :
+#### Principe : déplacer pendant le drag, ne sauvegarder qu'au relâchement
 
-- au `mousedown`, enregistrer une **copie** de la position de départ (`{ x: innerTarget.value.x, y: innerTarget.value.y }`) ;
-- émettre `panned` avec cette position en **second argument** : `panned: [ Coordinates, Coordinates ]` (arrivée, départ).
+Un pan se déroule en deux phases, qu'il faut traiter différemment.
 
-Avec un second argument, les listeners existants du blueprint (`c => emit('panned', c)`) continuent de fonctionner sans modification.
+| Phase | Événement | Ce qui se passe | Core appelé | Sauvegarde |
+|---|---|---|---|---|
+| Début | `mousedown` sur le fond du stage | Mémorisation d'une copie de la position de départ | Non | Non |
+| Déplacement | chaque `mousemove` | Le stage modifie `x` et `y` de la cible pour que l'affichage suive la souris | Non | Non |
+| Fin | `mouseup` ou `mouseleave` | Émission **unique** de `panned(arrivée, départ)` | Oui, `pan` | Seulement si la position a changé |
 
-Alternative écartée : un nouvel événement `pan-started` écouté par la page. Il est plus verbeux et il laisse à la page la responsabilité de garder un état entre deux événements.
+Les positions intermédiaires ne sont qu'un état d'affichage temporaire. Ce ne sont pas des faits métier. Ce découpage existe déjà dans `sp-stage` : le callback `dragged` modifie la cible à chaque `mousemove`, et le callback `dropped` n'est appelé qu'au relâchement. Cette étape **conserve** ce découpage et ajoute seulement la position de départ à l'événement de fin.
+
+Pourquoi ne pas appeler le core à chaque `mousemove` :
+
+- `pan` produirait un effet de sauvegarde à chaque mouvement, soit des dizaines de requêtes par seconde ;
+- la seule décision métier, « faut-il sauvegarder ? », ne peut être prise qu'en connaissant le départ et l'arrivée, donc à la fin ;
+- le calcul du déplacement (décalage, division par le scale) vit dans `sp-stage` et sert aussi à l'éditeur de blueprints. Le migrer sort du périmètre.
+
+Évolution possible plus tard, lors de la migration du calcul du drag : un process `drag` sans effet, appelé à chaque `mousemove`, qui renverrait seulement le viewport à afficher. `pan` resterait le seul process à produire un effet.
+
+#### Modifications dans [`components/sp/stage/Index.vue`](../components/sp/stage/Index.vue)
+
+1. Typer l'événement avec deux positions nommées :
+   ```ts
+   type Emits = {
+     zoom: [ number ],
+     panned: [ to: Coordinates, from: Coordinates ],
+   }
+   ```
+2. Au `mousedown`, enregistrer une **copie** de la position de départ, avant de modifier quoi que ce soit :
+   ```ts
+   const start: Ref<Coordinates> = ref({ x: 0, y: 0 });
+
+   function onmousedown($event: MouseEvent) {
+     start.value = { x: innerTarget.value.x, y: innerTarget.value.y };
+     // … calcul de event et originOffset, callback dragged : inchangés
+     dropped(() => emit('panned', { x: innerTarget.value.x, y: innerTarget.value.y }, start.value));
+   }
+   ```
+   La position d'arrivée est elle aussi copiée. Aujourd'hui, `panned` émet `innerTarget.value`, c'est-à-dire la cible elle-même. Si on émettait cet objet vivant à côté d'une copie, les deux arguments auraient un comportement différent.
+3. Ne rien changer à `onmousemove`, à `dragged` ni à `onmouseup`.
+
+#### Cas limites, vérifiés dans le code actuel
+
+- **Clic sans déplacement.** `panned` est émis avec une arrivée égale au départ. C'est le core (`positionsDiffer`) qui décide de ne pas sauvegarder, pas le stage. Le stage reste sans logique métier.
+- **La souris sort du stage pendant le drag.** `@mouseleave` appelle `onmouseup`, donc `panned` est émis et la position est sauvegardée. Ce comportement est conservé. Les callbacks sont ensuite réinitialisés, donc un `mouseup` plus tard ne déclenche pas une seconde émission.
+- **Drag d'un module.** [`Draggable.vue`](../components/sp/stage/Draggable.vue) écoute `@mousedown.prevent.stop`. Le `onmousedown` du stage n'est donc pas appelé, `start` n'est pas modifié et le callback `dropped` est celui du module. Aucun `panned` n'est émis.
+- **Pendant le drag, le synthétiseur est modifié en direct.** `innerTarget` enveloppe la même instance que `synthesizer` dans la page. L'affichage suit donc la souris sans passer par la page. À l'étape 3, `applyViewport` réécrit les mêmes valeurs, ce qui est sans effet.
+
+#### Compatibilité avec les autres utilisateurs du stage
+
+- [`blueprint/Structure/Index.vue`](../components/blueprint/Structure/Index.vue) relaie `c => emit('panned', c)` et ignore le second argument. [`Creator.vue`](../components/blueprint/Creator.vue) (`applyPanning`) ne lit que `c.x` et `c.y` : recevoir une copie au lieu de l'objet vivant ne change rien. Le blueprint continue de sauvegarder à chaque relâchement, y compris sans déplacement. C'est hors périmètre.
+- [`blueprint/Appearance/Index.vue`](../components/blueprint/Appearance/Index.vue) n'écoute pas `panned`.
+- [`pages/synthesizers/[id].vue`](../pages/synthesizers/[id].vue) ignore les arguments jusqu'à l'étape 4.
+
+Ce commit peut donc être livré seul, sans changement de comportement visible.
+
+#### Vérifications
+
+Le repo n'a ni `@vue/test-utils` ni environnement DOM configuré pour vitest. Cette étape se vérifie donc à la main, avec l'onglet réseau ouvert :
+
+- [ ] pendant un pan du synthétiseur, l'affichage suit la souris et **aucune requête** ne part pendant le mouvement ;
+- [ ] au relâchement, une seule requête part. Jusqu'à l'étape 4, c'est encore le `update` complet de la page ;
+- [ ] un drag de module ne déclenche aucun `panned` ;
+- [ ] le pan de l'éditeur de blueprints (onglet Structure) fonctionne et sauvegarde toujours ;
+- [ ] en sortant du stage pendant un pan, la position est sauvegardée une seule fois.
+
+Alternative écartée : un nouvel événement `pan-started` écouté par la page. Il est plus verbeux et il laisse à la page la responsabilité de garder un état entre deux événements, alors que le stage connaît déjà le début du drag.
 
 ### 3. Shell : adapter `panSynthesizer`
 
