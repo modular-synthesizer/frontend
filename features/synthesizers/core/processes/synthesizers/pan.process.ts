@@ -1,15 +1,12 @@
 import type { SynthesizersEffects } from "../../data/Effect.type";
 import type { Position } from "../../../../viewports/core/data/Position.type";
 import type { Uuid } from "../../../../shared/data/Uuid.type";
-import { positionsDiffer } from "../../../../viewports/core/shared/viewport";
 import type { Viewport } from "../../../../viewports/core/data/Viewport.type";
+import { panViewport } from "../../../../viewports/core/processes/pan.process";
 
 export type PanFct = (id: Uuid, from: Viewport, to: Position) => { viewport: Viewport, effects: SynthesizersEffects[] }
 
 export const pan: PanFct = (id, from, to) => {
-  const viewport = { position: { x: to.x, y: to.y }, scale: from.scale }
-  return {
-    viewport,
-    effects: positionsDiffer(from.position, to) ? [ { type: "synthesizers.viewport.save", id, viewport } ] : []
-  }
+  const { viewport, changed } = panViewport(from, to)
+  return { viewport, effects: changed ? [ { type: "synthesizers.viewport.save", id, viewport } ] : [] }
 }
