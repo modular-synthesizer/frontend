@@ -1,6 +1,6 @@
 import type { Position } from "../data/Position.type"
-import type { Viewport } from "../data/Synthesizer.type"
 import { DEFAULT_VIEWPORT } from "./Constants"
+import type { Viewport } from "../data/Viewport.type"
 
 type ElementsDiffer<T> = (first: T, second: T) => boolean
 

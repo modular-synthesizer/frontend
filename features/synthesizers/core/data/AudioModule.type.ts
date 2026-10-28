@@ -1,7 +1,7 @@
 import type { Control } from "./Control.type"
 import type { InnerLink } from "./InnerLink.type"
 import type { InnerNodeTemplate } from "./InnerNode.type"
-import type { Uuid } from "./Uuid.type"
+import type { Uuid } from "../../../shared/data/Uuid.type"
 
 /**
  * An audio module is the virtual representation of a eurorack module. It belongs to a designated synthesizer, and can

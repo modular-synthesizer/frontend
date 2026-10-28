@@ -1,5 +1,5 @@
 import type { Port } from "./Control.type"
-import type { Uuid } from "./Uuid.type"
+import type { Uuid } from "../../../shared/data/Uuid.type"
 
 /**
  * A cable is a polyphonic or monophonic connection between two audio modules. A cable holds several

@@ -1,8 +1,8 @@
 import type { SynthesizersEffects } from "../../data/Effect.type";
-import type { Position } from "../../data/Position.type";
-import type { Viewport } from "../../data/Synthesizer.type";
-import type { Uuid } from "../../data/Uuid.type";
-import { positionsDiffer } from "../../shared/viewport";
+import type { Position } from "../../../../viewports/core/data/Position.type";
+import type { Uuid } from "../../../../shared/data/Uuid.type";
+import { positionsDiffer } from "../../../../viewports/core/shared/viewport";
+import type { Viewport } from "../../../../viewports/core/data/Viewport.type";
 
 export type PanFct = (id: Uuid, from: Viewport, to: Position) => { viewport: Viewport, effects: SynthesizersEffects[] }
 

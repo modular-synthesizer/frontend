@@ -1,11 +1,11 @@
 import type { Synthesizer } from "~/types/Index";
-import type { Viewport } from "../../core/data/Synthesizer.type";
 import { reset } from "../../core/processes/synthesizers/reset.process";
 import { runEffect, type RunEffectFct } from "../effect";
-import type { Uuid } from "../../core/data/Uuid.type";
+import type { Uuid } from "../../../shared/data/Uuid.type";
 import { pan } from "../../core/processes/synthesizers/pan.process";
-import type { Position } from "../../core/data/Position.type";
+import type { Position } from "../../../viewports/core/data/Position.type";
 import type { SynthesizersEffects } from "../../core/data/Effect.type";
+import type { Viewport } from "../../../viewports/core/data/Viewport.type";
 
 export type ViewportFacts = { viewport: Viewport, effects: SynthesizersEffects[] }
 

@@ -1,8 +1,8 @@
 import { ko, ok } from "../../../../shared/results/result";
 import { saveViewport } from "../saveViewport.http";
 import { expect, it } from "vitest";
-import { DEFAULT_VIEWPORT } from "../../../core/shared/Constants";
-import type { Uuid } from "../../../core/data/Uuid.type";
+import { DEFAULT_VIEWPORT } from "../../../../viewports/core/shared/Constants";
+import type { Uuid } from "../../../../shared/data/Uuid.type";
 import { recorder } from "./utils/recorder";
 
 const ID = "uuid" as Uuid

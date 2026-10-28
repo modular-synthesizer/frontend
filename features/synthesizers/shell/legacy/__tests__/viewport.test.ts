@@ -3,9 +3,9 @@ import type { Synthesizer } from "~/types/Index";
 import { applyViewport, makeApplyFacts, makePanSynthesizer, makeResetSynthesizer, toViewport, type ViewportFacts } from "../viewport.adapter";
 import type { RunEffectFct } from "../../effect";
 import type { SynthesizersEffects } from "../../../core/data/Effect.type";
-import type { Viewport } from "../../../core/data/Synthesizer.type";
-import type { Uuid } from "../../../core/data/Uuid.type";
-import { DEFAULT_VIEWPORT } from "../../../core/shared/Constants";
+import type { Uuid } from "../../../../shared/data/Uuid.type";
+import { DEFAULT_VIEWPORT } from "../../../../viewports/core/shared/Constants";
+import type { Viewport } from "../../../../viewports/core/data/Viewport.type";
 
 describe("toViewport", () => {
   it("correctly transforms the synthesizer in a viewport", () => {

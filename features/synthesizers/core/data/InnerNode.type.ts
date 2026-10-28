@@ -1,4 +1,4 @@
-import type { Uuid } from "./Uuid.type"
+import type { Uuid } from "../../../shared/data/Uuid.type"
 
 export type NodeGenerator = () => Promise<AudioNode>
 

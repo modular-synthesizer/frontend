@@ -2,18 +2,8 @@ import type { AudioModule } from "./AudioModule.type"
 import type { Cable } from "./Cable.type"
 import type { InnerNode } from "./InnerNode.type"
 import type { Membership } from "./Membership.type"
-import type { Position } from "./Position.type"
-import type { Uuid } from "./Uuid.type"
-
-/**
- * Positions and scales the synthesizer in a screen.
- */
-export type Viewport = {
-  /** The position determines where the module set in its entirety will be represented on screen. */
-  position: Position
-  /** The scale is the zoom level, 1 is not zoom, < 1 is zommed out, > 1 is zoomed in. */
-  scale: number
-}
+import type { Uuid } from "../../../shared/data/Uuid.type"
+import type { Viewport } from "../../../viewports/core/data/Viewport.type"
 
 /**
  * A synthesizer holds several displayed audio modules that can be interacted with, and placed by the user,
