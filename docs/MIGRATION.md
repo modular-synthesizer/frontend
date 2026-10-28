@@ -2,7 +2,7 @@
 
 Ce document décrit comment partager la logique des viewports (pan, reset, puis zoom) entre `features/synthesizers` et une nouvelle `features/blueprints`, en respectant l'architecture FCIS.
 
-Statut : **en cours**. Les étapes 1, 2 et 3 sont faites.
+Statut : **en cours**. Les étapes 1, 2 et 3 sont faites, ainsi que les points 4.1, 4.2 et 4.3.
 
 ## Prérequis
 
@@ -330,7 +330,7 @@ Deux points à connaître, non bloquants :
 - **Types des champs.** Dans `models/blueprints/blueprint.rb`, `x` et `y` sont des `Integer` et `scale` un `Float`. C'est la même chose que pour le viewport du synthétiseur (`models/social/membership.rb`), donc le comportement en cas de position décimale sera identique à celui déjà validé à l'étape 3.
 - **Couverture des tests de l'API.** Aucun test de l'API ne vérifie une mise à jour de `x`, `y` ou `scale` sur un blueprint. On peut en ajouter un dans `spec/controllers/blueprints/update_spec.rb`, mais c'est hors du périmètre du front.
 
-#### 4.2. Core
+#### 4.2. Core — ✅ fait
 
 ```ts
 // features/blueprints/core/data/Effect.type.ts
@@ -345,21 +345,39 @@ export type PanFct = (id: Uuid | null, from: Viewport, to: Position) => { viewpo
 
 export const pan: PanFct = (id, from, to) => {
   const { viewport, changed } = panViewport(from, to)
-  return { viewport, effects: changed && id ? [ { type: "blueprints.viewport.save", id, viewport } ] : [] }
+  return { viewport, effects: id !== null && changed ? [ { type: "blueprints.viewport.save", id, viewport } ] : [] }
 }
 ```
 
 **Différence avec le synthétiseur : le blueprint peut ne pas avoir d'`id`.** En mode création, `Creator.vue` ne crée le blueprint côté API qu'à la première sauvegarde (`if (!blueprint.value.id)`). Un pan avant cette sauvegarde n'a rien à sauvegarder : le viewport est appliqué, mais aucun effet n'est produit. C'est une règle métier, elle vit donc dans le core et non dans l'adapter.
 
+**Représentation de l'absence d'`id`.** Le core représente l'absence d'`id` par `null`, et il le teste strictement avec `id !== null`, en accord avec son type `Uuid | null`. Le legacy, lui, utilise une chaîne vide : [`pages/blueprints/New.vue`](../pages/blueprints/New.vue) crée le blueprint avec `id: ""`, et `Identified` type `id` comme un `string`, jamais `null`. La conversion de `""` vers `null` relève de la traduction entre legacy et core. Elle se fait donc dans l'adapter (étape 4.3), pas dans le core.
+
 Tests (`features/blueprints/core/processes/__tests__/pan.test.ts`) :
 
-- [ ] un changement avec un `id` produit exactement un effet `blueprints.viewport.save` ;
-- [ ] une absence de changement ne produit aucun effet ;
-- [ ] un changement sans `id` ne produit aucun effet, mais le viewport renvoyé est bien le nouveau.
+- [x] un changement avec un `id` produit exactement un effet `blueprints.viewport.save`. Le scale de départ vaut 2, pour vérifier qu'il est conservé ;
+- [x] une absence de changement ne produit aucun effet ;
+- [x] un changement sans `id` ne produit aucun effet, mais le viewport renvoyé est bien le nouveau.
+
+Vérifications :
+
+- [x] `npx vitest run features` est vert : 12 fichiers, **75 tests**, soit 72 plus les 3 tests du core des blueprints. C'est la nouvelle référence pour la suite de l'étape 4 ;
+- [x] `npx tsc --noEmit -p .` ne signale aucune erreur ;
+- [x] les commandes de vérification des dépendances ne renvoient rien : `blueprints` n'importe rien de `synthesizers` ;
+- [x] mutations : chacune fait échouer au moins un test :
+  - effet toujours produit, ou jamais produit ;
+  - condition sur l'`id` retirée ;
+  - condition sur `changed` retirée ;
+  - `id` constant ;
+  - effet contenant `from` ;
+  - viewport renvoyé remplacé par `from` ;
+  - `type` modifié.
+
+Nommage retenu : comme pour le synthétiseur, le process du core s'appelle `pan` (type `PanFct`). Le nom `panBlueprint` reste libre pour l'adapter de l'étape 4.3.
 
 Un process `reset` n'est utile que si l'éditeur de blueprints propose un bouton de réinitialisation de la vue. Ce n'est pas le cas aujourd'hui, donc il est hors périmètre.
 
-#### 4.3. Shell
+#### 4.3. Shell — ✅ fait
 
 - `features/blueprints/shell/api/saveViewport.http.ts`, calqué sur celui du synthétiseur, vers `/proxy/blueprints/${id}` ;
 - `features/blueprints/shell/effect.ts`, avec `makeRunEffect(put)` et un `switch` sur `BlueprintsEffect` terminé par `assertNever` ;
@@ -370,18 +388,38 @@ Un process `reset` n'est utile que si l'éditeur de blueprints propose un bouton
 
   export const makePanBlueprint: PanBlueprintFactory = apply =>
     async (blueprint, from, to) => {
-      const facts = pan((blueprint.id ?? null) as Uuid | null, { ...toViewport(blueprint), position: from }, to)
+      const facts = pan(blueprint.id ? blueprint.id as Uuid : null, { ...toViewport(blueprint), position: from }, to)
       await apply(blueprint, facts)
     }
 
   export const panBlueprint = makePanBlueprint(applyFacts)
   ```
 
+  **Attention à la conversion de l'`id`.** Il faut utiliser un test de vérité (`blueprint.id ? … : null`) et non `blueprint.id ?? null`. `??` ne remplace que `null` et `undefined` : avec `"" ?? null`, le core recevrait `""` et produirait un effet, ce qui donnerait un `PUT /proxy/blueprints/` sans identifiant.
+
 Tests :
 
-- [ ] `saveViewport.http.ts` : seuls `x`, `y` et `scale` sont envoyés à la bonne URL, et une erreur HTTP est propagée (sur le modèle de `features/synthesizers/shell/api/__tests__/saveViewport.test.ts`) ;
-- [ ] `effect.ts` : l'effet `blueprints.viewport.save` appelle `saveViewport` avec le bon `id` et le bon viewport ;
-- [ ] `makePanBlueprint` : mêmes cas que `makePanSynthesizer`, dont le point délicat (blueprint placé à `to`, scale différent de 1). Plus un cas sans `id`, où `apply` reçoit des faits sans effet.
+- [x] `saveViewport.http.ts` : seuls `x`, `y` et `scale` sont envoyés à la bonne URL, et une erreur HTTP est propagée (sur le modèle de `features/synthesizers/shell/api/__tests__/saveViewport.test.ts`) ;
+- [x] `effect.ts` (`__tests__/effect.test.ts`), où l'on teste `makeRunEffect(put)` avec un `recorder`. Quatre cas sont vérifiés :
+  - l'effet `blueprints.viewport.save` envoie une seule requête, avec le bon `id` et le bon viewport, et la promesse se résout avec `undefined` ;
+  - un échec HTTP est absorbé : la promesse se résout avec `undefined`, sans nouvel essai ;
+  - une exception levée par `put` est propagée ;
+  - un type d'effet inconnu est rejeté par `assertNever`, sans qu'aucune requête soit envoyée ;
+- [x] `effect.ts`, tests de type (`__tests__/effect.test-d.ts`) : le runner a le type `RunEffectFct<BlueprintsEffect>`, et refuse un effet `synthesizers.viewport.save`. Ce refus est vérifié par `toBeCallableWith`, accompagné d'un `@ts-expect-error`, sans exécuter l'appel ;
+- [x] `makePanBlueprint` : mêmes cas que `makePanSynthesizer`, dont le point délicat (blueprint placé à `to`, scale différent de 1). Plus un cas avec `id: ""`, comme en mode création, où `apply` reçoit le nouveau viewport mais aucun effet. Ce test échoue si l'adapter utilise `??` au lieu d'un test de vérité.
+
+Écarts avec le plan, validés :
+
+- **Message d'`assertNever` simplifié.** Dans [`features/shared/facts.ts`](../features/shared/facts.ts), l'erreur ne contient plus que la valeur sérialisée (`JSON.stringify(value)`). Le préfixe « Effet non géré : » a été retiré. Les tests de type d'effet inconnu vérifient donc `JSON.stringify("<type>")`. Ce changement s'applique aussi au synthétiseur.
+- **Tests de `effect.ts` ajoutés aussi pour le synthétiseur** (`features/synthesizers/shell/__tests__/`), sur le même modèle. Il manquait ces tests depuis l'étape 3.
+- **Les `.test-d.ts` sont aussi exécutés par vitest**, car `vitest.config.ts` les inclut. Un appel réel dans ces fichiers est donc exécuté : il faut passer par `expectTypeOf(...).toBeCallableWith(...)` pour ne vérifier que le typage. Le mode `--typecheck` n'est pas utilisable aujourd'hui, car il signale 165 erreurs sans rapport (par exemple dans `utils/midi`).
+
+Vérifications :
+
+- [x] `npx vitest run features` est vert : 18 fichiers, **93 tests**. C'est la nouvelle référence pour le point 4.4 ;
+- [x] `npx tsc --noEmit -p .` ne signale aucune erreur ;
+- [x] les commandes de vérification des dépendances ne renvoient rien ;
+- [x] mutations : les 8 mutations de `effect.ts` et les 6 mutations de l'adapter font chacune échouer au moins un test.
 
 #### 4.4. Composants
 
