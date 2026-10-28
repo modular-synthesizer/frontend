@@ -1,9 +1,13 @@
 import type { Synthesizer } from "~/types/Index";
 import type { Viewport } from "../../core/data/Synthesizer.type";
 import { reset } from "../../core/processes/synthesizers/reset.process";
-import { runEffect } from "../effect";
-import { DEFAULT_VIEWPORT } from "../../core/shared/Constants";
+import { runEffect, type RunEffectFct } from "../effect";
 import type { Uuid } from "../../core/data/Uuid.type";
+import { pan } from "../../core/processes/synthesizers/pan.process";
+import type { Position } from "../../core/data/Position.type";
+import type { SynthesizersEffects } from "../../core/data/Effect.type";
+
+export type ViewportFacts = { viewport: Viewport, effects: SynthesizersEffects[] }
 
 export type ToViewportFct = (s: Synthesizer) => Viewport
 
@@ -19,11 +23,37 @@ export const applyViewport: ApplyViewportFct = (synthesizer, viewport) => {
   synthesizer.scale = viewport.scale
 }
 
+export type FactsApplier = (synth: Synthesizer, facts: ViewportFacts) => Promise<void>
+
+export type FactsApplierFactory = (run: RunEffectFct) => FactsApplier
+
+export const makeApplyFacts: FactsApplierFactory = run => async (synth, { viewport, effects }) => {
+  applyViewport(synth, viewport)
+  await Promise.all(effects.map(run))
+}
+
+export const applyFacts: FactsApplier = makeApplyFacts(runEffect)
+
 export type ResetSynthesizerFct = (s: Synthesizer) => Promise<void>
 
-export const resetSynthesizer: ResetSynthesizerFct = async synth => {
-  const viewport = toViewport(synth)
-  const facts = reset(synth.id as Uuid, viewport)
-  applyViewport(synth, facts.viewport)
-  await Promise.all(facts.effects.map(runEffect))
-}
+export type ResetSynthesizerFactory = (apply: FactsApplier) => ResetSynthesizerFct
+
+export const makeResetSynthesizer: ResetSynthesizerFactory = apply =>
+  async synth => {
+    const facts = reset(synth.id as Uuid, toViewport(synth))
+    await apply(synth, facts)
+  }
+
+export const resetSynthesizer = makeResetSynthesizer(applyFacts)
+
+export type PanSynthesizerFct = (s: Synthesizer, from: Position, to: Position) => Promise<void>
+
+export type PanSynthesizerFactory = (apply: FactsApplier) => PanSynthesizerFct
+
+export const makePanSynthesizer: PanSynthesizerFactory = apply =>
+  async (synth, from, to) => {
+    const facts = pan(synth.id as Uuid, { ...toViewport(synth), position: from }, to)
+    await apply(synth, facts)
+  }
+
+export const panSynthesizer = makePanSynthesizer(applyFacts)

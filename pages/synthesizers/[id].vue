@@ -13,7 +13,7 @@
       v-if="synthesizer"
       :target="synthesizer"
       @zoom="onzoom"
-      @panned="repositories.synthesizers.update(synthesizer)"
+      @pan-released="(from, to) => panSynthesizer(synthesizer, from, to)"
     >
       <synthesizer-background />
       <sp-stage-svg-layer name="modules">
@@ -59,7 +59,7 @@ import { translate } from "~/utils/functions/svg"
 import { createModule as instanciateModule } from '~/utils/factories/modules';
 import { useI18n } from 'vue-i18n';
 import { useCableCreation } from '~/composables/links/useCableCreation.composable';
-import { resetSynthesizer } from '~/features/synthesizers/shell/legacy/viewport.adapter';
+import { panSynthesizer, resetSynthesizer } from '~/features/synthesizers/shell/legacy/viewport.adapter';
 
 type PromisedRef<T> = Promise<Ref<T>>;
 

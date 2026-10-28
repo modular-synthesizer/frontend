@@ -30,7 +30,7 @@ provide('target', innerTarget);
 
 type Emits = {
   zoom: [ number ],
-  panned: [ Coordinates ],
+  panReleased: [ from: Coordinates, to: Coordinates ]
 }
 
 const emit = defineEmits<Emits>();
@@ -46,15 +46,20 @@ function getCoords($event: MouseEvent) {
   }
 }
 
+const start: Ref<Coordinates> = ref({ x: 0, y: 0 })
+
 function onmousedown($event: MouseEvent) {
   event.value = getCoords($event);
   originOffset.value = subtract(getCoords($event), innerTarget.value);
+  start.value = { x: innerTarget.value.x, y: innerTarget.value.y }
   dragged(($event: MouseEvent) => {
     const offset: Coordinates = subtract(getCoords($event), event.value);
     innerTarget.value.x = event.value.x + offset.x - originOffset.value.x;
     innerTarget.value.y = event.value.y + offset.y - originOffset.value.y;
   });
-  dropped(() => emit('panned', innerTarget.value));
+  dropped(() => 
+    emit('panReleased', start.value, { x: innerTarget.value.x, y: innerTarget.value.y })
+  );
 }
 
 function onmouseup($event: MouseEvent) {

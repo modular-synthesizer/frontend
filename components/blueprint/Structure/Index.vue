@@ -1,5 +1,5 @@
 <template>
-  <sp-stage :target="referential" @click="useSelectables().reset" @panned="c => emit('panned', c)">
+  <sp-stage :target="referential" @click="useSelectables().reset">
     <sp-stage-svg-layer name="blueprint">
       <sp-stage-draggable v-for="node in blueprint.nodes" :target="node" :sx="10" :sy="10" @dropped="b => emit('moved', b)">
         <blueprint-structure-node
