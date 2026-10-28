@@ -12,7 +12,7 @@
         </v-form>
       </v-tabs-window-item>
       <v-tabs-window-item value="structure">
-        <div class="content-wrapper"><blueprint-structure :blueprint="blueprint" @moved="moved" @panned="c => applyPanning(c)" /></div>
+        <div class="content-wrapper"><blueprint-structure :blueprint="blueprint" @moved="moved" /></div>
       </v-tabs-window-item>
       <v-tabs-window-item value="appearance">
         <div class="content-wrapper"><blueprint-appearance :blueprint="blueprint" :creation-mode="!blueprint.id" /></div>
@@ -89,12 +89,6 @@ async function save() {
 
 async function moved(coords: PlacedBox) {
   await repositories.blueprints.updateNode(blueprint.value, coords)
-}
-
-async function applyPanning(c: Coordinates) {
-  blueprint.value.x = c.x;
-  blueprint.value.y = c.y;
-  onSaveRequest(blueprint.value);
 }
 </script>
 

@@ -1,9 +1,9 @@
 import { makeApplyFacts, toViewport, type FactsApplier } from "../../../viewports/shell/legacy/viewport.adapter"
 import type { Synthesizer } from "~/types/Index"
-import { reset } from "../../core/processes/synthesizers/reset.process"
+import { reset } from "../../core/processes/reset.process"
 import type { Uuid } from "../../../shared/data/Uuid.type"
 import type { Position } from "../../../viewports/core/data/Position.type"
-import { pan } from "../../core/processes/synthesizers/pan.process"
+import { pan } from "../../core/processes/pan.process"
 import { runEffect } from "../effect"
 import type { SynthesizersEffect } from "../../core/data/Effect.type"
 
