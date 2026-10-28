@@ -2,7 +2,7 @@
 
 Ce document décrit comment partager la logique des viewports (pan, reset, puis zoom) entre `features/synthesizers` et une nouvelle `features/blueprints`, en respectant l'architecture FCIS.
 
-Statut : **en cours**. L'étape 1 est faite.
+Statut : **en cours**. Les étapes 1, 2 et 3 sont faites.
 
 ## Prérequis
 
@@ -140,7 +140,7 @@ Commits, à indexer séparément avec `git add` :
 1. `chore: remove unused synthesizer processes and test mocks` : les suppressions ci-dessus ;
 2. `refactor(viewports): extract the shared viewport data and comparisons` : l'étape 1.
 
-### 2. Processes partagés `panViewport` et `resetViewport`
+### 2. Processes partagés `panViewport` et `resetViewport` — ✅ fait
 
 Objectif : déplacer le calcul et le jugement dans `features/viewports`. Les processes du synthétiseur ne font plus que traduire un changement en effet.
 
@@ -168,7 +168,7 @@ export const resetViewport: ResetViewportFct = viewport => ({
 })
 ```
 
-Les noms `panViewport` et `resetViewport` évitent un alias à l'import dans les processes du domaine, qui s'appellent déjà `pan` et `reset`. `ViewportChange` peut vivre dans `core/data/Viewport.type.ts` si `zoom` doit le réutiliser.
+Les noms `panViewport` et `resetViewport` évitent un alias à l'import dans les processes du domaine, qui s'appellent déjà `pan` et `reset`. `ViewportChange` est défini dans `core/data/ViewportChange.type.ts`, à côté des autres types, pour que `zoom` puisse le réutiliser.
 
 #### Core du synthétiseur
 
@@ -196,33 +196,38 @@ L'ordre compte : on prouve d'abord la non-régression, puis on allège.
 
 1. **Avant toute modification des tests du synthétiseur**, réécrire les deux processes et vérifier que `pan.test.ts` et `reset.test.ts` passent sans changement. C'est la preuve que la réécriture ne change rien.
 2. Créer `features/viewports/core/processes/__tests__/pan.test.ts` en reprenant les cas de l'actuel `pan.test.ts`, avec des assertions sur `{ viewport, changed }` :
-   - [ ] déplacement sur X seul, puis sur Y seul : `changed` vaut `true` ;
-   - [ ] position inchangée : `changed` vaut `false` ;
-   - [ ] le scale de départ est conservé ;
-   - [ ] viewport de départ gelé (`Object.freeze`) ;
-   - [ ] le viewport renvoyé ne partage pas sa référence avec `to`.
+   - [x] déplacement sur X seul, puis sur Y seul : `changed` vaut `true` ;
+   - [x] position inchangée : `changed` vaut `false` ;
+   - [x] le scale de départ est conservé ;
+   - [x] viewport de départ gelé (`Object.freeze`) ;
+   - [x] le viewport renvoyé ne partage pas sa référence avec `to`.
 3. Créer `features/viewports/core/processes/__tests__/reset.test.ts` en reprenant l'actuel `reset.test.ts` :
-   - [ ] écart sur X seul, Y seul, scale seul : `changed` vaut `true` ;
-   - [ ] viewport déjà par défaut : `changed` vaut `false` ;
-   - [ ] viewport gelé ;
-   - [ ] le viewport renvoyé est toujours `DEFAULT_VIEWPORT`.
-4. Réduire les tests du synthétiseur à ce qui relève de cette couche :
-   - [ ] un changement produit exactement un effet `synthesizers.viewport.save`, avec le bon `id` et le viewport renvoyé ;
-   - [ ] une absence de changement ne produit aucun effet ;
-   - [ ] le viewport renvoyé est celui calculé par le core partagé.
+   - [x] écart sur X seul, Y seul, scale seul : `changed` vaut `true` ;
+   - [x] viewport déjà par défaut : `changed` vaut `false` ;
+   - [x] viewport gelé ;
+   - [x] le viewport renvoyé est toujours `DEFAULT_VIEWPORT`.
+4. Réduire les tests du synthétiseur à ce qui relève de cette couche. Il reste deux tests par process, qui comparent le résultat complet avec `toEqual` :
+   - [x] un changement produit exactement un effet `synthesizers.viewport.save`, avec le bon `id` et le viewport renvoyé. Pour `pan`, le scale de départ vaut 2, pour vérifier que l'effet contient bien le scale conservé ;
+   - [x] une absence de changement ne produit aucun effet.
 
-   Pour `pan`, garder un cas où le scale de départ n'est pas 1, pour vérifier que l'effet contient bien le scale conservé.
+   Un troisième test, « le viewport renvoyé est celui calculé par le core partagé », était prévu. Il est inutile, car `toEqual` vérifie déjà le viewport renvoyé dans les deux tests.
 
 #### Vérifications
 
-- [ ] `npx vitest run features` est vert ;
-- [ ] `npx tsc --noEmit -p .` ne signale aucune nouvelle erreur ;
-- [ ] les commandes de vérification des dépendances ne renvoient rien ;
-- [ ] mutation : en remplaçant `positionsDiffer(from.position, to)` par `true` dans `panViewport`, un test de `viewports` échoue. Même chose avec `!isDefaultViewport(viewport)` dans `resetViewport`.
+- [x] `npx vitest run features` est vert : 10 fichiers, **72 tests**. C'est la nouvelle référence pour l'étape 3 (79 après la création des tests de `viewports`, moins 3 pour `pan` et 4 pour `reset`) ;
+- [x] `npx tsc --noEmit -p .` ne signale aucune erreur dans `features/` ;
+- [x] les commandes de vérification des dépendances ne renvoient rien ;
+- [x] mutation : en remplaçant `positionsDiffer(from.position, to)` par `true` dans `panViewport`, un test de `viewports` échoue. Même chose avec `!isDefaultViewport(viewport)` dans `resetViewport` ;
+- [x] mutation des processes du synthétiseur : chacune des mutations suivantes fait échouer un test, pour `pan` comme pour `reset` :
+  - effet toujours produit, ou jamais produit ;
+  - `id` constant ;
+  - effet contenant `from` ;
+  - viewport renvoyé remplacé par `from` ;
+  - `type` modifié.
 
 Commit : `refactor(viewports): build synthesizers pan and reset on a shared core`.
 
-### 3. Shell partagé : couche HTTP et adapter legacy
+### 3. Shell partagé : couche HTTP et adapter legacy — ✅ fait
 
 Objectif : rendre réutilisables par les blueprints tout ce qui ne dépend pas du synthétiseur dans le shell.
 
@@ -273,7 +278,7 @@ L'adapter du synthétiseur ne garde que ce qui lui est propre :
 
 ```ts
 // features/synthesizers/shell/legacy/viewport.adapter.ts
-export const applyFacts: FactsApplier<SynthesizersEffects> = makeApplyFacts(runEffect)
+export const applyFacts: FactsApplier<SynthesizersEffect> = makeApplyFacts(runEffect)
 
 export const makePanSynthesizer: PanSynthesizerFactory = apply =>
   async (synth, from, to) => {
@@ -287,39 +292,56 @@ Les noms exportés `panSynthesizer` et `resetSynthesizer` ne changent pas. [`pag
 
 #### Tests
 
-- [ ] `toViewport`, `applyViewport` et `applyFacts` migrent vers `features/viewports/shell/legacy/__tests__/viewport.test.ts`. La cible est un simple objet `{ x, y, scale }` et l'effet un faux `{ type: "test.effect" }`, pour prouver que l'adapter ne dépend d'aucun domaine ;
-- [ ] `makeResetSynthesizer` et `makePanSynthesizer` restent dans `features/synthesizers/shell/legacy/__tests__/viewport.test.ts`, y compris le test du point délicat (synthétiseur placé à `to`, scale différent de 1).
+- [x] `toViewport`, `applyViewport` et `applyFacts` migrent vers `features/viewports/shell/legacy/__tests__/viewport.test.ts`. La cible est un simple objet `{ x, y, scale }` et l'effet un faux `{ type: "test.effect" }`, pour prouver que l'adapter ne dépend d'aucun domaine ;
+- [x] `makeResetSynthesizer` et `makePanSynthesizer` restent dans `features/synthesizers/shell/legacy/__tests__/viewport.test.ts`, y compris le test du point délicat (synthétiseur placé à `to`, scale différent de 1).
+
+#### Écarts avec le plan
+
+- **`RunEffectFct<E>` est défini dans [`features/shared/facts.ts`](../features/shared/facts.ts)**, à côté d'`Effect`, et non dans l'adapter. Il décrit l'exécution d'un effet en général. Les `effect.ts` de chaque domaine l'importent donc depuis `shared`, sans dépendre de l'adapter legacy des viewports.
+- **`SynthesizersEffects` est renommé `SynthesizersEffect`**, puisque le type décrit un seul effet. Le renommage est complet. Les extraits de code de l'étape 4 utilisent par analogie `BlueprintsEffect`.
+- **`core/shared/SynthesizerMap.type.ts` a été supprimé.** Aucun fichier ne l'utilisait. Cette suppression va dans un commit séparé.
 
 #### Vérifications
 
-- [ ] `npx vitest run features` est vert, avec le même nombre de tests qu'à la fin de l'étape 2 ;
-- [ ] `npx tsc --noEmit -p .` ne signale aucune nouvelle erreur ;
-- [ ] les commandes de vérification des dépendances ne renvoient rien ;
-- [ ] dans le navigateur : un pan et un reset du synthétiseur sauvegardent toujours (onglet réseau, `PUT /proxy/synthesizers/:id` avec `x`, `y`, `scale`).
+- [x] `npx vitest run features` est vert : 11 fichiers, 72 tests, soit le même nombre qu'à la fin de l'étape 2 ;
+- [x] `npx tsc --noEmit -p .` ne signale aucune erreur dans `features/`, `pages/` ni `components/` ;
+- [x] les commandes de vérification des dépendances ne renvoient rien ;
+- [x] dans le navigateur : un pan et un reset du synthétiseur sauvegardent toujours (onglet réseau, `PUT /proxy/synthesizers/:id` avec `x`, `y`, `scale`). Validé à la main.
 
-Commit : `refactor(viewports): share the legacy viewport adapter and the http layer`.
+Commits :
+
+1. `chore: remove unused SynthesizerMap type` ;
+2. `refactor(viewports): share the legacy viewport adapter and the http layer`.
 
 ### 4. Feature `blueprints` : pan
 
 Objectif : réparer la sauvegarde du pan dans l'éditeur de blueprints, sur le même modèle que le synthétiseur.
 
-#### 4.1. Vérifier l'API avant d'écrire du code
+#### 4.1. Vérifier l'API avant d'écrire du code — ✅ fait
 
-- [ ] `PUT /proxy/blueprints/:id` accepte un corps limité à `x`, `y` et `scale`, sans écraser les autres champs. Aujourd'hui, [`ToolsRepository.update`](../lib/repositories/toolsRepository.ts) envoie le blueprint complet, et rien dans le front ne garantit qu'une mise à jour partielle est acceptée. Il n'existe pas de `schema.json` pour les blueprints.
-- Si l'API refuse une mise à jour partielle, il faut la faire évoluer d'abord, ou bien envoyer le blueprint complet dans `saveViewport`. La seconde option perd l'un des bénéfices de la migration.
+- [x] `PUT /proxy/blueprints/:id` accepte un corps limité à `x`, `y` et `scale`, sans écraser les autres champs. Vérifié dans le dépôt `api` (commit `1b0ad53`) :
+  - la route `put '/:id'` de `controllers/blueprints/blueprints.rb` appelle `Services::Blueprints::Update#find_and_update` ;
+  - `services/blueprints/update.rb` applique `payload.slice(:name, :slots, :experimental, :x, :y, :scale)`. Seuls les champs présents dans le corps sont donc modifiés ;
+  - `spec/controllers/blueprints/update_spec.rb` envoie déjà des corps partiels (`name` seul, `slots` seul) et vérifie que la réponse vaut 200 ;
+  - la réponse (`views/blueprints/_blueprint`) renvoie `x`, `y` et `scale`.
+
+Deux points à connaître, non bloquants :
+
+- **Types des champs.** Dans `models/blueprints/blueprint.rb`, `x` et `y` sont des `Integer` et `scale` un `Float`. C'est la même chose que pour le viewport du synthétiseur (`models/social/membership.rb`), donc le comportement en cas de position décimale sera identique à celui déjà validé à l'étape 3.
+- **Couverture des tests de l'API.** Aucun test de l'API ne vérifie une mise à jour de `x`, `y` ou `scale` sur un blueprint. On peut en ajouter un dans `spec/controllers/blueprints/update_spec.rb`, mais c'est hors du périmètre du front.
 
 #### 4.2. Core
 
 ```ts
 // features/blueprints/core/data/Effect.type.ts
-export type BlueprintsEffects = Effect & (
+export type BlueprintsEffect = Effect & (
   | { type: "blueprints.viewport.save", id: Uuid, viewport: Viewport }
 )
 ```
 
 ```ts
 // features/blueprints/core/processes/pan.process.ts
-export type PanFct = (id: Uuid | null, from: Viewport, to: Position) => { viewport: Viewport, effects: BlueprintsEffects[] }
+export type PanFct = (id: Uuid | null, from: Viewport, to: Position) => { viewport: Viewport, effects: BlueprintsEffect[] }
 
 export const pan: PanFct = (id, from, to) => {
   const { viewport, changed } = panViewport(from, to)
@@ -340,11 +362,11 @@ Un process `reset` n'est utile que si l'éditeur de blueprints propose un bouton
 #### 4.3. Shell
 
 - `features/blueprints/shell/api/saveViewport.http.ts`, calqué sur celui du synthétiseur, vers `/proxy/blueprints/${id}` ;
-- `features/blueprints/shell/effect.ts`, avec `makeRunEffect(put)` et un `switch` sur `BlueprintsEffects` terminé par `assertNever` ;
+- `features/blueprints/shell/effect.ts`, avec `makeRunEffect(put)` et un `switch` sur `BlueprintsEffect` terminé par `assertNever` ;
 - `features/blueprints/shell/legacy/viewport.adapter.ts` :
 
   ```ts
-  export const applyFacts: FactsApplier<BlueprintsEffects> = makeApplyFacts(runEffect)
+  export const applyFacts: FactsApplier<BlueprintsEffect> = makeApplyFacts(runEffect)
 
   export const makePanBlueprint: PanBlueprintFactory = apply =>
     async (blueprint, from, to) => {
@@ -396,7 +418,7 @@ Commit : `feat(blueprints): save the blueprint viewport on pan through the share
 
 ## Points à trancher
 
-- **API blueprints** : mise à jour partielle acceptée ou non (étape 4.1). C'est bloquant pour l'étape 4.
+- ~~**API blueprints** : mise à jour partielle acceptée ou non (étape 4.1).~~ Tranché : la mise à jour partielle est acceptée (voir l'étape 4.1).
 - **Validation du formulaire** : la contourner pour la sauvegarde du viewport (étape 4.4).
 - **Emplacement du module** : `features/viewports` est proposé plutôt que `features/shared/viewports`, parce qu'il a son propre découpage core/shell, comme une feature. Si `shared` doit regrouper tout ce qui est transverse, les deux emplacements fonctionnent.
 - **Couche HTTP dans `shared`** : elle y introduit du code shell. L'autre solution serait un module `features/http`. Le choix n'a pas d'impact sur le reste du plan.

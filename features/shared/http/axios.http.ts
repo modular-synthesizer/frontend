@@ -1,6 +1,6 @@
 import axios from "axios"
 import type { HttpError, HttpPut } from "./http"
-import { ok, ko } from "../../../shared/results/result"
+import { ko, ok } from "../results/result"
 
 export type Tokens = { auth_token: string, tab_id: string }
 

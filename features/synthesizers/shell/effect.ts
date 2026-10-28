@@ -1,12 +1,10 @@
-import { assertNever } from "../../shared/facts";
-import type { HttpPut } from "./api/http";
-import { put } from "./api/nuxt.http";
-import type { SynthesizersEffects } from "../core/data/Effect.type";
+import { put } from "../../shared/http/nuxt.http";
+import { assertNever, type RunEffectFct } from "../../shared/facts";
+import type { HttpPut } from "../../shared/http/http";
+import type { SynthesizersEffect } from "../core/data/Effect.type";
 import { saveViewport } from "./api/saveViewport.http";
 
-export type RunEffectFct = (effect: SynthesizersEffects) => Promise<void>
-
-export type RunEffectFactory = (put: HttpPut) => RunEffectFct
+export type RunEffectFactory = (put: HttpPut) => RunEffectFct<SynthesizersEffect>
 
 export const makeRunEffect: RunEffectFactory = put => async effect => {
   switch(effect.type) {
@@ -17,4 +15,4 @@ export const makeRunEffect: RunEffectFactory = put => async effect => {
   }
 }
 
-export const runEffect: RunEffectFct = makeRunEffect(put)
+export const runEffect: RunEffectFct<SynthesizersEffect> = makeRunEffect(put)

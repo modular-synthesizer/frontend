@@ -1,4 +1,4 @@
-import { type Result } from "../../../../../shared/results/result";
+import type { Result } from "../../../results/result";
 import type { HttpError, HttpPut } from "../../http";
 
 export const recorder = (response: Result<unknown, HttpError>) => {

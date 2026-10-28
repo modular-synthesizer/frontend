@@ -3,7 +3,7 @@ import { saveViewport } from "../saveViewport.http";
 import { expect, it } from "vitest";
 import { DEFAULT_VIEWPORT } from "../../../../viewports/core/shared/Constants";
 import type { Uuid } from "../../../../shared/data/Uuid.type";
-import { recorder } from "./utils/recorder";
+import { recorder } from "../../../../shared/http/__tests__/utils/recorder";
 
 const ID = "uuid" as Uuid
 

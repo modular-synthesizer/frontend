@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { withAuthenticationGuard, type HttpError } from "../http"
-import { ko, ok, type Result } from "../../../../shared/results/result"
 import { recorder } from "./utils/recorder"
+import { withAuthenticationGuard, type HttpError } from "../http"
+import { ko, ok, type Result } from "../../results/result"
 
 const tryResponse = async (response: Result<unknown, HttpError>) => {
   let called = 0
