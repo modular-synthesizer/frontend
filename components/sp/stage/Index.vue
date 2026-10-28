@@ -30,7 +30,6 @@ provide('target', innerTarget);
 
 type Emits = {
   zoom: [ number ],
-  panned: [ Coordinates ],
   panReleased: [ from: Coordinates, to: Coordinates ]
 }
 
@@ -58,10 +57,9 @@ function onmousedown($event: MouseEvent) {
     innerTarget.value.x = event.value.x + offset.x - originOffset.value.x;
     innerTarget.value.y = event.value.y + offset.y - originOffset.value.y;
   });
-  dropped(() => {
-    emit('panned', innerTarget.value)
+  dropped(() => 
     emit('panReleased', start.value, { x: innerTarget.value.x, y: innerTarget.value.y })
-  });
+  );
 }
 
 function onmouseup($event: MouseEvent) {

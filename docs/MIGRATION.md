@@ -200,29 +200,38 @@ Le test du point délicat place le synthétiseur **là où le stage le laisse**,
 
 Les imports de `viewport.adapter.ts` fonctionnent dans vitest : les imports `~/…` ne servent qu'aux types, et `nuxt.http.ts` n'appelle `useSession` qu'au moment d'une requête.
 
-### 4. Page : brancher l'adapter
+### 4. Page : brancher l'adapter — ✅ fait
 
-Dans [`pages/synthesizers/[id].vue`](../pages/synthesizers/[id].vue), remplacer l'écoute de `panned` par celle de `panReleased` :
+Dans [`pages/synthesizers/[id].vue`](../pages/synthesizers/[id].vue), l'écoute de `panned` est remplacée par celle de `panReleased` :
 
 ```vue
 @pan-released="(from, to) => panSynthesizer(synthesizer, from, to)"
 ```
 
-Supprimer la ligne `@panned="repositories.synthesizers.update(synthesizer)"`. `repositories` reste utilisé dans la page pour le chargement, donc son import reste.
+La ligne `@panned="repositories.synthesizers.update(synthesizer)"` est supprimée. `repositories` reste utilisé dans la page pour le chargement, donc son import reste.
+
+#### Écart avec l'étape 2 : suppression de `panned`
+
+Contrairement à ce que prévoyait l'étape 2, `panned` est supprimé dès cette étape :
+
+- [`components/sp/stage/Index.vue`](../components/sp/stage/Index.vue) n'émet plus que `panReleased` au relâchement ;
+- [`blueprint/Structure/Index.vue`](../components/blueprint/Structure/Index.vue) ne retransmet plus `panned`. Son type `Emits` déclare encore `panned`, mais l'événement n'est plus émis.
+
+**Conséquence acceptée :** le pan de l'éditeur de blueprints ne sauvegarde plus. [`Creator.vue`](../components/blueprint/Creator.vue) écoute toujours `@panned` (`applyPanning`), mais ne le reçoit jamais. Cette régression est volontaire et sera corrigée plus tard, lors de la migration du pan du blueprint.
 
 ### 5. Vérifications
 
 Automatiques :
 
-- [ ] `npx vitest run features/synthesizers` est vert ;
-- [ ] `npx tsc --noEmit -p .` ne signale aucune nouvelle erreur dans les fichiers modifiés.
+- [x] `npx vitest run features/synthesizers` est vert (8 fichiers, 50 tests) ;
+- [x] `npx tsc --noEmit -p .` ne signale aucune nouvelle erreur dans les fichiers modifiés. Les erreurs restantes (`inner_nodes/__tests__/create.test.ts`, `modules/createVoice*`) concernent des fichiers que cette migration ne touche pas.
 
 Manuelles, dans le navigateur, onglet réseau ouvert :
 
 - [ ] un pan suivi d'un rechargement de la page conserve la position ;
 - [ ] la requête `PUT /proxy/synthesizers/:id` ne contient que `x`, `y`, `scale` et les tokens ;
 - [ ] un clic sans déplacement ne déclenche aucune requête ;
-- [ ] le pan de l'éditeur de blueprints (Structure et Appearance) fonctionne toujours ;
+- ~~le pan de l'éditeur de blueprints (Structure et Appearance) fonctionne toujours~~ : ne s'applique plus, le pan du blueprint est volontairement cassé (voir l'étape 4) ;
 - [ ] avec un token invalide, un pan renvoie vers `/`.
 
 ## Points d'attention
@@ -233,17 +242,18 @@ Manuelles, dans le navigateur, onglet réseau ouvert :
 
   Cette régression est temporaire et acceptée : elle disparaît avec la migration du zoom, qui sauvegardera lui-même le scale.
 - **Les autres champs du synthétiseur ne sont plus envoyés.** Vérifier que rien ne comptait sur le `update` complet déclenché au pan pour sauvegarder un autre champ, par exemple le nom.
+- **Le pan du blueprint ne sauvegarde plus.** `panned` a été supprimé du stage (voir l'étape 4). Cette régression est acceptée et sera corrigée lors de la migration du pan du blueprint.
 - **L'objet vivant.** Pendant le drag, le stage modifie le synthétiseur lui-même. `panReleased` émet des copies, et le core copie aussi la position reçue (voir le test de l'étape 1). Aucune couche ne doit garder une référence vers la cible.
 
 ## Hors périmètre
 
 - La migration du zoom, avec sa question de debounce. C'est la prochaine migration.
 - Le calcul du drag dans `sp-stage`, qui reste dans le composant.
-- Le pan de l'éditeur de blueprints.
+- Le pan de l'éditeur de blueprints, cassé par cette migration et à réparer ensuite.
 
 ## Découpage en commits
 
 1. ✅ `9758d43 feat(pan): implement the core functions for pan` : module `core/shared/viewport.ts`, passage de `reset` à `isDefaultViewport`, process `pan`, et leurs tests ;
 2. ✅ `dfc6caf feat(pan): add a new event for temporary migration` : événement `panReleased` dans `sp-stage` ;
-3. `feat(pan): add the panSynthesizer adapter` : `makeApplyFacts`, `makeResetSynthesizer`, `makePanSynthesizer` et leurs tests ;
-4. `feat(pan): plug the pan process in the synthesizer page` : étape 4.
+3. ✅ `55fae65 fix(pan): add the adapter layer to be able to use it in the legacy system` : `makeApplyFacts`, `makeResetSynthesizer`, `makePanSynthesizer` et leurs tests ;
+4. `feat(pan): plug the pan process in the synthesizer page` : étape 4, avec la suppression de `panned` dans le stage et dans `blueprint/Structure`.
