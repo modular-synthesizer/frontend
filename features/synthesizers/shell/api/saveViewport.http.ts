@@ -1,7 +1,7 @@
 import { ok, type Result } from "../../../shared/results/result";
-import type { Viewport } from "../../core/data/Synthesizer.type";
-import type { Uuid } from "../../core/data/Uuid.type";
-import type { HttpError, HttpPut } from "./http";
+import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { HttpError, HttpPut } from "../../../shared/http/http";
+import type { Viewport } from "../../../viewports/core/data/Viewport.type";
 
 type SaveViewportClosure = (id: Uuid, viewport: Viewport) => Promise<Result<void, HttpError>>
 
