@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { isDefaultViewport, positionsDiffer, viewportsDiffer } from "../viewport";
-import { DEFAULT_VIEWPORT } from "../Constants";
+import { clampScale, isDefaultViewport, positionsDiffer, viewportsDiffer } from "../viewport";
+import { DEFAULT_VIEWPORT, MAX_SCALE, MIN_SCALE } from "../Constants";
 
 describe("positionsDiffer", () => {
   it("returns TRUE when the X coordinates differ", () => {
@@ -43,5 +43,23 @@ describe("isDefaultViewport", () => {
   })
   it("returns FALSE when scale is different from the default one", () => {
     expect(isDefaultViewport({ position: { x: 0, y: 0 }, scale: 2.0 })).toBe(false)
+  })
+})
+
+describe("clampScale", () => {
+  it("keeps the value if it is between the minimum and maximum", () => {
+    expect(clampScale(1.0)).toEqual(1.0)
+  })
+  it("keeps the value if it equals the minimum", () => {
+    expect(clampScale(MIN_SCALE)).toEqual(MIN_SCALE)
+  })
+  it("keeps the value if it equals the maximum", () => {
+    expect(clampScale(MAX_SCALE)).toEqual(MAX_SCALE)
+  })
+  it("clamps a value below the minimum", () => {
+    expect(clampScale(MIN_SCALE - 1.0)).toEqual(MIN_SCALE)
+  })
+  it("clamps a value above the maximum", () => {
+    expect(clampScale(MAX_SCALE + 2.0)).toEqual(MAX_SCALE)
   })
 })

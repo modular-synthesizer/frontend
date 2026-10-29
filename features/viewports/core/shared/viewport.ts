@@ -1,5 +1,5 @@
 import type { Position } from "../data/Position.type"
-import { DEFAULT_VIEWPORT } from "./Constants"
+import { DEFAULT_VIEWPORT, MAX_SCALE, MIN_SCALE } from "./Constants"
 import type { Viewport } from "../data/Viewport.type"
 
 type ElementsDiffer<T> = (first: T, second: T) => boolean
@@ -12,3 +12,6 @@ export const viewportsDiffer: ElementsDiffer<Viewport> = (first, second) =>
 
 export const isDefaultViewport = (viewport: Viewport): boolean =>
   !viewportsDiffer(viewport, DEFAULT_VIEWPORT)
+
+export const clampScale = (scale: number): number =>
+  Math.min(Math.max(MIN_SCALE, scale), MAX_SCALE)

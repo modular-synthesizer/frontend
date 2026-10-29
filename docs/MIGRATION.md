@@ -1,68 +1,85 @@
-# Partage du core des viewports entre synthétiseurs et blueprints
+# Migration du zoom vers l'architecture FCIS
 
-Ce document décrit comment partager la logique des viewports (pan, reset, puis zoom) entre `features/synthesizers` et une nouvelle `features/blueprints`, en respectant l'architecture FCIS.
+Ce document décrit la migration du zoom de la vue vers `features/`, sur le modèle du pan et du reset. On commence par le zoom du synthétiseur. Le zoom de l'éditeur de blueprints suivra, sur le même core.
 
-Statut : **en cours**. Les étapes 1, 2 et 3 sont faites, ainsi que les points 4.1, 4.2 et 4.3.
+Statut : **proposition**, rien n'est implémenté.
 
 ## Prérequis
 
-La migration du pan du synthétiseur est terminée (`596fac1 feat(pan): connect the new panSynthesizer feature`). Son plan a été supprimé par `045d1a0` et reste consultable avec `git show 596fac1:docs/MIGRATION.md`.
+Le partage du core des viewports entre synthétiseurs et blueprints est terminé et mergé (`1295e14`, #128). Son plan reste consultable avec `git show 1295e14:docs/MIGRATION.md`.
+
+Référence de tests au départ : `npx vitest run features` donne **93 tests** verts.
 
 ## Constat
 
-Les processes `pan` et `reset` de [`features/synthesizers/core/processes/synthesizers`](../features/synthesizers/core/processes/synthesizers) mélangent deux responsabilités :
+### Le zoom aujourd'hui
 
-1. **un calcul géométrique, indépendant du domaine** : le nouveau viewport à afficher, et le fait qu'il ait changé ou non (`positionsDiffer`, `isDefaultViewport`) ;
-2. **une décision propre au synthétiseur** : produire l'effet `synthesizers.viewport.save` avec l'`id` du synthétiseur.
+- [`components/sp/stage/Index.vue`](../components/sp/stage/Index.vue), `onwheel` : à chaque événement `wheel`, le stage calcule le nouveau scale avec `zoom(innerTarget.value, $event)` ([`utils/functions/geometry.ts`](../utils/functions/geometry.ts)). Il modifie directement `innerTarget.value.scale`, c'est-à-dire le synthétiseur lui-même, puis émet `zoom(scale)`.
+- Le calcul est le suivant : `Math.abs(scale + deltaY * -ZOOM_RATIO)`, borné entre `MAX_ZOOM_OUT` (0.5) et `MAX_ZOOM_IN` (2). Les constantes se trouvent dans [`utils/constants.ts`](../utils/constants.ts), avec `ZOOM_RATIO = 0.005`.
+- Dans [`pages/synthesizers/[id].vue`](../pages/synthesizers/[id].vue), `@zoom="onzoom"` réécrit la même valeur dans `synthesizer.scale`. **Rien n'est sauvegardé.**
+- Depuis la migration du pan, le scale n'est sauvegardé que si un pan avec déplacement suit le zoom, car l'effet de pan contient le viewport complet. C'était la « régression temporaire acceptée » de cette migration : un zoom suivi d'un simple clic ne sauvegarde plus rien.
+- L'éditeur de blueprints n'écoute pas `zoom`. Il dépend uniquement du fait que le stage modifie le scale en direct.
 
-Seule la première peut être partagée. La seconde doit rester dans chaque domaine, sinon le core des blueprints dépendrait des effets des synthétiseurs.
+### Un défaut dans le calcul actuel
 
-L'éditeur de blueprints a les mêmes besoins. [`Blueprint`](../types/blueprints/Blueprint.ts) porte lui aussi `x`, `y` et `scale`, et son pan passe par le même composant `sp-stage`. Depuis la migration du pan, il ne sauvegarde plus : [`Creator.vue`](../components/blueprint/Creator.vue) écoute `@panned`, qui n'est plus émis.
+Le `Math.abs` produit un résultat faux quand on dézoome fortement. Par exemple, avec un scale de 0.5 et un `deltaY` de 400 : `0.5 - 2 = -1.5`, puis `abs` donne `1.5`. **Un fort dézoom produit donc un zoom avant.** La borne inférieure ne protège pas de ce cas, puisque l'`abs` est appliqué avant elle. Le nouveau core ne reprendra pas ce `abs` (voir « Points à trancher »).
+
+### La vraie difficulté : quand sauvegarder ?
+
+Le pan a une fin naturelle, le `mouseup`. Le zoom n'en a pas : une molette envoie des dizaines d'événements `wheel` par seconde, sans événement de fin. Sauvegarder à chaque événement enverrait des dizaines de requêtes par seconde. Il faut donc attendre que l'utilisateur s'arrête, c'est-à-dire **différer la sauvegarde** (debounce).
+
+## Décisions de conception
+
+### 1. Le core calcule à chaque événement, le shell gère le délai
+
+- **Le core est appelé à chaque événement `wheel`.** Il calcule le nouveau scale (borné) et indique s'il a changé. Il reste pur : il ne connaît ni le temps, ni les timers.
+- **Le délai avant la sauvegarde est une affaire de temps, donc de shell.** Un runner d'effets « différé » regroupe les effets reçus pendant le délai et n'exécute que le dernier.
+- L'affichage, lui, est mis à jour immédiatement, à chaque événement, par `applyViewport`.
+
+Alternative écartée : un événement `zoomReleased` émis par le stage après une période d'inactivité, sur le modèle de `panReleased`. Le stage, un composant legacy, porterait alors une règle temporelle impossible à tester, et la page devrait garder le scale de départ entre deux événements.
+
+### 2. Un effet dédié qui ne sauvegarde que le scale
+
+Le zoom produit un nouvel effet, `synthesizers.scale.save`, qui envoie **seulement `scale`**. Il ne réutilise pas `synthesizers.viewport.save`.
+
+Pourquoi : avec un effet contenant le viewport complet, un zoom suivi rapidement d'un pan provoquerait une course entre les deux sauvegardes.
+
+1. Le pan sauvegarde immédiatement `{ nouvelle position, scale }`.
+2. Le zoom différé part 500 ms plus tard avec `{ ancienne position, scale }`, et **écrase la nouvelle position**.
+
+Avec un effet limité au scale, les deux sauvegardes ne se marchent plus dessus. L'API accepte un corps partiel : `services/synthesizers.rb` fait `membership.update!(**payload.slice(:x, :y, :scale))`.
+
+### 3. Un runner différé générique et testable
+
+L'ancien `composables/debounce.ts` n'est pas réutilisé, pour trois raisons :
+
+- il repose sur un dictionnaire global partagé par tout le front ;
+- il appelle directement `setTimeout`, ce qui le rend impossible à tester sans faux timers ;
+- il utilise le type `Function`.
+
+Le nouveau runner reçoit en paramètre un **planificateur** (`schedule`, `cancel`), injecté comme `put` l'est dans `makeRunEffect`. Il est générique sur le type d'effet, ce qui permettra au zoom du blueprint de le réutiliser tel quel.
 
 ## Organisation cible
 
 ```
 features/
   shared/
-    data/Uuid.type.ts                 ← déplacé depuis synthesizers
-    http/                             ← déplacé depuis synthesizers/shell/api
-  viewports/                          ← nouveau, ne connaît ni synthétiseur ni blueprint
-    core/
-      data/Position.type.ts
-      data/Viewport.type.ts
-      shared/Constants.ts
-      shared/viewport.ts
-      processes/pan.process.ts        ← calcul pur, sans effet
-      processes/reset.process.ts      ← calcul pur, sans effet
-    shell/legacy/viewport.adapter.ts  ← toViewport, applyViewport, makeApplyFacts génériques
+    effects/debounce.ts                  ← nouveau : runner différé générique (shell)
+  viewports/
+    core/shared/Constants.ts             ← + ZOOM_RATIO, MIN_SCALE, MAX_SCALE
+    core/shared/viewport.ts              ← + clampScale
+    core/processes/zoom.process.ts       ← nouveau : zoomViewport (calcul pur, sans effet)
   synthesizers/
-    core/processes/synthesizers/pan.process.ts    ← produit l'effet synthesizers.viewport.save
-    core/processes/synthesizers/reset.process.ts
-    shell/effect.ts
-    shell/api/saveViewport.http.ts
-    shell/legacy/viewport.adapter.ts              ← makePanSynthesizer, makeResetSynthesizer
-  blueprints/                         ← nouveau
-    core/data/Effect.type.ts
-    core/processes/pan.process.ts     ← produit l'effet blueprints.viewport.save
-    shell/effect.ts
-    shell/api/saveViewport.http.ts
-    shell/legacy/viewport.adapter.ts  ← makePanBlueprint
+    core/data/Effect.type.ts             ← + synthesizers.scale.save
+    core/processes/synthesizers/zoom.process.ts   ← nouveau : produit l'effet
+    shell/api/saveScale.http.ts          ← nouveau : PUT { scale }
+    shell/effect.ts                      ← + case synthesizers.scale.save
+    shell/legacy/viewport.adapter.ts     ← + makeZoomSynthesizer, zoomSynthesizer
+components/sp/stage/Index.vue            ← + événement zoomRequested
+pages/synthesizers/[id].vue              ← @zoom-requested au lieu de @zoom
 ```
 
-### Règles de dépendance
-
-```
-synthesizers  ──►  viewports  ◄──  blueprints
-      │                │               │
-      └────────────►  shared  ◄────────┘
-```
-
-- `viewports` n'importe ni `synthesizers` ni `blueprints` ;
-- `synthesizers` et `blueprints` ne s'importent pas l'un l'autre ;
-- aucun core n'importe un shell ;
-- `shared` n'importe aucune feature.
-
-Chaque étape se vérifie avec :
+Les règles de dépendance du plan précédent s'appliquent sans changement. Chaque étape se vérifie avec :
 
 ```sh
 grep -rn "features/synthesizers\|\.\./synthesizers" features/viewports features/blueprints features/shared
@@ -72,391 +89,268 @@ grep -rn "/shell/" features/*/core
 
 Ces trois commandes ne doivent rien renvoyer.
 
-## Alternative écartée : injecter une fabrique d'effets
-
-Le core partagé pourrait recevoir une fabrique, `makePan<E>(toEffect: (vp: Viewport) => E)`, et produire directement `effects: E[]`.
-
-C'est compatible avec FCIS, car la fabrique est pure. Mais cette approche ajoute des génériques et une indirection pour un gain faible. Avec un booléen `changed`, le core partagé ignore complètement la notion d'effet, et chaque domaine décide de façon explicite de ce qu'il fait d'un changement.
-
 ## Étapes
 
-Chaque étape correspond à un commit. Les étapes 1 à 3 sont des refactorings : le comportement visible ne change pas, et les tests existants doivent rester verts sans modification de leurs assertions. Seuls leurs imports changent.
+Chaque étape correspond à un commit. Les tests de mutation se font sur une copie, jamais sur les fichiers de travail.
 
-Les déplacements se font avec `git mv`, pour conserver l'historique des fichiers.
+### 1. Core partagé : `zoomViewport`
 
-### 1. Extraire les données et comparaisons partagées — ✅ fait
+Objectif : déplacer le calcul du zoom dans `features/viewports/core`, sous une forme pure et testée.
 
-Objectif : créer `features/viewports/core` et `features/shared/data`, sans aucun changement de comportement.
+#### Constantes
 
-#### Déplacements
+Dans `features/viewports/core/shared/Constants.ts`, ajouter `ZOOM_RATIO` (0.005), `MIN_SCALE` (0.5) et `MAX_SCALE` (2). Ces noms décrivent des bornes de scale, ce qui est plus clair que `MAX_ZOOM_OUT` et `MAX_ZOOM_IN`.
 
-| Depuis `features/synthesizers/core/` | Vers |
-|---|---|
-| `data/Uuid.type.ts` | `features/shared/data/Uuid.type.ts` |
-| `data/Position.type.ts` | `features/viewports/core/data/Position.type.ts` |
-| type `Viewport` de `data/Synthesizer.type.ts` | `features/viewports/core/data/Viewport.type.ts` |
-| `shared/Constants.ts` | `features/viewports/core/shared/Constants.ts` |
-| `shared/viewport.ts` | `features/viewports/core/shared/viewport.ts` |
-| `shared/__tests__/viewport.test.ts` | `features/viewports/core/shared/__tests__/viewport.test.ts` |
+Les constantes de `utils/constants.ts` restent en place : l'ancien calcul du stage les utilise encore pour le blueprint. Elles seront supprimées lors de la migration du zoom du blueprint.
 
-`Constants.ts` ne contient que `DEFAULT_POSITION` et `DEFAULT_VIEWPORT`, donc le fichier se déplace en entier.
+#### Fonction partagée
 
-Dans `Synthesizer.type.ts`, la définition de `Viewport` et son commentaire sont remplacés par un import depuis `features/viewports`. `Synthesizer` reste défini comme `Viewport & { … }`. On ne réexporte pas `Viewport` depuis `Synthesizer.type.ts` : tous les imports pointent vers la nouvelle source.
-
-#### Imports à mettre à jour
-
-Relevés avec `grep -rn "Position.type\|Uuid.type\|shared/Constants\|shared/viewport\|Synthesizer.type" features` :
-
-- `Uuid` : `data/{AudioModule,Cable,InnerNode,Synthesizer,Effect}.type.ts`, `processes/synthesizers/{pan,reset}.process.ts` et leurs tests, `shell/api/saveViewport.http.ts` et son test, `shell/legacy/viewport.adapter.ts` et son test, `features/shared/tests/{mockAudioModule,mockInnerNode,mockSynthesizer}.ts` ;
-- `Viewport` : `data/Effect.type.ts`, `processes/synthesizers/{pan,reset}.process.ts` et leurs tests, `shell/api/saveViewport.http.ts`, `shell/legacy/viewport.adapter.ts` et son test ;
-- `Position` : `processes/synthesizers/pan.process.ts`, `shell/legacy/viewport.adapter.ts` ;
-- `DEFAULT_VIEWPORT` : `processes/synthesizers/reset.process.ts` et son test, `shell/api/__tests__/saveViewport.test.ts`, `shell/legacy/__tests__/viewport.test.ts`.
-
-#### Suppressions faites en même temps, hors du plan
-
-Pendant cette étape, des fichiers inutilisés ont été supprimés. Aucun fichier `.ts` ou `.vue` du projet ne les référençait :
-
-- `features/shared/tests/mock{AudioModule,AudioNode,InnerNode,Synthesizer}.ts` ;
-- `core/processes/inner_links/connectNodes.process.ts` ;
-- `core/processes/inner_nodes/create.process.ts` et son test (4 tests), dont l'import cassé de `Uuid` ;
-- `core/processes/modules/createVoice.process.ts` et son test (5 tests).
-
-Conséquences :
-
-- les mises à jour d'imports listées plus haut pour les mocks sont sans objet ;
-- les 5 erreurs tsc qui existaient avant la migration ont disparu, car elles venaient de ces fichiers ;
-- la règle « `shared` n'importe aucune feature » est désormais respectée, car les mocks étaient les seuls à l'enfreindre ;
-- **la nouvelle référence est de 41 tests** (30 dans `synthesizers`, 11 dans `viewports`), soit 68 avec `features/shared`. Les étapes suivantes se comparent à ce chiffre.
-
-#### Vérifications
-
-- [x] `npx vitest run features` est vert : 8 fichiers, 68 tests, dont 41 dans `synthesizers` et `viewports`. Les 50 tests d'avant l'étape, moins les 9 tests supprimés, sont tous présents ;
-- [x] `npx tsc --noEmit -p .` ne signale aucune erreur dans `features/` ;
-- [x] les commandes de vérification des dépendances ne renvoient rien ;
-- [x] `grep -rn "Viewport\b" features/synthesizers/core/data/Synthesizer.type.ts` ne montre plus qu'un import et l'intersection `Viewport & {`.
-
-Commits, à indexer séparément avec `git add` :
-
-1. `chore: remove unused synthesizer processes and test mocks` : les suppressions ci-dessus ;
-2. `refactor(viewports): extract the shared viewport data and comparisons` : l'étape 1.
-
-### 2. Processes partagés `panViewport` et `resetViewport` — ✅ fait
-
-Objectif : déplacer le calcul et le jugement dans `features/viewports`. Les processes du synthétiseur ne font plus que traduire un changement en effet.
-
-#### Core partagé
+Dans `features/viewports/core/shared/viewport.ts` :
 
 ```ts
-// features/viewports/core/processes/pan.process.ts
-export type ViewportChange = { viewport: Viewport, changed: boolean }
+export const clampScale = (scale: number): number => Math.min(Math.max(MIN_SCALE, scale), MAX_SCALE)
+```
 
-export type PanViewportFct = (from: Viewport, to: Position) => ViewportChange
+#### Process
 
-export const panViewport: PanViewportFct = (from, to) => {
-  const viewport = { position: { x: to.x, y: to.y }, scale: from.scale }
-  return { viewport, changed: positionsDiffer(from.position, to) }
+```ts
+// features/viewports/core/processes/zoom.process.ts
+export type ZoomViewportFct = (from: Viewport, deltaY: number) => ViewportChange
+
+export const zoomViewport: ZoomViewportFct = (from, deltaY) => {
+  const scale = clampScale(from.scale - deltaY * ZOOM_RATIO)
+  return {
+    viewport: { position: { x: from.position.x, y: from.position.y }, scale },
+    changed: scale !== from.scale
+  }
 }
 ```
 
-```ts
-// features/viewports/core/processes/reset.process.ts
-export type ResetViewportFct = (viewport: Viewport) => ViewportChange
-
-export const resetViewport: ResetViewportFct = viewport => ({
-  viewport: DEFAULT_VIEWPORT,
-  changed: !isDefaultViewport(viewport)
-})
-```
-
-Les noms `panViewport` et `resetViewport` évitent un alias à l'import dans les processes du domaine, qui s'appellent déjà `pan` et `reset`. `ViewportChange` est défini dans `core/data/ViewportChange.type.ts`, à côté des autres types, pour que `zoom` puisse le réutiliser.
-
-#### Core du synthétiseur
-
-```ts
-// features/synthesizers/core/processes/synthesizers/pan.process.ts
-export const pan: PanFct = (id, from, to) => {
-  const { viewport, changed } = panViewport(from, to)
-  return { viewport, effects: changed ? [ { type: "synthesizers.viewport.save", id, viewport } ] : [] }
-}
-```
-
-```ts
-// features/synthesizers/core/processes/synthesizers/reset.process.ts
-export const reset: ResetFct = (id, from) => {
-  const { viewport, changed } = resetViewport(from)
-  return { viewport, effects: changed ? [ { type: "synthesizers.viewport.save", id, viewport } ] : [] }
-}
-```
-
-Les signatures `PanFct` et `ResetFct` ne changent pas.
+- Le process reçoit le `deltaY` brut de l'événement, et non l'événement lui-même : le core ne connaît pas le DOM.
+- La position est copiée, jamais partagée, pour la même raison que pour le pan.
+- `changed` est faux quand on est déjà en butée. Zoomer au-delà de `MAX_SCALE` ne déclenche donc aucune sauvegarde.
 
 #### Tests
 
-L'ordre compte : on prouve d'abord la non-régression, puis on allège.
+Fichiers : `features/viewports/core/shared/__tests__/viewport.test.ts` (pour `clampScale`) et `features/viewports/core/processes/__tests__/zoom.test.ts`.
 
-1. **Avant toute modification des tests du synthétiseur**, réécrire les deux processes et vérifier que `pan.test.ts` et `reset.test.ts` passent sans changement. C'est la preuve que la réécriture ne change rien.
-2. Créer `features/viewports/core/processes/__tests__/pan.test.ts` en reprenant les cas de l'actuel `pan.test.ts`, avec des assertions sur `{ viewport, changed }` :
-   - [x] déplacement sur X seul, puis sur Y seul : `changed` vaut `true` ;
-   - [x] position inchangée : `changed` vaut `false` ;
-   - [x] le scale de départ est conservé ;
-   - [x] viewport de départ gelé (`Object.freeze`) ;
-   - [x] le viewport renvoyé ne partage pas sa référence avec `to`.
-3. Créer `features/viewports/core/processes/__tests__/reset.test.ts` en reprenant l'actuel `reset.test.ts` :
-   - [x] écart sur X seul, Y seul, scale seul : `changed` vaut `true` ;
-   - [x] viewport déjà par défaut : `changed` vaut `false` ;
-   - [x] viewport gelé ;
-   - [x] le viewport renvoyé est toujours `DEFAULT_VIEWPORT`.
-4. Réduire les tests du synthétiseur à ce qui relève de cette couche. Il reste deux tests par process, qui comparent le résultat complet avec `toEqual` :
-   - [x] un changement produit exactement un effet `synthesizers.viewport.save`, avec le bon `id` et le viewport renvoyé. Pour `pan`, le scale de départ vaut 2, pour vérifier que l'effet contient bien le scale conservé ;
-   - [x] une absence de changement ne produit aucun effet.
+- [ ] `clampScale` : une valeur dans les bornes est inchangée ; une valeur sous `MIN_SCALE` donne `MIN_SCALE` ; une valeur au-dessus de `MAX_SCALE` donne `MAX_SCALE` ; les bornes elles-mêmes sont inchangées ;
+- [ ] `deltaY` négatif : le scale augmente de `-deltaY * ZOOM_RATIO`, et `changed` vaut `true` ;
+- [ ] `deltaY` positif : le scale diminue, et `changed` vaut `true` ;
+- [ ] `deltaY` nul : `changed` vaut `false` ;
+- [ ] en butée haute (scale à `MAX_SCALE`, `deltaY` négatif) : le scale reste `MAX_SCALE`, et `changed` vaut `false`. Même chose en butée basse ;
+- [ ] **le défaut de l'`abs`** : avec un scale de 0.5 et un `deltaY` de 400, le scale reste 0.5. Avec l'ancien calcul, il passait à 1.5 ;
+- [ ] la position est conservée et le viewport renvoyé ne partage pas sa référence avec `from.position` ;
+- [ ] le process fonctionne avec un viewport gelé (`Object.freeze`).
 
-   Un troisième test, « le viewport renvoyé est celui calculé par le core partagé », était prévu. Il est inutile, car `toEqual` vérifie déjà le viewport renvoyé dans les deux tests.
+Choisir des valeurs exactement représentables en binaire (par exemple un `deltaY` de -100 depuis un scale de 1, qui donne 1.5), pour que `toEqual` ne soit pas piégé par les arrondis.
 
 #### Vérifications
 
-- [x] `npx vitest run features` est vert : 10 fichiers, **72 tests**. C'est la nouvelle référence pour l'étape 3 (79 après la création des tests de `viewports`, moins 3 pour `pan` et 4 pour `reset`) ;
-- [x] `npx tsc --noEmit -p .` ne signale aucune erreur dans `features/` ;
-- [x] les commandes de vérification des dépendances ne renvoient rien ;
-- [x] mutation : en remplaçant `positionsDiffer(from.position, to)` par `true` dans `panViewport`, un test de `viewports` échoue. Même chose avec `!isDefaultViewport(viewport)` dans `resetViewport` ;
-- [x] mutation des processes du synthétiseur : chacune des mutations suivantes fait échouer un test, pour `pan` comme pour `reset` :
-  - effet toujours produit, ou jamais produit ;
-  - `id` constant ;
-  - effet contenant `from` ;
-  - viewport renvoyé remplacé par `from` ;
-  - `type` modifié.
+- [ ] `npx vitest run features` est vert ;
+- [ ] `npx tsc --noEmit -p .` ne signale aucune erreur ;
+- [ ] les commandes de vérification des dépendances ne renvoient rien ;
+- [ ] mutations à vérifier :
+  - le `clampScale` retiré ;
+  - le `abs` réintroduit ;
+  - le signe de `deltaY` inversé ;
+  - `changed` forcé à `true` ;
+  - la position partagée au lieu d'être copiée.
 
-Commit : `refactor(viewports): build synthesizers pan and reset on a shared core`.
+Commit : `feat(viewports): add the shared zoom computation`.
 
-### 3. Shell partagé : couche HTTP et adapter legacy — ✅ fait
+### 2. Core du synthétiseur : effet `synthesizers.scale.save` et process `zoom`
 
-Objectif : rendre réutilisables par les blueprints tout ce qui ne dépend pas du synthétiseur dans le shell.
-
-#### Couche HTTP
-
-`saveViewport.http.ts` des blueprints aura besoin de `HttpPut`, `HttpError`, `withAuthenticationGuard` et du `put` Nuxt. Ces fichiers ne parlent pas de synthétiseur, ils passent donc dans `features/shared/http` :
-
-| Depuis `features/synthesizers/shell/api/` | Vers `features/shared/http/` |
-|---|---|
-| `http.ts` | `http.ts` |
-| `axios.http.ts` | `axios.http.ts` |
-| `nuxt.http.ts` | `nuxt.http.ts` (corriger l'import relatif de `composables/usetab`) |
-| `__tests__/http.test.ts` | `__tests__/http.test.ts` |
-| `__tests__/utils/recorder.ts` | `__tests__/utils/recorder.ts` |
-
-`saveViewport.http.ts` et son test restent dans `features/synthesizers/shell/api`, car ils connaissent l'URL `/proxy/synthesizers/:id`. Ils importent désormais depuis `features/shared/http`.
-
-`features/shared` contient alors du code shell (`nuxt.http.ts`). C'est acceptable tant qu'aucun core ne l'importe, ce que vérifie la troisième commande de vérification des dépendances.
-
-#### Adapter générique
-
-`toViewport` et `applyViewport` ne lisent que `x`, `y` et `scale`. Ils passent dans `features/viewports/shell/legacy/viewport.adapter.ts` et travaillent sur `ScaledCoordinates` ([`types/utils/Coordinates`](../types/utils/Coordinates.ts)), que `Synthesizer` et `Blueprint` satisfont tous les deux :
+#### Effet
 
 ```ts
-// features/viewports/shell/legacy/viewport.adapter.ts
-export const toViewport = (target: ScaledCoordinates): Viewport => ({
-  position: { x: target.x, y: target.y }, scale: target.scale
-})
-
-export const applyViewport = (target: ScaledCoordinates, viewport: Viewport): void => {
-  target.x = viewport.position.x
-  target.y = viewport.position.y
-  target.scale = viewport.scale
-}
-
-export type ViewportFacts<E extends Effect> = { viewport: Viewport, effects: E[] }
-
-export type FactsApplier<E extends Effect> = (target: ScaledCoordinates, facts: ViewportFacts<E>) => Promise<void>
-
-export const makeApplyFacts = <E extends Effect>(run: (effect: E) => Promise<void>): FactsApplier<E> =>
-  async (target, { viewport, effects }) => {
-    applyViewport(target, viewport)
-    await Promise.all(effects.map(run))
-  }
-```
-
-L'adapter du synthétiseur ne garde que ce qui lui est propre :
-
-```ts
-// features/synthesizers/shell/legacy/viewport.adapter.ts
-export const applyFacts: FactsApplier<SynthesizersEffect> = makeApplyFacts(runEffect)
-
-export const makePanSynthesizer: PanSynthesizerFactory = apply =>
-  async (synth, from, to) => {
-    const facts = pan(synth.id as Uuid, { ...toViewport(synth), position: from }, to)
-    await apply(synth, facts)
-  }
-// makeResetSynthesizer, panSynthesizer, resetSynthesizer : inchangés
-```
-
-Les noms exportés `panSynthesizer` et `resetSynthesizer` ne changent pas. [`pages/synthesizers/[id].vue`](../pages/synthesizers/[id].vue), qui les importe tous les deux, n'a rien à modifier.
-
-#### Tests
-
-- [x] `toViewport`, `applyViewport` et `applyFacts` migrent vers `features/viewports/shell/legacy/__tests__/viewport.test.ts`. La cible est un simple objet `{ x, y, scale }` et l'effet un faux `{ type: "test.effect" }`, pour prouver que l'adapter ne dépend d'aucun domaine ;
-- [x] `makeResetSynthesizer` et `makePanSynthesizer` restent dans `features/synthesizers/shell/legacy/__tests__/viewport.test.ts`, y compris le test du point délicat (synthétiseur placé à `to`, scale différent de 1).
-
-#### Écarts avec le plan
-
-- **`RunEffectFct<E>` est défini dans [`features/shared/facts.ts`](../features/shared/facts.ts)**, à côté d'`Effect`, et non dans l'adapter. Il décrit l'exécution d'un effet en général. Les `effect.ts` de chaque domaine l'importent donc depuis `shared`, sans dépendre de l'adapter legacy des viewports.
-- **`SynthesizersEffects` est renommé `SynthesizersEffect`**, puisque le type décrit un seul effet. Le renommage est complet. Les extraits de code de l'étape 4 utilisent par analogie `BlueprintsEffect`.
-- **`core/shared/SynthesizerMap.type.ts` a été supprimé.** Aucun fichier ne l'utilisait. Cette suppression va dans un commit séparé.
-
-#### Vérifications
-
-- [x] `npx vitest run features` est vert : 11 fichiers, 72 tests, soit le même nombre qu'à la fin de l'étape 2 ;
-- [x] `npx tsc --noEmit -p .` ne signale aucune erreur dans `features/`, `pages/` ni `components/` ;
-- [x] les commandes de vérification des dépendances ne renvoient rien ;
-- [x] dans le navigateur : un pan et un reset du synthétiseur sauvegardent toujours (onglet réseau, `PUT /proxy/synthesizers/:id` avec `x`, `y`, `scale`). Validé à la main.
-
-Commits :
-
-1. `chore: remove unused SynthesizerMap type` ;
-2. `refactor(viewports): share the legacy viewport adapter and the http layer`.
-
-### 4. Feature `blueprints` : pan
-
-Objectif : réparer la sauvegarde du pan dans l'éditeur de blueprints, sur le même modèle que le synthétiseur.
-
-#### 4.1. Vérifier l'API avant d'écrire du code — ✅ fait
-
-- [x] `PUT /proxy/blueprints/:id` accepte un corps limité à `x`, `y` et `scale`, sans écraser les autres champs. Vérifié dans le dépôt `api` (commit `1b0ad53`) :
-  - la route `put '/:id'` de `controllers/blueprints/blueprints.rb` appelle `Services::Blueprints::Update#find_and_update` ;
-  - `services/blueprints/update.rb` applique `payload.slice(:name, :slots, :experimental, :x, :y, :scale)`. Seuls les champs présents dans le corps sont donc modifiés ;
-  - `spec/controllers/blueprints/update_spec.rb` envoie déjà des corps partiels (`name` seul, `slots` seul) et vérifie que la réponse vaut 200 ;
-  - la réponse (`views/blueprints/_blueprint`) renvoie `x`, `y` et `scale`.
-
-Deux points à connaître, non bloquants :
-
-- **Types des champs.** Dans `models/blueprints/blueprint.rb`, `x` et `y` sont des `Integer` et `scale` un `Float`. C'est la même chose que pour le viewport du synthétiseur (`models/social/membership.rb`), donc le comportement en cas de position décimale sera identique à celui déjà validé à l'étape 3.
-- **Couverture des tests de l'API.** Aucun test de l'API ne vérifie une mise à jour de `x`, `y` ou `scale` sur un blueprint. On peut en ajouter un dans `spec/controllers/blueprints/update_spec.rb`, mais c'est hors du périmètre du front.
-
-#### 4.2. Core — ✅ fait
-
-```ts
-// features/blueprints/core/data/Effect.type.ts
-export type BlueprintsEffect = Effect & (
-  | { type: "blueprints.viewport.save", id: Uuid, viewport: Viewport }
+// features/synthesizers/core/data/Effect.type.ts
+export type SynthesizersEffect = Effect & (
+  | { type: "synthesizers.viewport.save", id: Uuid, viewport: Viewport }
+  | { type: "synthesizers.scale.save", id: Uuid, scale: number }
 )
 ```
 
-```ts
-// features/blueprints/core/processes/pan.process.ts
-export type PanFct = (id: Uuid | null, from: Viewport, to: Position) => { viewport: Viewport, effects: BlueprintsEffect[] }
+L'ajout de ce cas fait échouer tsc dans `features/synthesizers/shell/effect.ts`, grâce à `assertNever`, tant que l'étape 3 n'est pas faite. C'est le comportement attendu : **les étapes 2 et 3 vont dans le même commit**, ou bien l'étape 3 doit suivre immédiatement.
 
-export const pan: PanFct = (id, from, to) => {
-  const { viewport, changed } = panViewport(from, to)
-  return { viewport, effects: id !== null && changed ? [ { type: "blueprints.viewport.save", id, viewport } ] : [] }
+#### Process
+
+```ts
+// features/synthesizers/core/processes/synthesizers/zoom.process.ts
+export type ZoomFct = (id: Uuid, from: Viewport, deltaY: number) => { viewport: Viewport, effects: SynthesizersEffect[] }
+
+export const zoom: ZoomFct = (id, from, deltaY) => {
+  const { viewport, changed } = zoomViewport(from, deltaY)
+  return { viewport, effects: changed ? [ { type: "synthesizers.scale.save", id, scale: viewport.scale } ] : [] }
 }
 ```
 
-**Différence avec le synthétiseur : le blueprint peut ne pas avoir d'`id`.** En mode création, `Creator.vue` ne crée le blueprint côté API qu'à la première sauvegarde (`if (!blueprint.value.id)`). Un pan avant cette sauvegarde n'a rien à sauvegarder : le viewport est appliqué, mais aucun effet n'est produit. C'est une règle métier, elle vit donc dans le core et non dans l'adapter.
+#### Tests
 
-**Représentation de l'absence d'`id`.** Le core représente l'absence d'`id` par `null`, et il le teste strictement avec `id !== null`, en accord avec son type `Uuid | null`. Le legacy, lui, utilise une chaîne vide : [`pages/blueprints/New.vue`](../pages/blueprints/New.vue) crée le blueprint avec `id: ""`, et `Identified` type `id` comme un `string`, jamais `null`. La conversion de `""` vers `null` relève de la traduction entre legacy et core. Elle se fait donc dans l'adapter (étape 4.3), pas dans le core.
+Sur le modèle des tests de `pan` du synthétiseur, en comparant le résultat complet avec `toEqual` :
 
-Tests (`features/blueprints/core/processes/__tests__/pan.test.ts`) :
+- [ ] un zoom qui change le scale produit exactement un effet `synthesizers.scale.save`, avec le bon `id` et le nouveau scale, et **sans position** ;
+- [ ] un zoom en butée ne produit aucun effet.
 
-- [x] un changement avec un `id` produit exactement un effet `blueprints.viewport.save`. Le scale de départ vaut 2, pour vérifier qu'il est conservé ;
-- [x] une absence de changement ne produit aucun effet ;
-- [x] un changement sans `id` ne produit aucun effet, mais le viewport renvoyé est bien le nouveau.
+#### Vérifications
 
-Vérifications :
-
-- [x] `npx vitest run features` est vert : 12 fichiers, **75 tests**, soit 72 plus les 3 tests du core des blueprints. C'est la nouvelle référence pour la suite de l'étape 4 ;
-- [x] `npx tsc --noEmit -p .` ne signale aucune erreur ;
-- [x] les commandes de vérification des dépendances ne renvoient rien : `blueprints` n'importe rien de `synthesizers` ;
-- [x] mutations : chacune fait échouer au moins un test :
+- [ ] vitest, tsc et les commandes de vérification des dépendances ;
+- [ ] mutations :
   - effet toujours produit, ou jamais produit ;
-  - condition sur l'`id` retirée ;
-  - condition sur `changed` retirée ;
   - `id` constant ;
-  - effet contenant `from` ;
-  - viewport renvoyé remplacé par `from` ;
-  - `type` modifié.
+  - `scale` de l'effet remplacé par `from.scale` ;
+  - type d'effet remplacé par `synthesizers.viewport.save`.
 
-Nommage retenu : comme pour le synthétiseur, le process du core s'appelle `pan` (type `PanFct`). Le nom `panBlueprint` reste libre pour l'adapter de l'étape 4.3.
+### 3. Shell du synthétiseur : `saveScale` et `runEffect`
 
-Un process `reset` n'est utile que si l'éditeur de blueprints propose un bouton de réinitialisation de la vue. Ce n'est pas le cas aujourd'hui, donc il est hors périmètre.
+- `features/synthesizers/shell/api/saveScale.http.ts`, calqué sur `saveViewport.http.ts`, qui fait un `PUT /proxy/synthesizers/${id}` avec le corps `{ scale }` ;
+- dans `features/synthesizers/shell/effect.ts`, un `case "synthesizers.scale.save"` qui appelle `saveScale(put)(effect.id, effect.scale)`, puis `.or(undefined)`.
 
-#### 4.3. Shell — ✅ fait
+#### Tests
 
-- `features/blueprints/shell/api/saveViewport.http.ts`, calqué sur celui du synthétiseur, vers `/proxy/blueprints/${id}` ;
-- `features/blueprints/shell/effect.ts`, avec `makeRunEffect(put)` et un `switch` sur `BlueprintsEffect` terminé par `assertNever` ;
-- `features/blueprints/shell/legacy/viewport.adapter.ts` :
+- [ ] `saveScale.http.ts` : seul `scale` est envoyé, à la bonne URL, et une erreur HTTP est propagée ;
+- [ ] `effect.test.ts` : l'effet `synthesizers.scale.save` envoie une seule requête vers la bonne URL, avec `{ scale }`, et se résout avec `undefined` ;
+- [ ] `effect.test-d.ts` : le runner accepte `synthesizers.scale.save` (avec `toBeCallableWith`, sans exécuter l'appel).
 
-  ```ts
-  export const applyFacts: FactsApplier<BlueprintsEffect> = makeApplyFacts(runEffect)
+Commit, avec l'étape 2 : `feat(synthesizers): save the synthesizer scale through a dedicated effect`.
 
-  export const makePanBlueprint: PanBlueprintFactory = apply =>
-    async (blueprint, from, to) => {
-      const facts = pan(blueprint.id ? blueprint.id as Uuid : null, { ...toViewport(blueprint), position: from }, to)
-      await apply(blueprint, facts)
-    }
+### 4. Shell partagé : runner différé
 
-  export const panBlueprint = makePanBlueprint(applyFacts)
-  ```
+Objectif : n'exécuter que le dernier effet reçu pendant un délai, par synthétiseur.
 
-  **Attention à la conversion de l'`id`.** Il faut utiliser un test de vérité (`blueprint.id ? … : null`) et non `blueprint.id ?? null`. `??` ne remplace que `null` et `undefined` : avec `"" ?? null`, le core recevrait `""` et produirait un effet, ce qui donnerait un `PUT /proxy/blueprints/` sans identifiant.
+```ts
+// features/shared/effects/debounce.ts
+export type Scheduler = { schedule: (callback: () => void, delay: number) => unknown, cancel: (handle: unknown) => void }
 
-Tests :
+export type DebounceOptions<E extends Effect> = { delay: number, keyOf: (effect: E) => string, scheduler: Scheduler }
 
-- [x] `saveViewport.http.ts` : seuls `x`, `y` et `scale` sont envoyés à la bonne URL, et une erreur HTTP est propagée (sur le modèle de `features/synthesizers/shell/api/__tests__/saveViewport.test.ts`) ;
-- [x] `effect.ts` (`__tests__/effect.test.ts`), où l'on teste `makeRunEffect(put)` avec un `recorder`. Quatre cas sont vérifiés :
-  - l'effet `blueprints.viewport.save` envoie une seule requête, avec le bon `id` et le bon viewport, et la promesse se résout avec `undefined` ;
-  - un échec HTTP est absorbé : la promesse se résout avec `undefined`, sans nouvel essai ;
-  - une exception levée par `put` est propagée ;
-  - un type d'effet inconnu est rejeté par `assertNever`, sans qu'aucune requête soit envoyée ;
-- [x] `effect.ts`, tests de type (`__tests__/effect.test-d.ts`) : le runner a le type `RunEffectFct<BlueprintsEffect>`, et refuse un effet `synthesizers.viewport.save`. Ce refus est vérifié par `toBeCallableWith`, accompagné d'un `@ts-expect-error`, sans exécuter l'appel ;
-- [x] `makePanBlueprint` : mêmes cas que `makePanSynthesizer`, dont le point délicat (blueprint placé à `to`, scale différent de 1). Plus un cas avec `id: ""`, comme en mode création, où `apply` reçoit le nouveau viewport mais aucun effet. Ce test échoue si l'adapter utilise `??` au lieu d'un test de vérité.
+export const makeDebouncedRun = <E extends Effect>(run: RunEffectFct<E>, options: DebounceOptions<E>): RunEffectFct<E> => …
+```
 
-Écarts avec le plan, validés :
+- **Une clé par effet** (`keyOf`), par exemple `${effect.type}:${effect.id}`. Deux synthétiseurs ne s'annulent pas entre eux, et le pan, qui passe par le runner direct, n'est jamais retardé.
+- **Le dernier effet l'emporte** : chaque nouvel effet de même clé annule le précédent et relance le délai.
+- **La promesse renvoyée se résout immédiatement**, sans attendre l'exécution différée. Sinon, `applyFacts` resterait bloqué pendant toute la durée du délai.
+- **Toutes les erreurs de l'exécution différée sont ignorées** (décision prise). Le runner intercepte toute exception levée par `run` et l'abandonne, sans la journaliser. Les erreurs HTTP sont déjà absorbées par `runEffect`, donc seule une exception levée par `put` est concernée. Cette interception est quand même obligatoire : sans elle, l'exception donnerait un rejet de promesse non géré, puisque plus personne n'attend l'exécution différée.
+- **Pas de sauvegarde en quittant la page** (décision prise). Si l'utilisateur quitte la page pendant le délai, la sauvegarde en attente est perdue. Le runner n'a donc pas de méthode `flush`, et la page n'a rien à faire dans `onBeforeUnmount`. On perd au plus les 500 dernières millisecondes de zoom.
+- Le planificateur de production est `{ schedule: setTimeout, cancel: clearTimeout }`, et le délai est de **500 ms**, comme les autres sauvegardes différées du front (`knob/Wrapper.vue`, `blueprint/Structure/Node/List.vue`).
 
-- **Message d'`assertNever` simplifié.** Dans [`features/shared/facts.ts`](../features/shared/facts.ts), l'erreur ne contient plus que la valeur sérialisée (`JSON.stringify(value)`). Le préfixe « Effet non géré : » a été retiré. Les tests de type d'effet inconnu vérifient donc `JSON.stringify("<type>")`. Ce changement s'applique aussi au synthétiseur.
-- **Tests de `effect.ts` ajoutés aussi pour le synthétiseur** (`features/synthesizers/shell/__tests__/`), sur le même modèle. Il manquait ces tests depuis l'étape 3.
-- **Les `.test-d.ts` sont aussi exécutés par vitest**, car `vitest.config.ts` les inclut. Un appel réel dans ces fichiers est donc exécuté : il faut passer par `expectTypeOf(...).toBeCallableWith(...)` pour ne vérifier que le typage. Le mode `--typecheck` n'est pas utilisable aujourd'hui, car il signale 165 erreurs sans rapport (par exemple dans `utils/midi`).
+#### Tests
 
-Vérifications :
+Avec un faux planificateur, qui enregistre les callbacks et permet de les déclencher à la main. On évite ainsi les faux timers de vitest.
 
-- [x] `npx vitest run features` est vert : 18 fichiers, **93 tests**. C'est la nouvelle référence pour le point 4.4 ;
-- [x] `npx tsc --noEmit -p .` ne signale aucune erreur ;
-- [x] les commandes de vérification des dépendances ne renvoient rien ;
-- [x] mutations : les 8 mutations de `effect.ts` et les 6 mutations de l'adapter font chacune échouer au moins un test.
+- [ ] un effet seul n'est pas exécuté immédiatement, puis l'est une fois le délai écoulé ;
+- [ ] trois effets de même clé : seul le dernier est exécuté, une seule fois ;
+- [ ] deux effets de clés différentes : les deux sont exécutés ;
+- [ ] la promesse renvoyée se résout avant l'exécution de l'effet ;
+- [ ] une exception levée par `run` pendant l'exécution différée est ignorée : aucun rejet non géré, et un effet suivant de même clé est toujours exécuté normalement ;
+- [ ] le délai transmis au planificateur est bien celui des options.
 
-#### 4.4. Composants
+#### Vérifications
 
-- [`blueprint/Structure/Index.vue`](../components/blueprint/Structure/Index.vue) : écouter `@pan-released` sur `sp-stage` et appeler `panBlueprint(blueprint, from, to)`. Supprimer `panned` du type `Emits`. Le composant reçoit déjà le blueprint en prop, donc il n'a pas besoin de remonter l'événement.
-- [`Creator.vue`](../components/blueprint/Creator.vue) : supprimer `@panned="c => applyPanning(c)"` et la fonction `applyPanning`.
+- [ ] vitest, tsc et les commandes de vérification des dépendances ;
+- [ ] mutations :
+  - l'effet précédent n'est plus annulé ;
+  - la clé est ignorée ;
+  - l'exécution est immédiate ;
+  - l'erreur n'est plus interceptée.
 
-Conséquence : un pan ne passe plus par `onSaveRequest`, donc plus par la validation du formulaire. Pour un simple déplacement de la vue, c'est le comportement voulu : un formulaire incomplet ne doit pas empêcher de sauvegarder la position. **À confirmer.**
+Commit : `feat(shared): add a debounced effect runner`.
+
+### 5. Adapter legacy du synthétiseur
+
+```ts
+// features/synthesizers/shell/legacy/viewport.adapter.ts
+export const debouncedApplyFacts: FactsApplier<SynthesizersEffect> = makeApplyFacts(
+  makeDebouncedRun(runEffect, { delay: 500, keyOf: e => `${e.type}:${e.id}`, scheduler: timeoutScheduler })
+)
+
+export const makeZoomSynthesizer: ZoomSynthesizerFactory = apply =>
+  async (synth, from, deltaY) => {
+    const facts = zoom(synth.id as Uuid, { ...toViewport(synth), scale: from }, deltaY)
+    await apply(synth, facts)
+  }
+
+export const zoomSynthesizer = makeZoomSynthesizer(debouncedApplyFacts)
+```
+
+**Le point délicat est le même que pour le pan.** Quand l'adapter est appelé, le stage a déjà modifié le scale du synthétiseur avec l'ancien calcul. `toViewport(synth)` renvoie donc le scale **d'arrivée**. Il faut le remplacer par le scale de départ, `from`, que le stage transmet. Sans ce remplacement, `zoom` partirait d'un scale déjà zoomé, et chaque cran de molette compterait double.
+
+`applyViewport` réécrit ensuite le scale calculé par le core. C'est donc lui qui l'emporte sur le calcul du stage, ce qui corrige au passage le défaut de l'`abs` pour le synthétiseur.
+
+#### Tests
+
+- [ ] un zoom qui change le scale : `apply` est appelé une seule fois, avec le même synthétiseur (`toBe`) et les bons faits (`toEqual`) ;
+- [ ] un zoom en butée : `apply` reçoit des faits sans effet ;
+- [ ] **le point délicat** : le synthétiseur de test est placé là où le stage le laisse, c'est-à-dire avec le scale déjà modifié. On vérifie que le calcul part bien de `from`. Ce test doit échouer si l'adapter utilise `toViewport(synth)` sans remplacer le scale ;
+- [ ] une erreur de `apply` est propagée.
+
+Commit : `feat(synthesizers): add the zoomSynthesizer adapter`.
+
+### 6. Stage et page
+
+#### Stage
+
+Dans [`components/sp/stage/Index.vue`](../components/sp/stage/Index.vue), ajouter un événement `zoomRequested`, à côté de `zoom` :
+
+```ts
+type Emits = {
+  zoom: [ number ],
+  zoomRequested: [ from: number, deltaY: number ],
+  panReleased: [ from: Coordinates, to: Coordinates ]
+}
+
+function onwheel($event: WheelEvent) {
+  const from = innerTarget.value.scale
+  const zoomValue: number = zoom(innerTarget.value, $event)
+  innerTarget.value.scale = zoomValue;
+  emit('zoom', zoomValue)
+  emit('zoomRequested', from, $event.deltaY)
+}
+```
+
+- Le scale de départ est **lu avant** la modification.
+- `zoom` et la modification en direct ne changent pas : l'éditeur de blueprints en dépend encore. Ils seront supprimés lors de la migration du zoom du blueprint, avec `utils/functions/geometry.ts#zoom` et les constantes de `utils/constants.ts`.
+
+#### Page
+
+Dans [`pages/synthesizers/[id].vue`](../pages/synthesizers/[id].vue) :
+
+- remplacer `@zoom="onzoom"` par `@zoom-requested="(from, deltaY) => zoomSynthesizer(synthesizer, from, deltaY)"` ;
+- supprimer la fonction `onzoom` ;
+- importer `zoomSynthesizer` à côté de `panSynthesizer` et `resetSynthesizer`.
 
 #### Vérifications
 
 Automatiques :
 
-- [ ] `npx vitest run features` est vert ;
-- [ ] `npx tsc --noEmit -p .` ne signale aucune nouvelle erreur ;
-- [ ] les commandes de vérification des dépendances ne renvoient rien ;
-- [ ] `grep -rn "panned" components pages` ne renvoie plus rien (hors `components/stage/Index.vue`, l'ancien stage, non concerné).
+- [ ] vitest, tsc et les commandes de vérification des dépendances ;
+- [ ] `grep -rn "onzoom" pages components` ne renvoie plus rien.
 
-Manuelles, dans le navigateur, onglet réseau ouvert, sur l'onglet Structure de l'éditeur de blueprints :
+Manuelles, dans le navigateur, onglet réseau ouvert :
 
-- [ ] un pan suivi d'un rechargement de la page conserve la position ;
-- [ ] la requête `PUT /proxy/blueprints/:id` ne contient que `x`, `y`, `scale` et les tokens ;
-- [ ] un clic sans déplacement ne déclenche aucune requête ;
-- [ ] en mode création, avant la première sauvegarde, un pan ne déclenche aucune requête ;
-- [ ] avec un token invalide, un pan renvoie vers `/` ;
-- [ ] l'onglet Appearance fonctionne toujours (il n'écoute aucun événement de pan) ;
-- [ ] le pan du synthétiseur fonctionne toujours.
+- [ ] un mouvement de molette continu déclenche **une seule** requête `PUT /proxy/synthesizers/:id`, environ 500 ms après l'arrêt, avec seulement `scale` et les tokens ;
+- [ ] un zoom suivi d'un rechargement de la page conserve le scale ;
+- [ ] un zoom en butée haute ou basse ne déclenche aucune requête ;
+- [ ] un fort dézoom ne produit plus de zoom avant (défaut de l'`abs`) ;
+- [ ] **un zoom suivi immédiatement d'un pan**, puis un rechargement : la position et le scale sont tous les deux conservés ;
+- [ ] le pan et le reset du synthétiseur fonctionnent toujours ;
+- [ ] le zoom de l'éditeur de blueprints fonctionne toujours à l'affichage. Il n'est toujours pas sauvegardé seul, ce qui est hors périmètre ;
+- [ ] avec un token invalide, un zoom renvoie vers `/` une fois le délai écoulé.
 
-Commit : `feat(blueprints): save the blueprint viewport on pan through the shared core`.
+Commit : `feat(synthesizers): save the zoom through the FCIS feature`.
 
 ## Après cette migration
 
-- **Zoom** : le futur process `zoom` s'écrit directement selon ce modèle. `features/viewports` porte le calcul et le jugement, avec la question du debounce. Chaque domaine ajoute une fine couche qui produit son effet.
-- **`sp-stage`** : une fois le blueprint migré, plus personne n'écoute `panned`. Le calcul du drag peut alors migrer à son tour vers un process `drag` sans effet dans `features/viewports`.
+- **Zoom de l'éditeur de blueprints** : il réutilise `zoomViewport` et `makeDebouncedRun` tels quels. Il ajoute un effet `blueprints.scale.save`, un process `zoom` qui gère l'absence d'`id` comme le pan, `saveScale` vers `/proxy/blueprints/:id`, et un adapter `zoomBlueprint`. `Structure/Index.vue` écoute `@zoom-requested`. Ensuite, on supprime l'ancien calcul du stage, l'événement `zoom`, `utils/functions/geometry.ts#zoom` et les constantes de `utils/constants.ts`.
+- **Fin de la régression du pan** : une fois le zoom sauvegardé seul, un zoom suivi d'un simple clic est de nouveau persisté.
 
 ## Points à trancher
 
-- ~~**API blueprints** : mise à jour partielle acceptée ou non (étape 4.1).~~ Tranché : la mise à jour partielle est acceptée (voir l'étape 4.1).
-- **Validation du formulaire** : la contourner pour la sauvegarde du viewport (étape 4.4).
-- **Emplacement du module** : `features/viewports` est proposé plutôt que `features/shared/viewports`, parce qu'il a son propre découpage core/shell, comme une feature. Si `shared` doit regrouper tout ce qui est transverse, les deux emplacements fonctionnent.
-- **Couche HTTP dans `shared`** : elle y introduit du code shell. L'autre solution serait un module `features/http`. Le choix n'a pas d'impact sur le reste du plan.
+- **Correction du défaut de l'`abs`.** Le plan le corrige dans le core, ce qui change le comportement visible : un fort dézoom reste en butée basse au lieu de rezoomer. C'est un correctif, mais il faut le valider.
+- **Délai du debounce.** Le plan propose 500 ms, comme les autres sauvegardes différées du front. Puisque rien n'est sauvegardé en quittant la page, une valeur plus courte réduit ce qu'on peut perdre.
+- **Zoom centré sur le curseur.** Aujourd'hui, le zoom se fait autour de l'origine du stage, et non autour du curseur. Garder ce comportement est hors périmètre. Le core pourrait l'accueillir plus tard, en recevant la position du curseur et en ajustant la position du viewport.
+
+## Décisions prises
+
+- **Pas de sauvegarde du zoom en attente quand l'utilisateur quitte la page.** La perte est limitée au délai du debounce, et le runner reste simple : pas de `flush`, pas de `onBeforeUnmount`.
+- **Toutes les erreurs de sauvegarde du zoom sont ignorées**, sans journalisation. Les erreurs HTTP sont déjà absorbées par `runEffect`, et les exceptions sont interceptées et abandonnées par le runner différé. Un token invalide déconnecte quand même l'utilisateur, car `withAuthenticationGuard` réinitialise la session avant de renvoyer l'erreur, que celle-ci soit ensuite ignorée ou non.
