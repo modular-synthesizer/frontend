@@ -88,9 +88,9 @@ describe("makeZoomSynthesizer", () => {
     return { called, zoom }
   }
   it("saves the synthesizer if the zoom has been changed", async () => {
-    const synthesizer: Synthesizer = { id: "id", x: 10, y: 10, scale: 2.0 } as Synthesizer
+    const synthesizer: Synthesizer = { id: "id", x: 10, y: 10, scale: 1.5 } as Synthesizer
     const applier = createApplier()
-    await applier.zoom(synthesizer, 1.5, 100)
+    await applier.zoom(synthesizer, 100)
     const viewport = { position: { x: 10, y: 10 }, scale: 1.0 }
 
     expect(applier.called).toHaveLength(1)
@@ -103,7 +103,7 @@ describe("makeZoomSynthesizer", () => {
   it("does not save the synthesizer scale if it's zoom out from the minimum", async () => {
     const synthesizer: Synthesizer = { id: "id", x: 10, y: 10, scale: 0.5 } as Synthesizer
     const applier = createApplier()
-    await applier.zoom(synthesizer, 0.5, 100)
+    await applier.zoom(synthesizer, 100)
     const viewport = { position: { x: 10, y: 10 }, scale: 0.5 }
 
     expect(applier.called).toHaveLength(1)
@@ -116,7 +116,7 @@ describe("makeZoomSynthesizer", () => {
   it("does not save the synthesizer if the zoom has not been moved", async () => {
     const synthesizer: Synthesizer = { id: "id", x: 0, y: 0, scale: 2.0 } as Synthesizer
     const applier = createApplier()
-    await applier.zoom(synthesizer, 2.0, 0)
+    await applier.zoom(synthesizer, 0)
     const viewport = { position: { x: 0, y: 0 }, scale: 2.0 }
 
     expect(applier.called).toHaveLength(1)
@@ -127,6 +127,6 @@ describe("makeZoomSynthesizer", () => {
     const synthesizer: Synthesizer = { id: "id", x: 0, y: 0, scale: 1.0 } as Synthesizer
     const zoom = makeZoomSynthesizer(async () => { throw new Error("apply failed") })
 
-    await expect(zoom(synthesizer, 2.0, 0)).rejects.toThrow("apply failed")
+    await expect(zoom(synthesizer, 0)).rejects.toThrow("apply failed")
   })
 })

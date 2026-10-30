@@ -36,13 +36,13 @@ export const makePanSynthesizer: PanSynthesizerFactory = apply =>
 export const panSynthesizer = makePanSynthesizer(applyFacts)
 
 
-export type ZoomSynthesizerFct = (s: Synthesizer, from: number, deltaY: number) => Promise<void>
+export type ZoomSynthesizerFct = (s: Synthesizer, deltaY: number) => Promise<void>
 
 export type ZoomSynthesizerFactory = (apply: FactsApplier<SynthesizersEffect>) => ZoomSynthesizerFct
 
 export const makeZoomSynthesizer: ZoomSynthesizerFactory = apply =>
-  async (synth, from, deltaY) => {
-    const facts = zoom(synth.id as Uuid, { ...toViewport(synth), scale: from }, deltaY)
+  async (synth, deltaY) => {
+    const facts = zoom(synth.id as Uuid, toViewport(synth), deltaY)
     await apply(synth, facts)
   }
 

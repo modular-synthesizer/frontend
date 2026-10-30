@@ -7,7 +7,7 @@ type CancelFct<T> = (handler: T) => void
 type Scheduler<T> = { schedule: ScheduleFct<T>, cancel: CancelFct<T> }
 
 export const timeoutScheduler: Scheduler<ReturnType<typeof setTimeout>> = {
-  schedule: setTimeout, cancel: clearTimeout
+  schedule: setTimeout.bind(window), cancel: clearTimeout.bind(window)
 }
 
 type KeyBuilder<E> = (effect: E) => string
