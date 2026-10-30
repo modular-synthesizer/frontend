@@ -19,6 +19,15 @@ describe("makeRunEffect", () => {
       { url: `/proxy/synthesizers/${ID}`, body: { x: 0, y: 1, scale: 2.0 } }
     ])
   })
+  it("sends the effect's id and scale to the synthesizer scale update route", async () => {
+    const { put, calls } = recorder(ok({}))
+    const synthesizerEffect: SynthesizersEffect = { type: "synthesizers.scale.save", id: ID, scale: 2.0 }
+    await expect(makeRunEffect(put)(synthesizerEffect)).resolves.toBeUndefined()
+
+    expect(calls).toEqual([
+      { url: `/proxy/synthesizers/${ID}`, body: { scale: 2.0 } }
+    ])
+  })
   it("sends only one request if it fails, without retries", async () => {
     const { put, calls } = recorder(ko({ status: 500 }))
     const viewport = { position: { x: 1, y: 2 }, scale: 3.0 }

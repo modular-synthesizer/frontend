@@ -4,4 +4,5 @@ import type { Viewport } from "../../../viewports/core/data/Viewport.type";
 
 export type SynthesizersEffect = Effect & (
   | { type: "synthesizers.viewport.save", id: Uuid, viewport: Viewport }
+  | { type: "synthesizers.scale.save", id: Uuid, scale: number }
 )

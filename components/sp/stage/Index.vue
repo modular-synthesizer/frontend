@@ -14,7 +14,7 @@
 import type { PropType } from 'vue';
 import { RACK_HEIGHT, SLOT_SIZE } from '~/utils/constants';
 import type { Coordinates, ScaledCoordinates } from '~/types/utils/Coordinates';
-import { subtract, zoom } from '~/utils/functions/geometry';
+import { subtract } from '~/utils/functions/geometry';
 
 const { height, target, width } = defineProps({
   height: { type: String, default: '100%' },
@@ -29,7 +29,7 @@ const innerTarget: Ref<ScaledCoordinates> = ref(target);
 provide('target', innerTarget);
 
 type Emits = {
-  zoom: [ number ],
+  zoom: [ deltaY: number ],
   panReleased: [ from: Coordinates, to: Coordinates ]
 }
 
@@ -68,10 +68,8 @@ function onmouseup($event: MouseEvent) {
   callbacks.value.dropped = () => { }
 }
 
-function onwheel($event: WheelEvent) {
-  const zoomValue: number = zoom(innerTarget.value, $event)
-  innerTarget.value.scale = zoomValue;
-  emit('zoom', zoomValue)
+function onwheel({ deltaY }: WheelEvent) {
+  emit('zoom', deltaY)
 }
 
 export type Callback = ($event: MouseEvent) => void;
