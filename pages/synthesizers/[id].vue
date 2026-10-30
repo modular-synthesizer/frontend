@@ -179,10 +179,6 @@ function removeModule (payload: ModulePayload) {
   if (found) deleteModule(found, cables.value)
 }
 
-function onzoom(scale: number) {
-  synthesizer.value.scale = scale;
-}
-
 function move(module: AudioModule, { x, y }: Coordinates) {
   place(module, y / RACK_HEIGHT, x / SLOT_SIZE);
 }
