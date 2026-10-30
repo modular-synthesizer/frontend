@@ -2,7 +2,7 @@
 
 Ce document décrit la migration du zoom de la vue vers `features/`, sur le modèle du pan et du reset. On commence par le zoom du synthétiseur. Le zoom de l'éditeur de blueprints suivra, sur le même core.
 
-Statut : **en cours**. L'étape 1 est faite (`66642b7`), l'étape 2 est faite (non commitée, en attente de l'étape 3), les étapes 3 à 6 restent à faire.
+Statut : **en cours**. L'étape 1 est faite (`66642b7`), les étapes 2 et 3 sont faites (non commitées), les étapes 4 à 6 restent à faire.
 
 ## Prérequis
 
@@ -205,18 +205,20 @@ Sur le modèle des tests de `pan` du synthétiseur, en comparant le résultat co
 
 Résultat : fait, non commité (à commiter avec l'étape 3). Le process se trouve dans `features/synthesizers/core/processes/zoom.process.ts`, à côté de `pan.process.ts`, et non dans un sous-dossier `synthesizers/`. `npx vitest run features` donne **110 tests** verts. Les mutations du plan sont tuées, ainsi que 2 mutations supplémentaires : `changed` remplacé par `deltaY !== 0`, et le viewport renvoyé remplacé par `from`.
 
-### 3. Shell du synthétiseur : `saveScale` et `runEffect`
+### 3. Shell du synthétiseur : `saveScale` et `runEffect` ✅
 
 - `features/synthesizers/shell/api/saveScale.http.ts`, calqué sur `saveViewport.http.ts`, qui fait un `PUT /proxy/synthesizers/${id}` avec le corps `{ scale }` ;
 - dans `features/synthesizers/shell/effect.ts`, un `case "synthesizers.scale.save"` qui appelle `saveScale(put)(effect.id, effect.scale)`, puis `.or(undefined)`.
 
 #### Tests
 
-- [ ] `saveScale.http.ts` : seul `scale` est envoyé, à la bonne URL, et une erreur HTTP est propagée ;
-- [ ] `effect.test.ts` : l'effet `synthesizers.scale.save` envoie une seule requête vers la bonne URL, avec `{ scale }`, et se résout avec `undefined` ;
-- [ ] `effect.test-d.ts` : le runner accepte `synthesizers.scale.save` (avec `toBeCallableWith`, sans exécuter l'appel).
+- [x] `saveScale.http.ts` : seul `scale` est envoyé, à la bonne URL, et une erreur HTTP est propagée ;
+- [x] `effect.test.ts` : l'effet `synthesizers.scale.save` envoie une seule requête vers la bonne URL, avec `{ scale }`, et se résout avec `undefined` ;
+- [x] `effect.test-d.ts` : le runner accepte `synthesizers.scale.save` (avec `toBeCallableWith`, sans exécuter l'appel).
 
 Commit, avec l'étape 2 : `feat(synthesizers): save the synthesizer scale through a dedicated effect`.
+
+Résultat : fait, non commité. `npx vitest run features` donne **115 tests** verts, aucune erreur de type dans `features/` (tsc et `vitest --typecheck`), et les commandes de vérification des dépendances ne renvoient rien. Mutations tuées : `case` réduit à un `break`, effet routé vers `saveViewport`, scale constant, URL `/proxy/blueprints/`, corps enrichi d'un champ, `ok` renvoyé sans tenir compte de la réponse, `@ts-expect-error` retiré du test de type, `scale` typé `string`, cas retiré de l'union. Seul le retrait de `.or(undefined)` survit, mais cette mutation est équivalente : le `Result<void>` vaut déjà `undefined` en cas de succès.
 
 ### 4. Shell partagé : runner différé
 
