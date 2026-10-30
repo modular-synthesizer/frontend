@@ -2,7 +2,7 @@
 
 Ce document décrit la migration du zoom de la vue vers `features/`, sur le modèle du pan et du reset. On commence par le zoom du synthétiseur. Le zoom de l'éditeur de blueprints suivra, sur le même core.
 
-Statut : **proposition**, rien n'est implémenté.
+Statut : **en cours**. L'étape 1 est faite (`66642b7`), l'étape 2 est faite (non commitée, en attente de l'étape 3), les étapes 3 à 6 restent à faire.
 
 ## Prérequis
 
@@ -93,7 +93,7 @@ Ces trois commandes ne doivent rien renvoyer.
 
 Chaque étape correspond à un commit. Les tests de mutation se font sur une copie, jamais sur les fichiers de travail.
 
-### 1. Core partagé : `zoomViewport`
+### 1. Core partagé : `zoomViewport` ✅
 
 Objectif : déplacer le calcul du zoom dans `features/viewports/core`, sous une forme pure et testée.
 
@@ -134,23 +134,23 @@ export const zoomViewport: ZoomViewportFct = (from, deltaY) => {
 
 Fichiers : `features/viewports/core/shared/__tests__/viewport.test.ts` (pour `clampScale`) et `features/viewports/core/processes/__tests__/zoom.test.ts`.
 
-- [ ] `clampScale` : une valeur dans les bornes est inchangée ; une valeur sous `MIN_SCALE` donne `MIN_SCALE` ; une valeur au-dessus de `MAX_SCALE` donne `MAX_SCALE` ; les bornes elles-mêmes sont inchangées ;
-- [ ] `deltaY` négatif : le scale augmente de `-deltaY * ZOOM_RATIO`, et `changed` vaut `true` ;
-- [ ] `deltaY` positif : le scale diminue, et `changed` vaut `true` ;
-- [ ] `deltaY` nul : `changed` vaut `false` ;
-- [ ] en butée haute (scale à `MAX_SCALE`, `deltaY` négatif) : le scale reste `MAX_SCALE`, et `changed` vaut `false`. Même chose en butée basse ;
-- [ ] **le défaut de l'`abs`** : avec un scale de 0.5 et un `deltaY` de 400, le scale reste 0.5. Avec l'ancien calcul, il passait à 1.5 ;
-- [ ] la position est conservée et le viewport renvoyé ne partage pas sa référence avec `from.position` ;
-- [ ] le process fonctionne avec un viewport gelé (`Object.freeze`).
+- [x] `clampScale` : une valeur dans les bornes est inchangée ; une valeur sous `MIN_SCALE` donne `MIN_SCALE` ; une valeur au-dessus de `MAX_SCALE` donne `MAX_SCALE` ; les bornes elles-mêmes sont inchangées ;
+- [x] `deltaY` négatif : le scale augmente de `-deltaY * ZOOM_RATIO`, et `changed` vaut `true` ;
+- [x] `deltaY` positif : le scale diminue, et `changed` vaut `true` ;
+- [x] `deltaY` nul : `changed` vaut `false` ;
+- [x] en butée haute (scale à `MAX_SCALE`, `deltaY` négatif) : le scale reste `MAX_SCALE`, et `changed` vaut `false`. Même chose en butée basse ;
+- [x] **le défaut de l'`abs`** : avec un scale de 0.5 et un `deltaY` de 400, le scale reste 0.5. Avec l'ancien calcul, il passait à 1.5 ;
+- [x] la position est conservée et le viewport renvoyé ne partage pas sa référence avec `from.position` ;
+- [x] le process fonctionne avec un viewport gelé (`Object.freeze`).
 
 Choisir des valeurs exactement représentables en binaire (par exemple un `deltaY` de -100 depuis un scale de 1, qui donne 1.5), pour que `toEqual` ne soit pas piégé par les arrondis.
 
 #### Vérifications
 
-- [ ] `npx vitest run features` est vert ;
-- [ ] `npx tsc --noEmit -p .` ne signale aucune erreur ;
-- [ ] les commandes de vérification des dépendances ne renvoient rien ;
-- [ ] mutations à vérifier :
+- [x] `npx vitest run features` est vert ;
+- [x] `npx tsc --noEmit -p .` ne signale aucune erreur dans `features/` (les 49 erreurs restantes, dans `utils/midi` notamment, existaient déjà en `1295e14`) ;
+- [x] les commandes de vérification des dépendances ne renvoient rien ;
+- [x] mutations à vérifier :
   - le `clampScale` retiré ;
   - le `abs` réintroduit ;
   - le signe de `deltaY` inversé ;
@@ -159,7 +159,9 @@ Choisir des valeurs exactement représentables en binaire (par exemple un `delta
 
 Commit : `feat(viewports): add the shared zoom computation`.
 
-### 2. Core du synthétiseur : effet `synthesizers.scale.save` et process `zoom`
+Résultat : fait dans `66642b7` (`feat(viewport): implement the zoom viewport core`). `npx vitest run features` donne **107 tests** verts. Les 5 mutations du plan sont tuées, ainsi que 5 mutations supplémentaires : `changed` calculé par `deltaY !== 0`, la position remise à `{0,0}`, x et y inversés, la borne basse retirée et `MAX_SCALE` décalé.
+
+### 2. Core du synthétiseur : effet `synthesizers.scale.save` et process `zoom` ✅
 
 #### Effet
 
@@ -189,17 +191,19 @@ export const zoom: ZoomFct = (id, from, deltaY) => {
 
 Sur le modèle des tests de `pan` du synthétiseur, en comparant le résultat complet avec `toEqual` :
 
-- [ ] un zoom qui change le scale produit exactement un effet `synthesizers.scale.save`, avec le bon `id` et le nouveau scale, et **sans position** ;
-- [ ] un zoom en butée ne produit aucun effet.
+- [x] un zoom qui change le scale produit exactement un effet `synthesizers.scale.save`, avec le bon `id` et le nouveau scale, et **sans position** ;
+- [x] un zoom en butée ne produit aucun effet.
 
 #### Vérifications
 
-- [ ] vitest, tsc et les commandes de vérification des dépendances ;
-- [ ] mutations :
+- [x] vitest, tsc et les commandes de vérification des dépendances (tsc : seule l'erreur attendue sur `assertNever` dans `features/synthesizers/shell/effect.ts`, levée par l'étape 3) ;
+- [x] mutations :
   - effet toujours produit, ou jamais produit ;
   - `id` constant ;
   - `scale` de l'effet remplacé par `from.scale` ;
   - type d'effet remplacé par `synthesizers.viewport.save`.
+
+Résultat : fait, non commité (à commiter avec l'étape 3). Le process se trouve dans `features/synthesizers/core/processes/zoom.process.ts`, à côté de `pan.process.ts`, et non dans un sous-dossier `synthesizers/`. `npx vitest run features` donne **110 tests** verts. Les mutations du plan sont tuées, ainsi que 2 mutations supplémentaires : `changed` remplacé par `deltaY !== 0`, et le viewport renvoyé remplacé par `from`.
 
 ### 3. Shell du synthétiseur : `saveScale` et `runEffect`
 
