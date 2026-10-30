@@ -2,7 +2,7 @@
 
 Ce document décrit la migration du zoom de la vue vers `features/`, sur le modèle du pan et du reset. On commence par le zoom du synthétiseur. Le zoom de l'éditeur de blueprints suivra, sur le même core.
 
-Statut : **en cours**. L'étape 1 est faite (`66642b7`), les étapes 2 et 3 sont faites (non commitées), l'étape 4 est faite, les étapes 5 et 6 restent à faire.
+Statut : **en cours**. L'étape 1 est faite (`66642b7`), les étapes 2 et 3 sont faites (non commitées), l'étape 4 est faite, l'étape 5 est faite (non commitée), l'étape 6 reste à faire.
 
 ## Prérequis
 
@@ -264,7 +264,7 @@ Commit : `feat(shared): add a debounced effect runner`.
 
 Résultat : fait, non commité. Le runner s'appelle `makeDebounce` et l'option de clé `key`, au lieu de `makeDebouncedRun` et `keyOf`. Le planificateur est typé `Scheduler<T>`, générique sur le handle, car le handle typé `unknown` ne compilait pas avec `clearTimeout`. `npx vitest run features` donne **120 tests** verts, aucune erreur de type dans `features/`, et les commandes de vérification des dépendances ne renvoient rien. Les 11 mutations sont tuées : les 4 du plan, ainsi que le délai codé en dur, `if(previous)` (handle `0` jamais annulé), l'exécution immédiate avec une tâche vide, `run` jamais appelé, `await run`, le premier effet qui l'emporte et `pending.delete` retiré. Le retrait du `.catch` est détecté par le code de sortie de vitest (« Unhandled Errors »), et non par un test rouge. L'exécution d'un effet suivant après une exception n'a pas de test dédié : elle est garantie par le fait que `pending.delete` s'exécute avant `run`.
 
-### 5. Adapter legacy du synthétiseur
+### 5. Adapter legacy du synthétiseur ✅
 
 ```ts
 // features/synthesizers/shell/legacy/viewport.adapter.ts
@@ -287,12 +287,14 @@ export const zoomSynthesizer = makeZoomSynthesizer(debouncedApplyFacts)
 
 #### Tests
 
-- [ ] un zoom qui change le scale : `apply` est appelé une seule fois, avec le même synthétiseur (`toBe`) et les bons faits (`toEqual`) ;
-- [ ] un zoom en butée : `apply` reçoit des faits sans effet ;
-- [ ] **le point délicat** : le synthétiseur de test est placé là où le stage le laisse, c'est-à-dire avec le scale déjà modifié. On vérifie que le calcul part bien de `from`. Ce test doit échouer si l'adapter utilise `toViewport(synth)` sans remplacer le scale ;
-- [ ] une erreur de `apply` est propagée.
+- [x] un zoom qui change le scale : `apply` est appelé une seule fois, avec le même synthétiseur (`toBe`) et les bons faits (`toEqual`) ;
+- [x] un zoom en butée : `apply` reçoit des faits sans effet ;
+- [x] **le point délicat** : le synthétiseur de test est placé là où le stage le laisse, c'est-à-dire avec le scale déjà modifié. On vérifie que le calcul part bien de `from`. Ce test doit échouer si l'adapter utilise `toViewport(synth)` sans remplacer le scale ;
+- [x] une erreur de `apply` est propagée.
 
 Commit : `feat(synthesizers): add the zoomSynthesizer adapter`.
+
+Résultat : fait, non commité. La factory s'appelle `makeDebounce` et l'option de clé `key`, comme à l'étape 4. Le point délicat est couvert par le premier test : le synthétiseur est à 2.0, `from` vaut 1.5, et le scale attendu est 1.0. Sans le remplacement, on obtiendrait 1.5. Un test supplémentaire vérifie qu'un `deltaY` nul ne produit aucun effet. `npx vitest run features` donne **124 tests** verts, et tsc ne signale aucune erreur dans `features/`. Mutations, faites sur une copie, toutes tuées : `toViewport(synth)` sans `scale: from`, le scale de départ figé à 1, `apply` appelé avec une copie du synthétiseur, l'erreur de `apply` avalée, et `deltaY` ignoré. La clé du debounce (`${e.type}:${e.id}`) a été vérifiée en relisant le code, sans test : `debouncedRunEffect` n'est pas exporté.
 
 ### 6. Stage et page
 

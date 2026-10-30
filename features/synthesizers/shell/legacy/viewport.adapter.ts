@@ -6,6 +6,8 @@ import type { Position } from "../../../viewports/core/data/Position.type"
 import { pan } from "../../core/processes/pan.process"
 import { runEffect } from "../effect"
 import type { SynthesizersEffect } from "../../core/data/Effect.type"
+import { zoom } from "../../core/processes/zoom.process"
+import { makeDebounce, timeoutScheduler } from "../../../shared/effects/debounce"
 
 export const applyFacts: FactsApplier<SynthesizersEffect> = makeApplyFacts(runEffect)
 
@@ -32,3 +34,20 @@ export const makePanSynthesizer: PanSynthesizerFactory = apply =>
   }
 
 export const panSynthesizer = makePanSynthesizer(applyFacts)
+
+
+export type ZoomSynthesizerFct = (s: Synthesizer, from: number, deltaY: number) => Promise<void>
+
+export type ZoomSynthesizerFactory = (apply: FactsApplier<SynthesizersEffect>) => ZoomSynthesizerFct
+
+export const makeZoomSynthesizer: ZoomSynthesizerFactory = apply =>
+  async (synth, from, deltaY) => {
+    const facts = zoom(synth.id as Uuid, { ...toViewport(synth), scale: from }, deltaY)
+    await apply(synth, facts)
+  }
+
+const debouncedRunEffect = makeDebounce(runEffect, { delay: 500, key: e => `${e.type}:${e.id}`, scheduler: timeoutScheduler })
+
+export const debouncedApplyFacts: FactsApplier<SynthesizersEffect> = makeApplyFacts(debouncedRunEffect)
+
+export const zoomSynthesizer = makeZoomSynthesizer(debouncedApplyFacts)
