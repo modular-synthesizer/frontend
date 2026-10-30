@@ -2,7 +2,7 @@
 
 Ce document décrit la migration du zoom de la vue vers `features/`, sur le modèle du pan et du reset. On commence par le zoom du synthétiseur. Le zoom de l'éditeur de blueprints suivra, sur le même core.
 
-Statut : **en cours**. L'étape 1 est faite (`66642b7`), les étapes 2 et 3 sont faites (non commitées), les étapes 4 à 6 restent à faire.
+Statut : **en cours**. L'étape 1 est faite (`66642b7`), les étapes 2 et 3 sont faites (non commitées), l'étape 4 est faite, les étapes 5 et 6 restent à faire.
 
 ## Prérequis
 
@@ -220,7 +220,7 @@ Commit, avec l'étape 2 : `feat(synthesizers): save the synthesizer scale throug
 
 Résultat : fait, non commité. `npx vitest run features` donne **115 tests** verts, aucune erreur de type dans `features/` (tsc et `vitest --typecheck`), et les commandes de vérification des dépendances ne renvoient rien. Mutations tuées : `case` réduit à un `break`, effet routé vers `saveViewport`, scale constant, URL `/proxy/blueprints/`, corps enrichi d'un champ, `ok` renvoyé sans tenir compte de la réponse, `@ts-expect-error` retiré du test de type, `scale` typé `string`, cas retiré de l'union. Seul le retrait de `.or(undefined)` survit, mais cette mutation est équivalente : le `Result<void>` vaut déjà `undefined` en cas de succès.
 
-### 4. Shell partagé : runner différé
+### 4. Shell partagé : runner différé ✅
 
 Objectif : n'exécuter que le dernier effet reçu pendant un délai, par synthétiseur.
 
@@ -244,23 +244,25 @@ export const makeDebouncedRun = <E extends Effect>(run: RunEffectFct<E>, options
 
 Avec un faux planificateur, qui enregistre les callbacks et permet de les déclencher à la main. On évite ainsi les faux timers de vitest.
 
-- [ ] un effet seul n'est pas exécuté immédiatement, puis l'est une fois le délai écoulé ;
-- [ ] trois effets de même clé : seul le dernier est exécuté, une seule fois ;
-- [ ] deux effets de clés différentes : les deux sont exécutés ;
-- [ ] la promesse renvoyée se résout avant l'exécution de l'effet ;
-- [ ] une exception levée par `run` pendant l'exécution différée est ignorée : aucun rejet non géré, et un effet suivant de même clé est toujours exécuté normalement ;
-- [ ] le délai transmis au planificateur est bien celui des options.
+- [x] un effet seul n'est pas exécuté immédiatement, puis l'est une fois le délai écoulé ;
+- [x] trois effets de même clé : seul le dernier est exécuté, une seule fois ;
+- [x] deux effets de clés différentes : les deux sont exécutés ;
+- [x] la promesse renvoyée se résout avant l'exécution de l'effet ;
+- [x] une exception levée par `run` pendant l'exécution différée est ignorée : aucun rejet non géré, et un effet suivant de même clé est toujours exécuté normalement ;
+- [x] le délai transmis au planificateur est bien celui des options.
 
 #### Vérifications
 
-- [ ] vitest, tsc et les commandes de vérification des dépendances ;
-- [ ] mutations :
+- [x] vitest, tsc et les commandes de vérification des dépendances ;
+- [x] mutations :
   - l'effet précédent n'est plus annulé ;
   - la clé est ignorée ;
   - l'exécution est immédiate ;
   - l'erreur n'est plus interceptée.
 
 Commit : `feat(shared): add a debounced effect runner`.
+
+Résultat : fait, non commité. Le runner s'appelle `makeDebounce` et l'option de clé `key`, au lieu de `makeDebouncedRun` et `keyOf`. Le planificateur est typé `Scheduler<T>`, générique sur le handle, car le handle typé `unknown` ne compilait pas avec `clearTimeout`. `npx vitest run features` donne **120 tests** verts, aucune erreur de type dans `features/`, et les commandes de vérification des dépendances ne renvoient rien. Les 11 mutations sont tuées : les 4 du plan, ainsi que le délai codé en dur, `if(previous)` (handle `0` jamais annulé), l'exécution immédiate avec une tâche vide, `run` jamais appelé, `await run`, le premier effet qui l'emporte et `pending.delete` retiré. Le retrait du `.catch` est détecté par le code de sortie de vitest (« Unhandled Errors »), et non par un test rouge. L'exécution d'un effet suivant après une exception n'a pas de test dédié : elle est garantie par le fait que `pending.delete` s'exécute avant `run`.
 
 ### 5. Adapter legacy du synthétiseur
 
