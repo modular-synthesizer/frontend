@@ -28,6 +28,15 @@ describe("makeRunEffect", () => {
       { url: `/proxy/synthesizers/${ID}`, body: { scale: 2.0 } }
     ])
   })
+  it("sends the effect's id and placement to the module update route", async () => {
+    const { put, calls } = recorder(ok({}))
+    const synthesizerEffect: SynthesizersEffect = { type: "synthesizers.module.save", id: ID, placement: { rack: 0, slot: 10 } }
+    await expect(makeRunEffect(put)(synthesizerEffect)).resolves.toBeUndefined()
+
+    expect(calls).toEqual([
+      { url: `/proxy/modules/${ID}`, body: { rack: 0, slot: 10 } }
+    ])
+  })
   it("sends only one request if it fails, without retries", async () => {
     const { put, calls } = recorder(ko({ status: 500 }))
     const viewport = { position: { x: 1, y: 2 }, scale: 3.0 }
