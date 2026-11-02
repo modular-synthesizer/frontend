@@ -43,9 +43,10 @@
 import { groupBy } from 'lodash';
 import type { Blueprint } from '~~/types/blueprints/Blueprint';
 import { repositories } from '~~/lib/repositories';
-import { firstFreeSlot } from '~/utils/functions/synthesizers';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 import type { AudioModule } from '~/types/Index';
+import { firstFreeSlot } from '~/features/synthesizers/core/shared/rack';
+import { obstacles } from '~/features/synthesizers/shell/legacy/module.adapter';
 
 export default {
   data: () => ({
@@ -74,7 +75,7 @@ export default {
         blueprint_id: blueprint.id,
         synthesizer_id: this.synthesizer.id,
         rack: 0,
-        slot: firstFreeSlot(this.modules, blueprint.slots),
+        slot: firstFreeSlot(obstacles(this.modules), blueprint.slots),
       };
       const created = await api_post("/proxy/modules", payload)
       this.$emit('selected', created);

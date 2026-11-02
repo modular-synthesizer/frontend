@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { RACK_HEIGHT, SLOT_SIZE } from "../Constants"
-import { hasRoom, overlaps, placementsDiffer, toPlacement, toPosition } from "../rack"
+import { firstFreeSlot, hasRoom, overlaps, placementsDiffer, toPlacement, toPosition } from "../rack"
 import type { Footprint } from "../../data/Footprint.type"
 import type { Uuid } from "../../../../shared/data/Uuid.type"
 
@@ -103,5 +103,20 @@ describe("hasRoom", () => {
     const second: Footprint = { id: "second" as Uuid, placement: { rack: 0, slot: 5 }, slots: 10 }
     const third: Footprint = { id: "second" as Uuid, placement: { rack: 1, slot: 0 }, slots: 10 }
     expect(hasRoom(footprint, [ third, second ])).toEqual(false)
+  })
+})
+
+
+describe("firstFreeSlot", () => {
+  it("returns the first slot in an empty synthesizer", () => {
+    expect(firstFreeSlot([], 5)).toEqual(0)
+  })
+  it("returns the first slot found if the module cannot be placed at the start", () => {
+    const obstacles: Footprint[] = [ { id: "test" as Uuid, placement: { rack: 0, slot: 0 }, slots: 10 } ]
+    expect(firstFreeSlot(obstacles, 5)).toEqual(10)
+  })
+  it("returns the origin for a synthesizer with a non-colliding module", () => {
+    const obstacles: Footprint[] = [ { id: "test" as Uuid, placement: { rack: 0, slot: 10 }, slots: 10 } ]
+    expect(firstFreeSlot(obstacles, 5)).toEqual(0)
   })
 })
