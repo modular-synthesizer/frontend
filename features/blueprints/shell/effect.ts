@@ -10,8 +10,10 @@ export const makeRunEffect: RunEffectFactory = put => async effect => {
   switch(effect.type) {
     case "blueprints.viewport.save":
       return (await saveViewport(put)(effect.id, effect.viewport)).or(undefined)
+    case "blueprints.node.save":
+      break;
     default:
-      return assertNever(effect.type)
+      return assertNever(effect)
   }
 }
 
