@@ -8,7 +8,7 @@ import type { Coordinates } from '~/types/utils/Coordinates';
 import type { PlacedBox } from '~/types/utils/PlacedBox';
 import { round, subtract } from '~/utils/functions/geometry';
 import type { Callback } from './Index.vue';
-import type { Position } from '@vueuse/core';
+import type { Position } from '~/features/viewports/core/data/Position.type.ts';
 
 type Props = {
   sx?: number, sy?: number, target: Draggable, capture?: boolean, accepts?: (position: Position) => boolean

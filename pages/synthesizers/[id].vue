@@ -19,10 +19,10 @@
       <sp-stage-svg-layer name="modules">
         <sp-stage-draggable
           v-for="module in modules"
-          :collides-with="modules"
           :target="module"
           :sx="SLOT_SIZE"
           :sy="RACK_HEIGHT"
+          :accepts="position => acceptsModuleAt(module, position, modules)"
           @moved="() => syncModule(module)"
           @released="(from, to) => moveModuleAdapter(module, from, to, modules)"
         >
@@ -59,7 +59,7 @@ import { createModule as instanciateModule } from '~/utils/factories/modules';
 import { useI18n } from 'vue-i18n';
 import { useCableCreation } from '~/composables/links/useCableCreation.composable';
 import { panSynthesizer, resetSynthesizer, zoomSynthesizer } from '~/features/synthesizers/shell/legacy/viewport.adapter';
-import { moveModuleAdapter, syncModule } from '~/features/synthesizers/shell/legacy/module.adapter';
+import { acceptsModuleAt, applyPlacement, moveModuleAdapter, syncModule } from '~/features/synthesizers/shell/legacy/module.adapter';
 
 type PromisedRef<T> = Promise<Ref<T>>;
 
@@ -159,7 +159,7 @@ async function createModule (payload: ModulePayload) {
 
 function updateModule(payload: ModulePayload) {
   const found: AudioModule|undefined = find(synthesizer.value.modules, { id: payload.id });
-  if (found) syncModule(found)
+  if (found) applyPlacement(found, { rack: payload.rack, slot: payload.slot })
 }
 
 function removeIfFound<T extends {id: string}, Item extends {id: string}>(list: T[], item: Item) {
