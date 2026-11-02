@@ -27,7 +27,7 @@ const innerTarget: Ref<PlacedBox> = ref(target as PlacedBox)
 
 const offset: Ref<Coordinates> = ref({ x: 0, y: 0 });
 
-type Emits = { dropped: [ Draggable ], moved: [ Draggable ], released: [ from: Position, to: Position ] }
+type Emits = { moved: [ Draggable ], released: [ from: Position, to: Position ] }
 
 const emit = defineEmits<Emits>();
 

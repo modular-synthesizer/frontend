@@ -1,7 +1,17 @@
 <template>
-  <sp-stage :target="referential" @click="useSelectables().reset" @pan-released="(from, to) => panBlueprint(blueprint, from, to)">
+  <sp-stage
+    :target="referential"
+    @click="useSelectables().reset"
+    @pan-released="(from, to) => panBlueprint(blueprint, from, to)"
+  >
     <sp-stage-svg-layer name="blueprint">
-      <sp-stage-draggable v-for="node in blueprint.nodes" :target="node" :sx="10" :sy="10" @dropped="b => emit('moved', b)">
+      <sp-stage-draggable
+        v-for="node in blueprint.nodes"
+        :target="node"
+        :sx="10"
+        :sy="10"
+        @released="(from, to) => moveNodeAdapter(blueprint, node, from, to)"
+      >
         <blueprint-structure-node
           :node="node"
           :selected="false"
@@ -29,15 +39,12 @@ import type { ScaledCoordinates } from '~/types/utils/Coordinates';
 import { cloneDeep } from 'lodash';
 import { repositories } from '~/lib/repositories';
 import { panBlueprint } from '~/features/blueprints/shell/legacy/viewport.adapter';
-import type { PlacedBox } from '~/types/utils/PlacedBox';
 import { useSelectables } from '~/composables/utils/useSelectable';
+import { moveNodeAdapter } from '~/features/blueprints/shell/legacy/node.adapter';
 
 const { blueprint } = defineProps({
   blueprint: { type: Object as PropType<Blueprint>, required: true }
 });
-
-type Emits = { moved: [ PlacedBox ] };
-const emit = defineEmits<Emits>();
 
 const referential: Ref<ScaledCoordinates> = ref(blueprint)
 
