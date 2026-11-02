@@ -19,12 +19,12 @@
       <sp-stage-svg-layer name="modules">
         <sp-stage-draggable
           v-for="module in modules"
-          :collides-with="modules"
           :target="module"
           :sx="SLOT_SIZE"
           :sy="RACK_HEIGHT"
-          @moved="({ x, y }) => move(module, { x, y })"
-          @dropped="() => save(module)"
+          :accepts="position => acceptsModuleAt(module, position, modules)"
+          @moved="() => syncModule(module)"
+          @released="(from, to) => moveModuleAdapter(module, from, to, modules)"
         >
           <module v-if="!module.deleted" :module @deleted="() => deleteModule(module, cables)" @disconnected="disconnectModule(module, cables)">
             <g v-for="control in module.controls" :transform="translate({ x: +(control.payload.x || 0), y: +(control.payload.y || 0)})">
@@ -48,18 +48,18 @@ import { repositories } from '~/lib/repositories';
 import { RACK_HEIGHT, SLOT_SIZE } from '~/utils/constants';
 import { createCable, disconnectCable } from '~/utils/factories/cables';
 import type { AudioModule, Cable, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
-import { appendModule, disconnectModule, place } from '~/utils/functions/modules';
+import { appendModule, disconnectModule } from '~/utils/functions/modules';
 import { deleteModule } from '~/utils/functions/modules';
 import { initManagers, managers } from '~/utils/midi';
 import { eventbus } from '~/utils/eventbus/EventBus';
-import { find, pick } from 'lodash';
-import type { Coordinates } from '~/types/utils/Coordinates';
+import { find } from 'lodash';
 import { appendCable } from '~/utils/functions/cables';
 import { translate } from "~/utils/functions/svg"
 import { createModule as instanciateModule } from '~/utils/factories/modules';
 import { useI18n } from 'vue-i18n';
 import { useCableCreation } from '~/composables/links/useCableCreation.composable';
 import { panSynthesizer, resetSynthesizer, zoomSynthesizer } from '~/features/synthesizers/shell/legacy/viewport.adapter';
+import { acceptsModuleAt, applyPlacement, moveModuleAdapter, syncModule } from '~/features/synthesizers/shell/legacy/module.adapter';
 
 type PromisedRef<T> = Promise<Ref<T>>;
 
@@ -159,7 +159,7 @@ async function createModule (payload: ModulePayload) {
 
 function updateModule(payload: ModulePayload) {
   const found: AudioModule|undefined = find(synthesizer.value.modules, { id: payload.id });
-  if (found) move(found, { x: payload.slot * SLOT_SIZE, y: payload.rack * RACK_HEIGHT });
+  if (found) applyPlacement(found, { rack: payload.rack, slot: payload.slot })
 }
 
 function removeIfFound<T extends {id: string}, Item extends {id: string}>(list: T[], item: Item) {
@@ -177,18 +177,6 @@ function removeCable(payload: LinkPayload) {
 function removeModule (payload: ModulePayload) {
   const found: AudioModule|undefined = find(modules.value, { id: payload.id });
   if (found) deleteModule(found, cables.value)
-}
-
-function onzoom(scale: number) {
-  synthesizer.value.scale = scale;
-}
-
-function move(module: AudioModule, { x, y }: Coordinates) {
-  place(module, y / RACK_HEIGHT, x / SLOT_SIZE);
-}
-
-async function save(module: AudioModule) {
-  await api_put(`/proxy/modules/${module.id}`, pick(module, [ 'id', 'rack', 'slot', 'slots' ]))
 }
 
 const initialized: Ref<boolean> = ref(false);

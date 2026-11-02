@@ -1,20 +1,5 @@
-import { some } from "lodash";
-import type { AudioModule, ModuleCoordinates } from "~/types/modules/AudioModule";
-import { intersect } from "./modules";
 import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 import type { Membership } from "~/types/synthesizers/Membership";
-
-export function hasRoom(modules: AudioModule[], coordinates: ModuleCoordinates): boolean {
-  return !some(modules, (module: AudioModule) => {
-    return intersect(module, coordinates)
-  });
-}
-
-export function firstFreeSlot(modules: AudioModule[], slots: number) {
-  let slot = 0;
-  while(!hasRoom(modules, { rack: 0, slot, slots, id: '' })) slot ++;
-  return slot;
-}
 
 export function isReadMember(synthesizer: Synthesizer, username: string): boolean {
   return membershipType(synthesizer, username) === 'read';

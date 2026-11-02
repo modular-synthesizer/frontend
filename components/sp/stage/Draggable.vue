@@ -4,16 +4,16 @@
 </template>
 
 <script setup lang="ts" generic="Draggable extends PlacedBox">
-import { some } from 'lodash';
 import type { Coordinates } from '~/types/utils/Coordinates';
 import type { PlacedBox } from '~/types/utils/PlacedBox';
 import { round, subtract } from '~/utils/functions/geometry';
 import type { Callback } from './Index.vue';
+import type { Position } from '~/features/viewports/core/data/Position.type.ts';
 
 type Props = {
-  sx?: number, sy?: number, target: Draggable, collidesWith?: Draggable[], capture?: boolean, passive?: boolean
+  sx?: number, sy?: number, target: Draggable, capture?: boolean, accepts?: (position: Position) => boolean
 }
-const { collidesWith = [], sx = 1, sy = 1, target, passive = false, capture = false } = defineProps<Props>();
+const { accepts = () => true, sx = 1, sy = 1, target, capture = false } = defineProps<Props>();
 
 type DragFunction = (callback: Callback) => void
 
@@ -27,33 +27,24 @@ const innerTarget: Ref<PlacedBox> = ref(target as PlacedBox)
 
 const offset: Ref<Coordinates> = ref({ x: 0, y: 0 });
 
-const emit = defineEmits<{ dropped: [ Draggable ], moved: [ Draggable ] }>();
+type Emits = { dropped: [ Draggable ], moved: [ Draggable ], released: [ from: Position, to: Position ] }
 
-function collide(first: PlacedBox, second: PlacedBox): boolean {
-  if (first.id === second.id) return false;
-  if (first.x >= second.x + second.width) return false;
-  if (first.y >= second.y + second.height) return false;
-  return true;
-}
-
-function collides(tested: PlacedBox, colliders: PlacedBox[]): boolean {
-  return some(colliders, (collider: PlacedBox) => {
-    return collide(tested, collider) && collide(collider, tested);
-  })
-}
+const emit = defineEmits<Emits>();
 
 function onmousedown() {
+  const start: Position = { x: target.x, y: target.y }
   offset.value = subtract(useCoordinates().get(), target);
   dragged(($event: MouseEvent) => {
-    const coordinates: Coordinates = useCoordinates().get();
-    const rounded: Coordinates = round(subtract(coordinates, offset.value), { sx, sy });
-    if (collidesWith.length > 0 && collides({ ...target, ...rounded }, collidesWith)) return;
+    const rounded: Coordinates = round(subtract(useCoordinates().get(), offset.value), { sx, sy });
+    if (!accepts(rounded)) return
     innerTarget.value.x = rounded.x;
     innerTarget.value.y = rounded.y;
     emit('moved', target);
     $event.stopPropagation();
   });
-  dropped(() => emit('dropped', target));
+  dropped(() => {
+    emit('released', start, { x: target.x, y: target.y})
+  });
 }
 
 const translateDraggable = computed(() => {
