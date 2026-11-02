@@ -18,7 +18,7 @@ describe("makeRunEffect", () => {
       { url: `/proxy/blueprints/${ID}`, body: { x: 1, y: 2, scale: 3.0 } }
     ])
   })
-  it("sends only one request if it fails, without retries", async () => {
+  it("sends only one save viewport request if it fails, without retries", async () => {
     const { put, calls } = recorder(ko({ status: 500 }))
     const viewport = { position: { x: 2, y: 3 }, scale: 4.0 }
     const blueprintEffect: BlueprintsEffect = { type: "blueprints.viewport.save", id: ID, viewport }
@@ -26,6 +26,30 @@ describe("makeRunEffect", () => {
 
     expect(calls).toEqual([
       { url: `/proxy/blueprints/${ID}`, body: { x: 2, y: 3, scale: 4.0 } }
+    ])
+  })
+  it("sends the correct informations when handling a node saving effect", async () => {
+    const { put, calls } = recorder(ok({}))
+    const id = "id" as Uuid
+    const blueprintId = "blueprintId" as Uuid
+    const position = { x: 10, y: 20 }
+    const blueprintEffect: BlueprintsEffect = { type: "blueprints.node.save", id, blueprintId, position }
+    await expect(makeRunEffect(put)(blueprintEffect)).resolves.toBeUndefined()
+
+    expect(calls).toEqual([
+      { url: `/proxy/blueprints/nodes/${id}`, body: { x: 10, y: 20, blueprint_id: blueprintId } }
+    ])
+  })
+  it("sends only one save node request if it fails, without retries", async () => {
+    const { put, calls } = recorder(ko({ status: 500 }))
+    const id = "id" as Uuid
+    const blueprintId = "blueprintId" as Uuid
+    const position = { x: 10, y: 20 }
+    const blueprintEffect: BlueprintsEffect = { type: "blueprints.node.save", id, blueprintId, position }
+    await expect(makeRunEffect(put)(blueprintEffect)).resolves.toBeUndefined()
+
+    expect(calls).toEqual([
+      { url: `/proxy/blueprints/nodes/${id}`, body: { x: 10, y: 20, blueprint_id: blueprintId } }
     ])
   })
   it("forwards the error if the PUT query raises one", async () => {

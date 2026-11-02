@@ -6,14 +6,22 @@ import type { BlueprintsEffect } from "../../core/data/Effect.type";
 import type { Uuid } from "../../../shared/data/Uuid.type";
 
 describe("makeRunEffect", () => {
+  const id = "test" as Uuid
+  const position = { x: 0, y: 0 }
+
   it("builds the correct function type", () => {
     expectTypeOf(makeRunEffect(put)).toEqualTypeOf<RunEffectFct<BlueprintsEffect>>()
   })
-  it("only accepts the events about blueprints", () => {
-    const id = "test" as Uuid
-    const viewport = { position: { x: 0, y: 0 }, scale: 1.0 }
+  it("answer to the blueprint save effect", () => {
+    const viewport = { position, scale: 1.0 }
     expectTypeOf(makeRunEffect(put)).toBeCallableWith({ type: "blueprints.viewport.save", id, viewport })
+  })
+  it("answers to the node save effect", () => {
+    const expected: BlueprintsEffect = { type: "blueprints.node.save", id, blueprintId: id, position }
+    expectTypeOf(makeRunEffect(put)).toBeCallableWith(expected)
+  })
+  it("fails with an unknown event", () => {
     // @ts-expect-error synthesizers.viewport.save
-    expectTypeOf(makeRunEffect(put)).toBeCallableWith({ type: "synthesizers.viewport.save", id, viewport })
+    expectTypeOf(makeRunEffect(put)).toBeCallableWith({ type: "synthesizers.viewport.save" })
   })
 })

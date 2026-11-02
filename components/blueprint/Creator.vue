@@ -12,7 +12,7 @@
         </v-form>
       </v-tabs-window-item>
       <v-tabs-window-item value="structure">
-        <div class="content-wrapper"><blueprint-structure :blueprint="blueprint" @moved="moved" /></div>
+        <div class="content-wrapper"><blueprint-structure :blueprint="blueprint" /></div>
       </v-tabs-window-item>
       <v-tabs-window-item value="appearance">
         <div class="content-wrapper"><blueprint-appearance :blueprint="blueprint" :creation-mode="!blueprint.id" /></div>
@@ -32,9 +32,9 @@
         </v-tooltip>
         <template v-if="mode === 'structure'">
           <blueprint-structure-create-node @created="createNode" key="2" />
-          <blueprint-structure-create-link @created="createLink" :blueprint="blueprint" key="3" />
-          <blueprint-structure-create-port @created="createPort" :blueprint="blueprint" key="4" />
-          <blueprint-structure-create-parameter @created="createParameter" :blueprint="blueprint" key="5" />
+          <blueprint-structure-create-link @created="createLink" :blueprint="blueprint" :key="3" />
+          <blueprint-structure-create-port @created="createPort" :blueprint="blueprint" :key="4" />
+          <blueprint-structure-create-parameter @created="createParameter" :blueprint="blueprint" :key="5" />
         </template>
       </v-speed-dial>
     </v-fab>
@@ -85,10 +85,6 @@ async function save() {
     blueprint.value.id = creation.id;
   }
   else repositories.blueprints.update(blueprint.value);
-}
-
-async function moved(coords: PlacedBox) {
-  await repositories.blueprints.updateNode(blueprint.value, coords)
 }
 </script>
 
