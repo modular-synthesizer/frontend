@@ -16,6 +16,8 @@ export const makeRunEffect: RunEffectFactory = put => async effect => {
       return (await saveScale(put)(effect.id, effect.scale)).or(undefined)
     case "synthesizers.module.save":
       return (await saveModule(put)(effect.id, effect.placement)).or(undefined)
+    case "synthesizers.parameter.save":
+      break;
     default:
       return assertNever(effect)
   }

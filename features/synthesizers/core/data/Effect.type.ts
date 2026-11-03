@@ -7,4 +7,5 @@ export type SynthesizersEffect = Effect & (
   | { type: "synthesizers.viewport.save", id: Uuid, viewport: Viewport }
   | { type: "synthesizers.scale.save", id: Uuid, scale: number }
   | { type: "synthesizers.module.save", id: Uuid, placement: Placement }
+  | { type: "synthesizers.parameter.save", id: Uuid, moduleId: Uuid, value: number, t: number }
 )
