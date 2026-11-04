@@ -9,7 +9,7 @@ import type { ModControl } from "~/types/blueprints/Control";
 import type { DragCallback } from "~/types/draggables/DragDeclaration";
 import type { Parameter } from "~/types/modules/Parameter";
 import { eventbus } from "~/utils/eventbus/EventBus";
-import { setValue } from "~/utils/functions/parameters";
+import { receiveParameterAdapter } from "~/features/synthesizers/shell/legacy/receiveParameter.adapter";
 
 const props = defineProps({
   synthesizer: { type: Object as PropType<Synthesizer>, required: true },
@@ -28,16 +28,7 @@ const dropped: DragCallback = inject('dropped') as DragCallback;
 const parameter: Parameter|undefined = props.module.parameters[props.control.payload.target];
 if (parameter) {
   eventbus.subscribe(`${parameter.id}.update.parameter`, (p: Parameter) => {
-    const newT: number = Number.parseInt(`${p.t}`)
-    /**
-     * This mecanism does avoid putting the responsibility of the order of updates on the network
-     * By assigning them a timestamp and comparing it, we can eliminate "less recent" updates that
-     * were made by another user earlier in time, but delayed by the network.
-     */
-    if (parameter.t < newT) {
-      setValue(parameter, p.value)
-      parameter.t = newT
-    }
+    receiveParameterAdapter(parameter, p)
   })
 }
 </script>
