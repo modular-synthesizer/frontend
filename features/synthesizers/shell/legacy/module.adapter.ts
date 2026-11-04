@@ -1,6 +1,6 @@
 import type { AudioModule } from "~/types/Index";
 import type { Placement } from "../../core/data/Placement.type";
-import { hasRoom, toPlacement, toPosition, type Mapper } from "../../core/shared/rack";
+import { hasRoom, toPlacement, toPosition } from "../../core/shared/rack";
 import type { Footprint } from "../../core/data/Footprint.type";
 import { toObjectId } from "../../../shared/data/ObjectId.type";
 import type { Position } from "../../../viewports/core/data/Position.type";
@@ -8,6 +8,7 @@ import type { RunEffectFct } from "../../../shared/facts";
 import type { SynthesizersEffect } from "../../core/data/Effect.type";
 import { moveModule } from "../../core/processes/moveModule.process";
 import { runEffect } from "../effect";
+import type { Mapper } from "../../../shared/types/mapper.type";
 
 export type toFootprintFct = (module: AudioModule, placement?: Placement) => Footprint
 

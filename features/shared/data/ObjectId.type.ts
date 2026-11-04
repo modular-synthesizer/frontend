@@ -1,4 +1,4 @@
-import type { Mapper } from "~/features/synthesizers/core/shared/rack"
+import type { Mapper } from "../types/mapper.type"
 
 export type ObjectId = string & { _brand: 'ObjectId' }
 

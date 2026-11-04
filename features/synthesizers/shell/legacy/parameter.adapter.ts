@@ -1,5 +1,4 @@
 import type { Parameter as LegacyParameter } from "~/types/modules/Parameter";
-import type { Mapper } from "../../core/shared/rack";
 import type { Parameter, ParameterChange } from "../../core/data/Parameter.type";
 import { toEventualObjectId, toObjectId } from "../../../shared/data/ObjectId.type";
 import { setValue } from "../../../../utils/functions/parameters"
@@ -7,6 +6,7 @@ import { editParameter as editProcess, previewParameter } from "../../core/proce
 import type { SynthesizersEffect } from "../../core/data/Effect.type";
 import type { RunEffectFct } from "../../../shared/facts";
 import { debouncedRunEffect, runEffect } from "../effect";
+import type { Mapper } from "../../../shared/types/mapper.type";
 
 export const toParameter: Mapper<LegacyParameter, Parameter> = legacy => ({
   id: toObjectId(legacy.id),

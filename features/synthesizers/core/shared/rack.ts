@@ -1,10 +1,10 @@
+import type { Diff } from "../../../shared/types/diff.type";
 import { toObjectId } from "../../../shared/data/ObjectId.type";
 import type { Position } from "../../../viewports/core/data/Position.type"
 import type { Footprint } from "../data/Footprint.type";
 import type { Placement } from "../data/Placement.type";
 import { RACK_HEIGHT, SLOT_SIZE } from "./Constants"
-
-export type Mapper<F, T> = (from: F) => T
+import type { Mapper } from "../../../shared/types/mapper.type";
 
 /**
  * Mapper transforming a position (coordinates) in a placement (place in a synthesizer).
@@ -21,8 +21,6 @@ export const toPlacement: Mapper<Position, Placement> = ({ x, y }) =>
  */
 export const toPosition: Mapper<Placement, Position> = ({ slot, rack }) =>
   ({ x: slot * SLOT_SIZE, y: rack * RACK_HEIGHT })
-
-export type Diff<T> = (first: T, second: T) => boolean
 
 /**
  * Checks that two placements differ (not the same place in the synthesizer).

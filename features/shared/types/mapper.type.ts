@@ -1,0 +1,1 @@
+export type Mapper<F, T> = (from: F) => T

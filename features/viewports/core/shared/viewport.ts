@@ -1,13 +1,12 @@
 import type { Position } from "../data/Position.type"
 import { DEFAULT_VIEWPORT, MAX_SCALE, MIN_SCALE } from "./Constants"
 import type { Viewport } from "../data/Viewport.type"
+import type { Diff } from "../../../shared/types/diff.type"
 
-type ElementsDiffer<T> = (first: T, second: T) => boolean
-
-export const positionsDiffer: ElementsDiffer<Position> = (first, second) =>
+export const positionsDiffer: Diff<Position> = (first, second) =>
   first.x !== second.x || first.y !== second.y
 
-export const viewportsDiffer: ElementsDiffer<Viewport> = (first, second) =>
+export const viewportsDiffer: Diff<Viewport> = (first, second) =>
   positionsDiffer(first.position, second.position) || first.scale !== second.scale
 
 export const isDefaultViewport = (viewport: Viewport): boolean =>

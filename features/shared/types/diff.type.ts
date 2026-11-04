@@ -1,0 +1,1 @@
+export type Diff<T> = (first: T, second: T) => boolean

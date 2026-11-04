@@ -1,7 +1,7 @@
+import type { Diff } from "../../../shared/types/diff.type";
 import { assertNever } from "../../../shared/facts";
 import type { Parameter, ParameterChange, ParameterDragChange, ParameterMidiChange, ParameterWheelChange } from "../data/Parameter.type";
 import { PIXELS_PER_UNIT, SHIFT_RATIO_UPGRADE } from "./Constants";
-import type { Diff } from "./rack";
 
 export type ClampValueFct = (parameter: Parameter, value: number) => number
 
