@@ -51,13 +51,13 @@
 
 <script lang="ts">
 import { round } from 'lodash';
-import { repositories } from '~/lib/repositories';
 import type { DragCallback } from '~/types/draggables/DragDeclaration';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Parameter } from '~/types/modules/Parameter';
 import type { Control } from '~/types/blueprints/Control';
-import { setValue } from '~/utils/functions/parameters';
 import { DEFAULT_FADER_HEIGHT } from '~/utils/constants';
+import { editParameter, previewParameterAdapter } from '~/features/synthesizers/shell/legacy/parameter.adapter';
+import { eventbus } from '~/utils/eventbus/EventBus';
 
 const KNOB_SIZE = 26;
 
@@ -69,12 +69,6 @@ export default {
     dropped: { type: Function as DragCallback, required: true },
   },
   computed: {
-    x(): number {
-      return +this.control.payload.x
-    },
-    y(): number {
-      return +this.control.payload.y
-    },
     width(): number {
       return 20
     },
@@ -95,7 +89,7 @@ export default {
       return - (KNOB_SIZE / 2);
     },
     parameter(): Parameter {
-      return this.module.parameters[this.target]
+      return this.module.parameters[this.target] as Parameter
     },
     value(): number {
       return round(this.parameter.value, this.parameter.precision);
@@ -121,18 +115,17 @@ export default {
     onmousedown($event: MouseEvent) {
       this.original = this.parameter.value;
       this.originalY = $event.clientY;
+      let pixels = 0
 
       this.dragged(($event: MouseEvent) => {
-        const delta = Math.round((this.originalY - $event.clientY) / 10);
-        const newValue = this.original + delta * this.parameter.step;
-        setValue(this.parameter, newValue);
+        pixels = this.originalY - $event.clientY
+        previewParameterAdapter(this.parameter, { kind: "drag", pixels }, this.original)
       });
-      this.dropped(() => this.save(this.parameter, this.module));
+      this.dropped(async () => {
+        await editParameter(this.parameter, { kind: "drag", pixels }, this.original)
+        eventbus.emit(`parameters/update/${this.module.id}/channel`, { value: this.parameter.value })
+      });
     },
-    save(parameter: Parameter, module: AudioModule) {
-      parameter.t = Date.now()
-      api_put(`/parameters/${parameter.id}`, { value: this.value, module_id: module.id })
-    }
   }
 }
 </script>

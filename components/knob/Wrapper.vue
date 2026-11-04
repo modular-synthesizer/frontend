@@ -26,8 +26,9 @@ import type { Control } from '~/types/blueprints/Control';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { DragCallback } from '~/types/draggables/DragDeclaration';
 import type { Synthesizer } from '~/types/Index';
-import { moveValue, setValue } from '~/utils/functions/parameters';
 import { eventbus } from '~/utils/eventbus/EventBus';
+import { editParameter, editParameterDebounced, previewParameterAdapter } from '~/features/synthesizers/shell/legacy/parameter.adapter';
+import type { ParameterChange } from '~/features/synthesizers/core/data/Parameter.type';
 
 const { dragged, dropped, module, r, control } = defineProps({
   r: { type: Number, default: 20 },
@@ -44,31 +45,34 @@ const parameter: Parameter = Object.values(module.parameters).find((p: Parameter
 
 const value = computed(() => round(parameter.value, parameter.precision));
 
-const x: number = +control.payload.x;
-const y: number = +control.payload.y;
 const label: string = `${control.payload.label ?? ''}`;
 
 const original: Ref<number> = ref(0);
 
 const originalY: Ref<number> = ref(0)
 
+function emitValue(p: Parameter, m: AudioModule) {
+  eventbus.emit(`parameters/update/${m.id}/channel`, { value: p.value })
+}
+
 function onmousedown($event: MouseEvent) {
   original.value = parameter.value;
   originalY.value = $event.clientY;
+  let pixels = 0
 
   dragged(($event: MouseEvent) => {
-    const delta = Math.round((originalY.value - $event.clientY) / 10);
-    const newValue = original.value + delta * parameter.step;
-    setValue(parameter, newValue);
+    pixels = originalY.value - $event.clientY
+    previewParameterAdapter(parameter, { kind: "drag", pixels }, original.value)
   });
-  dropped(() => save(parameter));
+  dropped(async () => {
+    await editParameter(parameter, { kind: "drag", pixels }, original.value)
+    emitValue(parameter, module)
+  });
 }
 
-function onwheel($event: WheelEvent) {
-  const ratio = $event.shiftKey ? 10 : 1;
-  const sign = - $event.deltaY / Math.abs($event.deltaY);
-  moveValue(parameter, sign * parameter.step * ratio);
-  debounce('edit-' + parameter.id, 500, () => save(parameter))
+async function onwheel($event: WheelEvent) {
+  await editParameterDebounced(parameter, { kind: "wheel", deltaY: $event.deltaY, shift: $event.shiftKey })
+  emitValue(parameter, module)
 }
 
 function onrightclick($event: MouseEvent) {
@@ -76,20 +80,14 @@ function onrightclick($event: MouseEvent) {
     items: [
       { label: 'bind', action: useMidiLearn().learn },
       { label: 'unbind', action: useMidiLearn().unlearn },
-      { label: 'reset', action: resetValue },
+      {
+        label: 'reset', action: async () => {
+          await editParameter(parameter, { kind: "reset" })
+          emitValue(parameter, module)
+        }
+      },
     ],
     payload: parameter,
   })
-}
-
-function resetValue(parameter: Parameter) {
-  setValue(parameter, parameter.default)
-  save(parameter)
-}
-
-async function save(parameter: Parameter) {
-  parameter.t = Date.now()
-  await api_put(`/proxy/parameters/${parameter.id}`, { value: parameter.value, module_id: module.id })
-  eventbus.emit(`parameters/update/${module.id}/channel`, { value: parameter.value })
 }
 </script>
