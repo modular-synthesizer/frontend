@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { ko, ok } from "../../../shared/results/result";
 import { recorder } from "../../../shared/http/__tests__/utils/recorder";
-import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../shared/data/ObjectId.type";
 import type { SynthesizersEffect } from "../../core/data/Effect.type";
 import { makeRunEffect } from "../effect";
 
-const id = "00000000-0000-0000-0000-000000000001" as Uuid
+const id = "00000000-0000-0000-0000-000000000001" as ObjectId
 
 describe("makeRunEffect", () => {
 
@@ -30,7 +30,7 @@ describe("makeRunEffect", () => {
   })
   it("sends the effect's id, moduleId, value and t to the parameter save route", async () => {
     const { put, calls } = recorder(ok({}))
-    const moduleId = "module_id" as Uuid
+    const moduleId = "module_id" as ObjectId
     const synthesizerEffect: SynthesizersEffect = { type: "synthesizers.parameter.save", id, moduleId, value: 10, t: 1234 }
     await expect(makeRunEffect(put)(synthesizerEffect)).resolves.toBeUndefined()
 

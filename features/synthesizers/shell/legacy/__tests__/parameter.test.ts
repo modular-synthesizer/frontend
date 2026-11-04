@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Parameter as LegacyParameter } from "~/types/modules/Parameter";
 import { applyValue, makeEditParameter, previewParameterAdapter, toParameter } from "../parameter.adapter";
-import type { Uuid } from "../../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../../shared/data/ObjectId.type";
 import type { SynthesizersEffect } from "../../../core/data/Effect.type";
 import type { RunEffectFct } from "../../../../shared/facts";
 import type { AudioModule } from "~/types/Index";
@@ -16,8 +16,8 @@ describe("toParameter", () => {
   it("converts correctly a legacy parameter linked to a saved module", () => {
     const parameter = { ...param, mod: { id: "test" } } as LegacyParameter
     expect(toParameter(parameter)).toEqual({
-      id: "id" as Uuid,
-      moduleId: "test" as Uuid,
+      id: "id" as ObjectId,
+      moduleId: "test" as ObjectId,
       default: 10,
       value: 2,
       step: 1,
@@ -28,7 +28,7 @@ describe("toParameter", () => {
   it("converts correctly a legacy parameter linked to a non-saved module", () => {
     const parameter = { ...param, mod: { id: "" } } as LegacyParameter
     expect(toParameter(parameter)).toEqual({
-      id: "id" as Uuid,
+      id: "id" as ObjectId,
       moduleId: null,
       default: 10,
       value: 2,

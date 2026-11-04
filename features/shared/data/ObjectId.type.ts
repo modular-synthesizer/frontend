@@ -1,0 +1,1 @@
+export type ObjectId = string & { _brand: 'ObjectId' }

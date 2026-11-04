@@ -1,5 +1,5 @@
 import type { Port } from "./Control.type"
-import type { Uuid } from "../../../shared/data/Uuid.type"
+import type { ObjectId } from "../../../shared/data/ObjectId.type"
 
 /**
  * A cable is a polyphonic or monophonic connection between two audio modules. A cable holds several
@@ -8,7 +8,7 @@ import type { Uuid } from "../../../shared/data/Uuid.type"
  */
 export type Cable = {
   /** The unique identifier used to delete or edit the cable */
-  id: Uuid
+  id: ObjectId
   /** The output port of the module producing the signal transmitted in the cable. */
   origin: Port
   /** The input port in which goes the transmitted signal */

@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import type { Parameter, ParameterChange } from "../../data/Parameter.type";
-import type { Uuid } from "../../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../../shared/data/ObjectId.type";
 import { clampValue, targetValue, valuesDiffer } from "../parameter";
 
 const parameter: Parameter = {
-  id: "id" as Uuid, moduleId: "m_id" as Uuid, minimum: 0, maximum: 100, step: 1, value: 50, default: 1
+  id: "id" as ObjectId, moduleId: "m_id" as ObjectId, minimum: 0, maximum: 100, step: 1, value: 50, default: 1
 }
 
 describe("clampValue", () => {

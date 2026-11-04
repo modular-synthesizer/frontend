@@ -1,5 +1,5 @@
 import { DEBOUNCE_DELAY } from "../data/Constants";
-import type { Uuid } from "../data/Uuid.type";
+import type { ObjectId } from "../data/ObjectId.type";
 import type { Effect, RunEffectFct } from "../facts";
 
 type ScheduleFct<T> = (callback: () => void, delay: number) => T
@@ -34,7 +34,7 @@ export const makeDebounce = <E extends Effect, T>(
   }
 }
 
-export type DebounceByIdFct = <E extends Effect & { id: Uuid }>(run: RunEffectFct<E>) => RunEffectFct<E>
+export type DebounceByIdFct = <E extends Effect & { id: ObjectId }>(run: RunEffectFct<E>) => RunEffectFct<E>
 
 export type DebounceByIdFactory = <S>(scheduler: Scheduler<S>) => DebounceByIdFct
 

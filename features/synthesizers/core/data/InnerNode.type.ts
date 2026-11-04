@@ -1,4 +1,4 @@
-import type { Uuid } from "../../../shared/data/Uuid.type"
+import type { ObjectId } from "../../../shared/data/ObjectId.type"
 
 export type NodeGenerator = () => Promise<AudioNode>
 
@@ -9,7 +9,7 @@ export type NodeGenerator = () => Promise<AudioNode>
  */
 export type InnerNodeTemplate = {
   /** A unique identifier used by controls to know on which node they must act */
-  id: Uuid
+  id: ObjectId
   /** The name to be given to audio nodes created with this template. */
   name: string
   /** The function generating a Web Audio API AudioNode object to be able to work with audio signals. */
@@ -24,7 +24,7 @@ export type CustomAudioNode = AudioNode
  */
 export type InnerNode = {
   /** The identifier of the inner node template reproduced in every layer to search for nodes */
-  id: Uuid
+  id: ObjectId
   /** The name of the inner node identifying it. */
   name: string
   /** The Web Audio API AudioNode created in this inner node, handling or generating the signal. */

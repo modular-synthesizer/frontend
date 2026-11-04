@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { ko, ok } from "../../../shared/results/result";
 import { recorder } from "../../../shared/http/__tests__/utils/recorder";
-import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../shared/data/ObjectId.type";
 import type { BlueprintsEffect } from "../../core/data/Effect.type";
 import { makeRunEffect } from "../effect";
 
-const ID = "00000000-0000-0000-0000-000000000001" as Uuid
+const ID = "00000000-0000-0000-0000-000000000001" as ObjectId
 
 describe("makeRunEffect", () => {
   it("sends the effect's id and viewport to the blueprint viewport route", async () => {
@@ -30,8 +30,8 @@ describe("makeRunEffect", () => {
   })
   it("sends the correct informations when handling a node saving effect", async () => {
     const { put, calls } = recorder(ok({}))
-    const id = "id" as Uuid
-    const blueprintId = "blueprintId" as Uuid
+    const id = "id" as ObjectId
+    const blueprintId = "blueprintId" as ObjectId
     const position = { x: 10, y: 20 }
     const blueprintEffect: BlueprintsEffect = { type: "blueprints.node.save", id, blueprintId, position }
     await expect(makeRunEffect(put)(blueprintEffect)).resolves.toBeUndefined()
@@ -42,8 +42,8 @@ describe("makeRunEffect", () => {
   })
   it("sends only one save node request if it fails, without retries", async () => {
     const { put, calls } = recorder(ko({ status: 500 }))
-    const id = "id" as Uuid
-    const blueprintId = "blueprintId" as Uuid
+    const id = "id" as ObjectId
+    const blueprintId = "blueprintId" as ObjectId
     const position = { x: 10, y: 20 }
     const blueprintEffect: BlueprintsEffect = { type: "blueprints.node.save", id, blueprintId, position }
     await expect(makeRunEffect(put)(blueprintEffect)).resolves.toBeUndefined()

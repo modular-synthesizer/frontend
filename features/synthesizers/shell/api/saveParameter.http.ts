@@ -1,8 +1,8 @@
 import { ok, type Result } from "../../../shared/results/result";
-import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../shared/data/ObjectId.type";
 import type { HttpError, HttpPut } from "../../../shared/http/http";
 
-type SaveParameterClosure = (id: Uuid, moduleId: Uuid, value: number, t: number) => Promise<Result<void, HttpError>>
+type SaveParameterClosure = (id: ObjectId, moduleId: ObjectId, value: number, t: number) => Promise<Result<void, HttpError>>
 
 type SaveParameterFct = (put: HttpPut) => SaveParameterClosure
 

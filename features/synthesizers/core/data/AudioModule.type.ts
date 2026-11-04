@@ -1,7 +1,7 @@
 import type { Control } from "./Control.type"
 import type { InnerLink } from "./InnerLink.type"
 import type { InnerNodeTemplate } from "./InnerNode.type"
-import type { Uuid } from "../../../shared/data/Uuid.type"
+import type { ObjectId } from "../../../shared/data/ObjectId.type"
 
 /**
  * An audio module is the virtual representation of a eurorack module. It belongs to a designated synthesizer, and can
@@ -9,7 +9,7 @@ import type { Uuid } from "../../../shared/data/Uuid.type"
  * controls modifying parameters in the nodes of its several polyphonic layers.
  */
 export type AudioModule = {
-  id: Uuid
+  id: ObjectId
   controls: InModule<Control>[]
   nodeTemplates: InModule<InnerNodeTemplate>[]
   linkTemplates: InModule<InnerLink>[]

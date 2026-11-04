@@ -1,8 +1,8 @@
-import type { Uuid } from "../../../shared/data/Uuid.type"
+import type { ObjectId } from "../../../shared/data/ObjectId.type"
 
 export type Parameter = {
-  id: Uuid
-  moduleId: Uuid | null
+  id: ObjectId
+  moduleId: ObjectId | null
   value: number
   default: number
   minimum: number

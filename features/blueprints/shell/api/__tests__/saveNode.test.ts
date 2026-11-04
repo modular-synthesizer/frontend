@@ -1,11 +1,11 @@
 import { ko, ok } from "../../../../shared/results/result";
 import { describe, expect, it } from "vitest";
-import type { Uuid } from "../../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../../shared/data/ObjectId.type";
 import { recorder } from "../../../../shared/http/__tests__/utils/recorder";
 import { saveNode } from "../saveNode.http";
 
-const BLUEPRINT_ID = "blueprintId" as Uuid
-const ID = "uuid" as Uuid
+const BLUEPRINT_ID = "blueprintId" as ObjectId
+const ID = "testId" as ObjectId
 
 describe("saveNode", () => {
   it("sends the blueprint id, the node id, and the node position", async () => {

@@ -1,9 +1,9 @@
 import { ok, type Result } from "../../../shared/results/result";
-import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../shared/data/ObjectId.type";
 import type { HttpError, HttpPut } from "../../../shared/http/http";
 import type { Position } from "../../../viewports/core/data/Position.type";
 
-type SaveNodeClosure = (blueprintId: Uuid, id: Uuid, position: Position) => Promise<Result<void, HttpError>>
+type SaveNodeClosure = (blueprintId: ObjectId, id: ObjectId, position: Position) => Promise<Result<void, HttpError>>
 
 type SaveNodeFct = (put: HttpPut) => SaveNodeClosure
 

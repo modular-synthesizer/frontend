@@ -3,10 +3,10 @@ import { makeRunEffect } from "../effect";
 import { put } from "../../../shared/http/nuxt.http";
 import type { RunEffectFct } from "../../../shared/facts";
 import type { BlueprintsEffect } from "../../core/data/Effect.type";
-import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../shared/data/ObjectId.type";
 
 describe("makeRunEffect", () => {
-  const id = "test" as Uuid
+  const id = "test" as ObjectId
   const position = { x: 0, y: 0 }
 
   it("builds the correct function type", () => {

@@ -1,9 +1,9 @@
 import { zoomViewport } from "../../../viewports/core/processes/zoom.process";
 import type { SynthesizersEffect } from "../data/Effect.type";
 import type { Viewport } from "../../../viewports/core/data/Viewport.type";
-import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../shared/data/ObjectId.type";
 
-export type ZoomFct = (id: Uuid, from: Viewport, deltaY: number) => { viewport: Viewport, effects: SynthesizersEffect[] }
+export type ZoomFct = (id: ObjectId, from: Viewport, deltaY: number) => { viewport: Viewport, effects: SynthesizersEffect[] }
 
 export const zoom: ZoomFct = (id, from, deltaY) => {
   const { changed, viewport } = zoomViewport(from, deltaY)
