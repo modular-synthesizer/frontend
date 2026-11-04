@@ -20,18 +20,20 @@
         }
       }
     },
-    "/synthesizers/{uuid}": {
+    "/synthesizers/{id}": {
       "parameters": [
         {
-          "name": "uuid",
+          "name": "id",
           "in": "path",
           "required": true,
-          "description": "The UUID of the synthesizer to edit",
-          "schema": { "type": "string", "format": "uuid" }
+          "description": "The ObjectId of the synthesizer to edit",
+          "schema": {
+            "$ref": "#/components/schemas/objectId"
+          }
         }
       ],
       "put": {
-        "summary": "Edits a synthesizer's position and zoome level",
+        "summary": "Edits a synthesizer's position and zoom level",
         "operationId": "edit.synthesizer",
         
         "requestBody": {
@@ -58,6 +60,47 @@
           }
         }
       }
+    },
+    "/parameters/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "The ObjectId of the parameter to edit",
+          "schema": {
+            "$ref": "#/components/schemas/objectId"
+          }
+        }
+      ],
+      "put": {
+        "summary": "Edits a parameter's value",
+        "operationId": "edit.parameter",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [ "module_id", "value", "t" ],
+                "properties": {
+                  "module_id": {
+                    "$ref": "#/components/schemas/objectId",
+                    "description": "The ObjectId of the module containing the parameter to edit."
+                  },
+                  "value": {
+                    "type": "number",
+                    "description": "The new value to attribute to the parameter."
+                  },
+                  "t": {
+                    "type": "integer",
+                    "description": "The UNIX timestamp (in milliseconds) of the edition operation, used to never apply overwritten updates."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -69,6 +112,11 @@
             "type": "string"
           }
         }
+      },
+      "objectId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{24}$",
+        "description": "An ObjectId: 24 lowercase hexadecimal characters."
       }
     }
   }

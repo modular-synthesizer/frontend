@@ -1,4 +1,4 @@
-import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../shared/data/ObjectId.type";
 import type { Position } from "../../../viewports/core/data/Position.type"
 import type { Footprint } from "../data/Footprint.type";
 import type { Placement } from "../data/Placement.type";
@@ -57,6 +57,6 @@ export const hasRoom: HasRoomFct = (module, modules) =>
 
 export function firstFreeSlot(obstacles: Footprint[], slots: number) {
   let slot = 0;
-  while(!hasRoom({ placement: { rack: 0, slot }, slots, id: '' as Uuid }, obstacles)) slot ++;
+  while(!hasRoom({ placement: { rack: 0, slot }, slots, id: '' as ObjectId }, obstacles)) slot ++;
   return slot;
 }

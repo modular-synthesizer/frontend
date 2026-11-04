@@ -1,9 +1,9 @@
 import { ok, type Result } from "../../../shared/results/result";
-import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../shared/data/ObjectId.type";
 import type { HttpError, HttpPut } from "../../../shared/http/http";
 import type { Viewport } from "../../../viewports/core/data/Viewport.type";
 
-type SaveViewportClosure = (id: Uuid, viewport: Viewport) => Promise<Result<void, HttpError>>
+type SaveViewportClosure = (id: ObjectId, viewport: Viewport) => Promise<Result<void, HttpError>>
 
 type SaveViewportFct = (put: HttpPut) => SaveViewportClosure
 

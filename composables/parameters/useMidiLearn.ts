@@ -1,49 +1,33 @@
 import { has } from "lodash";
 import type { Parameter } from "~/types/modules/Parameter";
-import { setValue } from "~/utils/functions/parameters";
 import { eventbus } from "~/utils/eventbus/EventBus";
-import type { AudioModule } from "~/types/Index";
+import { editParameterDebounced } from "~/features/synthesizers/shell/legacy/parameter.adapter";
 
 type Handlers = {[key: string]: {[key: string]: Function}};
 
 type State = {
   handlers: Handlers,
-  timeout: number,
 }
 
 const state: Ref<State> = useState<State>('useMidiLearn', () => ({
-  handlers: {}, timeout: -1,
+  handlers: {},
 }))
 
 export function useMidiLearn() {
-  function bindMidiLearn(k: number, parameter: Parameter, module: AudioModule) {
+  function bindMidiLearn(k: number, parameter: Parameter) {
     if (!(parameter.id in state.value.handlers)) state.value.handlers[parameter.id] = {};
 
-    state.value.handlers[parameter.id][k] = messageHandler(parameter, module);
+    state.value.handlers[parameter.id][k] = messageHandler(parameter);
     eventbus.subscribe(`midi/generalpurpose/${k}`, state.value.handlers[parameter.id][k]);
   }
-  function messageHandler(parameter: Parameter, module: AudioModule) {
+  function messageHandler(parameter: Parameter) {
     return ({ amount }: any) => {
-      if (state.value.timeout !== -1) window.clearTimeout(state.value.timeout);
-      const ratio: number = amount / 127;
-      const gap: number = parameter.maximum - parameter.minimum;
-      
-      const value: number = parameter.minimum + (gap * ratio);
-      const step: number = parameter.step * 10
-      const flooredValue: number = Math.floor(value / step) * step
-      setValue(parameter, flooredValue);
-      
-      state.value.timeout = window.setTimeout(() => {
-        parameter.t = Date.now();
-        api_put(`/parameters/${parameter.id}`, { value: parameter.value, module_id: module.id })
-        state.value.timeout = -1;
-      }, 250);
+      editParameterDebounced(parameter, { kind: "midi", amount })
     }
   }
   return {
     state,
     get handlers(): Handlers { return state.value.handlers; },
-    get timeout(): number { return state.value.timeout; },
     learn(parameter: Parameter) {
       const fct = ({ knob }: any) => {
         eventbus.unsubscribe("midi/generalpurpose", fct);

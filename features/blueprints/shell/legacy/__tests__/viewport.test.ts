@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Uuid } from "../../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../../shared/data/ObjectId.type";
 import type { ScaledCoordinates } from "~/types/utils/Coordinates";
 import type { ViewportFacts } from "../../../../viewports/shell/legacy/viewport.adapter";
 import { makePanBlueprint } from "../viewport.adapter";
@@ -22,7 +22,7 @@ describe("makePanBlueprint", () => {
     expect(applier.called[0]?.blueprint).toBe(blueprint)
     expect(applier.called[0]?.facts).toEqual({
       viewport,
-      effects: [ { type: "blueprints.viewport.save", id: "id" as Uuid, viewport } ]
+      effects: [ { type: "blueprints.viewport.save", id: "id" as ObjectId, viewport } ]
     })
   })
   it("does not save the blueprint if it has not been moved", async () => {

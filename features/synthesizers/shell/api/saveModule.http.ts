@@ -1,9 +1,9 @@
 import { ok, type Result } from "../../../shared/results/result";
-import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../shared/data/ObjectId.type";
 import type { HttpError, HttpPut } from "../../../shared/http/http";
 import type { Placement } from "../../core/data/Placement.type";
 
-type SaveModuleClosure = (id: Uuid, placement: Placement) => Promise<Result<void, HttpError>>
+type SaveModuleClosure = (id: ObjectId, placement: Placement) => Promise<Result<void, HttpError>>
 
 type SaveModuleFct = (put: HttpPut) => SaveModuleClosure
 

@@ -2,7 +2,7 @@ import type { AudioModule } from "./AudioModule.type"
 import type { Cable } from "./Cable.type"
 import type { InnerNode } from "./InnerNode.type"
 import type { Membership } from "./Membership.type"
-import type { Uuid } from "../../../shared/data/Uuid.type"
+import type { ObjectId } from "../../../shared/data/ObjectId.type"
 import type { Viewport } from "../../../viewports/core/data/Viewport.type"
 
 /**
@@ -20,7 +20,7 @@ export type Synthesizer = Viewport & {
   /** The representation of the different memberships for users in this synthesizer. */
   memberships: InSynthesizer<Membership>[]
   /** The uniq identifier for this synthesizer, used for queries. */
-  id: Uuid
+  id: ObjectId
 }
 
 export type InSynthesizer<T> = T & { synthesizer: Synthesizer }

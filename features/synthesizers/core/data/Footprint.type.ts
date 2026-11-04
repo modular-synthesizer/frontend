@@ -1,4 +1,4 @@
-import type { Uuid } from "../../../shared/data/Uuid.type"
+import type { ObjectId } from "../../../shared/data/ObjectId.type"
 import type { Placement } from "./Placement.type"
 
 /**
@@ -7,7 +7,7 @@ import type { Placement } from "./Placement.type"
  */
 export type Footprint = {
   // The ID is given mostly so that a module footprint cannot be compared with itself.
-  id: Uuid
+  id: ObjectId
   // Represents where the module is placed in the synthesizer
   placement: Placement
   // Represents the place the module is taking, the more, the wider it is.

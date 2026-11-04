@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { makeDebounce, type DebounceOptions } from "../debounce";
+import { makeDebounce, makeDebounceById, type DebounceOptions } from "../debounce";
 import type { RunEffectFct } from "../../facts";
+import type { ObjectId } from "../../data/ObjectId.type";
 
 type TestEffect = { type: "test.effect", k: number } | { type: "test.other" }
 
@@ -86,5 +87,74 @@ describe('makeDebounce', () => {
     expect(scheduled.length).toBe(2)
     expect(cancelled).toEqual([])
     expect(calls).toEqual([ effect, { ...effect, k: 1 } ])
+  })
+})
+
+describe("debounceById", () => {
+  type IdEffect = { type: "test.a" | "test.b", id: ObjectId }
+  const effect: IdEffect = { type: "test.a", id: "test" as ObjectId }
+
+  const createDebounceRunner = () => {
+    const calls: IdEffect[] = []
+    const run: RunEffectFct<IdEffect> = async effect => { calls.push(effect) }
+    return { calls, run }
+  }
+  it("schedules the calls with the correct delay", async () => {
+    const { run, calls } = createDebounceRunner()
+    const { scheduler, scheduled } = createScheduler()
+    const debounceById = makeDebounceById(scheduler)
+    
+    await debounceById(run)({ id: "test" as ObjectId, type: "test.a"})
+
+    expect(calls).toEqual([])
+    expect(scheduled.map(s => s.delay)).toEqual([500])
+
+    scheduled[0]?.callback()
+
+    expect(calls).toEqual([ effect ])
+  })
+  it("can schedule two calls with the same type and id, and cancel one", async () => {
+    const { run, calls } = createDebounceRunner()
+    const { scheduler, scheduled, cancelled } = createScheduler()
+    const debounceById = makeDebounceById(scheduler)(run)
+
+    const first: IdEffect = { id: "test" as ObjectId, type: "test.a"}
+    const second: IdEffect = { id: "test" as ObjectId, type: "test.a"}
+    
+    await debounceById(first)
+    await debounceById(second)
+
+    scheduled[1]?.callback()
+
+    expect(cancelled).toEqual([0])
+    expect(calls[0]).toBe(second)
+  })
+  it("can schedule two calls with different id and the same type type, and cancel none", async () => {
+    const { run, calls } = createDebounceRunner()
+    const { scheduler, scheduled, cancelled } = createScheduler()
+    const debounceById = makeDebounceById(scheduler)(run)
+    
+    await debounceById({ id: "test1" as ObjectId, type: "test.a"})
+    await debounceById({ id: "test2" as ObjectId, type: "test.a"})
+
+    scheduled[0]?.callback()
+    scheduled[1]?.callback()
+
+    expect(cancelled).toEqual([])
+    expect(calls).toEqual([ { id: "test1", type: "test.a" }, { id: "test2", type: "test.a" } ])
+  })
+  it("can schedule two calls with same id, different type, and cancel none", async () => {
+    const { run, calls } = createDebounceRunner()
+    const { scheduler, scheduled, cancelled } = createScheduler()
+    const debounceById = makeDebounceById(scheduler)(run)
+    
+    await debounceById({ id: "test" as ObjectId, type: "test.a"})
+    await debounceById({ id: "test" as ObjectId, type: "test.b"})
+
+    scheduled[0]?.callback()
+    scheduled[1]?.callback()
+
+    expect(cancelled).toEqual([])
+    expect(calls).toEqual([ { id: "test", type: "test.a" }, { id: "test", type: "test.b" } ])
   })
 })

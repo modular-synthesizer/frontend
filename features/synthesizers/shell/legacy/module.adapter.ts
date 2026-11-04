@@ -2,7 +2,7 @@ import type { AudioModule } from "~/types/Index";
 import type { Placement } from "../../core/data/Placement.type";
 import { hasRoom, toPlacement, toPosition, type Mapper } from "../../core/shared/rack";
 import type { Footprint } from "../../core/data/Footprint.type";
-import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../shared/data/ObjectId.type";
 import type { Position } from "../../../viewports/core/data/Position.type";
 import type { RunEffectFct } from "../../../shared/facts";
 import type { SynthesizersEffect } from "../../core/data/Effect.type";
@@ -18,7 +18,7 @@ export type toFootprintFct = (module: AudioModule, placement?: Placement) => Foo
  * @returns the footprint of the module, placed at the given position
  */
 export const toFootprint: toFootprintFct = (module, placement) =>
-  ({ id: module.id as Uuid, placement: placement ?? { rack: module.rack, slot: module.slot }, slots: module.slots })
+  ({ id: module.id as ObjectId, placement: placement ?? { rack: module.rack, slot: module.slot }, slots: module.slots })
 
 export type ApplyPlacementFct = (module: AudioModule, placement: Placement) => void
 

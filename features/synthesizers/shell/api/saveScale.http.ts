@@ -1,8 +1,8 @@
 import { ok, type Result } from "../../../shared/results/result";
-import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../shared/data/ObjectId.type";
 import type { HttpError, HttpPut } from "../../../shared/http/http";
 
-type SaveScaleClosure = (id: Uuid, scale: number) => Promise<Result<void, HttpError>>
+type SaveScaleClosure = (id: ObjectId, scale: number) => Promise<Result<void, HttpError>>
 
 type SaveScaleFct = (put: HttpPut) => SaveScaleClosure
 

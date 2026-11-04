@@ -3,10 +3,10 @@ import { makeRunEffect } from "../effect";
 import { put } from "../../../shared/http/nuxt.http";
 import type { RunEffectFct } from "../../../shared/facts";
 import type { SynthesizersEffect } from "../../core/data/Effect.type";
-import type { Uuid } from "../../../shared/data/Uuid.type";
+import type { ObjectId } from "../../../shared/data/ObjectId.type";
 
 describe("makeRunEffect", () => {
-  const id = "test" as Uuid
+  const id = "test" as ObjectId
   const viewport = { position: { x: 0, y: 0 }, scale: 1.0 }
 
   it("builds the correct function type", () => {
@@ -25,6 +25,11 @@ describe("makeRunEffect", () => {
   it("accepts the module save events", () => {
     expectTypeOf(makeRunEffect(put)).toBeCallableWith({
       type: "synthesizers.module.save", id, placement: { rack: 0, slot: 10 }
+    })
+  })
+  it("accepts the parameter save events", () => {
+    expectTypeOf(makeRunEffect(put)).toBeCallableWith({
+      type: "synthesizers.parameter.save", id, moduleId: "test" as ObjectId, value: 10, t: 1234
     })
   })
   it("refuses blueprints viewport save events, even if it's a viewport event", () => {
