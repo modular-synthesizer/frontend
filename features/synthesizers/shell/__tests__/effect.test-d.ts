@@ -27,6 +27,11 @@ describe("makeRunEffect", () => {
       type: "synthesizers.module.save", id, placement: { rack: 0, slot: 10 }
     })
   })
+  it("accepts the parameter save events", () => {
+    expectTypeOf(makeRunEffect(put)).toBeCallableWith({
+      type: "synthesizers.parameter.save", id, moduleId: "test" as Uuid, value: 10, t: 1234
+    })
+  })
   it("refuses blueprints viewport save events, even if it's a viewport event", () => {
     expectTypeOf(makeRunEffect(put)).toBeCallableWith({
       // @ts-expect-error blueprints.viewport.save
