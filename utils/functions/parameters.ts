@@ -1,7 +1,6 @@
 import { clamp } from "lodash";
 import type { Channel } from "~/types/modules/Channel";
 import type { Parameter } from "~/types/modules/Parameter";
-import type { Control } from "~/types/blueprints/Control";
 import type { Parameters, AudioModule } from "~/types/modules/AudioModule";
 
 /**
@@ -20,24 +19,6 @@ export function setValue(param: Parameter, value: number): void {
       audioParam.setValueAtTime(param.value, useAudio().context.currentTime);
     })
   })
-}
-
-/**
- * Moves the value of a parameter from a relative delta instead of setting it to an absolute new value.
- * @param param the parameter to modify the value of.
- * @param delta the delta to move it of, as the difference between current value, and new expected value.
- */
-export function moveValue(param: Parameter, delta: number): void {
-  setValue(param, param.value + delta);
-}
-
-/**
- * Gets all the controls directly targetting the parameter, ie able to modify its value.
- * @param param the parameter the returned controls are able to modify.
- * @returns an array of controls targetting this parameter.
- */
-export function getControls(param: Parameter): Array<Control> {
-  return param.mod.controls.filter((c: Control) => c.payload.target === param.name);
 }
 
 export function extractAudioParam(node: AudioNode, field: string): AudioParam|undefined {

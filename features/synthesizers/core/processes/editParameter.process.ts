@@ -19,10 +19,3 @@ export const editParameter: EditParameterFct = (parameter, change, t) => {
   }
   return { value, effects: [ effect ]}
 }
-
-export type TimestampedValue = { t: number, value: number }
-
-export type ReceiveParameterFct = (local: TimestampedValue, remote: TimestampedValue) => TimestampedValue
-
-export const receiveParameter: ReceiveParameterFct = (local, remote) =>
-  (local.t < remote.t) ? remote : local

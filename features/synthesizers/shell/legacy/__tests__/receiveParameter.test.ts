@@ -3,7 +3,8 @@ import type { Parameter } from "~/types/modules/Parameter"
 import { receiveParameterAdapter } from "../receiveParameter.adapter"
 
 describe("receiveParameter", () => {
-  const param = { targets: [], mod: { id: "test" } }
+  const param = { targets: [], mod: { id: "test" }, minimum: 0, maximum: 100 }
+
   it("applies a more recent update to a local parameter", () => {
     const parameter = { ...param, value: 0, t: 10 } as unknown as Parameter
     const update = { value: 20, t: 11 }
@@ -35,5 +36,13 @@ describe("receiveParameter", () => {
     receiveParameterAdapter(parameter, update)
 
     expect(parameter).toMatchObject({ value: 0, t: 11 })
+  })
+  it("clamps the value if it's outside boundaries", () => {
+    const parameter = { ...param, value: 0, t: 10 } as unknown as Parameter
+    const update = { value: 200, t: 11 }
+
+    receiveParameterAdapter(parameter, update)
+
+    expect(parameter).toMatchObject({ value: 100, t: 11 })
   })
 })

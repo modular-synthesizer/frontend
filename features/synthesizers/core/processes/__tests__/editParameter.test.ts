@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { editParameter, previewParameter, receiveParameter } from "../editParameter.process";
+import { editParameter, previewParameter } from "../editParameter.process";
 import type { Parameter, ParameterChange } from "../../data/Parameter.type";
 import type { Uuid } from "../../../../shared/data/Uuid.type";
 
@@ -62,16 +62,5 @@ describe("editParameter", () => {
   })
   it("does not send a change event if a reset change is made on a parameter with the default value", () => {
     expect(editParameter(param, { kind: "reset"}, t)).toEqual({ value: 10, effects: [] })
-  })
-})
-
-describe("receiveParameter", () => {
-  it("returns the local version if it has been edited more recently", () => {
-    const result = receiveParameter({ value: 0, t: 1 }, { value: 2, t: 0 })
-    expect(result).toEqual({ value: 0, t: 1})
-  })
-  it("returns the remote one if is has been edited more recently", () => {
-    const result = receiveParameter({ value: 2, t: 0 }, { value: 0, t: 1 })
-    expect(result).toEqual({ value: 0, t: 1})
   })
 })
