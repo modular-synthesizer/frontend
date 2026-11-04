@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { RACK_HEIGHT, SLOT_SIZE } from "../Constants"
 import { firstFreeSlot, hasRoom, overlaps, placementsDiffer, toPlacement, toPosition } from "../rack"
 import type { Footprint } from "../../data/Footprint.type"
-import type { ObjectId } from "../../../../shared/data/ObjectId.type"
+import { toObjectId } from "../../../../shared/data/ObjectId.type"
 
 describe("toPlacement", () => {
   it("rounds the rack up if needed", () => {
@@ -54,54 +54,54 @@ describe("placementsDiffer", () => {
 
 describe("overlaps", () => {
   it("returns TRUE if two modules overlap from left to right", () => {
-    const first: Footprint = { id: "first" as ObjectId, placement: { rack: 0, slot: 0 }, slots: 10 }
-    const second: Footprint = { id: "second" as ObjectId, placement: { rack: 0, slot: 5 }, slots: 10 }
+    const first: Footprint = { id: toObjectId("first"), placement: { rack: 0, slot: 0 }, slots: 10 }
+    const second: Footprint = { id: toObjectId("second"), placement: { rack: 0, slot: 5 }, slots: 10 }
     expect(overlaps(first, second)).toEqual(true)
   })
   it("returns TRUE if two modules overlap from right to left", () => {
-    const first: Footprint = { id: "first" as ObjectId, placement: { rack: 0, slot: 5 }, slots: 10 }
-    const second: Footprint = { id: "second" as ObjectId, placement: { rack: 0, slot: 0 }, slots: 10 }
+    const first: Footprint = { id: toObjectId("first"), placement: { rack: 0, slot: 5 }, slots: 10 }
+    const second: Footprint = { id: toObjectId("second"), placement: { rack: 0, slot: 0 }, slots: 10 }
     expect(overlaps(first, second)).toEqual(true)
   })
   it("returns FALSE for two adjacent modules left to right", () => {
-    const first: Footprint = { id: "first" as ObjectId, placement: { rack: 0, slot: 0 }, slots: 5 }
-    const second: Footprint = { id: "second" as ObjectId, placement: { rack: 0, slot: 5 }, slots: 5 }
+    const first: Footprint = { id: toObjectId("first"), placement: { rack: 0, slot: 0 }, slots: 5 }
+    const second: Footprint = { id: toObjectId("second"), placement: { rack: 0, slot: 5 }, slots: 5 }
     expect(overlaps(first, second)).toEqual(false)
   })
   it("returns FALSE for two adjacent modules right to left", () => {
-    const first: Footprint = { id: "first" as ObjectId, placement: { rack: 0, slot: 5 }, slots: 5 }
-    const second: Footprint = { id: "second" as ObjectId, placement: { rack: 0, slot: 0 }, slots: 5 }
+    const first: Footprint = { id: toObjectId("first"), placement: { rack: 0, slot: 5 }, slots: 5 }
+    const second: Footprint = { id: toObjectId("second"), placement: { rack: 0, slot: 0 }, slots: 5 }
     expect(overlaps(first, second)).toEqual(false)
   })
   it("returns FALSE if two modules are on different racks but overlapping slots", () => {
-    const first: Footprint = { id: "first" as ObjectId, placement: { rack: 0, slot: 0 }, slots: 10 }
-    const second: Footprint = { id: "second" as ObjectId, placement: { rack: 1, slot: 0 }, slots: 10 }
+    const first: Footprint = { id: toObjectId("first"), placement: { rack: 0, slot: 0 }, slots: 10 }
+    const second: Footprint = { id: toObjectId("second"), placement: { rack: 1, slot: 0 }, slots: 10 }
     expect(overlaps(first, second)).toEqual(false)
   })
   it("does not overlap with itself", () => {
-    const module: Footprint = { id: "first" as ObjectId, placement: { rack: 0, slot: 0 }, slots: 10 }
+    const module: Footprint = { id: toObjectId("first"), placement: { rack: 0, slot: 0 }, slots: 10 }
     expect(overlaps(module, module)).toEqual(false)
   })
   it("returns TRUE if one of the modules is entirely contained in another", () => {
-    const first: Footprint = { id: "first" as ObjectId, placement: { rack: 0, slot: 0 }, slots: 10 }
-    const second: Footprint = { id: "second" as ObjectId, placement: { rack: 0, slot: 1 }, slots: 5 }
+    const first: Footprint = { id: toObjectId("first"), placement: { rack: 0, slot: 0 }, slots: 10 }
+    const second: Footprint = { id: toObjectId("second"), placement: { rack: 0, slot: 1 }, slots: 5 }
     expect(overlaps(first, second)).toEqual(true)
   })
 })
 
 describe("hasRoom", () => {
-  const footprint: Footprint = { id: "first" as ObjectId, placement: { rack: 0, slot: 0 }, slots: 10 }
+  const footprint: Footprint = { id: toObjectId("first"), placement: { rack: 0, slot: 0 }, slots: 10 }
 
   it("has room in an empty list", () => {
     expect(hasRoom(footprint, [])).toEqual(true)
   })
   it("has room in a list when no other module overlaps", () => {
-    const second: Footprint = { id: "second" as ObjectId, placement: { rack: 1, slot: 0 }, slots: 10 }
+    const second: Footprint = { id: toObjectId("second"), placement: { rack: 1, slot: 0 }, slots: 10 }
     expect(hasRoom(footprint, [ second ])).toEqual(true)
   })
   it("does not have room in a list with an overlapping module", () => {
-    const second: Footprint = { id: "second" as ObjectId, placement: { rack: 0, slot: 5 }, slots: 10 }
-    const third: Footprint = { id: "second" as ObjectId, placement: { rack: 1, slot: 0 }, slots: 10 }
+    const second: Footprint = { id: toObjectId("second"), placement: { rack: 0, slot: 5 }, slots: 10 }
+    const third: Footprint = { id: toObjectId("second"), placement: { rack: 1, slot: 0 }, slots: 10 }
     expect(hasRoom(footprint, [ third, second ])).toEqual(false)
   })
 })
@@ -112,11 +112,11 @@ describe("firstFreeSlot", () => {
     expect(firstFreeSlot([], 5)).toEqual(0)
   })
   it("returns the first slot found if the module cannot be placed at the start", () => {
-    const obstacles: Footprint[] = [ { id: "test" as ObjectId, placement: { rack: 0, slot: 0 }, slots: 10 } ]
+    const obstacles: Footprint[] = [ { id: toObjectId("test"), placement: { rack: 0, slot: 0 }, slots: 10 } ]
     expect(firstFreeSlot(obstacles, 5)).toEqual(10)
   })
   it("returns the origin for a synthesizer with a non-colliding module", () => {
-    const obstacles: Footprint[] = [ { id: "test" as ObjectId, placement: { rack: 0, slot: 10 }, slots: 10 } ]
+    const obstacles: Footprint[] = [ { id: toObjectId("test"), placement: { rack: 0, slot: 10 }, slots: 10 } ]
     expect(firstFreeSlot(obstacles, 5)).toEqual(0)
   })
 })

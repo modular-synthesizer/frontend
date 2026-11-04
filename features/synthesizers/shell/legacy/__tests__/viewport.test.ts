@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Synthesizer } from "~/types/Index";
-import type { ObjectId } from "../../../../shared/data/ObjectId.type";
+import { toObjectId } from "../../../../shared/data/ObjectId.type";
 import { DEFAULT_VIEWPORT } from "../../../../viewports/core/shared/Constants";
 import { makePanSynthesizer, makeResetSynthesizer, makeZoomSynthesizer } from "../viewport.adapter";
 import type { ScaledCoordinates } from "~/types/utils/Coordinates";
@@ -23,7 +23,7 @@ describe("makeResetSynthesizer", () => {
     expect(applier.called[0]?.synthesizer).toBe(synthesizer)
     expect(applier.called[0]?.facts).toEqual({
       viewport,
-      effects: [ { type: "synthesizers.viewport.save", id: "id" as ObjectId, viewport } ]
+      effects: [ { type: "synthesizers.viewport.save", id: toObjectId("id"), viewport } ]
     })
   })
   it("does not save the synthesizer if it was already at the origin", async () => {
@@ -60,7 +60,7 @@ describe("makePanSynthesizer", () => {
     expect(applier.called[0]?.synthesizer).toBe(synthesizer)
     expect(applier.called[0]?.facts).toEqual({
       viewport,
-      effects: [ { type: "synthesizers.viewport.save", id: "id" as ObjectId, viewport } ]
+      effects: [ { type: "synthesizers.viewport.save", id: toObjectId("id"), viewport } ]
     })
   })
   it("does not save the synthesizer if it has not been moved", async () => {
@@ -97,7 +97,7 @@ describe("makeZoomSynthesizer", () => {
     expect(applier.called[0]?.synthesizer).toBe(synthesizer)
     expect(applier.called[0]?.facts).toEqual({
       viewport,
-      effects: [ { type: "synthesizers.scale.save", id: "id" as ObjectId, scale: 1.0 } ]
+      effects: [ { type: "synthesizers.scale.save", id: toObjectId("id"), scale: 1.0 } ]
     })
   })
   it("does not save the synthesizer scale if it's zoom out from the minimum", async () => {

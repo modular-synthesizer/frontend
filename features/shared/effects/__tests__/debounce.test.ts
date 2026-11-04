@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { makeDebounce, makeDebounceById, type DebounceOptions } from "../debounce";
 import type { RunEffectFct } from "../../facts";
-import type { ObjectId } from "../../data/ObjectId.type";
+import { toObjectId, type ObjectId } from "../../data/ObjectId.type";
 
 type TestEffect = { type: "test.effect", k: number } | { type: "test.other" }
 
@@ -92,7 +92,7 @@ describe('makeDebounce', () => {
 
 describe("debounceById", () => {
   type IdEffect = { type: "test.a" | "test.b", id: ObjectId }
-  const effect: IdEffect = { type: "test.a", id: "test" as ObjectId }
+  const effect: IdEffect = { type: "test.a", id: toObjectId("test") }
 
   const createDebounceRunner = () => {
     const calls: IdEffect[] = []
@@ -104,7 +104,7 @@ describe("debounceById", () => {
     const { scheduler, scheduled } = createScheduler()
     const debounceById = makeDebounceById(scheduler)
     
-    await debounceById(run)({ id: "test" as ObjectId, type: "test.a"})
+    await debounceById(run)({ id: toObjectId("test"), type: "test.a"})
 
     expect(calls).toEqual([])
     expect(scheduled.map(s => s.delay)).toEqual([500])
@@ -118,8 +118,8 @@ describe("debounceById", () => {
     const { scheduler, scheduled, cancelled } = createScheduler()
     const debounceById = makeDebounceById(scheduler)(run)
 
-    const first: IdEffect = { id: "test" as ObjectId, type: "test.a"}
-    const second: IdEffect = { id: "test" as ObjectId, type: "test.a"}
+    const first: IdEffect = { id: toObjectId("test"), type: "test.a"}
+    const second: IdEffect = { id: toObjectId("test"), type: "test.a"}
     
     await debounceById(first)
     await debounceById(second)
@@ -134,8 +134,8 @@ describe("debounceById", () => {
     const { scheduler, scheduled, cancelled } = createScheduler()
     const debounceById = makeDebounceById(scheduler)(run)
     
-    await debounceById({ id: "test1" as ObjectId, type: "test.a"})
-    await debounceById({ id: "test2" as ObjectId, type: "test.a"})
+    await debounceById({ id: toObjectId("test1"), type: "test.a"})
+    await debounceById({ id: toObjectId("test2"), type: "test.a"})
 
     scheduled[0]?.callback()
     scheduled[1]?.callback()
@@ -148,8 +148,8 @@ describe("debounceById", () => {
     const { scheduler, scheduled, cancelled } = createScheduler()
     const debounceById = makeDebounceById(scheduler)(run)
     
-    await debounceById({ id: "test" as ObjectId, type: "test.a"})
-    await debounceById({ id: "test" as ObjectId, type: "test.b"})
+    await debounceById({ id: toObjectId("test"), type: "test.a"})
+    await debounceById({ id: toObjectId("test"), type: "test.b"})
 
     scheduled[0]?.callback()
     scheduled[1]?.callback()

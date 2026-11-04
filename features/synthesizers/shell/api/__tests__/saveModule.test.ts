@@ -1,10 +1,10 @@
 import { ko, ok } from "../../../../shared/results/result";
 import { describe, expect, it } from "vitest";
-import type { ObjectId } from "../../../../shared/data/ObjectId.type";
+import { toObjectId } from "../../../../shared/data/ObjectId.type";
 import { recorder } from "../../../../shared/http/__tests__/utils/recorder";
 import { saveModule } from "../saveModule.http";
 
-const ID = "testId" as ObjectId
+const ID = toObjectId("test")
 
 describe("saveModule", () => {
   it("only sends ID and the position of the module", async () => {

@@ -4,7 +4,7 @@ import type { BlueprintsEffect } from "../../core/data/Effect.type";
 import { runEffect } from "../effect";
 import type { Position } from "../../../viewports/core/data/Position.type";
 import { pan } from "../../core/processes/pan.process";
-import type { ObjectId } from "../../../shared/data/ObjectId.type";
+import { toEventualObjectId } from "../../../shared/data/ObjectId.type";
 
 export const applyFacts: FactsApplier<BlueprintsEffect> = makeApplyFacts(runEffect)
 
@@ -14,7 +14,7 @@ export type PanBlueprintFactory = (applier: FactsApplier<BlueprintsEffect>) => P
 
 export const makePanBlueprint: PanBlueprintFactory = apply =>
   async (blueprint, from, to) => {
-    const blueprintId = blueprint.id ? blueprint.id as ObjectId : null
+    const blueprintId = toEventualObjectId(blueprint.id)
     const facts = pan(blueprintId, { ...toViewport(blueprint), position: from }, to)
     await apply(blueprint, facts)
   }

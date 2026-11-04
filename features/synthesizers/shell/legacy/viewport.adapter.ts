@@ -1,7 +1,7 @@
 import { makeApplyFacts, toViewport, type FactsApplier } from "../../../viewports/shell/legacy/viewport.adapter"
 import type { Synthesizer } from "~/types/Index"
 import { reset } from "../../core/processes/reset.process"
-import type { ObjectId } from "../../../shared/data/ObjectId.type"
+import { toObjectId } from "../../../shared/data/ObjectId.type"
 import type { Position } from "../../../viewports/core/data/Position.type"
 import { pan } from "../../core/processes/pan.process"
 import { debouncedRunEffect, runEffect } from "../effect"
@@ -16,7 +16,7 @@ export type ResetSynthesizerFactory = (apply: FactsApplier<SynthesizersEffect>) 
 
 export const makeResetSynthesizer: ResetSynthesizerFactory = apply =>
   async synth => {
-    const facts = reset(synth.id as ObjectId, toViewport(synth))
+    const facts = reset(toObjectId(synth.id), toViewport(synth))
     await apply(synth, facts)
   }
 
@@ -28,7 +28,7 @@ export type PanSynthesizerFactory = (apply: FactsApplier<SynthesizersEffect>) =>
 
 export const makePanSynthesizer: PanSynthesizerFactory = apply =>
   async (synth, from, to) => {
-    const facts = pan(synth.id as ObjectId, { ...toViewport(synth), position: from }, to)
+    const facts = pan(toObjectId(synth.id), { ...toViewport(synth), position: from }, to)
     await apply(synth, facts)
   }
 
@@ -40,7 +40,7 @@ export type ZoomSynthesizerFactory = (apply: FactsApplier<SynthesizersEffect>) =
 
 export const makeZoomSynthesizer: ZoomSynthesizerFactory = apply =>
   async (synth, deltaY) => {
-    const facts = zoom(synth.id as ObjectId, toViewport(synth), deltaY)
+    const facts = zoom(toObjectId(synth.id), toViewport(synth), deltaY)
     await apply(synth, facts)
   }
 

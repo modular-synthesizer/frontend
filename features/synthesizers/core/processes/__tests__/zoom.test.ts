@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { ObjectId } from "../../../../shared/data/ObjectId.type";
-import type { Viewport } from "../../../../viewports/core/data/Viewport.type";
+import { toObjectId } from "../../../../shared/data/ObjectId.type";
 import { zoom } from "../zoom.process";
 
-const ID = "00000000-0000-0000-000000000000" as ObjectId
+const ID = toObjectId("test")
 
 function expectedEffect(scale: number) {
   return { type: "synthesizers.scale.save", id: ID, scale }

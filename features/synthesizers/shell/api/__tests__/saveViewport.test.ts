@@ -2,10 +2,10 @@ import { ko, ok } from "../../../../shared/results/result";
 import { saveViewport } from "../saveViewport.http";
 import { describe, expect, it } from "vitest";
 import { DEFAULT_VIEWPORT } from "../../../../viewports/core/shared/Constants";
-import type { ObjectId } from "../../../../shared/data/ObjectId.type";
+import { toObjectId } from "../../../../shared/data/ObjectId.type";
 import { recorder } from "../../../../shared/http/__tests__/utils/recorder";
 
-const ID = "testId" as ObjectId
+const ID = toObjectId("test")
 
 describe("saveViewport", () => {
   it("only sends x, y coordinates, and scale", async () => {

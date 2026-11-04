@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { editParameter, previewParameter } from "../editParameter.process";
 import type { Parameter, ParameterChange } from "../../data/Parameter.type";
-import type { ObjectId } from "../../../../shared/data/ObjectId.type";
+import { toObjectId } from "../../../../shared/data/ObjectId.type";
 
 const parameter: Parameter = {
-  id: "test" as ObjectId, moduleId: "m_id" as ObjectId, value: 1, minimum: 0, maximum: 100, step: 1, default: 10
+  id: toObjectId("test"), moduleId: toObjectId("m_id"), value: 1, minimum: 0, maximum: 100, step: 1, default: 10
 }
 
 describe("previewParameter", () => {
@@ -32,8 +32,8 @@ describe("previewParameter", () => {
 
 describe("editParameter", () => {
   const t = 1234
-  const id = "id" as ObjectId
-  const moduleId = "mid" as ObjectId
+  const id = toObjectId("id")
+  const moduleId = toObjectId("mid")
   const param = { id, moduleId, step: 1, minimum: 0, maximum: 100, default: 10, value: 10 }
 
   it("sends the save effect if the value has been changed", () => {

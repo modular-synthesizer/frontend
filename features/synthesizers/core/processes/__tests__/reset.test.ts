@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { reset } from "../reset.process";
 import { DEFAULT_VIEWPORT } from "../../../../viewports/core/shared/Constants";
-import type { ObjectId } from "../../../../shared/data/ObjectId.type";
+import { toObjectId } from "../../../../shared/data/ObjectId.type";
 import type { Viewport } from "../../../../viewports/core/data/Viewport.type";
 
-const ID = "00000000-0000-0000-000000000000" as ObjectId
+const ID = toObjectId("test")
 
 function expectedEffect(viewport: Viewport) {
   return { type: "synthesizers.viewport.save", id: ID, viewport }

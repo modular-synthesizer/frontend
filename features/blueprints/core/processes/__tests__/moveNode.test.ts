@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { ObjectId } from "../../../../shared/data/ObjectId.type";
+import { toObjectId } from "../../../../shared/data/ObjectId.type";
 import { moveNode } from "../moveNode.process";
 
 describe("moveNode", () => {
-  const id = "test" as ObjectId
-  const blueprintId = "blueprint" as ObjectId
+  const id = toObjectId("id")
+  const blueprintId = toObjectId("blueprint")
 
   it("moves the node and saves it if it has moved and is linked to a blueprint", () => {
     expect(moveNode(blueprintId, id, { x: 0, y: 0 }, { x: 10, y: 20 })).toEqual({

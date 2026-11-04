@@ -1,11 +1,11 @@
 import { ko, ok } from "../../../../shared/results/result";
 import { describe, expect, it } from "vitest";
-import type { ObjectId } from "../../../../shared/data/ObjectId.type";
+import { toObjectId } from "../../../../shared/data/ObjectId.type";
 import { recorder } from "../../../../shared/http/__tests__/utils/recorder";
 import { saveParameter } from "../saveParameter.http";
 
-const id = "id" as ObjectId
-const moduleId = "mid" as ObjectId
+const id = toObjectId("id")
+const moduleId = toObjectId("mid")
 
 describe("saveParameter", () => {
   it("sends the id, moduleId, value and timestamp with the request", async () => {

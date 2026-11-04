@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import type { ObjectId } from "../../../../shared/data/ObjectId.type";
+import { toObjectId } from "../../../../shared/data/ObjectId.type";
 import { pan } from "../pan.process";
 import type { Viewport } from "../../../../viewports/core/data/Viewport.type";
 
-const ID = "00000000-0000-0000-000000000000" as ObjectId
+const ID = toObjectId("test")
 
 function expectedEffect(viewport: Viewport) {
   return { type: "blueprints.viewport.save", id: ID, viewport }

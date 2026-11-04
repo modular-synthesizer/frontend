@@ -1,10 +1,10 @@
 import { ko, ok } from "../../../../shared/results/result";
 import { describe, expect, it } from "vitest";
-import type { ObjectId } from "../../../../shared/data/ObjectId.type";
+import { toObjectId } from "../../../../shared/data/ObjectId.type";
 import { recorder } from "../../../../shared/http/__tests__/utils/recorder";
 import { saveScale } from "../saveScale.http";
 
-const ID = "testId" as ObjectId
+const ID = toObjectId("test")
 
 describe("saveScale", () => {
   it("only sends the scale", async () => {

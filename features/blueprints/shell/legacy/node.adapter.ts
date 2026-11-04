@@ -2,7 +2,7 @@ import type { BlueprintsEffect } from "../../core/data/Effect.type";
 import type { Position } from "../../../viewports/core/data/Position.type";
 import type { Blueprint } from "~/types/blueprints/Blueprint";
 import { moveNode } from "../../core/processes/moveNode.process";
-import type { ObjectId } from "../../../shared/data/ObjectId.type";
+import { toEventualObjectId, toObjectId } from "../../../shared/data/ObjectId.type";
 import type { RunEffectFct } from "../../../shared/facts";
 import type { InnerNode } from "~/types/blueprints/InnerNode";
 import { runEffect } from "../effect";
@@ -13,8 +13,8 @@ export type MoveNodeAdapterFactory = (run: RunEffectFct<BlueprintsEffect>) => Mo
 
 export const makeMoveNodeAdapter: MoveNodeAdapterFactory = run =>
   async (blueprint, node, from, to) => {
-    const blueprintId = blueprint.id ? blueprint.id as ObjectId : null
-    const facts = moveNode(blueprintId, node.id as ObjectId, from, to)
+    const blueprintId = toEventualObjectId(blueprint.id)
+    const facts = moveNode(blueprintId, toObjectId(node.id), from, to)
     node.x = facts.position.x
     node.y = facts.position.y
     await Promise.all(facts.effects.map(run))
