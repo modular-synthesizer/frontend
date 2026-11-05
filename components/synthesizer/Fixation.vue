@@ -1,5 +1,5 @@
 <script lang="ts">
-import { SLOT_SIZE } from '~/utils/constants';
+import { SLOT_SIZE } from "../../features/synthesizers/core/shared/Constants"
 
 export default {
   computed: {

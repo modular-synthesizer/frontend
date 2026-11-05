@@ -6,12 +6,11 @@ import InnerLinksFactory from '~~/lib/factories/InnerLinks';
 import type { Generator } from '~~/types/Generator';
 import { initParameters } from "../functions/parameters";
 import type { ToolPort } from "~/types/blueprints/Port";
-import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
 import type { Blueprint } from "~/types/blueprints/Blueprint";
 import type { Port } from "~/types/modules/Port";
 import type { Parameter } from "~/types/modules/Parameter";
 import type { ToolParameter } from "~/types/blueprints/Parameter";
-import { RACK_HEIGHT, SLOT_SIZE } from "~/utils/constants";
+import { RACK_HEIGHT, SLOT_SIZE } from "../../features/synthesizers/core/shared/Constants"
 import type { Control, ModControl } from "~/types/blueprints/Control";
 
 export async function createModule(details: ModulePayload, generators: Promise<Ref<Generator[]>>,): Promise<AudioModule> {

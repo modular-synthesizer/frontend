@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import { RACK_HEIGHT, SLOT_SIZE } from '~/utils/constants';
+import { RACK_HEIGHT, SLOT_SIZE } from "../../../features/synthesizers/core/shared/Constants"
 import type { Coordinates, ScaledCoordinates } from '~/types/utils/Coordinates';
 import { subtract } from '~/utils/functions/geometry';
 

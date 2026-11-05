@@ -23,7 +23,7 @@ import { findIndex } from 'lodash';
 import type { Blueprint } from '~~/types/blueprints/Blueprint';
 import type { Control } from '~~/types/blueprints/Control';
 import { repositories } from '~~/lib/repositories';
-import { RACK_HEIGHT, SLOT_SIZE } from '~/utils/constants';
+import { RACK_HEIGHT, SLOT_SIZE } from "../../features/synthesizers/core/shared/Constants"
 import type { AudioModule } from '~/types/modules/AudioModule';
 import { createEmptyModule } from '~/utils/factories/modules';
 import type { ScaledCoordinates } from '~/types/utils/Coordinates';

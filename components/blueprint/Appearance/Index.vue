@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { RACK_HEIGHT, SLOT_SIZE } from '~/utils/constants';
+import { RACK_HEIGHT, SLOT_SIZE } from "../../../features/synthesizers/core/shared/Constants"
 import type { Control, ModControl } from '~/types/blueprints/Control';
 import type { ScaledCoordinates } from '~/types/utils/Coordinates';
 import type { PlacedBox } from '~/types/utils/PlacedBox';

@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import { repositories } from '~/lib/repositories';
-import { RACK_HEIGHT, SLOT_SIZE } from '~/utils/constants';
+import { RACK_HEIGHT, SLOT_SIZE } from "../../features/synthesizers/core/shared/Constants"
 import { createCable, disconnectCable } from '~/utils/factories/cables';
 import type { AudioModule, Cable, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
 import { appendModule, disconnectModule } from '~/utils/functions/modules';
