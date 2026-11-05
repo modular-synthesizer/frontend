@@ -1,10 +1,10 @@
 import { ok, type Result } from "../../../shared/results/result";
 import type { ObjectId } from "../../../shared/data/ObjectId.type";
-import type { HttpError, HttpPut } from "../../../shared/http/http";
+import type { HttpError, HttpRequest } from "../../../shared/http/http";
 
 type SaveParameterClosure = (id: ObjectId, moduleId: ObjectId, value: number, t: number) => Promise<Result<void, HttpError>>
 
-type SaveParameterFct = (put: HttpPut) => SaveParameterClosure
+type SaveParameterFct = (put: HttpRequest) => SaveParameterClosure
 
 export const saveParameter: SaveParameterFct = client => async (id, moduleId, value, t) => 
   client(`/proxy/parameters/${id}`, { value, t, module_id: moduleId })

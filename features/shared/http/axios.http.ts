@@ -1,5 +1,5 @@
 import axios from "axios"
-import type { HttpError, HttpPut } from "./http"
+import type { HttpError, HttpMethod, HttpRequest } from "./http"
 import { ko, ok } from "../results/result"
 
 export type Tokens = { auth_token: string, tab_id: string }
@@ -14,8 +14,12 @@ export const toHttpError: ToHttpErrorFct = e => {
   return { status: e.response.status, key, message }
 }
 
-export const createPut = (tokens: () => Tokens): HttpPut => (url, body) =>
-  axios.request({ method: "put", url, data: { ...body, ...tokens() } })
+export const createPut = (tokens: () => Tokens): HttpRequest => createRequester(tokens, "put")
+
+export const createPost = (tokens: () => Tokens): HttpRequest => createRequester(tokens, "post")
+
+const createRequester = (tokens: () => Tokens, method: HttpMethod): HttpRequest => (url, body) =>
+  axios.request({ method, url, data: { ...body, ...tokens() } })
     .then(
       r => ok<unknown, HttpError>(r.data),
       e => ko<unknown, HttpError>(toHttpError(e))

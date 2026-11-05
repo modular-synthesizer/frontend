@@ -1,6 +1,6 @@
 import { put } from "../../shared/http/nuxt.http";
 import { assertNever, type RunEffectFct } from "../../shared/facts";
-import type { HttpPut } from "../../shared/http/http";
+import type { HttpRequest } from "../../shared/http/http";
 import type { SynthesizersEffect } from "../core/data/Effect.type";
 import { saveViewport } from "./api/saveViewport.http";
 import { saveScale } from "./api/saveScale.http";
@@ -8,7 +8,7 @@ import { saveModule } from "./api/saveModule.http";
 import { saveParameter } from "./api/saveParameter.http";
 import { debounceById } from "../../shared/effects/debounce";
 
-export type RunEffectFactory = (put: HttpPut) => RunEffectFct<SynthesizersEffect>
+export type RunEffectFactory = (put: HttpRequest) => RunEffectFct<SynthesizersEffect>
 
 export const makeRunEffect: RunEffectFactory = put => async effect => {
   switch(effect.type) {
