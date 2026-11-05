@@ -6,3 +6,9 @@ export const recorder = (response: Result<unknown, HttpError>) => {
   const put: HttpRequest = async (url, body) => { calls.push({ url, body }); return response }
   return { put, calls }
 }
+
+export const httpRecorder = (response: Result<unknown, HttpError>) => {
+  const calls: { url: string, body: unknown }[] = []
+  const requester: HttpRequest = async (url, body) => { calls.push({ url, body }); return response }
+  return { requester, calls }
+}
