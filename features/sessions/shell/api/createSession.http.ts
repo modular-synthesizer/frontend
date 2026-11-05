@@ -38,11 +38,13 @@ const parseSession: SessionParserFct = payload => {
   })
 }
 
-type CreateSessionFactory = (post: HttpRequest) => (credentials: Credentials) => Promise<Result<Session, HttpError>>
+export type CreateSessionFct = (credentials: Credentials) => Promise<Result<Session, HttpError>>
+
+type CreateSessionFactory = (post: HttpRequest) => CreateSessionFct
 
 export const makeCreateSession: CreateSessionFactory = post => async credentials => {
   return (await post("/proxy/sessions", credentials))
     .flatMap(parseSession)
 }
 
-export const createSession = makeCreateSession(post)
+export const createSession: CreateSessionFct = makeCreateSession(post)
