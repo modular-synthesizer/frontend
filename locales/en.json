@@ -78,6 +78,9 @@
       "required": "You must give a valid email address",
       "uniq": "This email address is already used"
     },
+    "form": {
+      "unknown": "Unknown error, please contact the site's administrator."
+    },
     "password": {
       "required": "The password is mandatory"
     },

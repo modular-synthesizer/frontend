@@ -6,7 +6,6 @@ import LinksRepository from "./LinksRepository"
 import { Repository } from "./utils/Repository"
 import type { Application } from "../../types/Application"
 import AccountsRepository from "./AccountsRepository"
-import SessionsRepository from "./SessionsRepository"
 import ToolsRepository from "./toolsRepository"
 import { ToolElementsRepository } from "./utils/ToolElementsRepository"
 import type { Category } from "~/types/blueprints/Category";
@@ -16,6 +15,7 @@ import type { Right } from "~/types/permissions/Right";
 import type { Group } from "~/types/permissions/Group";
 import type { Generator, ModulePayload, Synthesizer } from '~/types/Index';
 import type { Parameter } from '~/types/modules/Parameter';
+import type { Session } from '~/types/authentication/Session';
 
 export type Repositories = Record<string, Repository<{ id: string }>>;
 
@@ -37,7 +37,7 @@ export const repositories = {
     ports: new ToolElementsRepository<ToolPort>('ports'),
   },
   rights: new Repository<Right>('rights'),
-  sessions: new SessionsRepository('sessions'),
+  sessions: new Repository<Session>('sessions'),
   synthesizers: new Repository<Synthesizer>('synthesizers'),
   blueprints: new ToolsRepository('blueprints'),
 }

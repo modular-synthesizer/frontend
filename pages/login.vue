@@ -5,7 +5,10 @@
         <div class="text-h2 mb-5">{{ $t('login.title') }}</div>
         <v-form @submit.prevent="submitLogin">
           <div class="mb-5">
-            <vuelidate-errors v-if="v$.$error" :errors="v$.$errors" />
+            <v-alert type="error" variant="outlined" v-if="errors.length">
+              <v-alert-title>Erreurs dans le formulaire</v-alert-title>
+              <div v-for="error in errors">{{ $t(`errors.${error.field}.${error.reason}`) }}</div>
+            </v-alert>
           </div>
           <v-text-field
             :label="$t('register.labels.username')"
@@ -37,34 +40,22 @@
 </template>
 
 <script lang="ts" setup>
-import useVuelidate from '@vuelidate/core';
-import { minLength, required } from '@vuelidate/validators';
-import type { LoginAttempt } from '~/types/authentication/Account';
+import type { Credentials } from '~/features/sessions/core/data/Credentials.type';
+import type { LoginError } from '~/features/sessions/core/data/LoginError.type';
+import { login } from '~/features/sessions/shell/legacy/login.adapter';
 
 definePageMeta({ middleware: ['already-logged'] });
 
-const account: Ref<LoginAttempt> = ref({ username: '', password: '' });
-
-const $externalResults: Ref<Record<string, string>> = ref({})
-
-const rules = computed(() => ({
-  username: { required, minsize: minLength(6) },
-  password: { required }
-}));
-
-const v$ = useVuelidate(rules, account, { $externalResults });
+const account: Ref<Credentials> = ref({ username: '', password: '' });
 
 const loading: Ref<boolean> = ref(false);
 
+const errors: Ref<LoginError[]> = ref([])
+
 async function submitLogin() {
-  await v$.value.$validate();
-  if (v$.value.$error) return;
-  loading.value = true;
-  useSession().authenticate(account.value.username, account.value.password)
-    .catch((error: any) => {
-        const [ key, message ]: [ string, string ] = error.statusMessage.split('.');
-        $externalResults.value = { [key]: message };
-        loading.value = false;
-    });
+  loading.value = true
+  login(account.value)
+    .then(err => errors.value = err)
+    .finally(() => loading.value = false)
 }
 </script>

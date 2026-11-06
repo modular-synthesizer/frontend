@@ -1,11 +1,11 @@
 import { put } from "../../shared/http/nuxt.http";
 import { assertNever, type RunEffectFct } from "../../shared/facts";
-import type { HttpPut } from "../../shared/http/http";
+import type { HttpRequest } from "../../shared/http/http";
 import type { BlueprintsEffect } from "../core/data/Effect.type";
 import { saveViewport } from "./api/saveViewport.http";
 import { saveNode } from "./api/saveNode.http";
 
-export type RunEffectFactory = (put: HttpPut) => RunEffectFct<BlueprintsEffect>
+export type RunEffectFactory = (put: HttpRequest) => RunEffectFct<BlueprintsEffect>
 
 export const makeRunEffect: RunEffectFactory = put => async effect => {
   switch(effect.type) {

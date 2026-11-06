@@ -38,13 +38,8 @@ export function useSession() {
     can(right: string): boolean {
       return !!find(storage.value.rights, (r: Right) => r.label === right)
     },
-    async authenticate(username: string, password: string): Promise<void> {
-      repositories.sessions.auth(username, password)
-        .then((session: Session) => {
-          storage.value = session
-          // initializeSSE();
-          navigateTo("/")
-        });
+    store(session: Session) {
+      storage.value = session
     },
     async logout() {
       await repositories.sessions.delete(storage.value.token);

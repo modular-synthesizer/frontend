@@ -78,6 +78,9 @@
       "required": "Vous devez indiquer une adresse email valide",
       "uniq": "Cette adresse email est déjà utilisée"
     },
+    "form": {
+      "unknown": "Erreur inconnue, veuillez contacter l'administrateur du site."
+    },
     "password": {
       "required": "Le mot de passe est obligatoire"
     },
