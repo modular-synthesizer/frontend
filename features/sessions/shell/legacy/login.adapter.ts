@@ -1,13 +1,14 @@
 import type { RunEffectFct } from "../../../shared/facts";
 import type { Credentials } from "../../core/data/Credentials.type";
 import type { LoginError } from "../../core/data/LoginError.type";
-import type { CreateSessionFct } from "../api/createSession.http";
+import { createSession, type CreateSessionFct } from "../api/createSession.http";
 import type { SessionsEffect } from "../../core/data/Effect.type";
 import { validateCredentials } from "../../core/processes/validateCredentials.process";
 import { receiveLogin } from "../../core/processes/receiveLogin.process";
 import type { Session as LegacySession } from "~/types/authentication/Session";
 import type { Session } from "../../core/data/Session.type";
 import type { Mapper } from "../../../shared/types/mapper.type";
+import { runEffect } from "../effect";
 
 export type LoginAdapterFct = (attempt: Credentials) => Promise<LoginError[]>
 
@@ -33,3 +34,5 @@ export const toLegacySession: Mapper<Session, LegacySession> = session => ({
     email: session.account.email
   }
 })
+
+export const login = makeLogin(createSession, runEffect)
