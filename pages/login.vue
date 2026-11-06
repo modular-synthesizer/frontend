@@ -5,7 +5,7 @@
         <div class="text-h2 mb-5">{{ $t('login.title') }}</div>
         <v-form @submit.prevent="submitLogin">
           <div class="mb-5">
-            <v-alert type="error" variant="outlined">
+            <v-alert type="error" variant="outlined" v-if="errors.length">
               <v-alert-title>Erreurs dans le formulaire</v-alert-title>
               <div v-for="error in errors">{{ $t(`errors.${error.field}.${error.reason}`) }}</div>
             </v-alert>
