@@ -42,7 +42,7 @@ export default {
       if (c === undefined) return;
       const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode
       gate.offset.setValueAtTime(1, this.ctx.currentTime);
-      this.noteChange({ note, voice })
+      this.noteChange({ note, channel: voice })
     },
     noteChange({ note, channel }: any) {
       const voice = channel > this.voices ? this.voices : channel
