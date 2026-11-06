@@ -14,13 +14,30 @@ export const toHttpError: ToHttpErrorFct = e => {
   return { status: e.response.status, key, message }
 }
 
-export const createPut = (tokens: () => Tokens): HttpRequest => createRequester(tokens, "put")
+export type RequesterFactory = (tokens: () => Tokens) => HttpRequest
 
-export const createPost = (tokens: () => Tokens): HttpRequest => createRequester(tokens, "post")
+const parseBody = (method: HttpMethod, body: Record<string, any>, tokens: () => Tokens): Record<string, any> => {
+  return (["get", "delete"].includes(method)) ? {} : { ...body, ...tokens() }
+}
+const parseParams = (method: HttpMethod, body: Record<string, any>, tokens: () => Tokens): Record<string, any> => {
+  return (["get", "delete"].includes(method)) ? { ...body, ...tokens() } : {}
+}
 
-const createRequester = (tokens: () => Tokens, method: HttpMethod): HttpRequest => (url, body) =>
-  axios.request({ method, url, data: { ...body, ...tokens() } })
-    .then(
-      r => ok<unknown, HttpError>(r.data),
-      e => ko<unknown, HttpError>(toHttpError(e))
-    )
+export const createRequester = (method: HttpMethod, request: typeof axios.request): RequesterFactory => tokens => (url, body) =>
+  request({
+    method,
+    url,
+    data: parseBody(method, body, tokens),
+    params: parseParams(method, body, tokens)
+  }).then(
+    r => ok<unknown, HttpError>(r.data),
+    e => ko<unknown, HttpError>(toHttpError(e))
+  )
+
+export const createPut: RequesterFactory = createRequester("put", axios.request)
+
+export const createPost: RequesterFactory = createRequester("post", axios.request)
+
+export const createGet: RequesterFactory = createRequester("get", axios.request)
+
+export const createDelete: RequesterFactory = createRequester("delete", axios.request)

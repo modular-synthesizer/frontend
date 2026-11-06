@@ -1,7 +1,7 @@
 import { assertNever, type RunEffectFct } from "../../shared/facts"
 import type { SessionsEffect } from "../core/data/Effect.type"
 import type { Session } from "../core/data/Session.type"
-import { toLegacySession } from "./legacy/login.adapter"
+import { toLegacySession } from "./legacy/mappers/session.mapper"
 
 type StoragePort = (session: Session) => void
 
