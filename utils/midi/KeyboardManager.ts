@@ -1,5 +1,5 @@
 import { find } from "lodash";
-import keyboard from './keyboard.json'
+import keyboard from "../../features/midi/core/shared/keyboard.json"
 import MidiDevice from "~/utils/midi/MidiDevice";
 import type { IManageable } from "~/utils/interfaces/IManageable";
 
