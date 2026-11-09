@@ -2,105 +2,48 @@
   <g></g>
 </template>
 
-<script lang="ts">
-import { eventbus } from '~/utils/eventbus/EventBus';
-import { POLYPHONY_CHANNELS } from '~/utils/constants';
-import type { Channel } from '~/types/modules/Channel';
-import type { AudioModule } from '~/types/modules/AudioModule';
-import type { Control } from '~/types/Index';
+<script lang="ts" setup>
 
-export default {
-  props: {
-    control: { type: Object as PropType<Control>, required: true },
-    modwheel: { type: String, required: true },
-    module: { type: Object as PropType<AudioModule>, required: true }
-  },
-  data: function() {
-    return {
-      inputs: [] as MIDIInput[],
-      keysCount: 0,
-      midichannel: -1,
-    }
-  },
-  created() {
-    console.log("midi controller created")
-    const midichannel: number = this.module.parameters.channel.value ?? -1;
-    this.declareKeyEvents(midichannel);
-    eventbus.subscribe(`parameters/update/${this.module.id}/channel`, ({ value }: any) => {
-      console.log("parameter changed")
-      this.removeKeyEvents();
-      this.declareKeyEvents(value);
-    });
-    eventbus.subscribe('synthesizers/quit', () => {
-      this.removeKeyEvents();
-    })
-  },
-  methods: {
-    noteTrigger({ note, channel }: any) {
-      const voice = channel > this.voices ? this.voices : channel
-      const c = this.module.channels[voice]
-      if (c === undefined) return;
-      const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode
-      gate.offset.setValueAtTime(1, this.ctx.currentTime);
-      this.noteChange({ note, channel: voice })
-    },
-    noteChange({ note, channel }: any) {
-      const voice = channel > this.voices ? this.voices : channel
-      const voltage: number = (note - 69) / 12;
-      const c = this.module.channels[voice]
-      if (!c) return;
-      const pitch: ConstantSourceNode = c.nodes[this.pitch] as ConstantSourceNode
-      pitch.offset.cancelScheduledValues(this.ctx.currentTime);
-      pitch.offset.setValueAtTime(voltage, this.ctx.currentTime);
-    },
-    noteRelease({ channel }: any) {
-      const voice = channel > this.voices ? this.voices : channel
-      const c = this.module.channels[voice]
-      if (c === undefined) return;
-      const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode
-      gate.offset.cancelScheduledValues(this.ctx.currentTime);
-      gate.offset.setValueAtTime(0, this.ctx.currentTime);
-    },
-    modWheel({ amount }: any) {
-      this.module.channels.forEach((channel: Channel) => {
-        const modnode: ConstantSourceNode = channel.nodes[this.modwheel] as ConstantSourceNode;
-        modnode.offset.setValueAtTime(amount, this.ctx.currentTime);
-      });
-    },
-    removeKeyEvents() {
-      eventbus.unsubscribe(`midi/trigger/${this.midichannel}`, this.noteTrigger);
-      eventbus.unsubscribe(`midi/note-change/${this.midichannel}`, this.noteChange);
-      eventbus.unsubscribe(`midi/release/${this.midichannel}`, this.noteRelease);
-      eventbus.unsubscribe(`midi/modwheel/${this.midichannel}`, this.modWheel);
-      for (let i = 0; i < POLYPHONY_CHANNELS; ++i) {
-        const c = this.module.channels[i]
-        if (c === undefined) continue;
-        const gate: ConstantSourceNode = c.nodes[this.envelope] as ConstantSourceNode;
-        if (gate === undefined) continue;
-        gate.offset.setValueAtTime(0, this.ctx.currentTime);
-      }
-    },
-    declareKeyEvents(midichannel: number) {
-      eventbus.subscribe(`midi/trigger/${midichannel}`, this.noteTrigger);
-      eventbus.subscribe(`midi/note-change/${midichannel}`, this.noteChange);
-      eventbus.subscribe(`midi/release/${midichannel}`, this.noteRelease);
-      eventbus.subscribe(`midi/modwheel/${midichannel}`, this.modWheel);
-      this.midichannel = midichannel;
-    }
-  },
-  computed: {
-    voices(): number {
-      return this.module?.parameters[this.control.payload.voices]?.value || 1
-    },
-    ctx(): AudioContext {
-      return useAudio().context;
-    },
-    envelope(): string {
-      return `${this.control.payload.envelope}`;
-    },
-    pitch(): string {
-      return `${this.control.payload.pitch}`;
-    }
-  }
+import type { AudioModule } from "~/types/modules/AudioModule"
+import type { Control } from "~/types/Index"
+import type { MidiMessage } from "~/features/midi/core/data/MidiMessage.type"
+import { makeMidiController, toVoicePorts, type MidiControl } from "~/features/synthesizers/shell/legacy/midiController.adapter"
+import { MIDI_HUB } from "~/features/synthesizers/shared/Constants";
+
+const props = defineProps({
+  control: { type: Object as PropType<Control>, required: true },
+  module: { type: Object as PropType<AudioModule>, required: true },
+})
+
+const hub = inject(MIDI_HUB)
+const ports = toVoicePorts(props.module, props.control.payload, useAudio().context)
+
+let control: MidiControl | null = null
+
+const build = (): void => {
+  const result = makeMidiController(ports, props.module, props.control.payload)
+  if (!result.ok) console.warn(`MIDI control of module ${props.module.id} disabled: ${result.error()}`)
+  control = result.orNull()
 }
+
+const releaseAll = (): void => { void control?.releaseAll() }
+const receive = (message: MidiMessage): void => { void control?.receive(message) }
+
+build()
+
+let unlisten = (): void => {}
+onMounted(() => {
+  if (hub) unlisten = hub.listen(receive)
+  else console.warn(`MIDI control of module ${props.module.id}: no MIDI hub provided`)
+})
+onBeforeUnmount(() => {
+  unlisten()
+  releaseAll()
+})
+
+watch(() => props.module.parameters.channel?.value, releaseAll)
+watch(() => props.module.parameters[String(props.control.payload.voices)]?.value, () => {
+  releaseAll()
+  build()
+})
 </script>

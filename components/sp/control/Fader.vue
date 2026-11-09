@@ -57,7 +57,6 @@ import type { Parameter } from '~/types/modules/Parameter';
 import type { Control } from '~/types/blueprints/Control';
 import { DEFAULT_FADER_HEIGHT } from '~/utils/constants';
 import { editParameter, previewParameterAdapter } from '~/features/synthesizers/shell/legacy/parameter.adapter';
-import { eventbus } from '~/utils/eventbus/EventBus';
 
 const KNOB_SIZE = 26;
 
@@ -123,7 +122,6 @@ export default {
       });
       this.dropped(async () => {
         await editParameter(this.parameter, { kind: "drag", pixels }, this.original)
-        eventbus.emit(`parameters/update/${this.module.id}/channel`, { value: this.parameter.value })
       });
     },
   }

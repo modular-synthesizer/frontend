@@ -1,0 +1,1 @@
+export type MidiSource = { stop: () => void }

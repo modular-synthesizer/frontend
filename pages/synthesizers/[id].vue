@@ -60,12 +60,37 @@ import { useI18n } from 'vue-i18n';
 import { useCableCreation } from '~/composables/links/useCableCreation.composable';
 import { panSynthesizer, resetSynthesizer, zoomSynthesizer } from '~/features/synthesizers/shell/legacy/viewport.adapter';
 import { acceptsModuleAt, applyPlacement, moveModuleAdapter, syncModule } from '~/features/synthesizers/shell/legacy/module.adapter';
+import { makeHub } from '~/features/midi/shell/hub';
+import { MIDI_HUB } from '~/features/synthesizers/shared/Constants';
+import { startMidi, type MidiSession } from '~/features/midi/shell/session';
+import type { MidiMessage } from '~/features/midi/core/data/MidiMessage.type';
 
 type PromisedRef<T> = Promise<Ref<T>>;
 
 definePageMeta({ layout: false });
 
 await loadProcessors(useAudio().context);
+
+const hub = makeHub()
+
+provide(MIDI_HUB, hub)
+
+const midiLearn = useMidiLearn()
+
+let session: MidiSession | null = null
+let unlistenLearn = (): void => {}
+
+onMounted(() => {
+  session = startMidi({ navigator, window }, hub.emit)
+  unlistenLearn = hub.listen((message: MidiMessage): void => { void midiLearn.receive(message) })
+})
+
+onBeforeUnmount(() => {
+  session?.stop()
+  session = null
+  unlistenLearn()
+  midiLearn.reset()
+})
 
 const id: string = useRoute().params.id as string;
 
@@ -139,8 +164,6 @@ loadAll.then(([ _, synth, mods, links, ps ]) => {
   cables.value = links.value;
   ports.value = ps.value;
 
-  initManagers(synthesizer.value);
-
   useCoordinates().setReference(synthesizer.value);
 
   // This little timeout is just here so that every "loaded OK" has the time to be seen.
@@ -196,9 +219,6 @@ function addCable(cable: Cable) {
   if (cable === undefined) return;
   if (!find(cables.value, { id: cable.id })) cables.value.push(cable);
 }
-
-managers.midi.start();
-managers.keyboard.start();
 
 eventbus.subscribe("remove.membership", () => navigateTo('/synthesizers'));
 </script>

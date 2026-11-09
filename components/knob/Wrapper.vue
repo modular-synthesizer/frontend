@@ -26,9 +26,7 @@ import type { Control } from '~/types/blueprints/Control';
 import type { AudioModule } from '~/types/modules/AudioModule';
 import type { DragCallback } from '~/types/draggables/DragDeclaration';
 import type { Synthesizer } from '~/types/Index';
-import { eventbus } from '~/utils/eventbus/EventBus';
 import { editParameter, editParameterDebounced, previewParameterAdapter } from '~/features/synthesizers/shell/legacy/parameter.adapter';
-import type { ParameterChange } from '~/features/synthesizers/core/data/Parameter.type';
 
 const { dragged, dropped, module, r, control } = defineProps({
   r: { type: Number, default: 20 },
@@ -51,10 +49,6 @@ const original: Ref<number> = ref(0);
 
 const originalY: Ref<number> = ref(0)
 
-function emitValue(p: Parameter, m: AudioModule) {
-  eventbus.emit(`parameters/update/${m.id}/channel`, { value: p.value })
-}
-
 function onmousedown($event: MouseEvent) {
   original.value = parameter.value;
   originalY.value = $event.clientY;
@@ -66,13 +60,11 @@ function onmousedown($event: MouseEvent) {
   });
   dropped(async () => {
     await editParameter(parameter, { kind: "drag", pixels }, original.value)
-    emitValue(parameter, module)
   });
 }
 
 async function onwheel($event: WheelEvent) {
   await editParameterDebounced(parameter, { kind: "wheel", deltaY: $event.deltaY, shift: $event.shiftKey })
-  emitValue(parameter, module)
 }
 
 function onrightclick($event: MouseEvent) {
@@ -83,7 +75,6 @@ function onrightclick($event: MouseEvent) {
       {
         label: 'reset', action: async () => {
           await editParameter(parameter, { kind: "reset" })
-          emitValue(parameter, module)
         }
       },
     ],
