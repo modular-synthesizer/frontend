@@ -60,12 +60,30 @@ import { useI18n } from 'vue-i18n';
 import { useCableCreation } from '~/composables/links/useCableCreation.composable';
 import { panSynthesizer, resetSynthesizer, zoomSynthesizer } from '~/features/synthesizers/shell/legacy/viewport.adapter';
 import { acceptsModuleAt, applyPlacement, moveModuleAdapter, syncModule } from '~/features/synthesizers/shell/legacy/module.adapter';
+import { makeHub } from '~/features/midi/shell/hub';
+import { MIDI_HUB } from '~/features/synthesizers/shared/Constants';
+import { startMidi, type MidiSession } from '~/features/midi/shell/session';
 
 type PromisedRef<T> = Promise<Ref<T>>;
 
 definePageMeta({ layout: false });
 
 await loadProcessors(useAudio().context);
+
+const hub = makeHub()
+
+provide(MIDI_HUB, hub)
+
+let session: MidiSession | null = null
+
+onMounted(() => {
+  session = startMidi({ navigator, window }, hub.emit)
+})
+
+onBeforeUnmount(() => {
+  session?.stop()
+  session = null
+})
 
 const id: string = useRoute().params.id as string;
 
