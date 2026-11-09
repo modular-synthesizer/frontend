@@ -50,7 +50,6 @@ import { createCable, disconnectCable } from '~/utils/factories/cables';
 import type { AudioModule, Cable, Generator, LinkPayload, ModulePayload, Port, Synthesizer } from '~/types/Index';
 import { appendModule, disconnectModule } from '~/utils/functions/modules';
 import { deleteModule } from '~/utils/functions/modules';
-import { initManagers, managers } from '~/utils/midi';
 import { eventbus } from '~/utils/eventbus/EventBus';
 import { find } from 'lodash';
 import { appendCable } from '~/utils/functions/cables';
