@@ -16,6 +16,7 @@ const CONTROL_CHANGE = 0xB0
  * are values with a meaning different given different types.
  * 
  * @param data the raw data of the MIDI messages sent by the browser.
+ * 
  * @returns a business MIDI event usable in our system, indicating what should be done.
  */
 export const parseMessage: ParseMessageFct = data => {

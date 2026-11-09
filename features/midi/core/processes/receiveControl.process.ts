@@ -9,6 +9,19 @@ export type ControlTargets = { learning: Learning, targets: ControlTarget[]}
 
 export type ReceiveControlFct = (learning: Learning, message: MidiMessage) => ControlTargets
 
+/**
+ * Receives a control message used by the MIDI learn module. A midi control message (MIDI CC) is
+ * sent by a standard potentiometer when rotating it. There can be several cases :
+ * - A control is pending is the learning structure, then the CC associated with the message is
+ *   bound to the control.
+ * - there is no pending control in the structure : nothing happens.
+ *
+ * @param learning the learning structure storing what MIDI CC controls which knob
+ * @param message the MIDI CC message sent by the physical real world knob turning.
+ * 
+ * @returns receives both the learning, modified with the new binding if necessary, and the targets
+ * of the parameter modification so that their values can be modified.
+ */
 export const receiveControl: ReceiveControlFct = (learning, message) => {
   if (message.kind !== "control" || message.controller === MODWHEEL_CONTROLLER) {
     return { learning, targets: [] }
