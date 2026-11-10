@@ -1,9 +1,9 @@
 import type { AudioModule } from "./AudioModule.type"
-import type { Cable } from "./Cable.type"
 import type { InnerNode } from "./InnerNode.type"
 import type { Membership } from "./Membership.type"
 import type { ObjectId } from "../../../shared/data/ObjectId.type"
 import type { Viewport } from "../../../viewports/core/data/Viewport.type"
+import type { Cable } from "../../../cables/core/data/Cable.type"
 
 /**
  * A synthesizer holds several displayed audio modules that can be interacted with, and placed by the user,

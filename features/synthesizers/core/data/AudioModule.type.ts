@@ -1,4 +1,3 @@
-import type { Control } from "./Control.type"
 import type { InnerLink } from "./InnerLink.type"
 import type { InnerNodeTemplate } from "./InnerNode.type"
 import type { ObjectId } from "../../../shared/data/ObjectId.type"
@@ -10,7 +9,6 @@ import type { ObjectId } from "../../../shared/data/ObjectId.type"
  */
 export type AudioModule = {
   id: ObjectId
-  controls: InModule<Control>[]
   nodeTemplates: InModule<InnerNodeTemplate>[]
   linkTemplates: InModule<InnerLink>[]
 }
