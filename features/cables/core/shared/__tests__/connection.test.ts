@@ -4,8 +4,8 @@ import { ko, ok } from "../../../../shared/results/result"
 import { toObjectId } from "../../../../shared/data/ObjectId.type"
 import { deepFreeze } from "../../../../shared/__tests__/utils/deepFreeze"
 import type { InputPort, OutputPort } from "../../data/Port.type"
-import type { Connection } from "../../data/Cable.type"
-import { accepts, orient, sameConnection, touches } from "../connection"
+import type { Cable, Connection } from "../../data/Cable.type"
+import { accepts, isPending, orient, sameConnection, touches } from "../connection"
 
 const output = (id: string): OutputPort =>
   deepFreeze({ id: toObjectId(id), moduleId: toObjectId("oscillator"), kind: "output", node: "osc", index: 0 })
@@ -149,5 +149,25 @@ describe("sameConnection", () => {
     it("is false when the ids are crossed", () => {
       expect(sameConnection(connect(output("a"), input("b")), connect(output("b"), input("a")))).toBe(false)
     })
+  })
+})
+
+const pending = (connection: Connection): Cable => deepFreeze({ ...connection, id: null, color: "red" })
+const saved = (connection: Connection): Cable => deepFreeze({ ...connection, id: toObjectId("saved"), color: "red" })
+
+describe("isPending", () => {
+  const connection = connect(output("out"), input("in"))
+
+  it("is true for a cable without id on the same ports", () => {
+    expect(isPending(pending(connection), connection)).toBe(true)
+  })
+  it("is false for a saved cable on the same ports", () => {
+    expect(isPending(saved(connection), connection)).toBe(false)
+  })
+  it("is false for a pending cable sharing only the output", () => {
+    expect(isPending(pending(connect(output("out"), input("other"))), connection)).toBe(false)
+  })
+  it("is false for a pending cable sharing only the input", () => {
+    expect(isPending(pending(connect(output("other"), input("in"))), connection)).toBe(false)
   })
 })
