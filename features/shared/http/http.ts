@@ -2,9 +2,9 @@ import type { Result } from "../results/result"
 
 export type HttpError = { status: number, key?: string, message?: string }
 
-export type HttpRequest = (url: string, body: Record<string, unknown>) => Promise<Result<unknown, HttpError>>
+export type HttpRequest = (url: string, payload: Record<string, unknown>) => Promise<Result<unknown, HttpError>>
 
-export type HttpMethod = "put" | "post"
+export type HttpMethod = "put" | "post" | "delete"
 
 export type AuthenticationGuard = (request: HttpRequest, onSessionUnauthorized: () => void | Promise<void>) => HttpRequest
 

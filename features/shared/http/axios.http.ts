@@ -14,12 +14,23 @@ export const toHttpError: ToHttpErrorFct = e => {
   return { status: e.response.status, key, message }
 }
 
-export const createPut = (tokens: () => Tokens): HttpRequest => createRequester(tokens, "put")
+export const createPut = (tokens: () => Tokens): HttpRequest => createRequesterWithBody(tokens, "put")
 
-export const createPost = (tokens: () => Tokens): HttpRequest => createRequester(tokens, "post")
+export const createPost = (tokens: () => Tokens): HttpRequest => createRequesterWithBody(tokens, "post")
 
-const createRequester = (tokens: () => Tokens, method: HttpMethod): HttpRequest => (url, body) =>
+export const createDelete = (tokens: () => Tokens): HttpRequest => createRequesterWithParams(tokens, "delete")
+
+export type RequesterFactory = (tokens: () => Tokens, method: HttpMethod) => HttpRequest
+
+const createRequesterWithBody: RequesterFactory = (tokens, method) => (url, body) =>
   axios.request({ method, url, data: { ...body, ...tokens() } })
+    .then(
+      r => ok<unknown, HttpError>(r.data),
+      e => ko<unknown, HttpError>(toHttpError(e))
+    )
+
+const createRequesterWithParams: RequesterFactory = (tokens, method) => (url, params) =>
+  axios.request({ method, url, params: { ...params, ...tokens() } })
     .then(
       r => ok<unknown, HttpError>(r.data),
       e => ko<unknown, HttpError>(toHttpError(e))
