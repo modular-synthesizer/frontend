@@ -31,7 +31,8 @@
 import type { Coordinates } from '~/types/utils/Coordinates';
 import { PORT_RADIUS } from '~/utils/constants';
 import { getCatenaryCurve, type CatenaryCurveQuadraticResult as Curve } from "catenary-curve";
-import { useCableCreation } from '~/composables/links/useCableCreation.composable';
+import { CABLES } from '~/features/synthesizers/shared/Constants';
+import type { CablesAdapter } from '~/features/cables/shell/legacy/cables.adapter';
 
 export default {
   emits: ['click'],
@@ -73,9 +74,10 @@ export default {
       return (this.end.y + this.start.y) / 2 + dangle;
     },
   },
+  inject: { cables: { from: CABLES, default: null } },
   methods: {
     validateCreation() {
-      useCableCreation().end()
+      (this.cables as CablesAdapter).cancel()
     },
     onleftmousedown($event: MouseEvent) {
       const port: Element | undefined = document

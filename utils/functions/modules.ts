@@ -1,29 +1,10 @@
-import type { Port } from '~/types/modules/Port';
-import type { Cable } from "~/types/Cable";
 import type { AudioModule, ModulePayload } from "~/types/modules/AudioModule";
-import { deleteCable } from './cables';
 import { repositories } from '~/lib/repositories';
 import type { Generator } from '~/types/Index';
 import { createModule } from '../factories/modules';
 import { find } from 'lodash';
 
-/**
- * Vanity methods used to aggregate all cables from and to a given module.
- * @param module the module having a list of ports that should be check to aggregate cables to/from them. 
- * @returns the complete list of cables linked to the module.
- */
-export function getCables({ ports }: { ports: Array<Port> }): Array<Cable> {
-  return ports.map((p: Port) => p.link).filter((c: Cable|undefined) => !!c);
-}
-
-export function disconnectModule(module: AudioModule, cables: Array<Cable>) {
-  for (const cable of getCables(module)) {
-    deleteCable(cable, cables);
-  }
-}
-
-export function deleteModule(module: AudioModule, cables: Array<Cable>) {
-  disconnectModule(module, cables);
+export function deleteModule(module: AudioModule) {
   module.deleted = true;
   repositories.modules.delete(module.id, useSession().token);
 }

@@ -23,9 +23,9 @@
         :r="r"
         :cx="eventX"
         :cy="eventY"
-        @mouseenter="magnetize"
-        @mouseout="unmagnetize"
-        @mousedown.left.stop="onmousedown"
+        @mouseenter="cablesAdapter.magnetize(port)"
+        @mouseout="cablesAdapter.unmagnetize(port)"
+        @mousedown.left.stop="cablesAdapter.start(port)"
       />
     </Teleport>
   </g>
@@ -37,7 +37,10 @@ import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Port } from '~/types/modules/Port';
 import type { ModControl } from "~/types/blueprints/Control";
 import { isInput } from '~/utils/functions/ports';
-import { useCableCreation } from '~/composables/links/useCableCreation.composable';
+import { CABLES } from '~/features/synthesizers/shared/Constants';
+import { portPosition, type CablesAdapter } from '~/features/cables/shell/legacy/cables.adapter';
+
+const cablesAdapter = inject(CABLES) as CablesAdapter
 
 const { control, module } = defineProps({
   control: { type: Object as PropType<ModControl>, required: true },
@@ -50,19 +53,8 @@ const r: number = PORT_RADIUS * 2;
 const port: Port = module.ports.find((p: Port) => p.name === control.payload.target) as Port;
 const color: string = isInput(port) ? 'grey' : 'indigo';
 
-const eventX: ComputedRef<number> = computed(() => +(control.payload.x || 0) + module.x)
-const eventY: ComputedRef<number> = computed(() => +(control.payload.y || 0) + module.y)
-
-function onmousedown() {
-  useCableCreation().start(port, control);
-}
-
-function magnetize() {
-  useCableCreation().magnetize(port, control)
-}
-function unmagnetize() {
-  useCableCreation().unmagnetize()
-}
+const eventX: ComputedRef<number> = computed(() => portPosition(port).x)
+const eventY: ComputedRef<number> = computed(() => portPosition(port).y)
 </script>
 
 <style scoped>

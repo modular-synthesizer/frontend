@@ -345,7 +345,6 @@
       "cables": "Plugging cables",
       "generators": "Loading sound generators",
       "modules": "Instanciating modules",
-      "ports": "Listing available ports",
       "synthesizer": "Fetching synthesizer informations"
     }
   },

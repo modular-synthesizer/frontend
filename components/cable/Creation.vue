@@ -1,35 +1,37 @@
 <template>
-  <template v-if="start && end"><cable :start="start" :end="end" :no-events="true" color="red" /></template>
+  <template v-if="start && end"><cable-view :start="start" :end="end" :no-events="true" color="red" /></template>
 </template>
 
 <script setup lang="ts">
-import { useCableCreation } from '~/composables/links/useCableCreation.composable';
-import { repositories } from '~/lib/repositories';
-import type { Cable, Synthesizer } from '~/types/Index';
+import type { Port } from '~/features/cables/core/data/Port.type';
+import { portPosition, type CablesAdapter } from '~/features/cables/shell/legacy/cables.adapter';
+import { CABLES } from '~/features/synthesizers/shared/Constants';
+import type { Coordinates } from '~/types/utils/Coordinates';
+
+const cablesAdapter: CablesAdapter = inject(CABLES) as CablesAdapter
 
 type DragCallback = (callback: ($event: MouseEvent) => void) => void
 
-const { synthesizer } = defineProps({
-  synthesizer: { type: Object as PropType<Synthesizer>, required: true },
-});
-
-type Emits = { created: [ Cable ] };
-
-const emit = defineEmits<Emits>();
-
 const dropped: DragCallback = inject('dropped') as DragCallback;
 
-dropped(async () => {
-  const { displayed, magnetized, startPort, endPort, cable  } = useCableCreation();
-  useCableCreation().end();
-  if (displayed && magnetized && startPort && endPort && cable ) {
-    emit('created', cable);
-    repositories.links.create({ from: startPort.id, to: endPort.id, color: 'red', id: '' }, synthesizer).then(res => {
-      cable.id = res.id
-    })
-  }
+dropped(() => cablesAdapter.drop())
+
+const positionOf = (port: Port): Coordinates | undefined => {
+  const legacy = cablesAdapter.portOf(port)
+  return legacy ? portPosition(legacy) : undefined
+}
+
+const start = computed(() => {
+  const drag = cablesAdapter.drag()
+  return drag.step === 'idle' ? undefined : positionOf(drag.origin)
 })
 
-const start = computed(() => useCableCreation().origin)
-const end = computed(() => useCableCreation().destination)
+const end = computed(() => {
+  const drag = cablesAdapter.drag()
+  switch (drag.step) {
+    case 'started': return useCoordinates().absolute()
+    case 'magnetized': return positionOf(drag.target)
+    default: return undefined
+  }
+})
 </script>

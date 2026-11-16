@@ -1,29 +1,24 @@
 <template>
-  <cable :start="origin" :end="destination" :show-cable="useLinksDisplay().displayed" />
+  <cable-view v-if="origin && destination" :color="cable.color" :start="origin" :end="destination" :show-cable="useLinksDisplay().displayed" />
 </template>
 
 <script setup lang="ts">
 import { useLinksDisplay } from '~/composables/links/useLinksDisplay';
-import type { Control } from '~/types/Index';
-import type { Port } from '~/types/modules/Port';
+import type { Cable } from '~/features/cables/core/data/Cable.type';
+import type { Port } from '~/features/cables/core/data/Port.type';
+import { portPosition, type CablesAdapter } from '~/features/cables/shell/legacy/cables.adapter';
+import { CABLES } from '~/features/synthesizers/shared/Constants';
 import type { Coordinates } from '~/types/utils/Coordinates';
 
-const { from, to } = defineProps({
-  from: { type: Object as PropType<Port>, required: true },
-  to: { type: Object as PropType<Port>, required: true },
-});
+const props = defineProps<{ cable: Cable }>();
 
-function getControl({ mod, name }: Port): Control {
-  return mod.controls.find(c => c.payload.target === name && c.component === 'Port') as Control;
+const adapter = inject(CABLES) as CablesAdapter
+
+const positionOf = (port: Port): Coordinates | undefined => {
+  const legacy = adapter.portOf(port)
+  return legacy ? portPosition(legacy) : undefined
 }
 
-function getAbsoluteCoordinates(port: Port): Coordinates {
-  return {
-    x: +(getControl(port).payload.x ?? 0) + port.mod.x,
-    y: +(getControl(port).payload.y ?? 0) + port.mod.y,
-  }
-}
-
-const origin: ComputedRef<Coordinates> = computed(() => getAbsoluteCoordinates(from))
-const destination: ComputedRef<Coordinates> = computed(() => getAbsoluteCoordinates(to))
+const origin = computed(() => positionOf(props.cable.origin))
+const destination = computed(() => positionOf(props.cable.destination))
 </script>
