@@ -81,7 +81,6 @@ describe("toPort", () => {
       target: "target",
       index: 1,
       kind: "output",
-      link: undefined,
       mod: { id: "modId" } as LegacyModule
     }
     expect(toPort(legacy)).toEqual({
@@ -138,7 +137,6 @@ describe("portPosition", () => {
     target: "target",
     index: 0,
     kind: "output",
-    link: undefined,
     mod: { id: "modId", controls: [] as Control[], x: 11, y: 6 } as LegacyModule
   }
   it("returns the sum of the coordinates of the control and the module if a control is found", () => {

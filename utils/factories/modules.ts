@@ -35,7 +35,7 @@ export async function createModule(details: ModulePayload, generators: Promise<R
 }
 
 function instanciatePorts(module: AudioModule, ports: Array<ToolPort>): Array<Port> {
-  return ports.map((tp: ToolPort) => ({ ...tp, link: undefined, mod: module }))
+  return ports.map((tp: ToolPort) => ({ ...tp, mod: module }))
 }
 
 /**

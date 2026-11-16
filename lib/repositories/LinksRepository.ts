@@ -1,15 +1,9 @@
-import type { LinkPayload } from "~/types/Cable";
 import { Repository } from "./utils/Repository";
-import type { Synthesizer } from "~/types/synthesizers/Synthesizer";
+import type { Identified } from "~/types/utils/Identified";
 
-export default class LinksRepository extends Repository<LinkPayload> {
+export default class LinksRepository extends Repository<Identified> {
     
-  public override async list(id: string): Promise<LinkPayload[]> {
+  public override async list(id: string): Promise<Identified[]> {
     return super.list({ synthesizer_id: id});
-  }
-
-  public override async create(payload: LinkPayload, synthesizer: Synthesizer|null = null) {
-    if (synthesizer === null) return;
-    return await api_post(this.uri(), { ...payload, synthesizer_id: synthesizer.id });
   }
 }
