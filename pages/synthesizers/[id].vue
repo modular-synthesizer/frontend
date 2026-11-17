@@ -35,7 +35,7 @@
       </sp-stage-svg-layer>
       <sp-stage-svg-layer name="forefront" />
       <sp-stage-svg-layer name="cables">
-        <cable-list :cables="cables" :synthesizer="synthesizer" />
+        <cable-list :cables="cables" />
         <cable-creation v-if="cableDrag.step !== 'idle'" />
       </sp-stage-svg-layer>
     </sp-stage>
