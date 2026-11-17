@@ -46,7 +46,7 @@ const props = defineProps({
 const emit = defineEmits<{ cancelled: [], validated: [ToolPort] }>();
 
 function getItems() {
-  if (props.port.target === '') props.port.target = props.blueprint.nodes[0].name
+  if (props.port.target === '') props.port.target = props.blueprint.nodes[0]?.name ?? ""
   return props.blueprint.nodes.map((n: InnerNode) => n.name)
 }
 

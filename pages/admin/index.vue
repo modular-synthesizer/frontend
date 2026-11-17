@@ -17,9 +17,6 @@
             <v-window-item value="categories">
               <Categories />
             </v-window-item>
-            <v-window-item value="applications">
-              <Applications />
-            </v-window-item>
             <v-window-item value="generators">
               <Generators />
             </v-window-item>
@@ -32,18 +29,16 @@
 
 <script lang="ts">
 import Categories from '~~/components/admin/categories.vue';
-import Applications from '~~/components/admin/applications.vue';
 import AdminRights from '~~/components/admin/rights.vue';
 import Generators from "~~/components/admin/generators.vue"
 
 export default {
-  components: { Applications, Categories, Generators, AdminRights },
+  components: { Categories, Generators, AdminRights },
   data: () => ({
     tab: 'groups',
     items: [
       {name: 'rights', icon: 'mdi-account-group'},
       {name: 'categories', icon: 'mdi-folder-outline'},
-      {name: 'applications', icon: 'mdi-lock-outline'},
       {name: "generators", icon: "mdi-factory"},
     ]
   }),

@@ -14,9 +14,12 @@ export function setValue(param: Parameter, value: number): void {
   param.value = clamp(value, param.minimum, param.maximum);
   param.targets.forEach((target: string) => {
     param.mod.channels.forEach((channel: Channel) => {
-      const audioParam: AudioParam|undefined = extractAudioParam(channel.nodes[target], param.field);
-      if (audioParam === undefined) return;
-      audioParam.setValueAtTime(param.value, useAudio().context.currentTime);
+      const node = channel.nodes[target]
+      if (node) {
+        const audioParam: AudioParam|undefined = extractAudioParam(node, param.field);
+        if (audioParam === undefined) return;
+        audioParam.setValueAtTime(param.value, useAudio().context.currentTime);
+      }
     })
   })
 }

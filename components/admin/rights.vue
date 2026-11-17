@@ -8,7 +8,7 @@
       </v-row>
       <v-row>
         <v-col xs="12">
-          <rights-table v-slot="{ right }" :rights="rights">
+          <rights-table :rights="rights">
             <v-btn icon small variant="plain" @click="remove()">
               <v-icon>mdi-delete</v-icon>
             </v-btn>

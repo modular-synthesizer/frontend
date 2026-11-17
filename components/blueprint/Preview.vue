@@ -55,7 +55,7 @@ async function editControl(control: Control) {
   const index: number = findIndex(props.modelValue.controls, { id: control.id });
   if (index <= -1 ) return;
   props.modelValue.controls[index] = control;
-  await repositories.blueprint.controls.update(blueprint.value, blueprint.value.controls, control);
+  await repositories.blueprint.controls.update(blueprint.value, control);
 }
 
 function updateInList(control: Control) {

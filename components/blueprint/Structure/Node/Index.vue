@@ -42,7 +42,7 @@ function openMenu($event: MouseEvent) {
     items: [
       {
         label: 'Supprimer', action() {
-          useSelectables().state.value.nodes.delete(props.blueprint);
+          useSelectables().state.value.nodes?.delete(props.blueprint);
         }
       }
     ]

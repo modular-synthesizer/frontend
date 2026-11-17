@@ -2,8 +2,8 @@
   <template v-for="port in ports">
     <blueprint-structure-port
       :port="port"
-      :selected="port.id === selection.item?.id"
-      @select="selection.select(port)"
+      :selected="port.id === selection?.item?.id"
+      @select="selection?.select(port)"
       @edit="editPort"
       :blueprint="blueprint"
     />

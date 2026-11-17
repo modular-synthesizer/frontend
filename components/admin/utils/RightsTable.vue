@@ -1,11 +1,11 @@
 <template>
-  <v-data-table v-if="rights" :headers="headers" :items="rights" :density="density">
+  <v-data-table v-if="rights" :headers="headers" :items="rights" density="comfortable">
     <template v-slot:item="{ item }">
       <tr>
         <td>{{ item.id }}</td>
         <td>{{ item.label }}</td>
         <td>
-          <slot :right="item.raw"></slot>
+          <slot :right="item.label"></slot>
         </td>
       </tr>
     </template>
@@ -16,10 +16,7 @@
 import { useI18n } from 'vue-i18n';
 import type { Right } from '~/types/permissions/Right';
 
-defineProps({
-  density: { type: String, default: 'comfortable' },
-  rights: { type: Array<Right>, default: () => [] },
-});
+const { rights = [] } = defineProps<{ rights: Right[] }>();
 
 const headers = useHeaders(useI18n, [
   { 'title': 'common.uuid', key: 'id' },

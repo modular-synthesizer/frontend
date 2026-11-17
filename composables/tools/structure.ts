@@ -10,7 +10,7 @@ export function parametersFor(node: InnerNode, blueprint: Blueprint): string[] {
   return uniq([
     ...parametersFromLinks(node, blueprint),
     ...parametersFromParams(node, blueprint)
-  ]);
+  ]).filter(v => v !== undefined)
 }
 
 export function parametersFromLinks(node: InnerNode, blueprint: Blueprint) {
@@ -66,17 +66,17 @@ export function getEndCoords(link: InnerLink, blueprint: Blueprint): Coordinates
 }
 
 export function getStartNode(link: InnerLink, blueprint: Blueprint): InnerNode {
-  return blueprint.nodes.find((n: InnerNode) => n.name === link.from.node);
+  return blueprint.nodes.find((n: InnerNode) => n.name === link.from.node) as InnerNode;
 }
 
 export function getEndNode(link: InnerLink, blueprint: Blueprint): InnerNode {
-  return blueprint.nodes.find((n: InnerNode) => n.name === link.to.node);
+  return blueprint.nodes.find((n: InnerNode) => n.name === link.to.node) as InnerNode;
 }
 
 export function getParamCoords(link: InnerLink, blueprint: Blueprint) {
   const [ nodeName, paramName ]: string[] = link.to.node.split('.');
-  const node: InnerNode = blueprint.nodes.find((n: InnerNode) => n.name === nodeName);
-  const idx: number = parametersFor(node, blueprint).indexOf(paramName);
+  const node: InnerNode = blueprint.nodes.find((n: InnerNode) => n.name === nodeName) as InnerNode;
+  const idx: number = paramName ? parametersFor(node, blueprint).indexOf(paramName) : 0;
   return {
     x: node.x + 20,
     y: node.y + TITLE_HEIGHT + PARAM_HEIGHT * idx + 10,

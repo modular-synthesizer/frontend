@@ -33,10 +33,10 @@ class InnerLinksFactory {
     public linkToParameter(nodes: ChannelNodes, link: InnerLink) {
         const [nodeName, paramName] = link.to.node.split(".")
         const from = nodes[link.from.node];
-        const to = nodes[nodeName];
+        const to = nodes[`${nodeName}`];
     
         if (from !== undefined && to !== undefined) {
-            const param: AudioParam | undefined = extractAudioParam(to, paramName);
+            const param: AudioParam | undefined = extractAudioParam(to, `${paramName}`);
             if (param !== undefined) from.connect(param);
         }
         return link;
