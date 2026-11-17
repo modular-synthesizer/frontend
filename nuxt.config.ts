@@ -1,29 +1,29 @@
-import fs from 'fs'
-import { startsWith } from 'lodash'
+import fs from "fs"
+import { startsWith } from "lodash"
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   modules: [ ],
   imports: {
-    dirs: ['composables/**'],
+    dirs: ["composables/**"],
   },
   ssr: false,
   css: [
-    'vuetify/lib/styles/main.sass',
-    '@mdi/font/css/materialdesignicons.min.css',
+    "vuetify/lib/styles/main.sass",
+    "@mdi/font/css/materialdesignicons.min.css",
   ],
   build: {
-    transpile: ['vuetify'],
+    transpile: ["vuetify"],
   },
   vite: {
     define: {
-      'process.env.DEBUG': false,
+      "process.env.DEBUG": false,
     },
   },
   runtimeConfig: {
     public: {
-      api_uri: process.env.API_URL || 'https://synple.app/api',
-      processors_url: process.env.PROCESSORS_URL || 'https://localhost:9080',
+      api_uri: process.env.API_URL || "https://synple.app/api",
+      processors_url: process.env.PROCESSORS_URL || "https://localhost:9080",
     }
   },
   nitro: {
@@ -33,12 +33,12 @@ export default defineNuxtConfig({
     },
   },
   hooks: {
-    'components:extend': (components: Component[]) => {
+    "components:extend": (components: Component[]) => {
       const filtered: Component[] = components.filter((c: any) => {
-        return startsWith(c.kebabName, 'controls-');
+        return startsWith(c.kebabName, "controls-");
       });
       const mapped: string[] = filtered.map((c: any) => c.pascalName);
-      fs.writeFileSync ('public/json/controls.json', JSON.stringify(mapped));
+      fs.writeFileSync ("public/json/controls.json", JSON.stringify(mapped));
     }
   }
 })

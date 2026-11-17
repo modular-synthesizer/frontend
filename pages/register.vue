@@ -111,7 +111,7 @@ async function register(_$event: Event) {
   }
   catch (error: any) {
     const [ key, message ] = split(error.statusMessage, '.');
-    $externalResults.value = {[key]: message};
+    $externalResults.value = {[`${key}`]: message};
   }
 }
 </script>

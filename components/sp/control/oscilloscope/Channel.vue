@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import { clamp } from 'lodash';
+// import { clamp } from 'lodash';
 import type { Channel } from '~/types/modules/Channel';
 import { nextPowerOfTwo } from '~/utils/functions/maths';
 
@@ -34,12 +34,12 @@ function callback() {
   
   node.value.fftSize = nextPowerOfTwo(fftsize)
   
-  node.value.getFloatTimeDomainData(samples.value);
-  line.value = 'M0 ' + samples.value[0] * 100 + ' ';
-  for (let i = 1; i <= fftsize; ++i) {
-    const v: number = clamp(100 * samples.value[i], -100, 100)
-    line.value += 'L' + (i * (width / samples.value.length)) + ' ' + v + ' ';
-  }
+  // node.value.getFloatTimeDomainData(samples.value);
+  // line.value = 'M0 ' + samples.value[0] * 100 + ' ';
+  // for (let i = 1; i <= fftsize; ++i) {
+  //   const v: number = clamp(100 * samples.value[i], -100, 100)
+  //   line.value += 'L' + (i * (width / samples.value.length)) + ' ' + v + ' ';
+  // }
 }
 
 addFetcher(callback);

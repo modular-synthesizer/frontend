@@ -1,7 +1,7 @@
 <template>
   <v-row class="mt-5" v-if=blueprint>
     <v-col cols="4">
-      <v-text-field v-model="blueprint.name" variant="outlined" label="Name" density="comfortable" :rules="rules.name" />
+      <v-text-field v-model="blueprint.name" variant="outlined" label="Name" density="comfortable" />
     </v-col>
   </v-row>
   <v-row>
@@ -37,12 +37,8 @@ import type { Blueprint } from '~~/types/blueprints/Blueprint';
 import { repositories } from '~~/lib/repositories';
 import type { Category } from '~/types/blueprints/Category';
 
-
-type Rules = {[key: string]: Function[]}
-
 const props = defineProps({
-  modelValue: { type: Object as PropType<Blueprint>, required: true },
-    rules: { type: Object as PropType<Rules>, default: () =>({})}
+  modelValue: { type: Object as PropType<Blueprint>, required: true }
 });
 
 const blueprint = computed(() => props.modelValue);

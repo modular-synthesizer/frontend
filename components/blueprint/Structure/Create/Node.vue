@@ -40,7 +40,7 @@ const node: Ref<InnerNode> = ref(createEmptyNode());
 function createEmptyNode(): InnerNode {
   return {
     name: '',
-    generator: generators[0].name,
+    generator: generators[0]?.name ?? "",
     x: 0,
     y: 0,
     id: '',

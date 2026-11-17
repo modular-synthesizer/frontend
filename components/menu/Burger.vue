@@ -16,7 +16,7 @@
         <v-list-item :href="item.url" v-if="item.url">
           <v-list-item-title class="pl-2">{{ $t(item.label) }}</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="item.click" v-if="!item.url && item.click">
+        <v-list-item @click="() => item?.click && item.click()" v-if="!item.url && item.click">
           <v-list-item-title class="pl-2">{{ $t(item.label) }}</v-list-item-title>
         </v-list-item>
         <v-divider></v-divider>

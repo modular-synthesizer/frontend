@@ -3,7 +3,7 @@
     <template v-if="groups">
       <v-row>
         <v-col cols="12">
-          <GroupCreator v-if="hasRight('groups::write')" @submitted="add" />
+          <GroupCreator @submitted="add" />
         </v-col>
       </v-row>
       <v-row>
@@ -14,7 +14,7 @@
                 <td>{{ item.id }}</td>
                 <td>{{ item.slug }}</td>
                 <td>
-                  <template v-if="hasRight('groups::write')">
+                  <template >
                     <v-btn icon size="small" variant="plain" @click="remove(item.id)">
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>

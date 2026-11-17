@@ -41,8 +41,8 @@ for (const c of props.blueprint.controls) {
   const val = {
     ...c,
     module,
-    x: +c?.payload?.x || 0,
-    y: +c?.payload?.y || 0,
+    x: +(c?.payload?.x || 0),
+    y: +(c?.payload?.y || 0),
     width: 0,
     height: 0,
     id: c.id

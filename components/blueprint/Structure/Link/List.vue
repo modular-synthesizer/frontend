@@ -1,14 +1,14 @@
 <template>
   <template v-for="link in blueprint.links">
     <blueprint-structure-link
-      v-if="link.id !== selection.item?.id"
+      v-if="link.id !== selection?.item?.id"
       :link="link"
       :blueprint="blueprint"
-      @selected="selection.select(link)"
+      @selected="selection?.select(link)"
     />
   </template>
   <blueprint-structure-link
-    v-if="selection.item"
+    v-if="selection?.item"
     :link="selection.item"
     :blueprint="blueprint"
     :selected="true"

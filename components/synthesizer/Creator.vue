@@ -16,7 +16,6 @@
             <v-text-field
               v-model="synthesizer.name"
               variant="outlined"
-              :rules="rules.name"
               :label="$t('synthesizers.create.labels.name')"
               required
               class="mb-3"
@@ -34,29 +33,15 @@
 </template>
 
 <script setup lang="ts">
-import { boundaries, minlength, required } from '@/lib/rules';
-import { useI18n } from 'vue-i18n';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 
 let synthesizer: Ref<Synthesizer> = ref(createEmptySynthesizer());
-
-const translator = useI18n();
 
 const emit = defineEmits<{ created: [ synth: Synthesizer ] }>();
 
 const props = defineProps({ floating: { type: Boolean, default: false } })
 
 const validForm = ref(true);
-
-const rules: {[key: string]: Function[]} = {
-  name: [
-    required("synthesizers.errors.name.required", translator),
-    minlength(6, "synthesizers.errors.name.minlength", translator),
-  ],
-  voices: [
-    boundaries(1, 32, "synthesizers.errors.voices.boundaries", translator),
-  ],
-};
 
 function close(isActive: Ref<boolean>) {
   isActive.value = false;

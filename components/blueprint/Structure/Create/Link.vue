@@ -51,7 +51,7 @@ const props = defineProps({
 function createEmptyLink(): InnerLink {
   return {
     id: '',
-    from: { node: getItems()[0], index: 0 },
+    from: { node: `${getItems()[0]}`, index: 0 },
     to: { node: '', index: 0 },
   }
 }
@@ -61,7 +61,7 @@ const emit = defineEmits<{ created: [ link: InnerLink]}>();
 const link: Ref<InnerLink> = ref(createEmptyLink());
 
 function getItems() {
-  return props.blueprint.nodes.filter((n: InnerNode) => n.inputs > 0).map((n: InnerNode) => n.name)
+  return props.blueprint.nodes.map((n: InnerNode) => n.name)
 }
 
 function nodeExists(blueprint: Blueprint, name: string) {
@@ -71,7 +71,7 @@ function nodeExists(blueprint: Blueprint, name: string) {
 function validEndNode(value: string) {
   const message: string = "Node with name " + value + " does not exist"
   if (value.includes('.')) {
-    return nodeExists(props.blueprint, value.split('.')[0]) || message;
+    return nodeExists(props.blueprint, `${value.split('.')[0]}`) || message;
   }
   else {
     return nodeExists(props.blueprint, value) || message;
