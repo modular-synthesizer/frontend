@@ -9,7 +9,7 @@ const ID = toObjectId("test")
 
 describe("makeRunEffect", () => {
   it("sends the effect's id and viewport to the blueprint viewport route", async () => {
-    const { put, calls } = recorder(ok({}))
+    const { requester: put, calls } = recorder(ok({}))
     const viewport = { position: { x: 1, y: 2 }, scale: 3.0 }
     const blueprintEffect: BlueprintsEffect = { type: "blueprints.viewport.save", id: ID, viewport }
     await expect(makeRunEffect(put)(blueprintEffect)).resolves.toBeUndefined()
@@ -19,7 +19,7 @@ describe("makeRunEffect", () => {
     ])
   })
   it("sends only one save viewport request if it fails, without retries", async () => {
-    const { put, calls } = recorder(ko({ status: 500 }))
+    const { requester: put, calls } = recorder(ko({ status: 500 }))
     const viewport = { position: { x: 2, y: 3 }, scale: 4.0 }
     const blueprintEffect: BlueprintsEffect = { type: "blueprints.viewport.save", id: ID, viewport }
     await expect(makeRunEffect(put)(blueprintEffect)).resolves.toBeUndefined()
@@ -29,7 +29,7 @@ describe("makeRunEffect", () => {
     ])
   })
   it("sends the correct informations when handling a node saving effect", async () => {
-    const { put, calls } = recorder(ok({}))
+    const { requester: put, calls } = recorder(ok({}))
     const id = toObjectId("id")
     const blueprintId = toObjectId("blueprintId")
     const position = { x: 10, y: 20 }
@@ -41,7 +41,7 @@ describe("makeRunEffect", () => {
     ])
   })
   it("sends only one save node request if it fails, without retries", async () => {
-    const { put, calls } = recorder(ko({ status: 500 }))
+    const { requester: put, calls } = recorder(ko({ status: 500 }))
     const id = toObjectId("id")
     const blueprintId = toObjectId("blueprintId")
     const position = { x: 10, y: 20 }
@@ -60,7 +60,7 @@ describe("makeRunEffect", () => {
     await expect(makeRunEffect(put)(blueprintEffect)).rejects.toThrow("test error")
   })
   it("does not handle an unknown effect type", async () => {
-    const { put, calls } = recorder(ok({}))
+    const { requester: put, calls } = recorder(ok({}))
     const effect = { type: "unknown.type" } as unknown as BlueprintsEffect
 
     await expect(makeRunEffect(put)(effect)).rejects.toThrow(JSON.stringify("unknown.type"))

@@ -535,7 +535,7 @@ describe("makeCables", () => {
     })
   })
 
-    describe("remove", () => {
+  describe("remove", () => {
     it("removes a saved cable, disconnects it and deletes it", async () => {
       const { adapter, cablesStore, effects } = setup(IDLE_DRAG, [ savedCable, otherCable ])
       await adapter.remove(connection)
@@ -658,5 +658,40 @@ describe("makeCables", () => {
     })
   })
 
-})
+  describe("recolor", () => {
+    it("recolors a saved cable in the store and saves it", async () => {
+      const { adapter, cablesStore, effects } = setup(IDLE_DRAG, [ savedCable, otherCable ])
+      await adapter.recolor(savedCable, "green")
+      expect(cablesStore.get()).toEqual([ { ...savedCable, color: "green" }, otherCable ])
+      expect(effects).toEqual([ { type: "cables.cable.save", id: cableId, color: "green" } ])
+    })
 
+    it("does not recolor a pending cable, and runs no effect", async () => {
+      const { adapter, cablesStore, effects } = setup(IDLE_DRAG, [ pendingCable ])
+      await adapter.recolor(pendingCable, "green")
+      expect(cablesStore.get()).toEqual([ pendingCable ])
+      expect(effects).toEqual([])
+    })
+
+    it("does nothing for an unknown connection", async () => {
+      const { adapter, cablesStore, effects } = setup(IDLE_DRAG, [ otherCable ])
+      await adapter.recolor(savedCable, "green")
+      expect(cablesStore.get()).toEqual([ otherCable ])
+      expect(effects).toEqual([])
+    })
+
+    it("writes the store before running the effects", async () => {
+      const seen: string[] = []
+      const { adapter, cablesStore } = setup(IDLE_DRAG, [ savedCable ], () => seen.push(cablesStore.get()[0]!.color))
+      await adapter.recolor(savedCable, "yellow")
+      expect(seen).toEqual([ "yellow" ])
+    })
+
+    it("does not change the drag state", async () => {
+      const { adapter, dragStore } = setup(magnetized, [ savedCable ])
+      await adapter.recolor(savedCable, "green")
+      expect(adapter.drag()).toEqual(magnetized)
+      expect(dragStore.history).toEqual([])
+    })
+  })
+})

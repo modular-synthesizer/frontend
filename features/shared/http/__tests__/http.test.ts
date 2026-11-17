@@ -5,7 +5,7 @@ import { ko, ok, type Result } from "../../results/result"
 
 const tryResponse = async (response: Result<unknown, HttpError>) => {
   let called = 0
-  const result = await withAuthenticationGuard(recorder(response).put, () => { called++ })("/anything", {})
+  const result = await withAuthenticationGuard(recorder(response).requester, () => { called++ })("/anything", {})
   return { result, called }
 }
 
@@ -42,7 +42,7 @@ describe("withAuthenticationGuard", () => {
   })
   it("forwards url and body untouched and returns the underlying response", async () => {
     const response = ok("anything")
-    const { put, calls } = recorder(response)
+    const { requester: put, calls } = recorder(response)
     const body = { x: 1, nested: { y: 2 } }
 
     const result = await withAuthenticationGuard(put, () => {})("/url", body)

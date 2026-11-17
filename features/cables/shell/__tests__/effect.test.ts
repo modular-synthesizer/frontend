@@ -24,55 +24,105 @@ const connection: Connection = {
 const cableId: ObjectId = toObjectId("cable")
 
 describe("makeRunEffect", () => {
-  it("triggers a connection of the audio on the corresponding event", async () => {
-    const { put: del, calls } = recorder(ok({}))
-    const { audio, connections } = createConnectionRecord()
+  describe("cables.audio.connect", () => {
+    it("triggers a connection of the audio on the corresponding event", async () => {
+      const { requester: del, calls: deletions } = recorder(ok({}))
+      const { requester: put, calls: updates } = recorder(ok({}))
+      const { audio, connections } = createConnectionRecord()
 
-    const effect: CablesEffect = { type: "cables.audio.connect", connection }
-    await expect(makeRunEffect({ audio, del })(effect)).resolves.toBeUndefined()
+      const effect: CablesEffect = { type: "cables.audio.connect", connection }
+      await expect(makeRunEffect({ audio, del, put })(effect)).resolves.toBeUndefined()
 
-    expect(calls).toEqual([])
-    expect(connections).toEqual([ { action: "connect", connection } ])
+      expect(deletions).toEqual([])
+      expect(updates).toEqual([])
+      expect(connections).toEqual([ { action: "connect", connection } ])
+    })
   })
-  it("triggers a disconnection of the audio on the corresponding event", async () => {
-    const { put: del, calls } = recorder(ok({}))
-    const { audio, connections } = createConnectionRecord()
+  describe("cables.audio.disconnect", () =>  {
+    it("triggers a disconnection of the audio on the corresponding event", async () => {
+      const { requester: del, calls: deletions } = recorder(ok({}))
+      const { requester: put, calls: updates } = recorder(ok({}))
+      const { audio, connections } = createConnectionRecord()
 
-    const effect: CablesEffect = { type: "cables.audio.disconnect", connection }
-    await expect(makeRunEffect({ audio, del })(effect)).resolves.toBeUndefined()
+      const effect: CablesEffect = { type: "cables.audio.disconnect", connection }
+      await expect(makeRunEffect({ audio, del, put })(effect)).resolves.toBeUndefined()
 
-    expect(calls).toEqual([])
-    expect(connections).toEqual([ { action: "disconnect", connection } ])
+      expect(deletions).toEqual([])
+      expect(connections).toEqual([ { action: "disconnect", connection } ])
+      expect(updates).toEqual([])
+    })
   })
-  it("triggers an HTTP request on the corresponding event", async () => {
-    const { put: del, calls } = recorder(ok({}))
-    const { audio } = createConnectionRecord()
-    const effect: CablesEffect = { type: "cables.cable.delete", id: cableId }
-    await expect(makeRunEffect({ audio, del })(effect)).resolves.toBeUndefined()
+  describe("cables.cable.delete", () => {
+    it("triggers an HTTP request on the corresponding event", async () => {
+      const { requester: del, calls: deletions } = recorder(ok({}))
+      const { requester: put, calls: updates } = recorder(ok({}))
+      const { audio } = createConnectionRecord()
+      const effect: CablesEffect = { type: "cables.cable.delete", id: cableId }
+      await expect(makeRunEffect({ audio, del, put })(effect)).resolves.toBeUndefined()
 
-    expect(calls).toEqual([ { url: `/proxy/links/cable`, body: {} } ])
+      expect(deletions).toEqual([ { url: `/proxy/links/cable`, body: {} } ])
+      expect(updates).toEqual([])
+    })
+    it("sends only one request if it fails, without retries", async () => {
+      const { requester: del, calls: deletions } = recorder(ko({ status: 500 }))
+      const { requester: put, calls: updates } = recorder(ok({}))
+      const { audio } = createConnectionRecord()
+      const effect: CablesEffect = { type: "cables.cable.delete", id: cableId }
+      await expect(makeRunEffect({ audio, del, put })(effect)).resolves.toBeUndefined()
+
+      expect(deletions).toEqual([ { url: `/proxy/links/cable`, body: {} } ])
+      expect(updates).toEqual([])
+    })
+    it("forwards the error if the DELETE query raises one", async () => {
+      const { audio } = createConnectionRecord()
+      const effect: CablesEffect = { type: "cables.cable.delete", id: cableId }
+      const del = async () => { throw new Error("test error") }
+      const { requester: put, calls: updates } = recorder(ok({}))
+
+      await expect(makeRunEffect({ audio, del, put })(effect)).rejects.toThrow("test error")
+      expect(updates).toEqual([])
+    })
   })
-  it("sends only one request if it fails, without retries", async () => {
-    const { put: del, calls } = recorder(ko({ status: 500 }))
-    const { audio } = createConnectionRecord()
-    const effect: CablesEffect = { type: "cables.cable.delete", id: cableId }
-    await expect(makeRunEffect({ audio, del })(effect)).resolves.toBeUndefined()
+  describe("cables.cable.save", () => {
+    it("triggers an HTTP request on the corresponding event", async () => {
+      const { requester: del, calls: deletions } = recorder(ok({}))
+      const { requester: put, calls: updates } = recorder(ok({}))
+      const { audio, connections } = createConnectionRecord()
+      const effect: CablesEffect = { type: "cables.cable.save", id: cableId, color: "green" }
+      await expect(makeRunEffect({ audio, del, put })(effect)).resolves.toBeUndefined()
 
-    expect(calls).toEqual([ { url: `/proxy/links/cable`, body: {} } ])
-  })
-  it("forwards the error if the DELETE query raises one", async () => {
-    const { audio } = createConnectionRecord()
-    const effect: CablesEffect = { type: "cables.cable.delete", id: cableId }
-    const del = async () => { throw new Error("test error") }
+      expect(deletions).toEqual([])
+      expect(connections).toEqual([])
+      expect(updates).toEqual([ { url: `/proxy/links/cable`, body: { color: "green" } } ])
+    })
+    it("sends only one request if it fails, without retries", async () => {
+      const { requester: del, calls: deletions } = recorder(ok({}))
+      const { requester: put, calls: updates } = recorder(ko({ status: 500 }))
+      const { audio } = createConnectionRecord()
+      const effect: CablesEffect = { type: "cables.cable.save", id: cableId, color: "green" }
+      await expect(makeRunEffect({ audio, del, put })(effect)).resolves.toBeUndefined()
 
-    await expect(makeRunEffect({ audio, del })(effect)).rejects.toThrow("test error")
+      expect(deletions).toEqual([])
+      expect(updates).toEqual([ { url: `/proxy/links/cable`, body: { color: "green" } } ])
+    })
+    it("forwards the error if the PUT query raises one", async () => {
+      const { audio } = createConnectionRecord()
+      const effect: CablesEffect = { type: "cables.cable.save", id: cableId, color: "green" }
+      const put = async () => { throw new Error("test error") }
+      const { requester: del, calls: deletions } = recorder(ok({}))
+
+      await expect(makeRunEffect({ audio, del, put })(effect)).rejects.toThrow("test error")
+      expect(deletions).toEqual([])
+    })
   })
   it("does not handle an unknown effect type", async () => {
     const { audio } = createConnectionRecord()
-    const { put: del, calls } = recorder(ok({}))
+    const { requester: del, calls: deletions } = recorder(ok({}))
+    const { requester: put, calls: updates } = recorder(ok({}))
     const effect = { type: "unknown.type" } as unknown as CablesEffect
 
-    await expect(makeRunEffect({ audio, del })(effect)).rejects.toThrow(JSON.stringify("unknown.type"))
-    expect(calls).toEqual([])
+    await expect(makeRunEffect({ audio, del, put })(effect)).rejects.toThrow(JSON.stringify("unknown.type"))
+    expect(deletions).toEqual([])
+    expect(updates).toEqual([])
   })
 })

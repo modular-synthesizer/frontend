@@ -6,13 +6,13 @@ import type { Mapper } from "../../../shared/types/mapper.type"
 import { makeCableAudio, type NodesResolver } from "../audio/cable.audio"
 import { toObjectId, type ObjectId } from "../../../shared/data/ObjectId.type"
 import type { CableDrag } from "../../core/data/CableDrag.type"
-import type { Cable, Connection, SavedCable } from "../../core/data/Cable.type"
+import type { Cable, CableColor, Connection, SavedCable } from "../../core/data/Cable.type"
 import { createCable, type CreateCableFct } from "../api/createCable.http"
 import type { RunEffectFct } from "../../../shared/facts"
 import type { CablesEffect } from "../../core/data/Effect.type"
 import type { Control as LegacyControl } from "~/types/Index"
 import { makeRunEffect } from "../effect"
-import { del } from "../../../shared/http/nuxt.http"
+import { del, put } from "../../../shared/http/nuxt.http"
 import { startCable } from "../../core/processes/startCable.process"
 import { magnetizeCable } from "../../core/processes/magnetizeCable.process"
 import { cancelCable } from "../../core/processes/cancelCable.process"
@@ -25,6 +25,7 @@ import { parseLink } from "../dto/ApiLink.dto"
 import { orient } from "../../core/shared/connection"
 import { receiveRemoval } from "../../core/processes/receiveRemoval.process"
 import { confirmCable } from "../../core/processes/confirmCable.process"
+import { recolorCable } from "../../core/processes/recolorCable.process"
 
 export type Store<T> = { get: () => T, set: (value: T) => void }
 
@@ -80,6 +81,7 @@ export type CablesAdapter = {
   receiveRemoved: (payload: unknown) => Promise<void>
   load: (payloads: readonly unknown[]) => Promise<void>
   portOf: (port: Port) => LegacyPort | undefined
+  recolor: (cable: Cable, color: CableColor) => Promise<void>
 }
 
 const createCommit: (run: RunEffectFct<CablesEffect>) => (effects: CablesEffect[]) => Promise<void> = run => async effects => {
@@ -171,6 +173,12 @@ export const makeCables: CablesFactory = context => {
       context.modules()
         .flatMap(m => m.ports)
         .find(p => p.id === port.id),
+    recolor: async (cable, color) => {
+      const connection: Connection = { origin: cable.origin, destination: cable.destination }
+      const facts = recolorCable(context.cables.get(), connection, color)
+      context.cables.set(facts.cables)
+      await commit(facts.effects)
+    }
   }
   return adapter
 }
@@ -187,5 +195,5 @@ export const createCables: CreateCablesFct = (synthesizerId, modules, cables, dr
   cables: refStore(cables),
   drag: refStore(drag),
   create: createCable,
-  run: makeRunEffect({ del, audio: makeCableAudio(resolveNodes(modules)) })
+  run: makeRunEffect({ del, put, audio: makeCableAudio(resolveNodes(modules)) })
 })

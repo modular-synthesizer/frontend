@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { deepFreeze } from "../../../../shared/__tests__/utils/deepFreeze"
 import { toObjectId } from "../../../../shared/data/ObjectId.type"
 import { INVALID_LINK, makeCreateCable } from "../createCable.http"
-import { httpRecorder } from "../../../../shared/http/__tests__/utils/recorder"
+import { recorder } from "../../../../shared/http/__tests__/utils/recorder"
 import { ko, ok, type Result } from "../../../../shared/results/result"
 import type { HttpError } from "../../../../shared/http/http"
 import type { InputPort, OutputPort } from "../../../core/data/Port.type"
@@ -17,7 +17,7 @@ const synthesizerId = toObjectId("synth")
 const expectedCall = { url: "/proxy/links", body: { synthesizer_id: synthesizerId, from: origin.id, to: destination.id, color: "blue" } }
 
 async function withResponse(response: Result<unknown, HttpError>) {
-  const { requester, calls } = httpRecorder(response)
+  const { requester, calls } = recorder(response)
   const result = await makeCreateCable(requester)(synthesizerId, cable)
   return { result, calls }
 }
@@ -29,7 +29,7 @@ describe("makeCreateCable", () => {
       expect(calls).toEqual([ expectedCall ])
     })
     it("sends the color of the cable, not the default one", async () => {
-      const { requester, calls } = httpRecorder(ok({ id: "link", from: "out", to: "in" }))
+      const { requester, calls } = recorder(ok({ id: "link", from: "out", to: "in" }))
       await makeCreateCable(requester)(synthesizerId, deepFreeze({ ...cable, color: "yellow" }))
       expect(calls[0]?.body).toEqual({ ...expectedCall.body, color: "yellow" })
     })

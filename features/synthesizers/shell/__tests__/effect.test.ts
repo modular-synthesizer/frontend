@@ -10,7 +10,7 @@ const id = toObjectId("test")
 describe("makeRunEffect", () => {
 
   it("sends the effect's id and viewport to the synthesizer viewport route", async () => {
-    const { put, calls } = recorder(ok({}))
+    const { requester: put, calls } = recorder(ok({}))
     const viewport = { position: { x: 0, y: 1 }, scale: 2.0 }
     const synthesizerEffect: SynthesizersEffect = { type: "synthesizers.viewport.save", id, viewport }
     await expect(makeRunEffect(put)(synthesizerEffect)).resolves.toBeUndefined()
@@ -20,7 +20,7 @@ describe("makeRunEffect", () => {
     ])
   })
   it("sends the effect's id and scale to the synthesizer scale update route", async () => {
-    const { put, calls } = recorder(ok({}))
+    const { requester: put, calls } = recorder(ok({}))
     const synthesizerEffect: SynthesizersEffect = { type: "synthesizers.scale.save", id, scale: 2.0 }
     await expect(makeRunEffect(put)(synthesizerEffect)).resolves.toBeUndefined()
 
@@ -29,7 +29,7 @@ describe("makeRunEffect", () => {
     ])
   })
   it("sends the effect's id, moduleId, value and t to the parameter save route", async () => {
-    const { put, calls } = recorder(ok({}))
+    const { requester: put, calls } = recorder(ok({}))
     const moduleId = toObjectId("module_id")
     const synthesizerEffect: SynthesizersEffect = { type: "synthesizers.parameter.save", id, moduleId, value: 10, t: 1234 }
     await expect(makeRunEffect(put)(synthesizerEffect)).resolves.toBeUndefined()
@@ -39,7 +39,7 @@ describe("makeRunEffect", () => {
     ])
   })
   it("sends the effect's id and placement to the module update route", async () => {
-    const { put, calls } = recorder(ok({}))
+    const { requester: put, calls } = recorder(ok({}))
     const synthesizerEffect: SynthesizersEffect = { type: "synthesizers.module.save", id, placement: { rack: 0, slot: 10 } }
     await expect(makeRunEffect(put)(synthesizerEffect)).resolves.toBeUndefined()
 
@@ -48,7 +48,7 @@ describe("makeRunEffect", () => {
     ])
   })
   it("sends only one request if it fails, without retries", async () => {
-    const { put, calls } = recorder(ko({ status: 500 }))
+    const { requester: put, calls } = recorder(ko({ status: 500 }))
     const viewport = { position: { x: 1, y: 2 }, scale: 3.0 }
     const synthesizerEffect: SynthesizersEffect = { type: "synthesizers.viewport.save", id, viewport }
     await expect(makeRunEffect(put)(synthesizerEffect)).resolves.toBeUndefined()
@@ -65,7 +65,7 @@ describe("makeRunEffect", () => {
     await expect(makeRunEffect(put)(synthesizerEffect)).rejects.toThrow("test error")
   })
   it("does not handle an unknown effect type", async () => {
-    const { put, calls } = recorder(ok({}))
+    const { requester: put, calls } = recorder(ok({}))
     const effect = { type: "unknown.type" } as unknown as SynthesizersEffect
 
     await expect(makeRunEffect(put)(effect)).rejects.toThrow(JSON.stringify("unknown.type"))

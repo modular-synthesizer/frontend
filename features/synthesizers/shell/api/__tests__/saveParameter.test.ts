@@ -9,13 +9,13 @@ const moduleId = toObjectId("mid")
 
 describe("saveParameter", () => {
   it("sends the id, moduleId, value and timestamp with the request", async () => {
-    const { put, calls } = recorder(ok({}))
+    const { requester: put, calls } = recorder(ok({}))
     await saveParameter(put)(id, moduleId, 20, 1234)
     expect(calls).toEqual([ { url: "/proxy/parameters/id", body: { module_id: "mid", value: 20, t: 1234 } } ])
   })
 
   it("returns an error if the underlying request raises an error", async () => {
-    const { put } = recorder(ko({ status: 500 }))
+    const { requester: put } = recorder(ko({ status: 500 }))
     expect((await saveParameter(put)(id, moduleId, 20, 1234)).ok).toBe(false)
   })
 })

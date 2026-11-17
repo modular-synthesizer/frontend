@@ -9,13 +9,13 @@ const ID = toObjectId("testId")
 
 describe("saveNode", () => {
   it("sends the blueprint id, the node id, and the node position", async () => {
-    const { put, calls } = recorder(ok({}))
+    const { requester: put, calls } = recorder(ok({}))
     await saveNode(put)(BLUEPRINT_ID, ID, { x: 3, y: 4 })
     expect(calls).toEqual([{ url: `/proxy/blueprints/nodes/${ID}`, body: { blueprint_id: BLUEPRINT_ID, x: 3, y: 4 } }])
   })
 
   it("returns an error if the underlying request raises an error", async () => {
-    const { put } = recorder(ko({ status: 500 }))
+    const { requester: put } = recorder(ko({ status: 500 }))
     expect((await saveNode(put)(BLUEPRINT_ID, ID, { x: 0, y: 0 })).ok).toBe(false)
   })
 })

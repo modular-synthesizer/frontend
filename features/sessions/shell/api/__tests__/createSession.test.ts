@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { httpRecorder } from "../../../../shared/http/__tests__/utils/recorder";
+import { recorder } from "../../../../shared/http/__tests__/utils/recorder";
 import { ko, ok } from "../../../../shared/results/result";
 import { makeCreateSession } from "../createSession.http";
 import type { HttpError } from "~/features/shared/http/http";
@@ -9,7 +9,7 @@ describe("makeCreateSession", () => {
   const payload = { token: "custom.token", admin: true, rights: [], account }
 
   async function withResponse(payload: unknown) {
-    const { requester, calls } = httpRecorder(ok(payload))
+    const { requester, calls } = recorder(ok(payload))
     const createSession = makeCreateSession(requester)
     const response = await createSession({ username: "testusername", password: "testpassword" })
     return { response, calls }
@@ -40,7 +40,7 @@ describe("makeCreateSession", () => {
   })
   describe("error cases", () => {
     async function withError(payload: HttpError) {
-      const { requester, calls } = httpRecorder(ko(payload))
+      const { requester, calls } = recorder(ko(payload))
       const createSession = makeCreateSession(requester)
       const response = await createSession({ username: "testusername", password: "testpassword" })
       return { response, calls }

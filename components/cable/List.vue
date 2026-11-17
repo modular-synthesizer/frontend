@@ -13,21 +13,12 @@
 import type { Cable, CableColor } from '~/features/cables/core/data/Cable.type';
 import type { CablesAdapter } from '~/features/cables/shell/legacy/cables.adapter';
 import { CABLES } from '~/features/synthesizers/shared/Constants';
-import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
 
-const { cables, synthesizer } = defineProps({
-  cables: { type: Array<Cable>, default: () => [] },
-  synthesizer: { type: Object as PropType<Synthesizer>, required: true },
-});
+const { cables } = defineProps<{ cables: Cable[] }>();
 
 const adapter = inject(CABLES) as CablesAdapter
 
-function changeColor(color: CableColor) {
-  return (cable: Cable) => {
-    cable.color = color
-    api_put(`/proxy/links/${cable.id}?synthesizer_id=${synthesizer.id}`, { color })
-  }
-}
+const changeColor = (color: CableColor) => (cable: Cable) => adapter.recolor(cable, color)
 
 function showContext($event: MouseEvent, cable: Cable) {
   useContexts().display($event, {
