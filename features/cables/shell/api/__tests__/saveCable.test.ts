@@ -1,5 +1,5 @@
 import { toObjectId } from "../../../../shared/data/ObjectId.type"
-import { httpRecorder } from "../../../../shared/http/__tests__/utils/recorder"
+import { recorder } from "../../../../shared/http/__tests__/utils/recorder"
 import type { HttpError } from "../../../../shared/http/http"
 import { ko, ok, type Result } from "../../../../shared/results/result"
 import { describe, expect, it } from "vitest"
@@ -8,7 +8,7 @@ import { saveCable } from "../saveCable.http"
 const id = toObjectId("link")
 
 async function withResponse(response: Result<unknown, HttpError>) {
-  const { requester, calls } = httpRecorder(response)
+  const { requester, calls } = recorder(response)
   const result = await saveCable(requester)(id, "green")
   return { result, calls }
 }

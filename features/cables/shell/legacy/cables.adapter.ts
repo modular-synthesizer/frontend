@@ -12,7 +12,7 @@ import type { RunEffectFct } from "../../../shared/facts"
 import type { CablesEffect } from "../../core/data/Effect.type"
 import type { Control as LegacyControl } from "~/types/Index"
 import { makeRunEffect } from "../effect"
-import { del } from "../../../shared/http/nuxt.http"
+import { del, put } from "../../../shared/http/nuxt.http"
 import { startCable } from "../../core/processes/startCable.process"
 import { magnetizeCable } from "../../core/processes/magnetizeCable.process"
 import { cancelCable } from "../../core/processes/cancelCable.process"
@@ -187,5 +187,5 @@ export const createCables: CreateCablesFct = (synthesizerId, modules, cables, dr
   cables: refStore(cables),
   drag: refStore(drag),
   create: createCable,
-  run: makeRunEffect({ del, audio: makeCableAudio(resolveNodes(modules)) })
+  run: makeRunEffect({ del, put, audio: makeCableAudio(resolveNodes(modules)) })
 })

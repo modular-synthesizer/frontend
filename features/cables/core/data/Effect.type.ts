@@ -1,5 +1,5 @@
 import type { Effect } from "../../../shared/facts";
-import type { Connection } from "./Cable.type";
+import type { CableColor, Connection } from "./Cable.type";
 import type { ObjectId } from "../../../shared/data/ObjectId.type";
 
 export type CablesEffect = Effect & (
@@ -9,4 +9,6 @@ export type CablesEffect = Effect & (
   | { type: "cables.audio.disconnect", connection: Connection }
   /** API Deletion of a cable */
   | { type: "cables.cable.delete", id: ObjectId }
+  /** API update for the color of a cable */
+  | { type: "cables.cable.save", id: ObjectId, color: CableColor }
 )
