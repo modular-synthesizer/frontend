@@ -21,10 +21,9 @@
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify'
 import { repositories } from '~~/lib/repositories';
-import { remove, sortBy } from 'lodash';
+import { sortBy } from 'lodash';
 import { membershipType } from '~/utils/functions/synthesizers';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
-import { eventbus } from '~/utils/eventbus/EventBus';
 
 const { mobile } = useDisplay()
 const synthesizers: Ref<Array<Synthesizer>> = ref([]);
@@ -42,11 +41,4 @@ const deleteSynth = (id: string) => repositories.synthesizers.delete(id, useSess
 async function create(details: Synthesizer) {
   synthesizers.value.push(await api_post("/proxy/synthesizers", { name: details.name, voices: 16 }))
 }
-
-eventbus.subscribe("add.membership", async (data: Synthesizer) => {
-  synthesizers.value.push(data);
-});
-eventbus.subscribe("remove.membership", async (data: Synthesizer) => {
-  remove(synthesizers.value, { id: data.id });
-})
 </script>

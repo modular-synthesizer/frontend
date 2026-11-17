@@ -49,13 +49,11 @@ import { RACK_HEIGHT, SLOT_SIZE } from "../../features/synthesizers/core/shared/
 import type { AudioModule, Generator, ModulePayload, Synthesizer } from '~/types/Index';
 import { appendModule } from '~/utils/functions/modules';
 import { deleteModule } from '~/utils/functions/modules';
-import { eventbus } from '~/utils/eventbus/EventBus';
-import { find } from 'lodash';
 import { translate } from "~/utils/functions/svg"
 import { createModule as instanciateModule } from '~/utils/factories/modules';
 import { useI18n } from 'vue-i18n';
 import { panSynthesizer, resetSynthesizer, zoomSynthesizer } from '~/features/synthesizers/shell/legacy/viewport.adapter';
-import { acceptsModuleAt, applyPlacement, moveModuleAdapter, syncModule } from '~/features/synthesizers/shell/legacy/module.adapter';
+import { acceptsModuleAt, moveModuleAdapter, syncModule } from '~/features/synthesizers/shell/legacy/module.adapter';
 import { makeHub } from '~/features/midi/shell/hub';
 import { CABLES, MIDI_HUB } from '~/features/synthesizers/shared/Constants';
 import { startMidi, type MidiSession } from '~/features/midi/shell/session';
@@ -161,28 +159,11 @@ loadAll.then(async ([ _, synth, mods, links ]) => {
 
   useCoordinates().setReference(synthesizer.value);
 
-  // This little timeout is just here so that every "loaded OK" has the time to be seen.
-  setTimeout(() => { loading.value = false; }, 100);
-
-  eventbus.subscribe(`${synthesizer.value.id}.add.module`, createModule);
-  eventbus.subscribe(`${synthesizer.value.id}.remove.module`, removeModule);
-  eventbus.subscribe(`${synthesizer.value.id}.update.module`, updateModule);
-  eventbus.subscribe(`${synthesizer.value.id}.add.cable`, cablesAdapter.receiveAdded);
-  eventbus.subscribe(`${synthesizer.value.id}.remove.cable`, cablesAdapter.receiveRemoved)
+  loading.value = false;
 })
 
 async function createModule (payload: ModulePayload) {
   await appendModule(await modulesPromise, payload, generatorsPromise);
-}
-
-function updateModule(payload: ModulePayload) {
-  const found: AudioModule|undefined = find(synthesizer.value.modules, { id: payload.id });
-  if (found) applyPlacement(found, { rack: payload.rack, slot: payload.slot })
-}
-
-async function removeModule (payload: ModulePayload) {
-  const found: AudioModule|undefined = find(modules.value, { id: payload.id });
-  if (found) await onDeleted(found)
 }
 
 const initialized: Ref<boolean> = ref(false);
@@ -193,8 +174,6 @@ function initialize() {
     initialized.value = true;
   }
 }
-
-eventbus.subscribe("remove.membership", () => navigateTo('/synthesizers'));
 </script>
 
 <style scoped>

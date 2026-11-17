@@ -581,29 +581,6 @@ describe("makeCables", () => {
     })
   })
 
-  describe("receiveRemoved", () => {
-    it("removes the cable and disconnects it, without deleting it", async () => {
-      const { adapter, cablesStore, effects } = setup(IDLE_DRAG, [ savedCable, otherCable ])
-      await adapter.receiveRemoved(apiLink)
-      expect(cablesStore.get()).toEqual([ otherCable ])
-      expect(effects).toEqual([ { type: "cables.audio.disconnect", connection } ])
-    })
-
-    it("does nothing for an unknown id", async () => {
-      const { adapter, cablesStore, effects } = setup(IDLE_DRAG, [ otherCable ])
-      await adapter.receiveRemoved(apiLink)
-      expect(cablesStore.get()).toEqual([ otherCable ])
-      expect(effects).toEqual([])
-    })
-
-    it("ignores an invalid payload without throwing", async () => {
-      const { adapter, cablesStore, effects } = setup(IDLE_DRAG, [ savedCable ])
-      await expect(adapter.receiveRemoved({ from: "x" })).resolves.toBeUndefined()
-      expect(cablesStore.get()).toEqual([ savedCable ])
-      expect(effects).toEqual([])
-    })
-  })
-
   describe("load", () => {
     const secondLink = { id: "second.id", from: "osc.out2", to: "vcf.in", color: "green" }
     const modules = () => [ osc, amp, vcf ]

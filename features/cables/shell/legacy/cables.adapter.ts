@@ -23,7 +23,6 @@ import { unmagnetizeCable } from "../../core/processes/unmagnetizeCable.process"
 import { receiveCable } from "../../core/processes/receiveCable.process"
 import { parseLink } from "../dto/ApiLink.dto"
 import { orient } from "../../core/shared/connection"
-import { receiveRemoval } from "../../core/processes/receiveRemoval.process"
 import { confirmCable } from "../../core/processes/confirmCable.process"
 import { recolorCable } from "../../core/processes/recolorCable.process"
 
@@ -78,7 +77,6 @@ export type CablesAdapter = {
   remove: (cable: Connection) => Promise<void>
   unplugModule: (module: LegacyAudioModule) => Promise<void>
   receiveAdded: (payload: unknown) => Promise<void>
-  receiveRemoved: (payload: unknown) => Promise<void>
   load: (payloads: readonly unknown[]) => Promise<void>
   portOf: (port: Port) => LegacyPort | undefined
   recolor: (cable: Cable, color: CableColor) => Promise<void>
@@ -157,14 +155,6 @@ export const makeCables: CablesFactory = context => {
       const facts = receiveCable(context.cables.get(), cable)
       context.cables.set(facts.cables)
       await commit(facts.effects)
-    },
-    receiveRemoved: async payload => {
-      const linkResult = parseLink(payload)
-      if (linkResult.ok) {
-        const facts = receiveRemoval(context.cables.get(), linkResult.orNull().id)
-        context.cables.set(facts.cables)
-        await commit(facts.effects)
-      }
     },
     load: async payload => {
       for (const candidate of payload) await adapter.receiveAdded(candidate)

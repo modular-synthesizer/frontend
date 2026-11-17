@@ -19,8 +19,6 @@ useHead({ htmlAttrs: { lang: 'fr' } });
 useCoordinates().initUpdates();
 useSession().refresh();
 
-// if (useSession().authenticated) initializeSSE();
-
 window.addEventListener("beforeunload", () => {
   useKeyboardEvents().cancel();
 });
