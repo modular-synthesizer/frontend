@@ -1,5 +1,5 @@
+import { USERNAME_MIN_LENGTH } from "../../../shared/data/Constants";
 import { ko, ok, type Result } from "../../../shared/results/result";
-import { USERNAME_MIN_LENGTH } from "../data/Constants";
 import type { Credentials } from "../data/Credentials.type";
 import type { LoginError } from "../data/LoginError.type";
 

@@ -90,7 +90,6 @@
     },
     "username": {
       "forbidden": "Les identifiants fournis sont incorrects",
-      "length": "Votre nom d'utilisateur doit faire six caractères ou plus",
       "minsize": "Votre nom d'utilisateur doit faire six caractères ou plus",
       "required": "Vous devez donner un nom d'utilisateur",
       "uniq": "Ce nom d'utilisateur est déjà utilisé",
@@ -303,6 +302,7 @@
   },
   "register": {
     "button": "S'inscrire",
+    "errors": "Erreurs dans le formulaire",
     "hints": {
       "email": "Entrez une adresse email valide",
       "password": "Entrez un mot de passe, plus vous entrerez un nombre et une variété importante de caractère, plus il sera sécurisé",

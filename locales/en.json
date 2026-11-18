@@ -90,7 +90,6 @@
     },
     "username": {
       "forbidden": "The given credentials are incorrect",
-      "length": "Your username must be at least six characters",
       "minsize": "Your username must be at least six characters",
       "required": "You must give a username",
       "uniq": "This username is already used",
@@ -303,6 +302,7 @@
   },
   "register": {
     "button": "Register",
+    "errors": "Errors encountered during submission",
     "hints": {
       "email": "Enter a valid email address",
       "password": "Enter a password. The more characters, and the more different ones you put, the most secure it will be",
