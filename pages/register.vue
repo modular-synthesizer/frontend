@@ -9,9 +9,14 @@
         </template>
         <template v-else>
           <div class="text-h3 mb-5">{{ $t('register.title') }}</div>
-          <v-form @submit.prevent="register">
+          <v-form @submit.prevent="submitRegistration">
             <div class="mb-5">
-              <vuelidate-errors v-if="v$.$error" :errors="v$.$errors" />
+              <v-alert type="error" variant="outlined" v-if="errors.length">
+                <v-alert-title>{{ $t("register.errors") }}</v-alert-title>
+                <div v-for="error in errors" :key="`errors.${error.field}.${error.reason}`">
+                  {{ $t(`errors.${error.field}.${error.reason}`) }}
+                </div>
+              </v-alert>
             </div>
             <v-row no-gutters>
               <v-col :cols="12" :md="6" class="pr-md-2">
@@ -20,7 +25,7 @@
                   :hint="$t('register.hints.username')"
                   :placeholder="$t('register.placeholders.username')"
                   variant="outlined"
-                  v-model="account.username"
+                  v-model="registration.username"
                   class="mb-3"
                 />
               </v-col>
@@ -30,7 +35,7 @@
                   :hint="$t('register.hints.email')"
                   :placeholder="$t('register.placeholders.email')"
                   type="email"
-                  v-model="account.email"
+                  v-model="registration.email"
                   variant="outlined"
                   class="mb-3"
                 />
@@ -43,22 +48,22 @@
                   :hint="$t('register.hints.password')"
                   type="password"
                   variant="outlined"
-                  v-model="account.password"
+                  v-model="registration.password"
                   class="mb-3"
                 />
               </v-col>
               <v-col :cols="12" :md="6" class="pl-md-2">
                 <v-text-field
-                  :label="$t('register.labels.password')"
-                  :hint="$t('register.hints.password')"
+                  :label="$t('register.labels.password_confirmation')"
+                  :hint="$t('register.hints.password_confirmation')"
                   type="password"
                   variant="outlined"
-                  v-model="account.password_confirmation"
+                  v-model="registration.password_confirmation"
                   class="mb-3"
                 />
               </v-col>
             </v-row>
-            <v-btn color="primary" type="submit">{{ $t('register.button') }}</v-btn>
+            <v-btn color="primary" type="submit" :disabled="loading">{{ $t('register.button') }}</v-btn>
           </v-form>
         </template>
       </v-col>
@@ -67,51 +72,32 @@
 </template>
 
 <script lang="ts" setup>
-import useVuelidate from '@vuelidate/core';
-import { email, minLength, required } from '@vuelidate/validators';
-import { split } from 'lodash';
-import { repositories } from '~~/lib/repositories';
+import type { Registration } from '~/features/accounts/core/data/Registration.type'
+import type { RegistrationError } from '~/features/accounts/core/data/RegistrationError.type'
+import { register } from '~/features/accounts/shell/legacy/register.adapter'
 
-definePageMeta({ middleware: ['already-logged'] });
+definePageMeta({ middleware: ['already-logged'] })
 
-const account = reactive({
-  id: '',
+const registration: Ref<Registration> = ref({
   username: '',
   password: '',
   password_confirmation: '',
   email: '',
-});
+})
 
-const $externalResults = ref({});
+const errors: Ref<RegistrationError[]> = ref([])
 
-const rules = computed(() => ({
-  username: { required, length: minLength(6) },
-  password: { required },
-  password_confirmation: { required, confirmation: (v: string) => v === account.password },
-  email: { required, format: email }
-}));
+const loading: Ref<boolean> = ref(false)
 
-const v$ = useVuelidate(rules, account, { $externalResults });
+const registered: Ref<boolean> = ref(false)
 
-const registered = ref(false);
-
-function hasEmptyFields() {
-  return account.username === '' ||
-    account.password === '' ||
-    account.password_confirmation === '' ||
-    account.email === ''
-}
-
-async function register(_$event: Event) {
-  await v$.value.$validate();
-  if (hasEmptyFields()) return;
-  try {
-    await repositories.accounts.create(account);
-    registered.value = true
-  }
-  catch (error: any) {
-    const [ key, message ] = split(error.statusMessage, '.');
-    $externalResults.value = {[`${key}`]: message};
-  }
+function submitRegistration(_$event: Event) {
+  loading.value = true
+  register(registration.value)
+    .then(err => {
+      errors.value = err.ok ? [] : err.error()
+      registered.value = err.ok
+    })
+    .finally(() => loading.value = false)
 }
 </script>

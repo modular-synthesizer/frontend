@@ -303,6 +303,7 @@
   },
   "register": {
     "button": "S'inscrire",
+    "errors": "Erreurs dans le formulaire",
     "hints": {
       "email": "Entrez une adresse email valide",
       "password": "Entrez un mot de passe, plus vous entrerez un nombre et une variété importante de caractère, plus il sera sécurisé",

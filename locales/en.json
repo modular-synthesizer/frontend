@@ -303,6 +303,7 @@
   },
   "register": {
     "button": "Register",
+    "errors": "Errors encountered during submission",
     "hints": {
       "email": "Enter a valid email address",
       "password": "Enter a password. The more characters, and the more different ones you put, the most secure it will be",
