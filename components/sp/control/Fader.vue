@@ -1,51 +1,53 @@
 <template>
-  <rect
-    :x="- 3"
-    :y="- 3"
-    width="6"
-    :height="height"
-    fill="black"
-    stroke="#555555"
-    stroke-width="2"
-  />
-  <line
-    v-for="i in 21"
-    :x1="6"
-    :x2="10"
-    :y1="(height-6) / 20 * (i-1)"
-    :y2="(height-6) / 20 * (i-1)"
-    stroke="#BBBBBB"
-  />
-  <line
-    v-for="i in 3"
-    :x1="6"
-    :x2="13"
-    :y1="(height-6) / 2 * (i-1)"
-    :y2="(height-6) / 2 * (i-1)"
-    stroke="#DDDDDD"
-    stroke-width="1.5"
-  />
-  <g
-    @mousedown.left.stop="onmousedown"
-    @click.right.stop.prevent="showMenu(parameter, $event)"
-  >
+  <g @wheel.passive.stop="onwheel">
     <rect
-      :x="- (knobSize / 2)"
-      :width="knobSize"
-      :y="yFader"
-      :height="knobSize"
-      rx="5"
-      ry="5"
+      :x="- 3"
+      :y="- 3"
+      width="6"
+      :height="height"
       fill="black"
       stroke="#555555"
       stroke-width="2"
-      class="knob"
     />
-    <text :y="yFader + (knobSize / 2)" text-anchor="middle" alignment-baseline="middle" fill="white" class="value">
-      <slot :value="value">
-        {{ value }}
-      </slot>
-    </text>
+    <line
+      v-for="i in 21"
+      :x1="6"
+      :x2="10"
+      :y1="(height-6) / 20 * (i-1)"
+      :y2="(height-6) / 20 * (i-1)"
+      stroke="#BBBBBB"
+    />
+    <line
+      v-for="i in 3"
+      :x1="6"
+      :x2="13"
+      :y1="(height-6) / 2 * (i-1)"
+      :y2="(height-6) / 2 * (i-1)"
+      stroke="#DDDDDD"
+      stroke-width="1.5"
+    />
+    <g
+      @mousedown.left.stop="onmousedown"
+      @click.right.stop.prevent="showMenu(parameter, $event)"
+    >
+      <rect
+        :x="- (knobSize / 2)"
+        :width="knobSize"
+        :y="yFader"
+        :height="knobSize"
+        rx="5"
+        ry="5"
+        fill="black"
+        stroke="#555555"
+        stroke-width="2"
+        class="knob"
+      />
+      <text :y="yFader + (knobSize / 2)" text-anchor="middle" alignment-baseline="middle" fill="white" class="value">
+        <slot :value="value">
+          {{ value }}
+        </slot>
+      </text>
+    </g>
   </g>
 </template>
 
@@ -56,7 +58,7 @@ import type { AudioModule } from '~/types/modules/AudioModule';
 import type { Parameter } from '~/types/modules/Parameter';
 import type { Control } from '~/types/blueprints/Control';
 import { DEFAULT_FADER_HEIGHT } from '~/utils/constants';
-import { editParameter, previewParameterAdapter } from '~/features/synthesizers/shell/legacy/parameter.adapter';
+import { editParameter, editParameterDebounced, previewParameterAdapter } from '~/features/synthesizers/shell/legacy/parameter.adapter';
 
 const KNOB_SIZE = 26;
 
@@ -124,6 +126,9 @@ export default {
         await editParameter(this.parameter, { kind: "drag", pixels }, this.original)
       });
     },
+    async onwheel($event: WheelEvent) {
+      await editParameterDebounced(this.parameter, { kind: "wheel", deltaY: $event.deltaY, shift: $event.shiftKey })
+    }
   }
 }
 </script>
