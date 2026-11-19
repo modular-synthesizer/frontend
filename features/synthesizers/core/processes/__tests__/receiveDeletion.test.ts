@@ -1,7 +1,7 @@
-import { describe, expect, it } from "vitest";
-import { receiveDeletion } from "../receiveDeletion.process";
-import { ko, ok } from "../../../../shared/results/result";
-import { deepFreeze } from "../../../../shared/__tests__/utils/deepFreeze";
+import { describe, expect, it } from "vitest"
+import { receiveDeletion } from "../receiveDeletion.process"
+import { ko, ok } from "../../../../shared/results/result"
+import { deepFreeze } from "../../../../shared/__tests__/utils/deepFreeze"
 
 describe("receiveDeletion", () => {
   const first = { id: "id.a" }
