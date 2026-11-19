@@ -51,7 +51,6 @@
       </v-btn>
       <deletion-dialog
         v-if="isCreator"
-        :url="`/synthesizers/${synthesizer.id}`"
         :text="`'${synthesizer.name}''`"
         @confirmed="emit('delete', synthesizer.id)"
         icon
