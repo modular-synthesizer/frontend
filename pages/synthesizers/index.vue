@@ -24,6 +24,7 @@ import { repositories } from '~~/lib/repositories';
 import { sortBy } from 'lodash';
 import { membershipType } from '~/utils/functions/synthesizers';
 import type { Synthesizer } from '~/types/synthesizers/Synthesizer';
+import { deleteFromList } from '~/features/synthesizers/shell/legacy/synthesizersList.adapter';
 
 const { mobile } = useDisplay()
 const synthesizers: Ref<Array<Synthesizer>> = ref([]);
@@ -36,7 +37,7 @@ const order: Record<string, number> = { creator: 0, write: 1, read: 2 };
 const name: string = useSession().username;
 const sorted = computed(() => sortBy(synthesizers.value, (s: Synthesizer) => order[membershipType(s, name)]));
 
-const deleteSynth = (id: string) => repositories.synthesizers.delete(id, useSession().token);
+const deleteSynth = (id: string) => deleteFromList(synthesizers, id);
 
 async function create(details: Synthesizer) {
   synthesizers.value.push(await api_post("/proxy/synthesizers", { name: details.name, voices: 16 }))
