@@ -1,5 +1,5 @@
 import { useTab } from "../../../composables/usetab"
-import { createDelete, createPost, createPut, type Tokens } from "./axios.http"
+import { createDelete, createGet, createPost, createPut, type Tokens } from "./axios.http"
 import { withAuthenticationGuard, type HttpRequest } from "./http"
 
 const getTokens: () => Tokens = () => ({ auth_token: useSession().token, tab_id: useTab().id })
@@ -16,3 +16,5 @@ export const put = createRoute(createPut)
 export const post = createRoute(createPost)
 
 export const del = createRoute(createDelete)
+
+export const get = createRoute(createGet)
