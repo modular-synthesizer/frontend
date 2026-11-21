@@ -20,6 +20,8 @@ export const createPost = (tokens: () => Tokens): HttpRequest => createRequester
 
 export const createDelete = (tokens: () => Tokens): HttpRequest => createRequesterWithParams(tokens, "delete")
 
+export const createGet = (tokens: () => Tokens): HttpRequest => createRequesterWithParams(tokens, "get")
+
 export type RequesterFactory = (tokens: () => Tokens, method: HttpMethod) => HttpRequest
 
 const createRequesterWithBody: RequesterFactory = (tokens, method) => (url, body) =>

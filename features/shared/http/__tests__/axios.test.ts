@@ -1,6 +1,7 @@
-import { AxiosError, type AxiosRequestHeaders, type AxiosResponse } from "axios";
-import { describe, expect, it } from "vitest";
-import { toHttpError } from "../axios.http";
+import axios, { AxiosError, type AxiosRequestHeaders, type AxiosResponse } from "axios";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { createGet, toHttpError } from "../axios.http";
+import { ko, ok } from "../../results/result";
 
 describe("toHttpError", () => {
   const nullResponse = null as unknown as AxiosResponse
@@ -26,5 +27,39 @@ describe("toHttpError", () => {
     }
     const error: AxiosError = new AxiosError("", "403", { headers }, {}, response)
     expect(toHttpError(error)).toEqual({ status: 403, key: undefined, message: undefined })
+  })
+})
+
+describe("createGet", () => {
+  const headers = null as unknown as AxiosRequestHeaders
+  const tokens = () => ({ auth_token: "token.auth", tab_id: "token.tab" })
+
+  afterEach(() => { vi.restoreAllMocks() })
+
+  it("sends a GET request with the parameters and the tokens in the query string", async () => {
+    const request = vi.spyOn(axios, "request").mockResolvedValue({ data: [] } as AxiosResponse)
+    await createGet(tokens)("/synthesizers", { type: "creator" })
+    expect(request).toHaveBeenCalledOnce()
+    expect(request).toHaveBeenCalledWith({
+      method: "get",
+      url: "/synthesizers",
+      params: { type: "creator", auth_token: "token.auth", tab_id: "token.tab" }
+    })
+    expect(request.mock.calls[0]?.[0]).not.toHaveProperty("data")
+  })
+  it("returns the data of a successful response", async () => {
+    const data = [ { id: "id.a" } ]
+    vi.spyOn(axios, "request").mockResolvedValue({ data } as AxiosResponse)
+    expect(await createGet(tokens)("/synthesizers", {})).toEqual(ok(data))
+  })
+  it("returns the converted error of a failed request", async () => {
+    const response: AxiosResponse = {
+      data: { key: "auth_token", message: "expired" }, status: 401, statusText: "Unauthorized", headers, config: { headers }
+    }
+    const error = new AxiosError("", "401", { headers }, {}, response)
+    vi.spyOn(axios, "request").mockRejectedValue(error)
+    const result = await createGet(tokens)("/synthesizers", {})
+    expect(result).toEqual(ko(toHttpError(error)))
+    expect(result).toEqual(ko({ status: 401, key: "auth_token", message: "expired" }))
   })
 })
