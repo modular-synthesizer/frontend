@@ -2,7 +2,7 @@ import { assertNever, type RunEffectFct } from "../../shared/facts"
 import type { SessionsEffect } from "../core/data/Effect.type"
 import type { Session } from "../core/data/Session.type"
 import { deleteSession, type DeleteSessionFct } from "./api/deleteSession.http"
-import { toLegacySession } from "./legacy/login.adapter"
+import { toLegacySession } from "./legacy/session.mapper"
 
 type StoragePort = (session: Session) => void
 

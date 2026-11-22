@@ -32,7 +32,7 @@
         </v-menu>
         
       </template>
-      <v-btn @click="useSession().logout">{{ $t('common.logout') }}</v-btn>
+      <v-btn @click="logoutAdapter">{{ $t('common.logout') }}</v-btn>
       <language-switch />
     </template>
   </v-app-bar>
@@ -40,12 +40,13 @@
 
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify';
+import { logoutAdapter } from '~/features/sessions/shell/legacy/logout.adapter';
 
 const items = [
   ...(!useSession().admin ? [] : [
     { label: 'menus.blueprints', url: '/blueprints' },
     { label: 'common.admin', url: '/admin' },
   ]),
-  { click: useSession().reset, label: 'common.logout' },
+  { click: logoutAdapter, label: 'common.logout' },
 ];
 </script>
