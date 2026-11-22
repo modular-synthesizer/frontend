@@ -17,6 +17,10 @@ export const makeRunEffect: RunEffectFactory = ({ store, navigate }) => async ef
       return navigate(effect.to)
     case "sessions.session.store":
       return store(effect.session)
+    case "sessions.session.clear":
+      break;
+    case "sessions.session.delete":
+      break;
     default:
       assertNever(effect)
   }
