@@ -11,8 +11,12 @@ const defaultSession: Session = {
 }
 
 function reset() {
-  storage.value = defaultSession;
+  clear()
   navigateTo('/');
+}
+
+function clear() {
+  storage.value = defaultSession;
 }
 
 const storage = useStorage('session', defaultSession, localStorage, { mergeDefaults: true });
@@ -40,11 +44,8 @@ export function useSession() {
     store(session: Session) {
       storage.value = session
     },
-    async logout() {
-      await repositories.sessions.delete(storage.value.token);
-      reset();
-    },
     reset,
+    clear,
     refresh() {
       if (storage.value.token !== '') {
         repositories.sessions.get(storage.value.token).catch(reset)
