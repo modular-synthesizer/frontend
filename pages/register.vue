@@ -76,8 +76,6 @@ import type { Registration } from '~/features/accounts/core/data/Registration.ty
 import type { RegistrationError } from '~/features/accounts/core/data/RegistrationError.type'
 import { register } from '~/features/accounts/shell/legacy/register.adapter'
 
-definePageMeta({ middleware: ['already-logged'] })
-
 const registration: Ref<Registration> = ref({
   username: '',
   password: '',

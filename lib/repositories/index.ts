@@ -15,7 +15,6 @@ import type { Right } from "~/types/permissions/Right";
 import type { Group } from "~/types/permissions/Group";
 import type { Generator, ModulePayload, Synthesizer } from '~/types/Index';
 import type { Parameter } from '~/types/modules/Parameter';
-import type { Session } from '~/types/authentication/Session';
 
 export type Repositories = Record<string, Repository<{ id: string }>>;
 
@@ -37,7 +36,6 @@ export const repositories = {
     ports: new ToolElementsRepository<ToolPort>('ports'),
   },
   rights: new Repository<Right>('rights'),
-  sessions: new Repository<Session>('sessions'),
   synthesizers: new Repository<Synthesizer>('synthesizers'),
   blueprints: new ToolsRepository('blueprints'),
 }

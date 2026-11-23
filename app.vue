@@ -14,10 +14,12 @@
 </template>
 
 <script lang="ts" setup>
+import { refreshAdapter } from '~/features/sessions/shell/legacy/refresh.adapter';
+
 useHead({ htmlAttrs: { lang: 'fr' } });
 
 useCoordinates().initUpdates();
-useSession().refresh();
+refreshAdapter()
 
 window.addEventListener("beforeunload", () => {
   useKeyboardEvents().cancel();

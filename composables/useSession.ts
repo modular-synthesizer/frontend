@@ -1,6 +1,6 @@
 import { useStorage } from "@vueuse/core"
 import { find } from "lodash";
-import { repositories } from "~/lib/repositories";
+import { isAuthenticated } from "~/features/sessions/core/shared/isAuthenticated";
 import type { Session } from "~/types/authentication/Session"
 import type { Right } from "~/types/permissions/Right";
 
@@ -30,7 +30,7 @@ export function useSession() {
       return storage.value.admin;
     },
     get authenticated(): boolean {
-      return storage.value.token !== ''
+      return isAuthenticated(storage.value.token)
     },
     get username(): string {
       return storage.value.account.username;
@@ -46,10 +46,5 @@ export function useSession() {
     },
     reset,
     clear,
-    refresh() {
-      if (storage.value.token !== '') {
-        repositories.sessions.get(storage.value.token).catch(reset)
-      }
-    }
   }
 }

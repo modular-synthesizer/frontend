@@ -1,8 +1,6 @@
-const EXCLUDED_ROUTES: (string|symbol|undefined|null)[] = ['login', 'register']
+import { routeGuard } from "~/features/sessions/shell/legacy/routeGuard.adapter";
 
-export default defineNuxtRouteMiddleware(async (to, _from) => {
-  if (EXCLUDED_ROUTES.includes(to.name)) return;
-  if (process.client) {
-    if (to.name !== "index" && !useSession().authenticated) return navigateTo('/');
-  }
+export default defineNuxtRouteMiddleware(to => {
+  const redirection = routeGuard(to.name)
+  if (redirection !== null) return navigateTo(redirection)
 });

@@ -44,8 +44,6 @@ import type { Credentials } from '~/features/sessions/core/data/Credentials.type
 import type { LoginError } from '~/features/sessions/core/data/LoginError.type';
 import { login } from '~/features/sessions/shell/legacy/login.adapter';
 
-definePageMeta({ middleware: ['already-logged'] });
-
 const account: Ref<Credentials> = ref({ username: '', password: '' });
 
 const loading: Ref<boolean> = ref(false);
